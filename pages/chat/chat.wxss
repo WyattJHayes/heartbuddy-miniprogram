@@ -90,3 +90,9 @@
 .q-ico { font-size: 28rpx; }
 .q-text { flex: 1; font-size: 25rpx; color: #4a5b76; line-height: 1.6; }
 .q-copy { font-size: 22rpx; color: #5d8def; flex-shrink: 0; }
+
+/* 深夜工具箱 */
+.night-bar { margin: 0 24rpx 16rpx; padding: 20rpx; background: linear-gradient(150deg, #eef3fb, #f7f2ff); border-radius: 12rpx; }
+.night-title { display: block; font-size: 24rpx; color: #4a5b76; font-weight: 600; }
+.night-chips { display: flex; flex-wrap: wrap; gap: 14rpx; margin-top: 14rpx; }
+.night-chip { font-size: 23rpx; color: #3f6fe0; background: #fff; border: 1rpx solid #dbe4f5; border-radius: 999rpx; padding: 10rpx 22rpx; }

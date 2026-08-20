@@ -43,7 +43,8 @@ Page({
     calCells: [],         // [{num,inMonth,emoji,count,isToday,key}]
     calWeekday: ['日', '一', '二', '三', '四', '五', '六'],
     calTitle: '',
-    calDay: null          // 点选某天后的当日小结
+    calDay: null,          // 点选某天后的当日小结
+    smalls: []            // 今日三件小事 [{i,text,done}]
   },
 
   onShow() {
@@ -51,6 +52,48 @@ Page({
     this.refreshPlan();
     this.refreshLetter();
     this.refreshRemind();
+    this.refreshSmall();
+  },
+
+  // ---- 今日三件小事：每天 3 条「为自己做的小事」，可勾选打卡（本地）----
+  _toKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+  },
+
+  refreshSmall() {
+    const today = this._toKey();
+    let items = [{ text: '', done: false }, { text: '', done: false }, { text: '', done: false }];
+    const raw = wx.getStorageSync('hb_small');
+    if (raw && raw.date === today && Array.isArray(raw.items) && raw.items.length === 3) {
+      items = raw.items;
+    }
+    this.setData({ smalls: items.map((x, i) => Object.assign({ i }, x)) });
+  },
+
+  onSmallInput(e) {
+    const items = this.data.smalls.slice();
+    const i = Number(e.currentTarget.dataset.i);
+    if (items[i]) items[i].text = e.detail.value;
+    this.setData({ smalls: items });
+  },
+
+  onSmallDone(e) {
+    const items = this.data.smalls.slice();
+    const i = Number(e.currentTarget.dataset.i);
+    if (!items[i]) return;
+    items[i].done = !items[i].done;
+    this.setData({ smalls: items });
+    const all = items.filter((x) => x.done).length === 3 && items.some((x) => x.text);
+    if (all) {
+      wx.setStorageSync('ach_small_three', true);
+      wx.showToast({ title: '三件小事都完成 ✨', icon: 'success' });
+    }
+    this.saveSmall();
+  },
+
+  saveSmall() {
+    wx.setStorageSync('hb_small', { date: this._toKey(), items: this.data.smalls.map((x) => ({ text: x.text, done: x.done })) });
   },
 
   // ---- 每日心情提醒（本地轻提醒：打开应用时若到点且今日未提醒则提示一次）----

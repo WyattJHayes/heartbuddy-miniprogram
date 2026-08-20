@@ -8,6 +8,7 @@
     "pages/report/report",
     "pages/helper/helper",
     "pages/breathe/breathe",
+    "pages/scan/scan",
     "pages/profile/profile",
     "pages/privacy/privacy"
   ],

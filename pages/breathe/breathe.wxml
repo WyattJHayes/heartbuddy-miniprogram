@@ -21,4 +21,5 @@
     {{calm ? '已记下此刻' : '记下此刻的平静心情'}}
   </button>
   <view wx:if="{{phase === 'done'}}" class="tip">点上面的按钮会把这一刻记成「平静」，同步到心情曲线。</view>
+  <view wx:if="{{phase === 'done'}}" class="tip scan-link" role="button" bindtap="goScan">还想更放松？试试 5 分钟身体扫描 →</view>
 </view>

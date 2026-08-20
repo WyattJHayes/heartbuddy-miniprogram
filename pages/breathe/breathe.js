@@ -65,6 +65,10 @@ Page({
   },
 
   // 结束后把此刻情绪记成「平静」（与心情页/曲线无缝联动）
+  goScan() {
+    wx.navigateTo({ url: '/pages/scan/scan' });
+  },
+
   async recordCalm() {
     if (this.data.calm) return;
     this.setData({ calm: true });

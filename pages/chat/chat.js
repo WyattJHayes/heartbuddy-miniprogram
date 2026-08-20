@@ -58,7 +58,8 @@ Page({
     onboardingStep: 0,
     weatherIco: '',   // ☀️/☁️/🌧…
     weatherText: '',   // "10:00 · 晴 · 24℃"（免费 open-meteo，无 key）
-    dailyQuote: ''     // 今日心语（日轮换，可点复制）
+    dailyQuote: '',    // 今日心语（日轮换，可点复制）
+    nightShow: false  // 深夜（22:00–5:00）显示深夜工具箱
   },
 
   async onLoad() {
@@ -74,7 +75,8 @@ Page({
     // 今日心语：按年内第几天轮换
     const now0 = new Date();
     const dayOfYear = Math.floor((now0 - new Date(now0.getFullYear(), 0, 0)) / 86400000);
-    this.setData({ dailyQuote: DAILY_QUOTES[dayOfYear % DAILY_QUOTES.length] });
+    const hour = now0.getHours();
+    this.setData({ dailyQuote: DAILY_QUOTES[dayOfYear % DAILY_QUOTES.length], nightShow: hour >= 22 || hour < 5 });
     // 天气角（免费 open-meteo，定位失败静默降级为默认城市）
     this.loadWeather();
     // 耐心等登录完成（拿到 isNewUser 才能定制首次欢迎语；失败也不阻塞，用常规欢迎语兜底）
@@ -89,6 +91,13 @@ Page({
       data: this.data.dailyQuote,
       success: () => wx.showToast({ title: '已复制今日心语', icon: 'success' })
     });
+  },
+
+  // ---- 深夜工具箱：22:00–5:00 出现，给「深夜的你想做点什么」提供小入口 ----
+  nightBreathe() { wx.navigateTo({ url: '/pages/breathe/breathe' }); },
+  nightWrite() { wx.switchTab({ url: '/pages/mood/mood' }); },
+  nightLater() {
+    wx.showToast({ title: '把烦心事留给明天的你吧，先去睡 🛌', icon: 'none' });
   },
 
   loadWeather() {

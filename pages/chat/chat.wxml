@@ -10,6 +10,15 @@
     <text class="q-text">{{dailyQuote}}</text>
     <text class="q-copy">复制</text>
   </view>
+  <!-- 深夜工具箱（22:00–5:00）：失眠/烦躁时的三个小出口 -->
+  <view class="night-bar" wx:if="{{nightShow}}">
+    <text class="night-title">🌙 这么晚还醒着？给你三个出口</text>
+    <view class="night-chips">
+      <view class="night-chip" bindtap="nightBreathe" role="button" aria-label="试试深呼吸">3 分钟呼吸</view>
+      <view class="night-chip" bindtap="nightWrite" role="button" aria-label="写下烦心事">写下烦心事</view>
+      <view class="night-chip" bindtap="nightLater" role="button" aria-label="把烦恼留给明天">把烦恼留给明天</view>
+    </view>
+  </view>
   <!-- 消息区 -->
   <scroll-view scroll-y class="msg-scroll" scroll-with-animation aria-live="polite">
     <view class="msg-list">

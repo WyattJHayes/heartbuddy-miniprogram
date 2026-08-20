@@ -1,0 +1,38 @@
+<view class="scan-page">
+  <!-- 准备态 -->
+  <view class="scan-card" wx:if="{{phase === 'ready'}}">
+    <view class="scan-hero">🧘</view>
+    <view class="scan-title">5 分钟身体扫描</view>
+    <view class="scan-sub">跟着引导，把注意力从「最忙的脑子」慢慢挪回身体。不需要技巧，只需要你陪着身体待一会儿。</view>
+    <view class="scan-tips">
+      <view class="scan-tip">· 跟着节奏往下走，走神了也没关系</view>
+      <view class="scan-tip">· 全程约 5 分钟，随时可以结束</view>
+      <view class="scan-tip">· 完成后会自动记一条「平静」心情</view>
+    </view>
+    <button class="btn-primary full" bindtap="begin">开始扫描</button>
+    <view class="scan-last" wx:if="{{lastDone}}">{{lastDone}}</view>
+    <button class="btn-ghost full mt" bindtap="exit">返回</button>
+  </view>
+
+  <!-- 进行态 -->
+  <view class="scan-card run" wx:elif="{{phase === 'run'}}">
+    <view class="scan-prog">
+      <view class="scan-prog-fill" style="width:{{pct}}%"></view>
+    </view>
+    <view class="scan-step">{{idx + 1}} / {{10}}</view>
+    <view class="scan-part">{{stages[idx].t}}</view>
+    <view class="scan-desc">{{stages[idx].d}}</view>
+    <view class="scan-countdown">{{left}}</view>
+    <button class="btn-ghost full" bindtap="exit">提前结束</button>
+  </view>
+
+  <!-- 完成态 -->
+  <view class="scan-card" wx:else>
+    <view class="scan-hero">🌿</view>
+    <view class="scan-title">这次扫描，你做到了</view>
+    <view class="scan-sub">给自己一点安静，本身就是一种照顾。</view>
+    <view class="scan-last" wx:if="{{lastDone}}">{{lastDone}}</view>
+    <button class="btn-primary full" bindtap="again">再来一次</button>
+    <button class="btn-ghost full mt" bindtap="exit">返回</button>
+  </view>
+</view>

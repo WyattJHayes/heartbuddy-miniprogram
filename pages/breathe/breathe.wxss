@@ -13,4 +13,4 @@
 .actions { margin-top: 40rpx; display: flex; justify-content: center; gap: 24rpx; width: 100%; }
 .primary { background: #5b8def; color: #fff; border-radius: 44rpx; font-weight: 600; width: 60%; }
 button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-radius: 44rpx; width: 70%; font-weight: 600; }
-.tip { margin-top: 18rpx; font-size: 23rpx; color: #98a2b5; text-align: center; line-height: 1.7; }
+.tip { margin-top: 18rpx; font-size: 23rpx; color: #98a2b5; text-align: center; line-height: 1.7; }.scan-link { color: #5b8def; }

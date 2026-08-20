@@ -81,6 +81,10 @@ Page({
     wx.navigateTo({ url: '/pages/breathe/breathe' });
   },
 
+  goScan() {
+    wx.navigateTo({ url: '/pages/scan/scan' });
+  },
+
   // 已安全回执：24 小时后在「陪伴」页轻声回访一次
   checkSafe() {
     wx.showModal({

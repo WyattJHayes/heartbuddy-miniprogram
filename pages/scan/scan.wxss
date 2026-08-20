@@ -1,0 +1,15 @@
+.container { padding: 32rpx; }
+.scan-card { background: #fff; border-radius: 20rpx; padding: 40rpx 32rpx; margin-top: 40rpx; }
+.scan-hero { font-size: 110rpx; text-align: center; margin-bottom: 20rpx; }
+.scan-title { font-size: 40rpx; font-weight: 800; text-align: center; color: #2a3b55; }
+.scan-sub { font-size: 26rpx; color: #5a6b85; text-align: center; margin-top: 12rpx; line-height: 1.7; }
+.scan-card .scan-tips { margin: 28rpx 0; font-size: 25rpx; color: #7a8698; line-height: 1.9; }
+.scan-last { text-align: center; font-size: 23rpx; color: #9aa5b8; margin-top: 20rpx; }
+.scan-progress { height: 12rpx; background: #edf1f7; border-radius: 999rpx; overflow: hidden; }
+.scan-progress-fill { height: 100%; background: linear-gradient(90deg, #a3c0f7, #5b8def); border-radius: 999rpx; transition: width .9s linear; }
+.scan-step { text-align: center; font-size: 24rpx; color: #9aa5b8; margin-top: 30rpx; }
+.scan-part { text-align: center; font-size: 46rpx; font-weight: 800; color: #2a3b55; margin-top: 14rpx; }
+.scan-desc { text-align: center; font-size: 28rpx; color: #4a5b76; line-height: 1.8; margin: 26rpx 40rpx; }
+.scan-countdown { text-align: center; font-size: 90rpx; font-weight: 300; color: #5b8def; margin: 10rpx 0 30rpx; line-height: 1; }
+.mood-tips { margin: 24rpx 0; }.scan-tips { margin: 24rpx 0; font-size: 25rpx; color: #7a8698; line-height: 1.9; }
+.scan-tip { margin-top: 6rpx; }
