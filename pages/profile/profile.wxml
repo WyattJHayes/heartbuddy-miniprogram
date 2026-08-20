@@ -45,7 +45,7 @@
       <text>运营看板（演示）</text><text class="arrow">›</text>
     </view>
     <view class="row">
-      <text>版本</text><text class="muted">v0.2.0（参赛 MVP）</text>
+      <text>版本</text><text class="muted">v0.3.0（参赛 MVP）</text>
     </view>
   </view>
 </view>

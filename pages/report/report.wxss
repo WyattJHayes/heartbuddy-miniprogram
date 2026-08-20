@@ -12,3 +12,11 @@
 
 .advice { font-size: 28rpx; line-height: 1.7; }
 .full { width: 100%; }
+.mt { margin-top: 20rpx; }
+
+/* 分享卡浮层 */
+.mask { position: fixed; inset: 0; background: rgba(20, 26, 40, 0.55); display: flex; align-items: center; justify-content: center; z-index: 999; }
+.sheet { width: 640rpx; background: #fff; border-radius: 32rpx; padding: 32rpx; display: flex; flex-direction: column; align-items: center; }
+.sheet-tip { font-size: 24rpx; margin-bottom: 20rpx; text-align: center; }
+.share-card { width: 560rpx; height: 830rpx; border-radius: 24rpx; overflow: hidden; background: #eaf2ff; }
+.rowbtns { width: 100%; display: flex; flex-direction: column; gap: 16rpx; margin-top: 24rpx; }
