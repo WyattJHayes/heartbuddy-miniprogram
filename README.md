@@ -98,8 +98,8 @@ heartbuddy-miniprogram/
 ├── utils/api.js                      # 云函数封装
 ├── pages/
 │   ├── welcome/   隐私 & AI 说明
-│   ├── chat/      核心对话页
-│   ├── mood/      情绪可视化（快速记录/打卡 streak/曲线+小结图/今日任务）
+│   ├── chat/      核心对话页（快捷情绪双闭环·英文角）
+│   ├── mood/      情绪可视化（快速记录/打卡 streak/曲线+小结图/今日任务/本周小结）
 │   ├── assessment/ 考前焦虑自评（7 题）+ 应对卡导出 + 3 天陪伴计划
 │   ├── ops/       运营看板（危机闭环/处理率/CSV 导出）
 │   ├── report/    周报 + canvas 分享卡（双模板）+ 复制文字版/往期回看

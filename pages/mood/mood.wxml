@@ -1,6 +1,6 @@
 <view class="container">
   <!-- 自评入口 -->
-  <view class="card assess-entry" bindtap="goAssessment">
+  <view class="card assess-entry" role="button" aria-label="进入考前焦虑自评" bindtap="goAssessment">
     <view class="ae-emoji">📋</view>
     <view class="ae-main">
       <view class="ae-title">考前焦虑自评</view>
@@ -82,6 +82,7 @@
     <view class="card">
       <view class="section-title">最近 7 天心情曲线</view>
       <view wx:if="{{insight}}" class="insight">💡 {{insight}}</view>
+      <view wx:if="{{weekSum}}" class="week-sum">📅 {{weekSum}}</view>
       <emotion-chart id="moodChart" points="{{moodLine}}" maxY="{{5}}" minY="{{1}}" color="#5b8def" unit="分值" footer="{{chartFooter}}"></emotion-chart>
       <view class="chart-actions">
         <button class="btn-ghost" bindtap="saveMoodSummary">保存小结图片</button>

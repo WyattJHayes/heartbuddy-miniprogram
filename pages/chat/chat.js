@@ -2,6 +2,10 @@
 const app = getApp();
 const api = require('../../utils/api');
 const { quickReplies } = require('../../config/index');
+const { MOOD_META } = require('../../utils/moodscore');
+
+// 中文情绪标签 → 落库 key（与心情页保持一致）
+const MOOD_KEY = { '开心': 'happy', '平静': 'peace', '焦虑': 'anxiety', '难过': 'sad', '孤独': 'lonely', '生气': 'angry' };
 
 const GREETINGS = {
   morning: '早上好呀 ☀️ 今天想聊点什么？',
@@ -107,8 +111,37 @@ Page({
   onInput(e) { this.setData({ input: e.detail.value }); },
 
   onMood(e) {
-    this.setData({ moodTag: e.currentTarget.dataset.m });
-    this.pushUser('我今天想倾诉情绪：' + e.currentTarget.dataset.m); // 直接发送情绪标签
+    const label = e.currentTarget.dataset.m;
+    this.setData({ moodTag: label });
+    this.pushUser('我今天想倾诉情绪：' + label); // 直接发送情绪标签
+    this.recordMood(label); // 同步落库，形成「倾诉+记录」双闭环
+  },
+
+  // 把所选情绪写入 moods 集合（与心情页共用同一数据源）
+  async recordMood(label) {
+    const key = MOOD_KEY[label];
+    if (!key) return;
+    let openid = app.globalData.openid;
+    if (!openid) openid = await app.login();
+    if (!openid) return;
+    try {
+      const db = wx.cloud.database();
+      await db.collection('moods').add({
+        data: {
+          openid,
+          sessionId: 'chat-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+          mood: key,
+          intensity: 3,
+          trigger: '聊天标签',
+          createdAt: Date.now()
+        }
+      });
+      if (!wx.getStorageSync('ach_firstRecord')) wx.setStorageSync('ach_firstRecord', true);
+      wx.vibrateShort && wx.vibrateShort({ type: 'light' });
+      wx.showToast({ title: '心情已记录，到心情页看曲线', icon: 'none' });
+    } catch (e) {
+      console.error('[chat] 心情落库失败', e);
+    }
   },
 
   onQuick(e) { this.setData({ showQuick: false }); this.send(e.currentTarget.dataset.text); },

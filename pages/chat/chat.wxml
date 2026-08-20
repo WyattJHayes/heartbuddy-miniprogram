@@ -1,6 +1,6 @@
 <view class="chat-page">
   <!-- 消息区 -->
-  <scroll-view scroll-y class="msg-scroll" scroll-with-animation>
+  <scroll-view scroll-y class="msg-scroll" scroll-with-animation aria-live="polite">
     <view class="msg-list">
       <block wx:for="{{messages}}" wx:key="index">
         <view class="row {{item.role === 'user' ? 'right' : 'left'}}">
@@ -40,8 +40,10 @@
   <view class="input-bar">
     <view class="mood-tags">
       <view class="tag {{moodTag==='开心'?'on':''}}" data-m="开心" bindtap="onMood">😊 开心</view>
+      <view class="tag {{moodTag==='平静'?'on':''}}" data-m="平静" bindtap="onMood">😌 平静</view>
       <view class="tag {{moodTag==='焦虑'?'on':''}}" data-m="焦虑" bindtap="onMood">😰 焦虑</view>
       <view class="tag {{moodTag==='难过'?'on':''}}" data-m="难过" bindtap="onMood">😢 难过</view>
+      <view class="tag {{moodTag==='孤独'?'on':''}}" data-m="孤独" bindtap="onMood">🌫 孤独</view>
       <view class="tag {{moodTag==='生气'?'on':''}}" data-m="生气" bindtap="onMood">😡 生气</view>
     </view>
     <view class="input-row">

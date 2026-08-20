@@ -15,6 +15,7 @@ Page({
     recentList: [],  // 最近记录 [{time,mood,label}]
     moodLine: [],     // 近 7 天 [{label,value}]，无记录 value:null
     insight: '',       // 趋势的一句话 AI 解读（规则生成）
+    weekSum: '',       // 本周小结（规则生成的完整文案）
     chartFooter: '',    // 曲线图 footer（随长图一并导出）
     streak: { n: 0, today: false },  // 连续打卡天数
     quickList,           // 快速记录按钮
@@ -120,6 +121,7 @@ Page({
         moodLine,
         insight: this.buildInsight(moodLine),
         chartFooter: this.buildChartFooter(moodLine),
+        weekSum: this.buildWeekSum(list),
         streak: streakNow,
         empty: list.length === 0,
         loaded: true
@@ -182,7 +184,21 @@ Page({
     return { n, today: set.has(today.toDateString()) };
   },
 
-  // 趋势的一句话解读（规则生成，突出 AI 陪伴感）
+  // 本周小结（规则生成，突出陪伴感；供周报/分享复用）
+  buildWeekSum(list) {
+    if (!list || !list.length) return '';
+    const stats = this.data.statList || [];
+    const top = stats[0];
+    const total = list.length;
+    const scores = list
+      .map((m) => MOOD_SCORE[m.mood])
+      .filter((v) => typeof v === 'number' && !isNaN(v));
+    const avg = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : null;
+    const avgTxt = avg == null ? '—' : avg.toFixed(1);
+    const topTxt = top ? `最常出现「${top.emoji} ${top.label}」（${top.count} 次，占 ${top.ratio}%）` : '整体情绪偏平稳';
+    const tail = avg == null ? '继续保持就好，别对自己太严苛。' : avg >= 4 ? '整体偏轻松，把这份松弛感带给别人也不错。' : avg >= 3 ? '整体偏低落，今天的你已经足够勇敢，允许自己慢一点。' : '整体偏低迷，如果持续难受，请记得「求助」页随时有人可以帮你。';
+    return `本周共记录 ${total} 次，${topTxt}；情绪均分 ${avgTxt}/5。${tail}`;
+  },
   buildInsight(line) {
     const vals = (line || []).filter((d) => d.value != null).map((d) => d.value);
     if (!vals.length) return '';

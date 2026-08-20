@@ -46,7 +46,7 @@
           <view class="pd-desc">{{item.desc}}</view>
         </view>
         <text class="pd-check {{plan.done[index] ? (index < planIdx ? 'done' : 'on') : ''}}" wx:if="{{index < planIdx || plan.done[index]}}" aria-label="第{{item.n}}天已完成">✓</text>
-        <text class="pd-check do" wx:if="{{index === planIdx && !plan.done[index]}}" data-i="{{index}}" bindtap="toggleDay" aria-label="打卡第{{item.n}}天">☐</text>
+        <text class="pd-check do" wx:if="{{index === planIdx && !plan.done[index]}}" data-i="{{index}}" bindtap="toggleDay" role="button" aria-label="打卡第{{item.n}}天">☐</text>
       </view>
       <view class="text-muted plan-note">
         <block wx:if="{{planIdx < 0}}">计划未到开始日，先照顾好自己。</block>
