@@ -2,7 +2,11 @@
 const app = getApp();
 
 Page({
-  data: { loading: true, openid: '' },
+  data: { loading: true, openid: '', showNotice: false },
+
+  openNotice() { this.setData({ showNotice: true }); },
+  closeNotice() { this.setData({ showNotice: false }); },
+  noop() {},
 
   onLoad() {
     if (!wx.getStorageSync('privacyAgreed')) {

@@ -9,7 +9,35 @@
     <view class="item">· 对话中涉及的情绪数据仅用于功能服务，<text class="hl">不会泄露给第三方</text>。</view>
     <view class="item">· 如遇紧急情绪波动，请优先查看「求助」页的热线。</view>
     <view class="item text-muted">点击「同意并开始」即表示你已阅读并同意上述说明。</view>
+    <view class="link" bindtap="openNotice">阅读《用户须知与免责声明》全文 ›</view>
   </view>
 
   <button class="btn-primary agree" bindtap="agree">同意并开始</button>
+</view>
+
+<!-- 用户须知与免责声明 -->
+<view class="notice-mask" wx:if="{{showNotice}}" bindtap="closeNotice">
+  <view class="notice-sheet" catchtap="noop">
+    <view class="ns-title">用户须知与免责声明</view>
+    <scroll-view scroll-y class="ns-body">
+      <view class="ns-h">一、服务定位</view>
+      <view class="ns-p">心语伴是一款基于大语言模型的 AI 情绪陪伴小程序，面向备考学生等群体提供情绪倾诉、情绪记录与自助式建议。本工具不提供心理诊断、治疗或任何医疗服务。</view>
+
+      <view class="ns-h">二、使用说明</view>
+      <view class="ns-p">· 你可以随时与 AI 对话倾诉，回复由大模型生成，可能存在误差或不适之处。</view>
+      <view class="ns-p">· 「心情」「周报」「自评」等功能会记录你的情绪标签与自评得分，用于生成建议与可视化，属于必要功能数据。</view>
+
+      <view class="ns-h">三、隐私与数据</view>
+      <view class="ns-p">· 我们不收集你的姓名、手机号、位置、通讯录等敏感信息。</view>
+      <view class="ns-p">· 对话正文不写入数据库，仅为本次会话使用；情绪标签、自评结果与危机预警（触发时间与等级）会脱敏存库，用于改进产品安全。</view>
+
+      <view class="ns-h">四、免责声明</view>
+      <view class="ns-p">AI 内容仅供自助参考，不构成医疗、心理诊断或治疗建议。若你正处于自伤/他伤风险之中，请立即：
+        拨打全国心理援助热线 <text class="ns-strong">12356</text>，或 120，或直接联系身边信任的人；紧急情况下请使用「求助」页提供的所有可用途径。</view>
+
+      <view class="ns-h">五、反馈与撤回</view>
+      <view class="ns-p">你可以通过「我的」→ 意见反馈告诉我们如何改进；如希望停止使用，关闭即可，相关数据按微信及云开发平台规则处理。</view>
+    </scroll-view>
+    <button class="btn-primary full" bindtap="closeNotice">我知道了</button>
+  </view>
 </view>

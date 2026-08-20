@@ -1,4 +1,4 @@
-// pages/report/report.js —— 本周情绪周报 + 分享卡片（canvas 生成）
+// pages/report/report.js —— 本周情绪周报 + 分享卡片（canvas，双模板）
 const app = getApp();
 
 const MOOD_EMOJI = {
@@ -6,6 +6,34 @@ const MOOD_EMOJI = {
 };
 const MOOD_LABEL = {
   happy: '开心', peace: '平静', anxiety: '焦虑', sad: '难过', lonely: '孤独', angry: '生气'
+};
+
+// 分享卡模板（配色与字号差异）
+const TPL = {
+  light: {
+    name: '清新浅色',
+    bg: ['#dbe6ff', '#eaf2ff', '#f7fbff'],
+    ink: '#3a4a63',        // 主文字
+    accent: '#4568c8',     // 顶栏文字
+    accentBar: 'rgba(91,141,239,0.10)',
+    data: '#5b8def',       // 数据高亮
+    muted: '#9ca3af',
+    sub: '#5b6b85',        // 建议正文
+    line: 'rgba(91,141,239,0.25)',
+    foot: '#aab4c8'
+  },
+  dark: {
+    name: '深夜深色',
+    bg: ['#0f1f3a', '#16264d', '#1d3466'],
+    ink: '#eef3ff',
+    accent: '#9cc3ff',
+    accentBar: 'rgba(156,195,255,0.14)',
+    data: '#9cc3ff',
+    muted: '#7c97b8',
+    sub: '#c3cde6',
+    line: 'rgba(156,195,255,0.30)',
+    foot: '#7c97b8'
+  }
 };
 
 Page({
@@ -17,8 +45,9 @@ Page({
     chatCount: 0,
     dayCount: 0,
     suggestion: '',
-    showShare: false,   // 分享卡浮层
-    shareUrl: '',       // 生成的临时图片
+    tpl: 'light',       // light | dark
+    showShare: false,
+    shareUrl: '',
     drawing: false
   },
 
@@ -79,6 +108,13 @@ Page({
   goChat() { wx.switchTab({ url: '/pages/chat/chat' }); },
 
   /* ---------- 分享卡片 ---------- */
+  setTpl(e) {
+    const tpl = e.currentTarget.dataset.tpl;
+    if (tpl === this.data.tpl) return;
+    this.setData({ tpl, shareUrl: '' });
+    wx.nextTick(() => this.drawCard());
+  },
+
   openShare() {
     this.setData({ showShare: true });
     wx.nextTick(() => this.drawCard());
@@ -90,6 +126,7 @@ Page({
   async drawCard() {
     if (this.data.drawing) return;
     this.setData({ drawing: true });
+    const t = TPL[this.data.tpl] || TPL.dark;
     try {
       const canvas = await new Promise((resolve, reject) => {
         wx.createSelectorQuery()
@@ -112,17 +149,15 @@ Page({
 
       // 背景渐变
       const g = ctx.createLinearGradient(0, 0, 0, H);
-      g.addColorStop(0, '#dbe6ff');
-      g.addColorStop(0.55, '#eaf2ff');
-      g.addColorStop(1, '#f7fbff');
+      t.bg.forEach((c, i) => g.addColorStop(i / (t.bg.length - 1), c));
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, W, H);
 
       // 顶栏
-      ctx.fillStyle = 'rgba(91,141,239,0.10)';
+      ctx.fillStyle = t.accentBar;
       this.rr(ctx, 46, 52, W - 92, 96, 28);
       ctx.fill();
-      ctx.fillStyle = '#4568c8';
+      ctx.fillStyle = t.accent;
       ctx.font = 'bold 30px sans-serif';
       ctx.textAlign = 'left';
       ctx.fillText('❥ 心语伴 · 本周情绪小报', 56, 112);
@@ -133,22 +168,22 @@ Page({
       ctx.fillText(this.data.topEmoji, W / 2, 220);
 
       // 情绪标签
-      ctx.fillStyle = '#3a4a63';
+      ctx.fillStyle = t.ink;
       ctx.font = 'bold 46px sans-serif';
       ctx.fillText('本周主要情绪：' + this.data.topLabel, W / 2, 320);
 
       // 数据
-      ctx.fillStyle = '#5b8def';
+      ctx.fillStyle = t.data;
       ctx.font = 'bold 64px sans-serif';
       ctx.fillText(String(this.data.chatCount), W / 2 - 130, 470);
       ctx.fillText(String(this.data.dayCount), W / 2 + 130, 470);
-      ctx.fillStyle = '#9ca3af';
+      ctx.fillStyle = t.muted;
       ctx.font = '24px sans-serif';
       ctx.fillText('次倾诉', W / 2 - 130, 510);
       ctx.fillText('天记录', W / 2 + 130, 510);
 
-      // 分隔
-      ctx.strokeStyle = 'rgba(91,141,239,0.25)';
+      // 分隔线
+      ctx.strokeStyle = t.line;
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(70, 560);
@@ -156,19 +191,18 @@ Page({
       ctx.stroke();
 
       // 建议（自动换行）
-      ctx.fillStyle = '#5b6b85';
+      ctx.fillStyle = t.sub;
       ctx.font = '27px sans-serif';
       this.wrap(ctx, this.data.suggestion, W / 2, 620, W - 150, 40, 3);
 
       // 日期与底部
       const now = new Date();
       const dateStr = now.getFullYear() + '.' + (now.getMonth() + 1) + '.' + now.getDate();
-      ctx.fillStyle = '#aab4c8';
+      ctx.fillStyle = t.foot;
       ctx.font = '22px sans-serif';
-      ctx.fillText(dateStr + ' · 记录本周的每一天', W / 2, 810);
+      ctx.fillText(dateStr + ' · 记录这周的每一天', W / 2, 810);
       ctx.fillText('AI 情绪陪伴 · 非医疗诊断', W / 2, 862);
 
-      // 导出
       this.makeTemp(canvas, W, H, dpr);
     } catch (e) {
       console.error('[分享卡] 绘制失败', e);
@@ -203,7 +237,7 @@ Page({
     }
     if (lines.length < maxLines) lines.push(line);
     const lastIdx = lines.length - 1;
-    lines[lastIdx] = lastIdx === maxLines - 1 && i < chars.length ? lines[lastIdx] + '…' : lines[lastIdx];
+    if (lastIdx === maxLines - 1 && i < chars.length) lines[lastIdx] += '…';
     lines.forEach((ln, idx) => ctx.fillText(ln, x, y + idx * lineH));
   },
 
@@ -215,10 +249,6 @@ Page({
       success: (res) => this.setData({ shareUrl: res.tempFilePath }),
       fail: (err) => console.error('[转图失败]', err)
     }, this);
-  },
-
-  previewCard() {
-    if (this.data.shareUrl) wx.previewImage({ urls: [this.data.shareUrl] });
   },
 
   saveCard() {

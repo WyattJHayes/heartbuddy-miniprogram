@@ -37,6 +37,10 @@
 <view class="mask" wx:if="{{showShare}}" bindtap="closeShare">
   <view class="sheet" catchtap="noop">
     <view class="sheet-tip text-muted">长按图片可预览/保存，也可以直接分享给好友</view>
+    <view class="tpls">
+      <view class="tpl {{tpl === 'light' ? 'on' : ''}}" bindtap="setTpl" data-tpl="light">清新浅色</view>
+      <view class="tpl {{tpl === 'dark' ? 'on' : ''}}" bindtap="setTpl" data-tpl="dark">深夜深色</view>
+    </view>
     <canvas type="2d" id="shareCard" class="share-card"></canvas>
     <view class="rowbtns">
       <button class="btn-primary" bindtap="saveCard">保存到相册</button>

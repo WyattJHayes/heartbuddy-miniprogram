@@ -1,5 +1,7 @@
 # 心语伴（Heartbuddy）—— AI 情绪陪伴小程序
 
+<p align="center"><img src="assets/banner.svg" alt="心语伴 banner" width="100%"></p>
+
 > 2026 微信小程序开发大赛参赛作品 · 方向：AI + 心理健康 / 情绪陪伴（学生考前焦虑细分）
 > 技术栈：微信小程序原生 + 微信云开发（云函数 / 云数据库）+ OpenAI 兼容大模型
 

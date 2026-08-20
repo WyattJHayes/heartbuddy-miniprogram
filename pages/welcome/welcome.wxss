@@ -14,3 +14,16 @@
 .hl { color: #5b8def; font-weight: 500; }
 
 .agree { width: 100%; margin-top: 32rpx; }
+
+.link { margin-top: 18rpx; color: #5b8def; font-size: 26rpx; text-decoration: underline; }
+
+/* 用户须知弹窗 */
+.notice-mask { position: fixed; inset: 0; background: rgba(20, 26, 40, 0.55); display: flex; align-items: center; justify-content: center; z-index: 999; }
+.notice-sheet { width: 640rpx; max-height: 80vh; background: #fff; border-radius: 32rpx; padding: 36rpx 32rpx 28rpx; display: flex; flex-direction: column; }
+.ns-title { font-size: 34rpx; font-weight: 700; text-align: center; margin-bottom: 20rpx; }
+.ns-body { flex: 1; max-height: 48vh; }
+.ns-h { font-size: 28rpx; font-weight: 700; color: #3a4a63; margin: 20rpx 0 8rpx; }
+.ns-p { font-size: 25rpx; line-height: 1.75; color: #5b6b85; margin-bottom: 8rpx; }
+.ns-strong { color: #e05c53; font-weight: 600; }
+.notice-sheet .btn-primary { margin-top: 20rpx; }
+.full { width: 100%; }
