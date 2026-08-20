@@ -25,9 +25,12 @@
 | 🟠 mid | 绝望 / 撑不下去等强痛苦 | 温和弹窗提示查看求助页 |
 | 🟡 low | 一般情绪低落 | 不弹窗，AI 回复里轻提一句
 
-**周报分享卡预览**（浅色模板 · 运行时 canvas 绘制 + 双模板可切换）：
+**周报分享卡预览**（运行时 canvas 绘制，浅色 / 深色双模板可切换）：
 
-<p align="center"><img src="assets/sharecard-preview.png" alt="周报分享卡预览" width="320"></p>
+<p align="center">
+  <img src="assets/sharecard-preview.png" alt="浅色模板" width="300">
+  <img src="assets/sharecard-preview-dark.png" alt="深色模板" width="300">
+</p>
 
 ## 🚀 快速开始（约 30 分钟）
 
@@ -90,7 +93,8 @@ heartbuddy-miniprogram/
 │   ├── privacy/   隐私政策（全文）
 │   └── profile/   我的
 ├── assets/banner.svg                  # README 封面
-├── assets/sharecard-preview.png       # 周报分享卡预览（由 sharecard-light.svg 生成）
+├── assets/sharecard-preview.png       # 周报分享卡预览-浅色（.svg 生成）
+├── assets/sharecard-preview-dark.png  # 周报分享卡预览-深色（.svg 生成）
 ├── docs/视频脚本.md                    # 参赛演示视频分镜脚本
 ├── docs/参赛提交自查清单.md             # 提交前逐项打勾
 ├── docs/答辩问答预判.md                # 评委 10 问 Q&A

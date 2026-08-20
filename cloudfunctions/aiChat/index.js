@@ -4,6 +4,7 @@ const https = require('https');
 const { SYSTEM_PROMPT } = require('./prompt');
 const { apiKey, baseUrl, model, temperature, maxTokens, enabled } = require('./config');
 const danger = require('./danger');
+const secure = require('./secure');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
@@ -94,6 +95,20 @@ exports.main = async (event) => {
 
   if (!userInput || !userInput.trim()) return { ok: false, error: 'empty' };
   if (!enabled) return { ok: false, error: 'LLM 未启用，请检查 config.js / 环境变量' };
+
+  // 0. 微信官方内容安全（上架硬要求）：命中违规直接拦下，不进大模型（未开通时自动降级放行）
+  const sec = await secure.check({ content: userInput, openid: OPENID });
+  if (sec.risky) {
+    return {
+      code: 0,
+      result: {
+        content: secure.BLOCKED_REPLY,
+        mood: 'peace', intensity: 0.3,
+        crisis: null,
+        securityBlocked: true
+      }
+    };
+  }
 
   // 1. 组装多轮上下文（最近 10 条）
   const messages = [];

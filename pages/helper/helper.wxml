@@ -2,6 +2,13 @@
   <view class="card urgent">
     <view class="section-title">如果你现在很不好</view>
     <view class="urgent-text">请优先联系最近的成年人、老师或直接拨打心理援助热线。你不需要独自承受。</view>
+    <view class="urgent-num">
+      <view class="urgent-num-main">
+        <view class="urgent-num-hl">你永远可以拨打 12356</view>
+        <view class="urgent-num-desc">全国统一心理援助热线 · 24 小时免费</view>
+      </view>
+      <button class="dial dial-big" data-number="12356" bindtap="call">拨打</button>
+    </view>
   </view>
 
   <view class="card">

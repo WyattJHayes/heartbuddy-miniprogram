@@ -2,6 +2,14 @@
 .heart-title { font-size: 32rpx; font-weight: 600; color: #b33a2a; margin-bottom: 12rpx; }
 .urgent-text { font-size: 28rpx; line-height: 1.7; }
 
+.urgent-num {
+  margin-top: 20rpx; padding: 20rpx 24rpx; border-radius: 24rpx;
+  background: #ffffff; display: flex; align-items: center; justify-content: space-between; gap: 16rpx;
+}
+.urgent-num-hl { font-size: 30rpx; font-weight: 700; color: #d6483a; }
+.urgent-num-desc { font-size: 22rpx; color: #9ca3af; margin-top: 4rpx; }
+.dial-big { background: #e05c53; color: #fff; border-radius: 40rpx; padding: 0 40rpx; font-size: 28rpx; }
+
 .line { display: flex; align-items: center; justify-content: space-between; padding: 16rpx 0; border-bottom: 1rpx solid #f3f4f6; }
 .line:last-child { border-bottom: none; }
 .line-name { font-size: 28rpx; font-weight: 500; }
