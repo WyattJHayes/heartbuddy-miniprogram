@@ -1,0 +1,48 @@
+<view class="container">
+  <!-- 用户信息 -->
+  <view class="card user">
+    <view class="avatar">🌱</view>
+    <view class="user-info">
+      <view class="user-name">心语伴的用户</view>
+      <view class="text-muted">ID {{shortId || '—'}}</view>
+    </view>
+  </view>
+
+  <!-- 统计 -->
+  <view class="card">
+    <view class="section-title">我的数据</view>
+    <view class="stats">
+      <view class="stat" bindtap="goReport">
+        <text class="stat-num">{{chatTotal}}</text>
+        <text class="stat-label">累计倾诉</text>
+      </view>
+      <view class="stat" bindtap="goReport">
+        <text class="stat-num">→</text>
+        <text class="stat-label">查看周报</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 反馈 -->
+  <view class="card">
+    <view class="section-title">给心语伴留言</view>
+    <textarea
+      class="ta"
+      placeholder="说说你的使用感受 / 想增加的陪伴功能…"
+      value="{{feedback}}"
+      bindinput="onFeedback"
+      maxlength="200"
+    />
+    <button class="btn-primary full" bindtap="submitFeedback" loading="{{submitting}}">提交反馈</button>
+  </view>
+
+  <!-- 设置 -->
+  <view class="card">
+    <view class="row" bindtap="viewPrivacy">
+      <text>隐私说明</text><text class="arrow">›</text>
+    </view>
+    <view class="row">
+      <text>版本</text><text class="muted">v0.1.0（参赛 MVP）</text>
+    </view>
+  </view>
+</view>

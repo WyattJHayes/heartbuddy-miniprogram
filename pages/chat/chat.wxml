@@ -1,0 +1,49 @@
+<view class="chat-page">
+  <!-- 消息区 -->
+  <scroll-view scroll-y class="msg-scroll" scroll-with-animation>
+    <view class="msg-list">
+      <block wx:for="{{messages}}" wx:key="index">
+        <view class="row {{item.role === 'user' ? 'right' : 'left'}}">
+          <view class="msg {{item.role === 'user' ? 'user-msg' : 'ai-msg'}}">{{item.content}}</view>
+        </view>
+      </block>
+
+      <!-- AI 正在输入 -->
+      <view class="row left" wx:if="{{typing}}">
+        <view class="msg ai-msg">{{typedText}}<text class="cursor">▍</text></view>
+      </view>
+      <view id="aiEnd"></view>
+      <view id="scrollAnchor"></view>
+    </view>
+
+    <!-- 快捷问题 -->
+    <view class="quick" wx:if="{{messages.length <= 1 && !typing}}">
+      <view class="quick-title">试试这样说</view>
+      <view class="quick-list">
+        <view class="quick-item" wx:for="{{quickReplies}}" wx:key="*this"
+              data-text="{{item}}" bindtap="onQuick">{{item}}</view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 输入栏 -->
+  <view class="input-bar">
+    <view class="mood-tags">
+      <view class="tag {{moodTag==='开心'?'on':''}}" data-m="开心" bindtap="onMood">😊 开心</view>
+      <view class="tag {{moodTag==='焦虑'?'on':''}}" data-m="焦虑" bindtap="onMood">😰 焦虑</view>
+      <view class="tag {{moodTag==='难过'?'on':''}}" data-m="难过" bindtap="onMood">😢 难过</view>
+      <view class="tag {{moodTag==='生气'?'on':''}}" data-m="生气" bindtap="onMood">😡 生气</view>
+    </view>
+    <view class="input-row">
+      <input
+        class="input"
+        placeholder="说点什么…"
+        value="{{input}}"
+        confirm-type="send"
+        bindinput="onInput"
+        bindconfirm="onSend"
+      />
+      <button class="send" bindtap="onSend" loading="{{loading}}">发送</button>
+    </view>
+  </view>
+</view>

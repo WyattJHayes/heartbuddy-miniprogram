@@ -1,0 +1,24 @@
+.progress { display: flex; align-items: center; gap: 16rpx; margin-bottom: 20rpx; }
+.p-num { font-size: 26rpx; color: #5b8def; }
+.p-bar { flex: 1; height: 12rpx; background: #e5e9f2; border-radius: 12rpx; overflow: hidden; }
+.p-fill { height: 100%; background: #5b8def; border-radius: 12rpx; transition: width 0.3s; }
+
+.q-card { }
+.q-text { font-size: 34rpx; font-weight: 600; line-height: 1.6; margin-bottom: 28rpx; }
+.opt {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 24rpx 28rpx; background: #f7f8fb; border-radius: 16rpx;
+  margin-bottom: 16rpx; font-size: 28rpx;
+}
+.mark { color: #5b8def; font-weight: 600; }
+.prev { width: 100%; }
+
+.result { text-align: center; }
+.r-emoji { font-size: 110rpx; margin: 16rpx 0; }
+.r-label { font-size: 36rpx; font-weight: 700; }
+.r-score { font-size: 28rpx; color: #5b8def; margin: 12rpx 0; font-weight: 600; }
+.r-advice { font-size: 29rpx; line-height: 1.8; text-align: left; background: #f2f6ff; padding: 28rpx; border-radius: 16rpx; margin-top: 20rpx; }
+.r-note { font-size: 22rpx; color: #9ca3af; margin-top: 16rpx; }
+
+.full { width: 100%; }
+.mt { margin-top: 20rpx; }

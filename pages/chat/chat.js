@@ -1,0 +1,155 @@
+// pages/chat/chat.js —— 核心对话页
+const app = getApp();
+const api = require('../../utils/api');
+const { quickReplies } = require('../../config/index');
+
+const GREETINGS = {
+  morning: '早上好呀 ☀️ 今天想聊点什么？',
+  afternoon: '下午好 🌤 我在这儿陪着你。',
+  evening: '夜深了 🌙 有什么想说给我听吗？'
+};
+
+Page({
+  data: {
+    loading: false,
+    sessionId: '',
+    messages: [],        // [{ role: 'user'|'ai', content }]
+    input: '',
+    moodTag: '',         // 当前可选的情绪标签
+    typing: false,       // AI 打字中
+    typedText: '',
+    quickReplies
+  },
+
+  onLoad() {
+    // 首次进入且未同意隐私 -> 去欢迎页
+    if (!wx.getStorageSync('privacyAgreed')) {
+      wx.redirectTo({ url: '/pages/welcome/welcome' });
+      return;
+    }
+    this.initSession();
+  },
+
+  initSession() {
+    const hour = new Date().getHours();
+    const greeting =
+      hour < 11 ? GREETINGS.morning : hour < 19 ? GREETINGS.afternoon : GREETINGS.evening;
+    const sessionId = String(Date.now());
+    this.setData({ sessionId });
+    this.setAI(5); // 初始会话 ID 就绪后可向云函数获取历史；MVP 简化为固定 ID
+    this.pushAI(greeting, false);
+  },
+
+  setAI(timeout) {
+    // 预留：从云端恢复历史会话可在此实现
+  },
+
+  pushAI(content, type = true) {
+    this.setData({ messages: this.data.messages.concat([{ role: 'ai', content }]), typing: true });
+    this.typewriter(content);
+  },
+
+  pushUser(content) {
+    this.setData({ messages: this.data.messages.concat([{ role: 'user', content }]) });
+  },
+
+  /* 打字机效果 */
+  typewriter(fullText) {
+    let i = 0;
+    this.setData({ typedText: '', typing: true });
+    this.timer = setInterval(() => {
+      i += 2;
+      if (i >= fullText.length) {
+        clearInterval(this.timer);
+        this.setData({ typing: false, typedText: fullText });
+      } else {
+        this.setData({ typedText: fullText.slice(0, i) });
+      }
+      this.scrollBottom();
+    }, 30);
+  },
+
+  scrollBottom() {
+    wx.createSelectorQuery()
+      .select('#msgEnd')
+      .boundingClientRect((rect) => {
+        if (rect) wx.pageScrollTo({ scrollTop: rect.top + rect.height, duration: 200 });
+      })
+      .exec();
+  },
+
+  onInput(e) { this.setData({ input: e.detail.value }); },
+
+  onMood(e) {
+    this.setData({ moodTag: e.currentTarget.dataset.m });
+    this.pushUser('我今天想倾诉情绪：' + e.currentTarget.dataset.m); // 直接发送情绪标签
+  },
+
+  onQuick(e) { this.send(e.currentTarget.dataset.text); },
+
+  onSend() {
+    const text = this.data.input.trim();
+    if (!text) return;
+    this.setData({ input: '' });
+    this.send(text);
+  },
+
+  async send(text) {
+    this.pushUser(text);
+    this.setData({ moodTag: '' });
+    // 组装历史（最近 10 条）
+    const history = this.data.messages.slice(-10).map((m) => ({
+      role: m.role === 'user' ? 'user' : 'assistant',
+      content: m.content
+    }));
+
+    this.setData({ loading: true });
+    try {
+      const res = await api.call('aiChat', {
+        sessionId: this.data.sessionId,
+        userInput: text,
+        history
+      });
+      const r = res.result || {};
+      this.setData({ loading: false });
+      this.pushAI(r.content || '我在，慢慢说。');
+
+      // 危机分级响应（high 弹窗推送求助页 / mid 温和引导 / low 不打扰）
+      this.handleCrisis(r.crisis);
+    } catch (err) {
+      this.setData({ loading: false });
+      this.pushAI('😔 线上有点忙，请再试一次，我一直在。');
+    }
+  },
+
+  handleCrisis(crisis) {
+    if (!crisis || !crisis.level) return;
+    const tip = crisis.tip || '如果需要，这里有一些能立刻帮到你的方式。';
+    if (crisis.level === 'high') {
+      wx.showModal({
+        title: '我愿意陪着你',
+        content: '听起来你现在很不容易。请一定向身边的人求助，或拨打心理援助热线。' + tip,
+        confirmText: '去看看帮助',
+        cancelText: '继续聊聊',
+        success: (r) => {
+          if (r.confirm) wx.switchTab({ url: '/pages/helper/helper' });
+        }
+      });
+    } else if (crisis.level === 'mid') {
+      wx.showModal({
+        title: '我听到你了',
+        content: tip,
+        confirmText: '看看求助页',
+        cancelText: '继续聊聊',
+        success: (r) => {
+          if (r.confirm) wx.switchTab({ url: '/pages/helper/helper' });
+        }
+      });
+    } else {
+      // low：不弹窗打扰，短短一行就好
+      this.pushAI('（如果这份低落持续很久，别忘了求助页一直有人在等你。）');
+    }
+  },
+
+  onUnload() { if (this.timer) clearInterval(this.timer); }
+});

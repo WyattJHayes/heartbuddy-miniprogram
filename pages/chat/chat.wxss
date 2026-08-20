@@ -1,0 +1,40 @@
+.chat-page { display: flex; flex-direction: column; height: 100vh; background: #f7f8fb; }
+.msg-scroll { flex: 1; overflow: hidden; }
+.msg-list { padding: 24rpx; }
+
+.row { display: flex; margin-bottom: 20rpx; }
+.row.left { justify-content: flex-start; }
+.row.right { justify-content: flex-end; }
+
+.msg { max-width: 76%; padding: 20rpx 24rpx; border-radius: 20rpx; font-size: 30rpx; line-height: 1.6; }
+.user-msg { background: #5b8def; color: #fff; border-bottom-right-radius: 6rpx; }
+.ai-msg { background: #f2f4f8; color: #1f2937; border-bottom-left-radius: 6rpx; }
+.cursor { color: #5b8def; }
+
+.quick { padding: 24rpx; }
+.quick-title { color: #9ca3af; font-size: 26rpx; margin-bottom: 16rpx; }
+.quick-list { display: flex; flex-wrap: wrap; gap: 16rpx; }
+.quick-item {
+  background: #eef3ff; color: #4a6fc4; font-size: 26rpx;
+  padding: 14rpx 24rpx; border-radius: 32rpx;
+}
+
+.input-bar {
+  border-top: 1rpx solid #eee;
+  padding: 16rpx 24rpx;
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+  background: #fff;
+}
+.mood-tags { display: flex; gap: 14rpx; margin-bottom: 14rpx; }
+.tag {
+  font-size: 24rpx; color: #6b7280; background: #f7f8fb;
+  padding: 8rpx 20rpx; border-radius: 28rpx;
+}
+.tag.on { background: #e8f0ff; color: #5b8def; font-weight: 600; }
+
+.input-row { display: flex; align-items: center; gap: 16rpx; }
+.input {
+  flex: 1; height: 76rpx; background: #f7f8fb; border-radius: 40rpx;
+  padding: 0 32rpx; font-size: 30rpx;
+}
+.send { background: #5b8def; color: #fff; border-radius: 40rpx; padding: 0 40rpx; font-size: 28rpx; }

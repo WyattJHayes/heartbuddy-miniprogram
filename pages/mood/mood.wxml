@@ -1,0 +1,51 @@
+<view class="container">
+  <!-- 自评入口 -->
+  <view class="card assess-entry" bindtap="goAssessment">
+    <view class="ae-emoji">📋</view>
+    <view class="ae-main">
+      <view class="ae-title">考前焦虑自评</view>
+      <view class="ae-desc">7 个问题 · 约 2 分钟 · 结果仅供参考</view>
+    </view>
+    <view class="ae-arrow">›</view>
+  </view>
+
+  <block wx:if="{{!loaded}}">
+    <view class="text-muted center">加载中…</view>
+  </block>
+
+  <block wx:elif="{{empty}}">
+    <view class="card center">
+      <view class="big">🌱</view>
+      <view class="sub">还没有情绪记录</view>
+      <view class="text-muted">去「陪伴」页和心语说说话，这里就会长出你的情绪地图。</view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <!-- 情绪占比 -->
+    <view class="card">
+      <view class="section-title">最近的心情分布</view>
+      <view class="stat" wx:for="{{statList}}" wx:key="label">
+        <text class="stat-emoji">{{item.emoji}}</text>
+        <text class="stat-label">{{item.label}}</text>
+        <view class="bar-bg">
+          <view class="bar" style="width:{{item.ratio}}%"></view>
+        </view>
+        <text class="stat-num">{{item.count}} 次</text>
+      </view>
+      <button class="btn-ghost report" bindtap="goReport">查看本周情绪周报</button>
+    </view>
+
+    <!-- 最近记录 -->
+    <view class="card">
+      <view class="section-title">最近记录</view>
+      <view class="row" wx:for="{{recentList}}" wx:key="index">
+        <text class="row-emoji">{{item.emoji}}</text>
+        <view class="row-main">
+          <view class="row-label">{{item.label}}</view>
+          <view class="row-time">{{item.time}}</view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

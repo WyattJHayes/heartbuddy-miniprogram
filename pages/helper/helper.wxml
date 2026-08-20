@@ -1,0 +1,30 @@
+<view class="container">
+  <view class="card urgent">
+    <view class="section-title">如果你现在很不好</view>
+    <view class="urgent-text">请优先联系最近的成年人、老师或直接拨打心理援助热线。你不需要独自承受。</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">心理援助热线</view>
+    <view class="line" wx:for="{{hotlines}}" wx:key="name">
+      <view class="line-main">
+        <view class="line-name">{{item.name}}</view>
+        <view class="line-desc">{{item.free}} · {{item.number}}</view>
+      </view>
+      <button class="dial" data-number="{{item.number}}" bindtap="call">拨打</button>
+    </view>
+    <view class="text-muted tip">热线号码请以官方最新发布为准。</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">还能做什么</view>
+    <view class="tip-item">· 找一位信任的家人/老师/朋友聊一聊</view>
+    <view class="tip-item">· 去正规医院的临床心理科挂号咨询</view>
+    <view class="tip-item">· 回到「陪伴」页，让心语陪你说说话</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">重要说明</view>
+    <view class="text-muted">心语伴是 AI 情绪陪伴助手，不能替代专业医疗诊断与治疗。危机时刻请优先寻求专业或他人帮助。</view>
+  </view>
+</view>

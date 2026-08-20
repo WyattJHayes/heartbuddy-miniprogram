@@ -1,0 +1,22 @@
+{
+  "miniprogramRoot": "./",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "newFeature": true,
+    "coverView": true,
+    "nodeModules": false,
+    "autoAudits": false,
+    "showShadowRootInWxmlPanel": true,
+    "scopeDataCheck": false
+  },
+  "appid": "你的AppID",
+  "projectname": "heartbuddy",
+  "compileType": "miniprogram",
+  "libVersion": "latest",
+  "condition": {}
+}

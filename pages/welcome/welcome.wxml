@@ -1,0 +1,15 @@
+<view class="wrap">
+  <view class="logo">🌱</view>
+  <view class="title">心语伴</view>
+  <view class="slogan">随时在线的情绪陪伴者</view>
+
+  <view class="card notice">
+    <view class="section-title">在开始前，请了解</view>
+    <view class="item">· 我是 AI 心理陪伴助手，<text class="hl">不替代专业诊疗</text>。</view>
+    <view class="item">· 对话中涉及的情绪数据仅用于功能服务，<text class="hl">不会泄露给第三方</text>。</view>
+    <view class="item">· 如遇紧急情绪波动，请优先查看「求助」页的热线。</view>
+    <view class="item text-muted">点击「同意并开始」即表示你已阅读并同意上述说明。</view>
+  </view>
+
+  <button class="btn-primary agree" bindtap="agree">同意并开始</button>
+</view>

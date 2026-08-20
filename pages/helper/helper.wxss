@@ -1,0 +1,11 @@
+.urgent { background: linear-gradient(135deg, #fff2f0, #ffece8); border: 2rpx solid #ffb4a8; }
+.heart-title { font-size: 32rpx; font-weight: 600; color: #b33a2a; margin-bottom: 12rpx; }
+.urgent-text { font-size: 28rpx; line-height: 1.7; }
+
+.line { display: flex; align-items: center; justify-content: space-between; padding: 16rpx 0; border-bottom: 1rpx solid #f3f4f6; }
+.line:last-child { border-bottom: none; }
+.line-name { font-size: 28rpx; font-weight: 500; }
+.line-desc { font-size: 24rpx; color: #9ca3af; margin-top: 4rpx; }
+.dial { background: #5b8def; color: #fff; font-size: 26rpx; border-radius: 32rpx; padding: 0 32rpx; }
+
+.tip-item { font-size: 28rpx; line-height: 1.8; }

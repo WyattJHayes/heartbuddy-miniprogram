@@ -1,0 +1,43 @@
+<view class="container">
+  <!-- 答题态 -->
+  <block wx:if="{{!done}}">
+    <view class="progress">
+      <text class="p-num">{{cur + 1}}/{{questions.length}}</text>
+      <view class="p-bar"><view class="p-fill" style="width:{{(cur / questions.length) * 100}}%"></view></view>
+    </view>
+
+    <view class="card q-card">
+      <view class="q-text">{{questions[cur]}}</view>
+      <view class="opt" data-score="0" bindtap="pick">
+        <text>完全不然</text><text class="mark">0</text>
+      </view>
+      <view class="opt" data-score="1" bindtap="pick">
+        <text>有几天</text><text class="mark">1</text>
+      </view>
+      <view class="opt" data-score="2" bindtap="pick">
+        <text>一半以上的时间</text><text class="mark">2</text>
+      </view>
+      <view class="opt" data-score="3" bindtap="pick">
+        <text>几乎每天</text><text class="mark">3</text>
+      </view>
+      <view class="text-muted tip">请根据「过去两周」的感受选择。</view>
+    </view>
+
+    <button class="btn-ghost prev" wx:if="{{cur > 0}}" bindtap="prev">上一题</button>
+  </block>
+
+  <!-- 结果态 -->
+  <block wx:else>
+    <view class="card result">
+      <view class="r-emoji">{{total <= 4 ? '🌤' : total <= 11 ? '🌥' : '⛈'}}</view>
+      <view class="r-label">焦虑水平：{{label}}</view>
+      <view class="r-score">得分 {{total}} / 21</view>
+      <view class="r-advice">{{advice}}</view>
+      <view class="text-muted r-note">自评仅作参考，不能代替专业诊断。</view>
+    </view>
+
+    <button class="btn-primary full" bindtap="goChat">和心语聊聊</button>
+    <button class="btn-ghost full mt" bindtap="goHelper">去看求助热线</button>
+    <button class="btn-ghost full mt" bindtap="restart">重新测评</button>
+  </block>
+</view>

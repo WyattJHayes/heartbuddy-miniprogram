@@ -1,0 +1,26 @@
+.center { text-align: center; }
+.big { font-size: 90rpx; margin: 24rpx 0; }
+
+.assess-entry { display: flex; align-items: center; background: linear-gradient(135deg, #eaf1ff, #f7f9ff); }
+.ae-emoji { font-size: 56rpx; margin-right: 20rpx; }
+.ae-main { flex: 1; }
+.ae-title { font-size: 30rpx; font-weight: 600; }
+.ae-desc { font-size: 24rpx; color: #9ca3af; margin-top: 4rpx; }
+.ae-arrow { color: #c4c9d4; font-size: 40rpx; }
+
+.stat { display: flex; align-items: center; margin-bottom: 20rpx; }
+.stat-emoji { width: 56rpx; }
+.stat-label { width: 100rpx; font-size: 26rpx; }
+.bar-bg { flex: 1; height: 22rpx; background: #f0f2f7; border-radius: 20rpx; margin: 0 16rpx; overflow: hidden; }
+.bar { height: 100%; background: linear-gradient(90deg, #8fb4ff, #5b8def); border-radius: 20rpx; }
+.stat-num { width: 90rpx; text-align: right; font-size: 24rpx; color: #9ca3af; }
+
+.report { width: 100%; margin-top: 8rpx; }
+
+.row { display: flex; align-items: center; padding: 16rpx 0; border-bottom: 1rpx solid #f3f4f6; }
+.row:last-child { border-bottom: none; }
+.row-emoji { font-size: 44rpx; margin-right: 20rpx; }
+.row-main { flex: 1; }
+.row-label { font-size: 28rpx; }
+.row-trigger { color: #5b8def; }
+.row-time { font-size: 22rpx; color: #9ca3af; margin-top: 4rpx; }

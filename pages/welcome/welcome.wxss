@@ -1,0 +1,16 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 48rpx 48rpx;
+}
+
+.logo { font-size: 120rpx; }
+.title { font-size: 48rpx; font-weight: 700; margin-top: 16rpx; }
+.slogan { color: #9ca3af; margin: 8rpx 0 48rpx; }
+
+.card { width: 100%; }
+.item { font-size: 28rpx; line-height: 1.7; margin-bottom: 12rpx; }
+.hl { color: #5b8def; font-weight: 500; }
+
+.agree { width: 100%; margin-top: 32rpx; }

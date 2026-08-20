@@ -1,0 +1,33 @@
+<view class="container">
+  <block wx:if="{{!loaded}}">
+    <view class="text-muted center">生成中…</view>
+  </block>
+
+  <block wx:elif="{{empty}}">
+    <view class="card center">
+      <view class="big">📝</view>
+      <view class="sub">本周还没有记录</view>
+      <view class="text-muted">去和心语聊聊，下周这里会有一张属于你的心情卡片。</view>
+      <button class="btn-primary go" bindtap="goChat">去聊聊</button>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="card hero">
+      <view class="section-title">本周情绪小报</view>
+      <view class="hero-emoji">{{topEmoji}}</view>
+      <view class="hero-label">主要情绪：{{topLabel}}</view>
+      <view class="hero-stats">
+        <view class="hero-item"><text class="num">{{chatCount}}</text><text class="unit">次倾诉</text></view>
+        <view class="hero-item"><text class="num">{{dayCount}}</text><text class="unit">天有记录</text></view>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="section-title">给这周的你</view>
+      <view class="advice">{{suggestion}}</view>
+    </view>
+
+    <button class="btn-primary full" bindtap="goChat">继续和心语聊聊</button>
+  </block>
+</view>

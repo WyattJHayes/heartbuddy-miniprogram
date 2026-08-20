@@ -1,0 +1,51 @@
+/* app.wxss —— 全局样式 */
+page {
+  background: #f7f8fb;
+  font-family: -apple-system, "PingFang SC", "Helvetica Neue", Helvetica, sans-serif;
+  color: #1f2937;
+}
+
+.container {
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(31, 41, 55, 0.06);
+}
+
+.btn-primary {
+  background: #5b8def;
+  color: #fff;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #5b8def;
+  border: 2rpx solid #5b8def;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  margin: 8rpx 0 16rpx;
+}
+
+.sub {
+  font-size: 30rpx;
+  font-weight: 500;
+  margin-top: 8rpx;
+}
+
+.text-muted {
+  color: #9ca3af;
+  font-size: 24rpx;
+}

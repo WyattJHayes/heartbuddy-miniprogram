@@ -1,0 +1,34 @@
+{
+  "pages": [
+    "pages/welcome/welcome",
+    "pages/chat/chat",
+    "pages/mood/mood",
+    "pages/assessment/assessment",
+    "pages/report/report",
+    "pages/helper/helper",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#F7F8FB",
+    "navigationBarTitleText": "心语伴",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#9CA3AF",
+    "selectedColor": "#5B8DEF",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      { "pagePath": "pages/chat/chat", "text": "陪伴" },
+      { "pagePath": "pages/mood/mood", "text": "心情" },
+      { "pagePath": "pages/helper/helper", "text": "求助" },
+      { "pagePath": "pages/profile/profile", "text": "我的" }
+    ]
+  },
+  "cloud": true,
+  "style": "v2",
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}
