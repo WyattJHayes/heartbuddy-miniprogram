@@ -51,6 +51,12 @@ Page({
     drawing: false
   },
 
+  onLoad() {
+    // 记住上次选择的模板（区别于每次默认浅色）
+    const saved = wx.getStorageSync('reportTpl');
+    if (saved === 'light' || saved === 'dark') this.setData({ tpl: saved });
+  },
+
   onShow() { this.fetchWeek(); },
 
   async fetchWeek() {
@@ -112,6 +118,7 @@ Page({
     const tpl = e.currentTarget.dataset.tpl;
     if (tpl === this.data.tpl) return;
     this.setData({ tpl, shareUrl: '' });
+    wx.setStorageSync('reportTpl', tpl); // 记住本次选择，下次默认用
     wx.nextTick(() => this.drawCard());
   },
 
@@ -276,8 +283,11 @@ Page({
   },
 
   onShareAppMessage() {
+    const t = TPL[this.data.tpl] || TPL.light;
     return {
-      title: '我这周的主要情绪是「' + this.data.topLabel + '」，也来记录你的心情吧',
+      title:
+        '我在心语伴记下了「' + this.data.topLabel +
+        '」——' + this.data.chatCount + ' 次倾诉 · ' + this.data.dayCount + ' 天记录（' + t.name + '），一起来记录心情吧',
       path: '/pages/welcome/welcome'
     };
   }

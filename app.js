@@ -2,6 +2,7 @@
 App({
   globalData: {
     openid: '',
+    isNewUser: false,     // 首次登录（第一次建用户记录）时为 true，用于欢迎语定制
     loginFallback: false, // 登录失败降级标志（降级后 DB 相关功能受限但应用不崩）
     // 云开发环境 ID：留空则使用当前默认环境；
     // 如需指定环境，可改为 'xxx-xxx'（在「云开发控制台 - 设置 - 环境 ID」查看）
@@ -34,17 +35,19 @@ App({
 
     const attempt = async () => {
       const res = await wx.cloud.callFunction({ name: 'login' });
-      return (res && res.result && res.result.openid) || '';
+      const r = (res && res.result) || {};
+      return { openid: r.openid || '', isNewUser: !!r.isNewUser };
     };
 
     this._loginPromise = (async () => {
       // 第一次尝试
       try {
-        const openid = await attempt();
-        if (openid) {
-          this.globalData.openid = openid;
+        const info = await attempt();
+        if (info.openid) {
+          this.globalData.openid = info.openid;
+          this.globalData.isNewUser = info.isNewUser;
           this.globalData.loginFallback = false;
-          return openid;
+          return info.openid;
         }
       } catch (e) {
         console.warn('[login] 第一次失败：', e && e.message || e);
@@ -53,11 +56,12 @@ App({
       // 等 800ms 再试一次
       await new Promise((r) => setTimeout(r, 800));
       try {
-        const openid = await attempt();
-        if (openid) {
-          this.globalData.openid = openid;
+        const info = await attempt();
+        if (info.openid) {
+          this.globalData.openid = info.openid;
+          this.globalData.isNewUser = info.isNewUser;
           this.globalData.loginFallback = false;
-          return openid;
+          return info.openid;
         }
       } catch (e2) {
         console.warn('[login] 第二次失败', e2 && e2.message || e2);
@@ -65,6 +69,7 @@ App({
 
       // 最终降级：不阻断应用，DB 相关功能自然受限
       this.globalData.openid = '';
+      this.globalData.isNewUser = false;
       this.globalData.loginFallback = true;
       console.warn('[login] 已降级：openid 为空，DB 记录类功能暂不可用');
       return '';

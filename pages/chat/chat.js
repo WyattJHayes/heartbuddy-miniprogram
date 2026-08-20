@@ -6,7 +6,8 @@ const { quickReplies } = require('../../config/index');
 const GREETINGS = {
   morning: '早上好呀 ☀️ 今天想聊点什么？',
   afternoon: '下午好 🌤 我在这儿陪着你。',
-  evening: '夜深了 🌙 有什么想说给我听吗？'
+  evening: '夜深了 🌙 有什么想说给我听吗？',
+  first: '第一次见到你，真高兴 🌱 我是心语，会一直在。想从哪儿聊起都可以，我会认真听。'
 };
 
 Page({
@@ -22,19 +23,23 @@ Page({
     quickReplies
   },
 
-  onLoad() {
+  async onLoad() {
     // 首次进入且未同意隐私 -> 去欢迎页
     if (!wx.getStorageSync('privacyAgreed')) {
       wx.redirectTo({ url: '/pages/welcome/welcome' });
       return;
     }
+    // 耐心等登录完成（拿到 isNewUser 才能定制首次欢迎语；失败也不阻塞，用常规欢迎语兜底）
+    await app.login().catch(() => {});
     this.initSession();
   },
 
   initSession() {
     const hour = new Date().getHours();
     const greeting =
-      hour < 11 ? GREETINGS.morning : hour < 19 ? GREETINGS.afternoon : GREETINGS.evening;
+      app.globalData.isNewUser
+        ? GREETINGS.first
+        : hour < 11 ? GREETINGS.morning : hour < 19 ? GREETINGS.afternoon : GREETINGS.evening;
     const sessionId = String(Date.now());
     this.setData({ sessionId });
     this.setAI(5); // 初始会话 ID 就绪后可向云函数获取历史；MVP 简化为固定 ID

@@ -10,7 +10,9 @@ exports.main = async () => {
   const users = db.collection('users');
   const exist = await users.where({ openid: OPENID }).limit(1).get();
 
+  let isNewUser = false;
   if (!exist.data.length) {
+    isNewUser = true;
     await users.add({
       data: {
         openid: OPENID,
@@ -22,5 +24,5 @@ exports.main = async () => {
     });
   }
 
-  return { openid: OPENID, appid: APPID };
+  return { openid: OPENID, appid: APPID, isNewUser };
 };
