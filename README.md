@@ -122,6 +122,7 @@ heartbuddy-miniprogram/
 ├── tools/accessibility-check.py       # 无障碍自检脚本（本地 python3 运行）
 ├── components/emotion-chart/          # 通用 Canvas2D 折线图（长按存图，mood/ops 复用）
 ├── components/crisis-flow/            # 危机流程图组件（点击全屏/长按另存）
+├── components/share-card/             # 周报分享卡组件（浅/深双模板，长按预览/保存）
 ├── utils/moodscore.js                 # 情绪→分值映射（mood/ops 共享）
 ├── docs/周报分享图文教程.md            # 生成分享卡 → 朋友圈 4 步图文教程
 ├── docs/README-English.md            # 英文版 README

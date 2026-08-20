@@ -26,6 +26,7 @@
 .ctime { font-size: 22rpx; color: #9ca3af; margin-top: 4rpx; }
 
 .full { width: 100%; }
+.trend-copy { margin-top: 20rpx; font-size: 24rpx; }
 
 /* 危机预警待处理高亮卡 */
 .alert-card { border: 2rpx solid #ffb4a8; background: #fff7f6; }

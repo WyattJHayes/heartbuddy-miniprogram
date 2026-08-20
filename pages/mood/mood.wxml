@@ -39,6 +39,7 @@
     <!-- 7 日心情曲线 -->
     <view class="card">
       <view class="section-title">最近 7 天心情曲线</view>
+      <view wx:if="{{insight}}" class="insight">💡 {{insight}}</view>
       <emotion-chart points="{{moodLine}}" maxY="{{5}}" minY="{{1}}" color="#5b8def" unit="分值"></emotion-chart>
       <view class="chart-legend">纵轴情绪分值 1–5（低→高愉悦），每天取该日最后一次倾诉记录</view>
     </view>

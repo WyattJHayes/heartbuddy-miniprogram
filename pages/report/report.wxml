@@ -41,7 +41,7 @@
       <view class="tpl {{tpl === 'light' ? 'on' : ''}}" bindtap="setTpl" data-tpl="light">清新浅色</view>
       <view class="tpl {{tpl === 'dark' ? 'on' : ''}}" bindtap="setTpl" data-tpl="dark">深夜深色</view>
     </view>
-    <canvas type="2d" id="shareCard" class="share-card"></canvas>
+    <share-card id="shareCard" card="{{cardData}}" tpl="{{tpl}}"></share-card>
     <view class="rowbtns">
       <button class="btn-primary" bindtap="saveCard">保存到相册</button>
       <button class="btn-ghost" open-type="share">转发给好友</button>

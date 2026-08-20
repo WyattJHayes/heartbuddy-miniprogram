@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "本周情绪周报"
+  "navigationBarTitleText": "本周情绪周报",
+  "usingComponents": {
+    "share-card": "/components/share-card/share-card"
+  }
 }

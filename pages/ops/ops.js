@@ -64,5 +64,19 @@ Page({
     }
   },
 
-  refresh() { this.load(); }
+  refresh() { this.load(); },
+
+  // 复制近 14 日均值（便于答辩/Excel 使用）
+  copyTrend() {
+    const pts = this.data.trendPoints || [];
+    if (!pts.some((p) => p.value != null)) {
+      wx.showToast({ title: '暂无趋势数据可导出', icon: 'none' });
+      return;
+    }
+    const json = JSON.stringify(pts, null, 2);
+    wx.setClipboardData({
+      data: json,
+      success: () => wx.showToast({ title: '已复制 14 日均值 JSON', icon: 'success' })
+    });
+  }
 });

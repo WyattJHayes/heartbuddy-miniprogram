@@ -1,0 +1,3 @@
+<view class="sh-wrap">
+  <canvas type="2d" id="share" class="sh-canvas" bindlongpress="preview"></canvas>
+</view>

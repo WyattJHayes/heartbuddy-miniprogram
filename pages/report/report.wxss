@@ -18,7 +18,6 @@
 .mask { position: fixed; inset: 0; background: rgba(20, 26, 40, 0.55); display: flex; align-items: center; justify-content: center; z-index: 999; }
 .sheet { width: 640rpx; background: #fff; border-radius: 32rpx; padding: 32rpx; display: flex; flex-direction: column; align-items: center; }
 .sheet-tip { font-size: 24rpx; margin-bottom: 20rpx; text-align: center; }
-.share-card { width: 560rpx; height: 830rpx; border-radius: 24rpx; overflow: hidden; background: #eaf2ff; }
 .tpls { display: flex; gap: 16rpx; margin-bottom: 20rpx; }
 .tpl { padding: 12rpx 28rpx; border-radius: 999rpx; font-size: 25rpx; color: #7b88a2; background: #f0f3fa; border: 2rpx solid transparent; }
 .tpl.on { color: #5b8def; border-color: #5b8def; background: #eef4ff; font-weight: 600; }
