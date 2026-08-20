@@ -13,9 +13,25 @@
     <!-- 顶部指标 -->
     <view class="kpis">
       <view class="kpi"><text class="v">{{d.totalUsers}}</text><text class="t">累计用户</text></view>
-      <view class="kpi"><text class="v">{{d.totalMills}}</text><text class="t">倾诉次数</text></view>
+      <view class="kpi"><text class="v">{{d.totalChats}}</text><text class="t">倾诉次数</text></view>
       <view class="kpi"><text class="v">{{d.activeUsers7d}}</text><text class="t">7日活跃</text></view>
       <view class="kpi"><text class="v warn">{{d.totalCrisis}}</text><text class="t">危机总数</text></view>
+    </view>
+
+    <!-- 危机预警待处理（高亮） -->
+    <view class="card alert-card">
+      <view class="alert-main">
+        <view class="alert-l">
+          <view class="alert-num">{{d.openHigh}}</view>
+          <view class="alert-caption">未处理高危</view>
+        </view>
+        <view class="alert-r">
+          <view class="alert-title">⚠️ 危机预警待跟进</view>
+          <view class="alert-desc">
+            {{d.openCrisis}} 条未处理危机记录（含中低危）。请在控制台查询 crisisAlerts 并尽快人工跟进高危项。
+          </view>
+        </view>
+      </view>
     </view>
 
     <!-- 本周危机分级 -->
@@ -43,7 +59,7 @@
 
     <view class="card">
       <view class="section-title">测评</view>
-      <view class="text-muted">累计完成 {{d.totalAssessments}} 人次考前焦虑自评。</view>
+      <view class="text-muted">累计完成 {{d.totalAssessment}} 人次考前焦虑自评。</view>
     </view>
 
     <button class="btn-ghost full" bindtap="refresh">刷新</button>

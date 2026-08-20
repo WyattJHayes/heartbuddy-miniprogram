@@ -4,6 +4,7 @@
 
 > 2026 微信小程序开发大赛参赛作品 · 方向：AI + 心理健康 / 情绪陪伴（学生考前焦虑细分）
 > 技术栈：微信小程序原生 + 微信云开发（云函数 / 云数据库）+ OpenAI 兼容大模型
+> 🌐 English README → [docs/README-English.md](docs/README-English.md)
 
 ## ✨ 功能
 
@@ -96,10 +97,12 @@ heartbuddy-miniprogram/
 ├── assets/sharecard-preview.png       # 周报分享卡预览-浅色（.svg 生成）
 ├── assets/sharecard-preview-dark.png  # 周报分享卡预览-深色（.svg 生成）
 ├── docs/视频脚本.md                    # 参赛演示视频分镜脚本
+├── docs/演示录屏分镜卡.md              # 按镜头可拍的录制卡（S1–S10）
 ├── docs/参赛提交自查清单.md             # 提交前逐项打勾
 ├── docs/答辩问答预判.md                # 评委 10 问 Q&A
 ├── docs/部署运维手册.md                # 部署/集合/Key/提审/运维/排障
-├── .github/workflows/check.yml         # CI：JS/JSON/SVG 自动校验
+├── docs/README-English.md            # 英文版 README
+├── .github/workflows/check.yml        # CI：JS/JSON/SVG 自动校验
 └── cloudfunctions/
     ├── login/     静默登录（建 users 记录）
     ├── aiChat/    对话 + 情绪 + 危机（config / prompt / danger）

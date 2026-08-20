@@ -26,3 +26,13 @@
 .ctime { font-size: 22rpx; color: #9ca3af; margin-top: 4rpx; }
 
 .full { width: 100%; }
+
+/* 危机预警待处理高亮卡 */
+.alert-card { border: 2rpx solid #ffb4a8; background: #fff7f6; }
+.alert-main { display: flex; align-items: center; gap: 28rpx; }
+.alert-l { display: flex; flex-direction: column; align-items: center; min-width: 150rpx; }
+.alert-num { font-size: 88rpx; font-weight: 800; color: #e05c4e; line-height: 1; }
+.alert-caption { font-size: 22rpx; color: #c94a3e; margin-top: 8rpx; }
+.alert-r { flex: 1; }
+.alert-title { font-size: 30rpx; font-weight: 700; color: #b33a2a; margin-bottom: 8rpx; }
+.alert-desc { font-size: 24rpx; color: #a35c52; line-height: 1.6; }
