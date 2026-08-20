@@ -387,7 +387,7 @@ Page({
       this.setData({
         recentList: list.slice(0, 7),
         moodLine,
-        insight: this.buildInsight(moodLine),
+        insight: this.buildInsight(raw),
         healthIdx: this.buildHealth(moodLine),
         band: this.buildBand(raw),
         chartFooter: this.buildChartFooter(moodLine),
@@ -621,15 +621,42 @@ Page({
     const tail = avg == null ? '继续保持就好，别对自己太严苛。' : avg >= 4 ? '整体偏轻松，把这份松弛感带给别人也不错。' : avg >= 3 ? '整体偏低落，今天的你已经足够勇敢，允许自己慢一点。' : '整体偏低迷，如果持续难受，请记得「求助」页随时有人可以帮你。';
     return `本周共记录 ${total} 次，${topTxt}；情绪均分 ${avgTxt}/5。${tail}`;
   },
-  buildInsight(line) {
-    const vals = (line || []).filter((d) => d.value != null).map((d) => d.value);
-    if (!vals.length) return '';
-    const n = vals.length;
-    const half = Math.floor(n / 2);
+  // 情绪洞察（规则推导，14 天口径）：连低温柔建议、连高点赞、否则整体升降解读
+  buildInsight(raw) {
+    // 14 天内每天的平均分（当天可能多条记录，取均值）
+    const daySum = {};
+    (raw || []).forEach((m) => {
+      const v = MOOD_SCORE[m.mood];
+      if (typeof v !== 'number') return;
+      const d = new Date(m.createdAt);
+      if (Date.now() - d.getTime() > 14 * 86400000) return;
+      const k = d.toDateString();
+      if (!daySum[k]) daySum[k] = { s: 0, n: 0 };
+      daySum[k].s += v;
+      daySum[k].n++;
+    });
+    const dayAvg = Object.keys(daySum)
+      .map((k) => ({ ts: new Date(k).getTime(), v: daySum[k].s / daySum[k].n }))
+      .sort((a, b) => a.ts - b.ts);
+    if (dayAvg.length < 3) {
+      return dayAvg.length ? '多记录几天，我就能看出你情绪的走向啦 🌱' : '';
+    }
+    // 结尾连续段：从最后一天往前数同档（低 <2.5 / 高 ≥4）天数
+    let lowStreak = 0;
+    for (let i = dayAvg.length - 1; i >= 0 && dayAvg[i].v < 2.5; i--) lowStreak++;
+    let highStreak = 0;
+    for (let i = dayAvg.length - 1; i >= 0 && dayAvg[i].v >= 4; i--) highStreak++;
+    if (lowStreak >= 3) {
+      return `最近连续 ${lowStreak} 天情绪都偏低，辛苦了。可以先做 3 分钟呼吸，或到求助页找我说说，别一个人扛 🌿`;
+    }
+    if (highStreak >= 3) {
+      return `连续 ${highStreak} 天都是明亮的心情，真为你高兴！记得把这份好状态也记下来 🎈`;
+    }
+    // 整体趋势：前后两半均值对比
+    const half = Math.floor(dayAvg.length / 2);
+    const a = dayAvg.slice(0, Math.max(1, half)).map((x) => x.v);
+    const b = dayAvg.slice(half).map((x) => x.v);
     const avg = (arr) => arr.reduce((s, v) => s + v, 0) / arr.length;
-    const a = vals.slice(0, Math.max(1, half));
-    const b = vals.slice(half);
-    if (!b.length) return '';
     const d = avg(b) - avg(a);
     if (d <= -0.3) return '最近两天的曲线在往下走，好像有点累。允许自己慢下来，也可以现在就找我聊聊 🌱';
     if (d >= 0.3) return '最近情绪在回升，为你开心。记得把好心情也写进记录 🎈';

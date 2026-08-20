@@ -152,6 +152,24 @@ Page({
         const d = new Date(today.getTime() - i * DAY);
         mood7.push(daySet.has(d.toDateString()) ? 1 : 0);
       }
+      // 本月平均强度 + 最常用记录入口（trigger 统计，脱敏展示）
+      const mStart = new Date(today.getFullYear(), today.getMonth(), 1).getTime();
+      const _ = db.command;
+      const monthRes = await db.collection('moods')
+        .where({ openid, createdAt: _.gte(mStart) }).orderBy('createdAt', 'desc').limit(200)
+        .get().catch(() => ({ data: [] }));
+      const mList = monthRes.data || [];
+      let monthAvgInt = '';
+      const ints = mList.map((m) => m.intensity).filter((v) => typeof v === 'number' && v > 0);
+      if (ints.length) {
+        monthAvgInt = (ints.reduce((a, b) => a + b, 0) / ints.length).toFixed(1);
+      }
+      const trig = {};
+      mList.forEach((m) => {
+        const t = (m.trigger || '').trim();
+        if (t) trig[t] = (trig[t] || 0) + 1;
+      });
+      const topTrig = Object.keys(trig).sort((a, b) => trig[b] - trig[a])[0] || '';
       const first = firstRec.data && firstRec.data[0];
       this.setData({
         chatTotal: moods.total || 0,
@@ -160,6 +178,8 @@ Page({
         firstDate: first ? this.fmtDate(first.createdAt) : '—',
         streakDays,
         mood7Days: mood7,
+        monthAvgInt,
+        topTrig,
         footprintSum: (moods.total || 0) + (assessments.total || 0) + (crisis.total || 0)
       });
     } catch (e) {

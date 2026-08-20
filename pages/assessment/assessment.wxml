@@ -71,6 +71,7 @@
 
     <button class="btn-primary full" bindtap="goChat">和心语聊聊</button>
     <button class="btn-ghost full mt" bindtap="openCard">生成焦虑应对卡（可保存图片）</button>
+    <button class="btn-ghost full mt" bindtap="shareTrusted">把这段话发给信任的人（复制文字）</button>
     <button class="btn-ghost full mt" bindtap="goHelper">去看求助热线</button>
     <button class="btn-ghost full mt" bindtap="restart">重新测评</button>
   </block>

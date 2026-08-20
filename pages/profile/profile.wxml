@@ -48,6 +48,10 @@
       <view class="fw-cell {{item ? 'on' : ''}}" wx:for="{{mood7Days}}" wx:key="index" aria-label="{{item ? '今日已记录' : '今日未记录'}}"></view>
     </view>
     <view class="text-muted stat-tip">近 7 天：点亮的小格是你记录过心情的日子。</view>
+    <view class="foot-extra" wx:if="{{monthAvgInt || topTrig}}">
+      <text wx:if="{{monthAvgInt}}">本月平均强度 <text class="foot-hl">{{monthAvgInt}}</text>/5</text>
+      <text wx:if="{{topTrig}}"> · 最常用入口 <text class="foot-hl">{{topTrig}}</text></text>
+    </view>
   </view>
 
   <!-- 数据与隐私 -->
