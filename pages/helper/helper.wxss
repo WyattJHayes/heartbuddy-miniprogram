@@ -17,3 +17,19 @@
 .dial { background: #5b8def; color: #fff; font-size: 26rpx; border-radius: 32rpx; padding: 0 32rpx; }
 
 .tip-item { font-size: 28rpx; line-height: 1.8; }.breathe-link { color: #3f6fd8; background: #eef4ff; border-radius: 16rpx; padding: 18rpx 22rpx; margin-top: 10rpx; font-weight: 600; line-height: 1.6; }
+
+/* 今日关怀 */
+.care { background: linear-gradient(135deg, #eef4ff, #fdf4ec); border: none; }
+.care-head { display: flex; align-items: center; gap: 20rpx; }
+.care-emoji { font-size: 56rpx; }
+.care-title { font-size: 30rpx; font-weight: 700; color: #2a3b55; }
+.care-sub { font-size: 22rpx; color: #8a97ad; margin-top: 6rpx; }
+.care-text { margin-top: 16rpx; font-size: 27rpx; color: #4a5b76; line-height: 1.7; }
+
+/* 英语角 */
+.en-item { display: flex; align-items: center; gap: 20rpx; padding: 18rpx 0; border-bottom: 1rpx solid #f1f3f8; }
+.en-item:last-child { border-bottom: none; }
+.en-main { flex: 1; }
+.en-line { font-size: 27rpx; color: #3a4a63; }
+.en-zh { font-size: 23rpx; color: #8a97ad; margin-top: 6rpx; }
+.en-copy { font-size: 23rpx; color: #3f6fd8; background: #eef4ff; padding: 8rpx 22rpx; border-radius: 999rpx; font-weight: 600; }

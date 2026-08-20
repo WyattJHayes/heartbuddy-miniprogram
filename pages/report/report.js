@@ -84,10 +84,26 @@ Page({
       let deltaText = '';
       if (weekAvg != null && prevAvg != null) {
         const d = +(weekAvg - prevAvg).toFixed(1);
-        deltaText = d > 0.05 ? `↗ 本周较上 周高 ${d}` : d < -0.05 ? `↘ 本周较上周低 ${Math.abs(d)}` : '→ 与上周基本持平';
+        deltaText = d > 0.05 ? `↗ 本周较上周高 ${d}` : d < -0.05 ? `↘ 本周较上周低 ${Math.abs(d)}` : '→ 与上周基本持平';
       } else if (weekAvg != null) {
         deltaText = prevAvg == null ? '（上周无记录可对比）' : '';
       }
+      // 近 7 天分日均值（分享卡折线用；list 覆盖 now-7d ~ now）
+      const dayAcc = {};
+      list.forEach((m) => {
+        const v = MOOD_SCORE[m.mood];
+        if (typeof v !== 'number') return;
+        const k = new Date(m.createdAt).toDateString();
+        (dayAcc[k] = dayAcc[k] || []).push(v);
+      });
+      const avg7 = [];
+      const _td = new Date();
+      for (let i = 6; i >= 0; i--) {
+        const dd = new Date(_td.getFullYear(), _td.getMonth(), _td.getDate() - i);
+        const arr = dayAcc[dd.toDateString()];
+        avg7.push(arr && arr.length ? +(arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1) : null);
+      }
+
       const suggestions = {
         anxiety: '这周焦虑出现较多，试着每天睡前做 3 分钟深呼吸，把担心的事写下来。',
         sad: '这周难过占比较多，允许自己低落，也别忘了和信任的人分享一点。',
@@ -116,7 +132,8 @@ Page({
           suggestion: suggestions[top] || '继续保持觉察，记录本身就是一种照顾。',
           weekAvg: weekAvg != null ? weekAvg.toFixed(1) : '',
           prevAvg: prevAvg != null ? prevAvg.toFixed(1) : '',
-          deltaText
+          deltaText,
+          avg7
         }
       });
       this.pushHistory({

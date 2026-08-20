@@ -1,4 +1,16 @@
 <view class="container">
+  <!-- 今日关怀：日轮换轻贴士 -->
+  <view class="card care" wx:if="{{care}}">
+    <view class="care-head">
+      <view class="care-emoji">{{care.emoji}}</view>
+      <view>
+        <view class="care-title">{{care.title}}</view>
+        <view class="care-sub">今日关怀 · 每天一句，照顾忙碌的你</view>
+      </view>
+    </view>
+    <view class="care-text">{{care.text}}</view>
+  </view>
+
   <view class="card urgent">
     <view class="section-title">如果你现在很不好</view>
     <view class="urgent-text">请优先联系最近的成年人、老师或直接拨打心理援助热线。你不需要独自承受。</view>
@@ -35,6 +47,19 @@
     <view class="tip-item">· 去正规医院的临床心理科挂号咨询</view>
     <view class="tip-item">· 回到「陪伴」页，让心语陪你说说话</view>
     <view class="tip-item breathe-link" role="button" bindtap="goBreathe">🧘 如果很焦虑，先跟着 4 轮呼吸放松一下 →</view>
+  </view>
+
+  <!-- 英语角：想用英语说时，复制粘贴到聊天即可 -->
+  <view class="card">
+    <view class="section-title">🇬🇧 英语角：English Corner</view>
+    <view class="text-muted tip">心语支持中英文自由切换，复制下面任意一句，回到「陪伴」页粘贴发送即可，AI 会用英文回应。</view>
+    <view class="en-item" wx:for="{{englishPhrases}}" wx:key="en" data-en="{{item.en}}" bindtap="copyEn" role="button" aria-label="复制英文句子 {{item.en}}">
+      <view class="en-main">
+        <view class="en-line">{{item.en}}</view>
+        <view class="en-zh">{{item.zh}}</view>
+      </view>
+      <view class="en-copy">复制</view>
+    </view>
   </view>
 
   <view class="card">

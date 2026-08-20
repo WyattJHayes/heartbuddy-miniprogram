@@ -57,7 +57,7 @@ Component({
       return this._initCanvas().then(() => {
         if (!this.canvas) throw new Error('canvas 未就绪');
         const ctx = this.canvas.getContext('2d');
-        const W = 620, H = 920;
+        const W = 620, H = 980;
         const win = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync();
         const dpr = win.pixelRatio || 2;
         this.canvas.width = W * dpr;
@@ -112,25 +112,54 @@ Component({
         // 本周 vs 上周均值（数据化升级）
         ctx.fillStyle = t.data;
         ctx.font = 'bold 30px sans-serif';
-        ctx.fillText((cd.weekAvg ? '本周均值 ' + cd.weekAvg : '本周均值 —') + (cd.prevAvg ? '   ·   上周 ' + cd.prevAvg : ''), W / 2, 600);
+        ctx.fillText((cd.weekAvg ? '本周均值 ' + cd.weekAvg : '本周均值 —') + (cd.prevAvg ? '   ·   上周 ' + cd.prevAvg : ''), W / 2, 610);
         if (cd.deltaText) {
           ctx.fillStyle = t.sub;
           ctx.font = '23px sans-serif';
-          ctx.fillText(String(cd.deltaText).replace('（上周无记录可对比）', ''), W / 2, 636);
+          ctx.fillText(String(cd.deltaText).replace('（上周无记录可对比）', ''), W / 2, 646);
+        }
+
+        // 近 7 天情绪折线（数据来自 avg7：分值数组，null=无记录）
+        if (Array.isArray(cd.avg7) && cd.avg7.length) {
+          const n = cd.avg7.length;
+          const x0 = 110, x1 = W - 110, yTop = 760, yBot = 680;
+          const seg = { started: false };
+          const dotPts = [];
+          ctx.strokeStyle = t.accent;
+          ctx.lineWidth = 3;
+          ctx.setLineDash([]);
+          ctx.beginPath();
+          cd.avg7.forEach((v, i) => {
+            if (v == null) { seg.started = false; return; }
+            const x = x0 + (x1 - x0) * (i / (n - 1 || 1));
+            const y = yBot - (yBot - yTop) * Math.min(v / 5, 1);
+            if (seg.started) ctx.lineTo(x, y); else { ctx.moveTo(x, y); seg.started = true; }
+            dotPts.push([x, y]);
+          });
+          if (seg.started) ctx.stroke();
+          ctx.fillStyle = t.data;
+          dotPts.forEach(([x, y]) => {
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.fill();
+          });
+          ctx.fillStyle = t.muted;
+          ctx.font = '22px sans-serif';
+          ctx.fillText('近 7 天情绪曲线', W / 2, 690);
         }
 
         // 建议（自动换行）
         ctx.fillStyle = t.sub;
         ctx.font = '27px sans-serif';
-        this._wrap(ctx, cd.suggestion || '', W / 2, 686, W - 150, 40, 3);
+        this._wrap(ctx, cd.suggestion || '', W / 2, 810, W - 150, 40, 3);
 
         // 日期与底部
         const now = new Date();
         const dateStr = now.getFullYear() + '.' + (now.getMonth() + 1) + '.' + now.getDate();
         ctx.fillStyle = t.foot;
         ctx.font = '22px sans-serif';
-        ctx.fillText(dateStr + ' · 记录这周的每一天', W / 2, 810);
-        ctx.fillText('AI 情绪陪伴 · 非医疗诊断', W / 2, 862);
+        ctx.fillText(dateStr + ' · 记录这周的每一天', W / 2, 922);
+        ctx.fillText('AI 情绪陪伴 · 非医疗诊断', W / 2, 964);
 
         return this._toTemp(W, H, dpr);
       });
