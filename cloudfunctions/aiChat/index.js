@@ -8,6 +8,7 @@ const secure = require('./secure');
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
+const _ = db.command;
 
 // ---------- 调用大模型（OpenAI 兼容接口） ----------
 function callLLM(messages) {
@@ -110,6 +111,21 @@ exports.main = async (event) => {
     };
   }
 
+  // 0.1 运营安排的到期回访（Ops 看板「安排 24h 回访」→ followUps 集合，到点触发一次）
+  let followUp = null;
+  try {
+    const fu = await db.collection('followUps')
+      .where({ openid: OPENID, status: 'open', dueAt: _.lte(Date.now()) })
+      .orderBy('dueAt', 'asc').limit(1).get();
+    if (fu.data && fu.data.length) {
+      followUp = fu.data[0];
+      await db.collection('followUps').doc(followUp._id)
+        .update({ data: { status: 'done', handledAt: Date.now() } });
+    }
+  } catch (e) {
+    console.warn('[aiChat] followUps 读取失败', e);
+  }
+
   // 1. 组装多轮上下文（最近 10 条）
   const messages = [];
   // 1.0 语言自适应：输入以英文为主（且无中文）→ 让模型用英文回复（中英文自动跟随）
@@ -123,6 +139,13 @@ exports.main = async (event) => {
     });
   }
   if (SYSTEM_PROMPT) messages.push({ role: 'system', content: SYSTEM_PROMPT });
+  // 1.05 到期回访：自然问候，不暴露内部机制
+  if (followUp) {
+    messages.push({
+      role: 'system',
+      content: `（背景：运营方曾为该用户安排过一次关怀回访，备注：${followUp.note || '了解一下近况'}。现在正好到期。请在回复开头自然地问候一声近况，语气温暖，如同很久没见的老朋友，但不要提及「回访」「运营」等内部词汇。）`
+    });
+  }
   // 1.1 自评结果作为上下文（自然关心，不下诊断）
   if (assessment && Number.isFinite(assessment.total)) {
     messages.push({

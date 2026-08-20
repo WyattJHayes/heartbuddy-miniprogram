@@ -19,7 +19,7 @@ exports.main = async () => {
   const weekAgo = Date.now() - 7 * 24 * 3600 * 1000;
 
   try {
-    const [users, moods, assessments, crisisTotal, crisisWeek, moodWeek, activeUsers, openHigh, openCrisis, handledCrisis, weekHandled] =
+    const [users, moods, assessments, crisisTotal, crisisWeek, moodWeek, activeUsers, openHigh, openCrisis, handledCrisis, weekHandled, highWeek] =
       await Promise.all([
         db.collection('users').count(),
         db.collection('moods').count(),
@@ -31,7 +31,8 @@ exports.main = async () => {
         db.collection('crisisAlerts').where({ level: 'high', status: 'open' }).count(),
         db.collection('crisisAlerts').where({ status: 'open' }).count(),
         db.collection('crisisAlerts').where({ status: 'handled' }).count(),
-        db.collection('crisisAlerts').where({ status: 'handled', handledAt: _.gte(weekAgo) }).count()
+        db.collection('crisisAlerts').where({ status: 'handled', handledAt: _.gte(weekAgo) }).count(),
+        db.collection('crisisAlerts').where({ level: 'high', createdAt: _.gte(weekAgo) }).limit(200).get()
       ]);
 
     const byLevel = { high: 0, mid: 0, low: 0 };
@@ -56,6 +57,30 @@ exports.main = async () => {
       .sort()
       .map((k) => ({ day: k, avg: +(byDay[k].sum / byDay[k].n).toFixed(1), n: byDay[k].n }));
 
+    // 高危 7 天分日趋势（含 0 天补齐）+ 高危用户 top（脱敏）
+    const highByDay = {};
+    const highUsers = {};
+    (highWeek.data || []).forEach((c) => {
+      const d = new Date(c.createdAt);
+      const key = `${d.getMonth() + 1}-${String(d.getDate()).padStart(2, '0')}`;
+      highByDay[key] = (highByDay[key] || 0) + 1;
+      if (c.openid) highUsers[c.openid] = (highUsers[c.openid] || 0) + 1;
+    });
+    const highTrend7 = (function () {
+      const out = [];
+      const today = new Date();
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
+        const key = `${d.getMonth() + 1}-${String(d.getDate()).padStart(2, '0')}`;
+        out.push({ day: key, count: highByDay[key] || 0 });
+      }
+      return out;
+    })();
+    const highUserList = Object.keys(highUsers)
+      .sort((a, b) => highUsers[b] - highUsers[a])
+      .slice(0, 6)
+      .map((o) => ({ openid: o, short: o.slice(0, 6) + '…', count: highUsers[o] }));
+
     return {
       ok: true,
       admin: true,
@@ -73,6 +98,8 @@ exports.main = async () => {
         weekHandled: weekHandled.total,
         moodTrend7,
         crisisBySource: Object.keys(bySource).map((k) => ({ source: k, count: bySource[k] })),
+        highTrend7,
+        highUserList,
         recentCrisis: (crisisWeek.data || []).slice(0, 10).map((c) => ({
           id: c._id,
           level: c.level,

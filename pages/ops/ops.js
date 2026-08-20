@@ -71,6 +71,28 @@ Page({
 
   refresh() { this.load(); },
 
+  // 高危用户 → 安排 24h 回访（写入 followUps，用户下次开口时 AI 自然问候一次）
+  async scheduleFollow(e) {
+    const openid = e.currentTarget.dataset.full;
+    if (!openid) return;
+    try {
+      const db = wx.cloud.database();
+      await db.collection('followUps').add({
+        data: {
+          openid,
+          note: '高危用户关怀回访',
+          status: 'open',
+          dueAt: Date.now() + 24 * 3600 * 1000,
+          createdAt: Date.now()
+        }
+      });
+      wx.showToast({ title: '已安排 24h 后回访', icon: 'success' });
+    } catch (err) {
+      console.error('[ops] 安排回访失败', err);
+      wx.showToast({ title: '安排失败，请重试', icon: 'none' });
+    }
+  },
+
   // 一键把危机标记为已处理（写回 crisisAlerts，形成现场可点的闭环）
   handleCrisis(e) {
     const id = e.currentTarget.dataset.id;

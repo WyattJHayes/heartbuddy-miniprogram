@@ -60,3 +60,14 @@
 .src-bar { flex: 1; height: 20rpx; background: #eef1f6; border-radius: 999rpx; overflow: hidden; }
 .src-fill { height: 100%; background: #f2a35c; border-radius: 999rpx; }
 .src-num { width: 96rpx; text-align: right; font-size: 23rpx; color: #5b6b85; }
+
+/* 高危趋势 + 高危用户 */
+.hday { display: flex; align-items: center; gap: 14rpx; margin: 10rpx 0; }
+.hday-label { width: 88rpx; font-size: 23rpx; color: #5b6b85; }
+.hday-bar { flex: 1; height: 20rpx; background: #fdeaea; border-radius: 999rpx; overflow: hidden; }
+.hday-fill { height: 100%; background: linear-gradient(90deg, #ffb3a0, #f26c4f); border-radius: 999rpx; }
+.hday-num { width: 44rpx; text-align: right; font-size: 24rpx; font-weight: 700; color: #d8482a; }
+.huser { display: flex; align-items: center; gap: 16rpx; margin: 14rpx 0; }
+.huser-id { font-family: monospace; flex: 1; font-size: 25rpx; color: #3a4a63; }
+.huser-cnt { font-size: 23rpx; color: #d8482a; }
+.huser-btn { margin: 0; padding: 6rpx 20rpx; background: #fff3ee; color: #d8482a; font-size: 23rpx; border-radius: 999rpx; line-height: 1.9; }

@@ -36,6 +36,17 @@
       <view class="text-muted r-note">自评仅作参考，不能代替专业诊断。</view>
     </view>
 
+    <!-- 自评历史回顾：最近几次变化 -->
+    <view class="card mt" wx:if="{{hist.length}}">
+      <view class="section-title">📈 自评历史变化</view>
+      <view class="hrow" wx:for="{{hist}}" wx:key="index">
+        <text class="hdate">{{item.date}}</text>
+        <view class="hdrop"><view class="hbar" style="width: {{item.total / 21 * 100}}%"></view></view>
+        <text class="hval">{{item.total}} 分 · {{item.level}}</text>
+      </view>
+      <view wx:if="{{histDelta}}" class="text-muted hdelta">{{histDelta}}</view>
+    </view>
+
     <!-- 3 天陪伴计划 -->
     <view class="card mt" wx:if="{{plan}}">
       <view class="section-title">3 天陪伴计划 · {{plan.label}}</view>

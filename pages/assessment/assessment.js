@@ -33,12 +33,49 @@ Page({
     drawing: false,
     plan: null,       // 3 天陪伴计划（本地）
     planIdx: -1,
-    planAllDone: false
+    planAllDone: false,
+    hist: [],          // 历次自评趋势 [{date,total,level}]
+    histDelta: ''      // 与最近一次对比文案
   },
 
   onLoad() {
     this.setData({ answers: QUESTIONS.map(() => null) });
     this.refreshPlan();
+    this.loadHistory();
+  },
+
+  // 自评历史：取本人最近 6 次（高分=焦虑高）→ 看变化趋势
+  async loadHistory() {
+    try {
+      let openid = app.globalData.openid;
+      if (!openid) openid = await app.login();
+      if (!openid) return;
+      const db = wx.cloud.database();
+      const res = await db.collection('assessments')
+        .where({ openid })
+        .orderBy('createdAt', 'desc')
+        .limit(6)
+        .get();
+      const list = (res.data || []).map((a) => ({
+        date: this.fmt(a.createdAt),
+        total: a.total,
+        level: a.level || '—'
+      }));
+      let histDelta = '';
+      if (list.length >= 2 && typeof list[0].total === 'number' && typeof list[1].total === 'number') {
+        const d = list[0].total - list[1].total;
+        histDelta = d < 0 ? `较上次低 ${-d} 分，焦虑在回落 👍` : d > 0 ? `较上次高 ${d} 分，建议多关注自己` : '与上次持平，保持关注';
+      }
+      this.setData({ hist: list, histDelta });
+    } catch (err) {
+      console.warn('[assessment] 历史读取失败', err);
+    }
+  },
+
+  fmt(ts) {
+    const d = new Date(ts);
+    const p = (x) => (x < 10 ? '0' + x : x);
+    return `${d.getMonth() + 1}/${d.getDate()} ${p(d.getHours())}:${p(d.getMinutes())}`;
   },
 
   refreshPlan() {

@@ -21,6 +21,11 @@
         <view class="hero-item"><text class="num">{{chatCount}}</text><text class="unit">次倾诉</text></view>
         <view class="hero-item"><text class="num">{{dayCount}}</text><text class="unit">天有记录</text></view>
       </view>
+      <view wx:if="{{weekAvg}}" class="avg-line">
+        <text class="avg-num">本周均值 {{weekAvg}}</text>
+        <text wx:if="{{prevAvg}}" class="avg-cmp">上周 {{prevAvg}}</text>
+        <text class="avg-delta {{deltaText[0] === '↘' ? 'down' : ''}}">{{deltaText}}</text>
+      </view>
     </view>
 
     <view class="card">

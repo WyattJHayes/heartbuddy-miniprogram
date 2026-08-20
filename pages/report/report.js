@@ -1,5 +1,6 @@
 // pages/report/report.js —— 本周情绪周报 + 分享卡片（组件 share-card）
 const app = getApp();
+const { MOOD_SCORE } = require('../../utils/moodscore');
 
 const MOOD_EMOJI = {
   happy: '😊', peace: '😌', anxiety: '😰', sad: '😢', lonely: '🌫', angry: '😡'
@@ -25,7 +26,10 @@ Page({
     shareUrl: '',
     drawing: false,
     cardData: {},        // 传给 share-card 组件的数据
-    history: []          // 往期周报（本地缓存）
+    history: [],          // 往期周报（本地缓存）
+    weekAvg: null,        // 本周情绪均值
+    prevAvg: null,        // 上周情绪均值
+    deltaText: ''         // 与上周对比文案（↗/↘/→ +0.4 等）
   },
 
   onLoad() {
@@ -65,6 +69,25 @@ Page({
       });
 
       const top = Object.keys(counts).sort((a, b) => counts[b] - counts[a])[0] || 'peace';
+      // 本周/上周情绪均值（分值来自 utils/moodscore）
+      const _ = db.command;
+      const weekAgo2 = weekAgo - 7 * 24 * 3600 * 1000;
+      const prevRes = await db.collection('moods')
+        .where({ openid, createdAt: _.and(_.gte(weekAgo2), _.lt(weekAgo)) })
+        .limit(100).get();
+      const mean = (arr) => {
+        const vals = (arr || []).map((m) => MOOD_SCORE[m.mood]).filter((v) => typeof v === 'number');
+        return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+      };
+      const weekAvg = mean(list);
+      const prevAvg = mean(prevRes.data || []);
+      let deltaText = '';
+      if (weekAvg != null && prevAvg != null) {
+        const d = +(weekAvg - prevAvg).toFixed(1);
+        deltaText = d > 0.05 ? `↗ 本周较上 周高 ${d}` : d < -0.05 ? `↘ 本周较上周低 ${Math.abs(d)}` : '→ 与上周基本持平';
+      } else if (weekAvg != null) {
+        deltaText = prevAvg == null ? '（上周无记录可对比）' : '';
+      }
       const suggestions = {
         anxiety: '这周焦虑出现较多，试着每天睡前做 3 分钟深呼吸，把担心的事写下来。',
         sad: '这周难过占比较多，允许自己低落，也别忘了和信任的人分享一点。',
@@ -82,6 +105,9 @@ Page({
         chatCount: list.length,
         dayCount: days.size,
         suggestion: suggestions[top] || '继续保持觉察，记录本身就是一种照顾。',
+        weekAvg: weekAvg != null ? weekAvg.toFixed(1) : null,
+        prevAvg: prevAvg != null ? prevAvg.toFixed(1) : null,
+        deltaText,
         cardData: {
           topEmoji: MOOD_EMOJI[top] || '😌',
           topLabel: MOOD_LABEL[top] || '平稳',

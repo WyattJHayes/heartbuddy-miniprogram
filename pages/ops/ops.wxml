@@ -80,6 +80,31 @@
       </view>
     </block>
 
+    <!-- 高危预警大屏：分日趋势 + 高危用户回访 -->
+    <block wx:if="{{d.highTrend7 && d.highTrend7.length}}">
+      <view class="card">
+        <view class="section-title">🚨 高危危机·近 7 天趋势</view>
+        <view class="hday" wx:for="{{d.highTrend7}}" wx:key="index">
+          <text class="hday-label">{{item.day}}</text>
+          <view class="hday-bar"><view class="hday-fill" style="width: {{item.count / 5 * 100}}%"></view></view>
+          <text class="hday-num">{{item.count}}</text>
+        </view>
+        <view class="text-muted trend-note">近 7 天高危级危机记录分日计数（柱宽按 /5 缩放）。</view>
+      </view>
+    </block>
+
+    <block wx:if="{{d.highUserList && d.highUserList.length}}">
+      <view class="card">
+        <view class="section-title">高危用户（近 7 天）<text class="plan-sub">top {{d.highUserList.length}}</text></view>
+        <view class="huser" wx:for="{{d.highUserList}}" wx:key="openid">
+          <text class="huser-id">{{item.short}}</text>
+          <text class="huser-cnt">{{item.count}} 次高危</text>
+          <button class="huser-btn" data-full="{{item.openid}}" bindtap="scheduleFollow">安排 24h 回访</button>
+        </view>
+        <view class="text-muted trend-note">回访到期后，用户下次开口时 AI 会自然地关心一次（旁白内部机制不明说）。</view>
+      </view>
+    </block>
+
     <!-- 最近危机记录 -->
     <view class="card">
       <view class="section-title">最近危机记录</view>

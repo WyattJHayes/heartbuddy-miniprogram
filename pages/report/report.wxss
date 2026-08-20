@@ -26,3 +26,9 @@
 .tpl { padding: 12rpx 28rpx; border-radius: 999rpx; font-size: 25rpx; color: #7b88a2; background: #f0f3fa; border: 2rpx solid transparent; }
 .tpl.on { color: #5b8def; border-color: #5b8def; background: #eef4ff; font-weight: 600; }
 .rowbtns { width: 100%; display: flex; flex-direction: column; gap: 16rpx; margin-top: 24rpx; }
+/* 本周 vs 上周均值 */
+.avg-line { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 14rpx; margin-top: 18rpx; padding-top: 16rpx; border-top: 1rpx dashed #e4eaf3; }
+.avg-num { font-size: 26rpx; font-weight: 700; color: #3f6fd8; }
+.avg-cmp { font-size: 23rpx; color: #8a97ad; }
+.avg-delta { font-size: 23rpx; color: #28a06b; font-weight: 600; }
+.avg-delta.down { color: #c25b3a; }

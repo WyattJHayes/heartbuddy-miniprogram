@@ -41,3 +41,11 @@
 .pd-check.on { border-color: #5b8def; background: #eef4ff; color: #5b8def; }
 .pd-check.do { color: #b7c1d0; }
 .plan-note { margin-top: 8rpx; font-size: 23rpx; }
+
+/* 自评历史 */
+.hrow { display: flex; align-items: center; gap: 16rpx; margin: 12rpx 0; }
+.hdate { width: 170rpx; font-size: 23rpx; color: #5b6b85; }
+.hdrop { flex: 1; height: 18rpx; background: #eef1f6; border-radius: 999rpx; overflow: hidden; }
+.hbar { display: block; height: 100%; background: linear-gradient(90deg, #9dc2ff, #5b8def); border-radius: 999rpx; }
+.hval { width: 200rpx; text-align: right; font-size: 23rpx; color: #3a4a63; }
+.hdelta { margin-top: 12rpx; font-size: 23rpx; }
