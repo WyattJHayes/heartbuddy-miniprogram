@@ -1,5 +1,6 @@
 // pages/profile/profile.js —— 我的
 const app = getApp();
+const api = require('../../utils/api');
 
 Page({
   data: {
@@ -72,6 +73,42 @@ Page({
   goReport() { wx.navigateTo({ url: '/pages/report/report' }); },
 
   goOps() { wx.navigateTo({ url: '/pages/ops/ops' }); },
+
+  // 隐私合规：一键清空本人全部记录（双确认，防误触）
+  clearData() {
+    wx.showModal({
+      title: '清空我的记录？',
+      content: '将删除本机已同步的全部情绪记录、自评与危机提醒，且不可恢复。是否继续？',
+      confirmText: '仍要清空',
+      confirmColor: '#e05c4e',
+      success: (r) => {
+        if (!r.confirm) return;
+        wx.showModal({
+          title: '最后确认',
+          content: '删除后无法找回。确定清空？',
+          confirmText: '确认清空',
+          confirmColor: '#e05c4e',
+          success: async (r2) => {
+            if (!r2.confirm) return;
+            wx.showLoading({ title: '清理中…' });
+            try {
+              const res = await api.call('clearMyData');
+              wx.hideLoading();
+              if (res && res.ok) {
+                this.loadStats();
+                wx.showToast({ title: '已清空', icon: 'success' });
+              } else {
+                wx.showToast({ title: (res && res.error) || '清理失败', icon: 'none' });
+              }
+            } catch (e) {
+              wx.hideLoading();
+              wx.showToast({ title: '清理失败，请重试', icon: 'none' });
+            }
+          }
+        });
+      }
+    });
+  },
 
   goPrivacy() { wx.navigateTo({ url: '/pages/privacy/privacy' }); }
 });

@@ -2,6 +2,13 @@
 .big { font-size: 90rpx; margin: 24rpx 0; }
 
 .assess-entry { display: flex; align-items: center; background: linear-gradient(135deg, #eaf1ff, #f7f9ff); }
+
+.streak-card { display: flex; align-items: center; background: linear-gradient(135deg, #fff7ec, #fffdf7); border: 1rpx solid #ffe3b3; }
+.streak-emoji { font-size: 64rpx; margin-right: 20rpx; }
+.streak-main { flex: 1; }
+.streak-title { font-size: 30rpx; font-weight: 700; color: #9a6a1f; }
+.streak-desc { font-size: 24rpx; color: #b5882f; margin-top: 4rpx; }
+.streak-tag { font-size: 22rpx; color: #fff; background: #ffb03a; border-radius: 999rpx; padding: 6rpx 18rpx; }
 .ae-emoji { font-size: 56rpx; margin-right: 20rpx; }
 .ae-main { flex: 1; }
 .ae-title { font-size: 30rpx; font-weight: 600; }

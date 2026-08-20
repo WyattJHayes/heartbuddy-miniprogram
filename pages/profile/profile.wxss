@@ -14,5 +14,6 @@
 .row { display: flex; justify-content: space-between; align-items: center; padding: 24rpx 0; border-bottom: 1rpx solid #f3f4f6; font-size: 28rpx; }
 .row:last-child { border-bottom: none; }
 .arrow { color: #c4c9d4; font-size: 36rpx; }
+.row.danger { color: #e05c4e; }
 .muted { color: #9ca3af; }
 .stat-tip { margin-top: 12rpx; font-size: 22rpx; line-height: 1.6; }

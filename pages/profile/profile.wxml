@@ -58,6 +58,9 @@
     <view class="row" bindtap="goOps">
       <text>运营看板（演示）</text><text class="arrow">›</text>
     </view>
+    <view class="row danger" bindtap="clearData">
+      <text>清空我的记录（不可恢复）</text><text class="arrow">›</text>
+    </view>
     <view class="row">
       <text>版本</text><text class="muted">v0.3.0（参赛 MVP）</text>
     </view>

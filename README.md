@@ -37,7 +37,7 @@
 
 <p align="center"><img src="assets/architecture.svg" alt="产品架构图" width="100%"></p>
 
-三条链路：**前端 callFunction → 云函数（login / aiChat / opsSummary）→ 云数据库**；`aiChat` 额外接 **大模型 API**（OpenAI 兼容）与 **微信内容安全 msgSecCheck**。对话正文不进库，库中仅存情绪/测评脱敏字段。
+三条链路：**前端 callFunction → 云函数（login / aiChat / opsSummary / opsHandleCrisis / clearMyData）→ 云数据库**；`aiChat` 额外接 **大模型 API**（OpenAI 兼容）与 **微信内容安全 msgSecCheck**。对话正文不进库，库中仅存情绪/测评脱敏字段。
 
 ## 🚑 危机应对流程（内置「求助」页）
 
@@ -75,8 +75,9 @@ model: 'deepseek-chat',
 ### 5. 部署云函数
 1. 在编辑器中右键 `cloudfunctions/login` → **上传并部署：云端安装依赖**
 2. 右键 `cloudfunctions/aiChat` → **上传并部署：云端安装依赖**
-3. **（可选）运营看板**：右键 `cloudfunctions/opsSummary` 同样部署；然后把 `cloudfunctions/opsSummary/index.js` 顶部的 `ADMIN_OPENIDS` 换成你自己的 openid（可在云开发控制台→用户管理里查）
-4. 编译运行，完成 🎉
+3. **（可选）运营看板**：右键 `cloudfunctions/opsSummary` 和 `cloudfunctions/opsHandleCrisis` 同样部署；再把 `opsSummary` / `opsHandleCrisis` 顶部 `ADMIN_OPENIDS` 换成你自己的 openid（可在云开发控制台→用户管理里查）。这样「运营看板」里才能在危机列表上一键把记录标记为已处理
+4. **（可选）隐私清空**：右键 `cloudfunctions/clearMyData` 部署后，「我的」页的「清空我的记录」可用
+5. 编译运行，完成 🎉
 
 ## 🧪 自测清单
 - [ ] 首次进入出现「隐私同意」页，同意后可进主页
@@ -133,7 +134,8 @@ heartbuddy-miniprogram/
     ├── login/     静默登录（建 users 记录）
     ├── aiChat/    对话 + 情绪 + 危机（config / prompt / danger）
     ├── opsSummary/ 数据汇总（填 ADMIN_OPENIDS 白名单）
-    └── opsHandleCrisis/ 危机一键闭环（标记已处理，同白名单）
+    ├── opsHandleCrisis/ 危机一键闭环（标记已处理，同白名单）
+    └── clearMyData/ 隐私合规：清空当前用户数据
 ```
 
 ## 🔒 合规注意

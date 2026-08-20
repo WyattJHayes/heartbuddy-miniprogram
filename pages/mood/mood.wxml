@@ -22,6 +22,16 @@
   </block>
 
   <block wx:else>
+    <!-- 打卡激励 -->
+    <view wx:if="{{streak.n}}" class="card streak-card">
+      <text class="streak-emoji">🔥</text>
+      <view class="streak-main">
+        <view class="streak-title">已连续记录 {{streak.n}} 天</view>
+        <view class="streak-desc">{{streak.today ? '坚持此刻的觉察，就是对自己的照顾' : '今天还没记录，来一条就能续上'}}</view>
+      </view>
+      <text class="streak-tag">{{streak.today ? '今日已打卡' : '今日待打卡'}}</text>
+    </view>
+
     <!-- 情绪占比 -->
     <view class="card">
       <view class="section-title">最近的心情分布</view>

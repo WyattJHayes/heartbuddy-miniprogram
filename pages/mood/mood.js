@@ -10,7 +10,8 @@ Page({
     recentList: [],  // 最近记录 [{time,mood,label}]
     moodLine: [],     // 近 7 天 [{label,value}]，无记录 value:null
     insight: '',       // 趋势的一句话 AI 解读（规则生成）
-    chartFooter: ''    // 曲线图 footer（随长图一并导出）
+    chartFooter: '',    // 曲线图 footer（随长图一并导出）
+    streak: { n: 0, today: false }  // 连续打卡天数
   },
 
   onShow() { this.fetchMoods(); },
@@ -49,6 +50,7 @@ Page({
         moodLine,
         insight: this.buildInsight(moodLine),
         chartFooter: this.buildChartFooter(moodLine),
+        streak: this.computeStreak(raw),
         empty: list.length === 0,
         loaded: true
       });
@@ -89,6 +91,26 @@ Page({
   },
 
   dateKey(d) { return d.toDateString(); },
+
+  // 连续打卡：从今天（或昨天）往前数，有记录的天数
+  computeStreak(raw) {
+    const set = new Set();
+    (raw || []).forEach((m) => set.add(new Date(m.createdAt).toDateString()));
+    const DAY = 24 * 60 * 60 * 1000;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (!set.has(today.toDateString())) {
+      const y = new Date(today.getTime() - DAY);
+      if (!set.has(y.toDateString())) return { n: 0, today: false };
+    }
+    let n = 0;
+    const d = new Date(today);
+    while (set.has(d.toDateString())) {
+      n += 1;
+      d.setTime(d.getTime() - DAY);
+    }
+    return { n, today: set.has(today.toDateString()) };
+  },
 
   // 趋势的一句话解读（规则生成，突出 AI 陪伴感）
   buildInsight(line) {

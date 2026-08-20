@@ -29,6 +29,7 @@
     </view>
 
     <button class="btn-ghost full mt" bindtap="openShare">生成分享卡片</button>
+    <button class="btn-ghost full mt" bindtap="copyWeekText">复制文字版周报</button>
     <button class="btn-primary full mt" bindtap="goChat">继续和心语聊聊</button>
   </block>
 </view>

@@ -96,6 +96,25 @@ Page({
 
   goChat() { wx.switchTab({ url: '/pages/chat/chat' }); },
 
+  // 复制文字版周报（答辩/聊天分享友好）
+  copyWeekText() {
+    const d = this.data;
+    if (d.empty) {
+      wx.showToast({ title: '本周还没有记录', icon: 'none' });
+      return;
+    }
+    const text =
+      ['【心语伴 · 本周情绪小报】',
+       `主要情绪：${d.topLabel} ${d.topEmoji}`,
+       `倾诉 ${d.chatCount} 次 · ${d.dayCount} 天有记录`,
+       `给这周的你：${d.suggestion}`,
+       '—— 用 AI 心理陪伴，记录你的情绪地图 🌱'].join('\n');
+    wx.setClipboardData({
+      data: text,
+      success: () => wx.showToast({ title: '已复制文字版', icon: 'success' })
+    });
+  },
+
   /* ---------- 分享卡片（绘制在 share-card 组件） ---------- */
   setTpl(e) {
     const tpl = e.currentTarget.dataset.tpl;
