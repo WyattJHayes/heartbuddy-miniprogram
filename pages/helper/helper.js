@@ -76,6 +76,7 @@ Page({
       success: (r) => {
         if (!r.confirm) return;
         wx.setStorageSync('crisisCheck', Date.now() + 24 * 3600 * 1000);
+        if (!wx.getStorageSync('ach_care')) wx.setStorageSync('ach_care', true); // 成就：也请心语来看我
         this.setData({ safety: true });
         wx.showToast({ title: '已安排回访 🌱', icon: 'success' });
       }

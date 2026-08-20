@@ -79,3 +79,8 @@
 .ob-actions { display: flex; gap: 20rpx; margin-top: 40rpx; }
 .ob-skip { flex: 1; background: #f1f3f7; color: #6b7b95; border-radius: 999rpx; font-size: 27rpx; }
 .ob-next { flex: 2; background: #5b8def; color: #fff; border-radius: 999rpx; font-size: 27rpx; font-weight: 600; }
+
+/* 天气角 */
+.weather-bar { display: flex; align-items: center; gap: 10rpx; padding: 12rpx 30rpx; font-size: 23rpx; color: #5b6b85; background: #f4f8ff; border-bottom: 1rpx solid #e6edf8; }
+.w-ico { font-size: 26rpx; }
+.w-text { letter-spacing: 1rpx; }

@@ -25,7 +25,8 @@
 
   <!-- 成就徽章 -->
   <view class="card">
-    <view class="section-title">成就徽章</view>
+    <view class="section-title">成就徽章<text class="plan-sub">{{gotCount}}/{{badgeTotal}} 已点亮</text></view>
+    <view class="badge-progress"><view class="badge-progress-fill" style="width: {{badgeTotal ? gotCount / badgeTotal * 100 : 0}}%"></view></view>
     <view class="badges">
       <view class="badge {{item.got ? 'got' : 'lock'}}" wx:for="{{badges}}" wx:key="key">
         <text class="b-emoji">{{item.got ? item.emoji : '🔒'}}</text>
@@ -33,6 +34,20 @@
         <text class="b-desc">{{item.desc}}</text>
       </view>
     </view>
+  </view>
+
+  <!-- 数据足迹 -->
+  <view class="card">
+    <view class="section-title">我的数据足迹</view>
+    <view class="foot-stats">
+      <view class="foot-item"><text class="foot-num">{{footprintSum}}</text><text class="foot-label">累计记录</text></view>
+      <view class="foot-item"><text class="foot-num">{{streakDays}}</text><text class="foot-label">连续打卡(天)</text></view>
+      <view class="foot-item"><text class="foot-num">{{firstDate}}</text><text class="foot-label">最早记录</text></view>
+    </view>
+    <view class="foot-week">
+      <view class="fw-cell {{item ? 'on' : ''}}" wx:for="{{mood7Days}}" wx:key="index" aria-label="{{item ? '今日已记录' : '今日未记录'}}"></view>
+    </view>
+    <view class="text-muted stat-tip">近 7 天：点亮的小格是你记录过心情的日子。</view>
   </view>
 
   <!-- 数据与隐私 -->

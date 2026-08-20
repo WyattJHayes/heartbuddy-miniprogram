@@ -38,7 +38,9 @@ Page({
     ],
     // 新手引导（一次性）
     onboarding: false,
-    onboardingStep: 0
+    onboardingStep: 0,
+    weatherIco: '',   // ☀️/☁️/🌧…
+    weatherText: ''   // "10:00 · 晴 · 24℃"（免费 open-meteo，无 key）
   },
 
   async onLoad() {
@@ -51,9 +53,65 @@ Page({
     if (!wx.getStorageSync('hb_onboard_v1')) {
       this.setData({ onboard: true, onboardingStep: 0 });
     }
+    // 天气角（免费 open-meteo，定位失败静默降级为默认城市）
+    this.loadWeather();
     // 耐心等登录完成（拿到 isNewUser 才能定制首次欢迎语；失败也不阻塞，用常规欢迎语兜底）
     await app.login().catch(() => {});
     this.initSession();
+  },
+
+  // ---- 天气角：open-meteo（免费、无需 key）----
+  loadWeather() {
+    const fetchBy = (lat, lon) => {
+      wx.request({
+        url: `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`,
+        timeout: 6000,
+        success: (r) => {
+          const cur = r && r.data && r.data.current_weather;
+          if (!cur) return;
+          const h = new Date();
+          const pad = (n) => (n < 10 ? '0' + n : n);
+          this.setData({
+            weatherIco: this.wmoEmoji(cur.weathercode),
+            weatherText: `${pad(h.getHours())}:${pad(h.getMinutes())} · ${this.wmoText(cur.weathercode)} · ${Math.round(cur.temperature)}℃`
+          });
+        },
+        fail: () => {}
+      });
+    };
+    wx.getLocation({
+      type: 'gcj02',
+      success: (p) => fetchBy(p.latitude, p.longitude),
+      fail: () => wx.getLocation({
+        type: 'wgs84',
+        success: (p) => fetchBy(p.latitude, p.longitude),
+        fail: () => fetchBy(39.9, 116.4)
+      })
+    });
+  },
+
+  wmoText(code) {
+    code = Number(code);
+    if (code === 0) return '晴';
+    if (code <= 2) return '多云';
+    if (code === 3) return '阴';
+    if (code <= 48) return '雾';
+    if (code <= 67) return '雨';
+    if (code <= 77) return '雪';
+    if (code <= 82) return '阵雨';
+    return '雷雨';
+  },
+
+  wmoEmoji(code) {
+    code = Number(code);
+    if (code === 0) return '☀️';
+    if (code <= 2) return '⛅';
+    if (code === 3) return '☁️';
+    if (code <= 48) return '🌫';
+    if (code <= 67) return '🌧';
+    if (code <= 77) return '🌨';
+    if (code <= 82) return '🌦';
+    return '⛈';
   },
 
   onBoardNext() {

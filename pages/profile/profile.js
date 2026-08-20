@@ -11,7 +11,14 @@ Page({
     crisisTotal: 0,
     feedback: '',
     submitting: false,
-    badges: []
+    badges: [],
+    gotCount: 0,
+    badgeTotal: 0,
+    // 数据足迹
+    firstDate: '',     // 最早一条记录
+    streakDays: 0,     // 当前连续打卡天数（本地估算）
+    mood7: [],         // 近 7 天是否记录（true/false × 7，最左是最老）
+    footprintSum: 0
   },
 
   onShow() {
@@ -24,11 +31,17 @@ Page({
     const defs = [
       { key: 'ach_firstRecord', emoji: '🌱', title: '走出第一步', desc: '记录第一条心情' },
       { key: 'ach_streak3', emoji: '🔥', title: '坚持 3 天', desc: '连续打卡 3 天' },
-      { key: 'ach_assess',     emoji: '📋', title: '认识自己', desc: '完成一次自评' },
-      { key: 'ach_share',      emoji: '🤝', title: '陪伴他人', desc: '把心语伴分享出去' }
+      { key: 'ach_streak7', emoji: '🌿', title: '坚持 7 天', desc: '连续打卡 7 天' },
+      { key: 'ach_breathe',     emoji: '🍃', title: '一呼一吸', desc: '完成一次呼吸练习' },
+      { key: 'ach_breathe5',    emoji: '🧘', title: '呼吸行者', desc: '呼吸练习累计 5 次' },
+      { key: 'ach_assess',      emoji: '📋', title: '认识自己', desc: '完成一次自评' },
+      { key: 'ach_letter',      emoji: '💌', title: '写给未来', desc: '寄出时光信' },
+      { key: 'ach_care',        emoji: '💛', title: '也请心语来看我', desc: '安排一次 24h 回访' },
+      { key: 'ach_share',       emoji: '🤝', title: '陪伴他人', desc: '把心语伴分享出去' }
     ];
     const badges = defs.map((b) => ({ ...b, got: !!wx.getStorageSync(b.key) }));
-    this.setData({ badges });
+    const gotCount = badges.filter((b) => b.got).length;
+    this.setData({ badges, gotCount, badgeTotal: badges.length });
   },
 
   async loadStats() {
@@ -39,19 +52,53 @@ Page({
 
     try {
       const db = wx.cloud.database();
-      const [moods, assessments, crisis] = await Promise.all([
+      const [moods, assessments, crisis, firstRec] = await Promise.all([
         db.collection('moods').where({ openid }).count(),
         db.collection('assessments').where({ openid }).count().catch(() => ({ total: 0 })),
-        db.collection('crisisAlerts').where({ openid }).count().catch(() => ({ total: 0 }))
+        db.collection('crisisAlerts').where({ openid }).count().catch(() => ({ total: 0 })),
+        db.collection('moods').where({ openid }).orderBy('createdAt', 'asc').limit(1).get().catch(() => ({ data: [] }))
       ]);
+      // 连续打卡：取最近 30 条，从今天往回数
+      const recent = await db.collection('moods').where({ openid }).orderBy('createdAt', 'desc').limit(30).get().catch(() => ({ data: [] }));
+      const daySet = new Set((recent.data || []).map((m) => new Date(m.createdAt).toDateString()));
+      const DAY = 24 * 3600 * 1000;
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      if (!daySet.has(today.toDateString())) {
+        const y = new Date(today.getTime() - DAY);
+        if (!daySet.has(y.toDateString())) { /* streak 0 */ }
+      }
+      let streakDays = 0;
+      const cursor = daySet.has(today.toDateString()) ? today : new Date(today.getTime() - DAY);
+      while (daySet.has(cursor.toDateString())) {
+        streakDays += 1;
+        cursor.setTime(cursor.getTime() - DAY);
+        if (streakDays > 365) break;
+      }
+      // 近 7 天记录足迹（最老 → 最新）
+      const mood7 = [];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(today.getTime() - i * DAY);
+        mood7.push(daySet.has(d.toDateString()) ? 1 : 0);
+      }
+      const first = firstRec.data && firstRec.data[0];
       this.setData({
         chatTotal: moods.total || 0,
         assessTotal: assessments.total || 0,
-        crisisTotal: crisis.total || 0
+        crisisTotal: crisis.total || 0,
+        firstDate: first ? this.fmtDate(first.createdAt) : '—',
+        streakDays,
+        mood7Days: mood7,
+        footprintSum: (moods.total || 0) + (assessments.total || 0) + (crisis.total || 0)
       });
     } catch (e) {
       console.error('[profile] 统计失败', e);
     }
+  },
+
+  fmtDate(ts) {
+    const d = new Date(ts);
+    const p = (n) => (n < 10 ? '0' + n : n);
+    return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
   },
 
   // 一键导出本人数据（数据可携带权）：读自己全部集合 → 复制 JSON 文本

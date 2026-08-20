@@ -220,6 +220,7 @@ Page({
       success: (res) => {
         if (!res.confirm) return;
         wx.setStorageSync('timeLetter', { content, createdAt: Date.now() });
+        if (!wx.getStorageSync('ach_letter')) wx.setStorageSync('ach_letter', true); // 成就：写给未来的自己
         this.setData({ letterText: '', letter: { content, createdAt: Date.now() }, letterDue: 0, letterReady: false });
         wx.showToast({ title: '已寄出，7 天后见', icon: 'success' });
       }
@@ -326,6 +327,9 @@ Page({
       const streakNow = this.computeStreak(raw);
       if (streakNow.n >= 3 && !wx.getStorageSync('ach_streak3')) {
         wx.setStorageSync('ach_streak3', true); // 成就：坚持 3 天
+      }
+      if (streakNow.n >= 7 && !wx.getStorageSync('ach_streak7')) {
+        wx.setStorageSync('ach_streak7', true); // 成就：坚持 7 天
       }
       this.setData({
         recentList: list.slice(0, 7),

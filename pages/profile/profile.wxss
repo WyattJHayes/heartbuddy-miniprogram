@@ -26,3 +26,14 @@
 .b-title { font-size: 26rpx; font-weight: 600; color: #3a4a63; margin-top: 10rpx; }
 .b-desc { font-size: 21rpx; color: #98a2b5; margin-top: 4rpx; text-align: center; }
 .export-btn { margin-top: 18rpx; background: #eef4ff; color: #3f6fd8; border-radius: 44rpx; font-size: 26rpx; font-weight: 600; }
+
+/* 徽章进度 + 数据足迹 */
+.badge-progress { height: 12rpx; background: #eef1f6; border-radius: 999rpx; margin: 8rpx 0 18rpx; overflow: hidden; }
+.badge-progress-fill { height: 100%; background: linear-gradient(90deg, #ffd48a, #ffb054); border-radius: 999rpx; }
+.foot-stats { display: flex; margin: 6rpx 0 18rpx; }
+.foot-item { flex: 1; text-align: center; }
+.foot-num { display: block; font-size: 34rpx; font-weight: 700; color: #3a4a63; }
+.foot-label { display: block; margin-top: 6rpx; font-size: 22rpx; color: #8a97ad; }
+.foot-week { display: flex; gap: 12rpx; }
+.fw-cell { flex: 1; height: 44rpx; border-radius: 12rpx; background: #f0f2f7; }
+.fw-cell.on { background: linear-gradient(135deg, #9dc2ff, #5b8def); }

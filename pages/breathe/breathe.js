@@ -84,6 +84,11 @@ Page({
           }
         });
         if (!wx.getStorageSync('ach_firstRecord')) wx.setStorageSync('ach_firstRecord', true);
+        // 呼吸练习徽章：完成 1 次 / 累计 5 次
+        const bc = (wx.getStorageSync('breatheCount') || 0) + 1;
+        wx.setStorageSync('breatheCount', bc);
+        if (!wx.getStorageSync('ach_breathe')) wx.setStorageSync('ach_breathe', true);
+        if (bc >= 5 && !wx.getStorageSync('ach_breathe5')) wx.setStorageSync('ach_breathe5', true);
         wx.vibrateShort && wx.vibrateShort({ type: 'light' });
         wx.showToast({ title: '已记下此刻的平静', icon: 'success' });
       } catch (e) {
