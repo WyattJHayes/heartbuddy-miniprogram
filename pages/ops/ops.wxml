@@ -44,6 +44,13 @@
       </view>
     </view>
 
+    <!-- 近 14 日情绪均值趋势 -->
+    <view class="card">
+      <view class="section-title">近 14 日情绪均值趋势</view>
+      <emotion-chart points="{{trendPoints}}" maxY="{{5}}" minY="{{1}}" color="#5b8def" unit="均值"></emotion-chart>
+      <view class="text-muted trend-note">近 14 日全部倾诉记录的情绪分值取平均（无记录日为断开）。</view>
+    </view>
+
     <!-- 最近危机记录 -->
     <view class="card">
       <view class="section-title">最近危机记录</view>

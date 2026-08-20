@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "求助中心"
+  "navigationBarTitleText": "求助中心",
+  "usingComponents": {
+    "crisis-flow": "/components/crisis-flow/crisis-flow"
+  }
 }

@@ -1,0 +1,2 @@
+.cf-img { width: 100%; border-radius: 16rpx; }
+.cf-tip { font-size: 20rpx; color: #b3bfd6; text-align: right; margin-top: 6rpx; }

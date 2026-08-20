@@ -120,6 +120,9 @@ heartbuddy-miniprogram/
 ├── docs/部署运维手册-en.md            # 部署运维英文精简版（国际评委）
 ├── docs/评委体验口令卡.md             # 评委 3 分钟走 3 条路径（路演/答辩用）
 ├── tools/accessibility-check.py       # 无障碍自检脚本（本地 python3 运行）
+├── components/emotion-chart/          # 通用 Canvas2D 折线图（长按存图，mood/ops 复用）
+├── components/crisis-flow/            # 危机流程图组件（点击全屏/长按另存）
+├── utils/moodscore.js                 # 情绪→分值映射（mood/ops 共享）
 ├── docs/周报分享图文教程.md            # 生成分享卡 → 朋友圈 4 步图文教程
 ├── docs/README-English.md            # 英文版 README
 ├── .github/workflows/check.yml        # CI：JS/JSON/SVG 自动校验

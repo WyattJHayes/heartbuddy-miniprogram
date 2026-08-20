@@ -32,7 +32,7 @@
 
   <view class="card">
     <view class="section-title">危机应对流程</view>
-    <image class="flow-img" src="/assets/crisis-flow.png" mode="widthFix" show-menu-by-longpress></image>
+    <crisis-flow></crisis-flow>
   </view>
 
   <view class="card">

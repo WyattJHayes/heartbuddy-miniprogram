@@ -1,0 +1,4 @@
+<view class="cf">
+  <image class="cf-img" src="/assets/crisis-flow.png" mode="widthFix" bindtap="preview" show-menu-by-longpress></image>
+  <view class="cf-tip">点击可全屏查看 · 长按保存</view>
+</view>

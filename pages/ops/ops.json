@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "运营看板"
+  "navigationBarTitleText": "运营看板",
+  "usingComponents": {
+    "emotion-chart": "/components/emotion-chart/emotion-chart"
+  }
 }

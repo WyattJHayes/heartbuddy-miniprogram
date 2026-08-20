@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "我的心情"
+  "navigationBarTitleText": "我的心情",
+  "usingComponents": {
+    "emotion-chart": "/components/emotion-chart/emotion-chart"
+  }
 }

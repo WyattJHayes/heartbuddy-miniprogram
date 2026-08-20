@@ -1,0 +1,4 @@
+<view class="ec-wrap">
+  <canvas type="2d" id="ec" class="ec" bindlongpress="onLongPress"></canvas>
+  <view class="ec-tip">▼ 长按曲线可保存为图片分享</view>
+</view>
