@@ -332,6 +332,7 @@ Page({
       });
       wx.vibrateShort && wx.vibrateShort({ type: 'light' });
       if (!wx.getStorageSync('ach_firstRecord')) wx.setStorageSync('ach_firstRecord', true); // 成就：走出第一步
+      wx.setStorageSync('hb_lastMoodDate', new Date().toDateString()); // 供 chat 晨间提醒判断
       wx.showToast({ title: meta.label + ' / 已记下', icon: 'success' });
       this.fetchMoods();
     } catch (e) {

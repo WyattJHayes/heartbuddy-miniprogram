@@ -81,6 +81,8 @@ Page({
         data: { openid, mood: 'peace', trigger: '身体扫描', note: '5分钟身体扫描完成', createdAt: Date.now() }
       });
       wx.setStorageSync('ach_body_scan', true);
+      wx.setStorageSync('ach_scan', true);
+      wx.setStorageSync('hb_scanCount', (wx.getStorageSync('hb_scanCount') || 0) + 1);
     } catch (e) {
       console.warn('[scan] 记录心情失败', e);
     }

@@ -78,9 +78,18 @@ Page({
       { key: 'ach_letter',      emoji: '💌', title: '写给未来', desc: '寄出时光信' },
       { key: 'ach_care',        emoji: '💛', title: '也请心语来看我', desc: '安排一次 24h 回访' },
       { key: 'ach_fav',         emoji: '📌', title: '念念不忘', desc: '珍藏一句话' },
+      { key: 'ach_scan',        emoji: '🧭', title: '安放自己', desc: '完成 1 次身体扫描' },
+      { key: 'ach_scan3',       emoji: '🌌', title: '内在旅行者', desc: '身体扫描累计 3 次' },
+      { key: 'ach_small3',      emoji: '💫', title: '微小而确定', desc: '一天之内做完 3 件小事' },
       { key: 'ach_share',       emoji: '🤝', title: '陪伴他人', desc: '把心语伴分享出去' }
     ];
-    const badges = defs.map((b) => ({ ...b, got: !!wx.getStorageSync(b.key) }));
+    const scanCount = wx.getStorageSync('hb_scanCount') || 0;
+    const badges = defs.map((b) => {
+      let got = !!wx.getStorageSync(b.key);
+      if (b.key === 'ach_scan' && got) got = true;
+      if (b.key === 'ach_scan3' && scanCount >= 3) got = true;
+      return { ...b, got };
+    });
     const gotCount = badges.filter((b) => b.got).length;
     this.setData({ badges, gotCount, badgeTotal: badges.length });
   },

@@ -33,6 +33,13 @@
       <view class="advice">{{suggestion}}</view>
     </view>
 
+    <!-- 本周对自己说（可写进文字版周报） -->
+    <view class="card mt">
+      <view class="section-title">想对本周的自己说<text class="section-sub">会附在文字版周报末尾</text></view>
+      <textarea class="note-input" value="{{weekNote}}" bindinput="onNoteInput" placeholder="例：这周考试很多，辛苦你撑住，周末去吃顿好的" maxlength="60" />
+      <button class="btn-ghost small mt" bindtap="saveNote">保存备注</button>
+    </view>
+
     <!-- 月度小结：本月构成 + 与上月对比 -->
     <view class="card mt" wx:if="{{monthInfo}}">
       <view class="section-title">📅 {{monthInfo.label}} 心情小结</view>

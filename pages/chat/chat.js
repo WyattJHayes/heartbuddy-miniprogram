@@ -196,11 +196,19 @@ Page({
 
   initSession() {
     const hour = new Date().getHours();
-    const greeting =
+    let greeting =
       app.globalData.isNewUser
         ? GREETINGS.first
         : hour >= 22 || hour < 5 ? GREETINGS.night
         : hour < 11 ? GREETINGS.morning : hour < 19 ? GREETINGS.afternoon : GREETINGS.evening;
+    // 上午（5–11 点）今天还没记录心情时，轻轻提醒一次（每天仅一次）
+    const todayKey = new Date().toDateString();
+    if (hour >= 5 && hour < 11
+        && wx.getStorageSync('hb_lastMoodDate') !== todayKey
+        && wx.getStorageSync('hb_nudgeMorning') !== todayKey) {
+      wx.setStorageSync('hb_nudgeMorning', todayKey);
+      greeting = greeting.replace(/。$/, '') + '。今天还没记录过心情，花 5 秒记下就好 🌅';
+    }
     const sessionId = String(Date.now());
     this.setData({ sessionId });
     this.setAI(5); // 初始会话 ID 就绪后可向云函数获取历史；MVP 简化为固定 ID

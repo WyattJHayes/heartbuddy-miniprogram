@@ -30,7 +30,32 @@ Page({
     weekAvg: null,        // 本周情绪均值
     prevAvg: null,        // 上周情绪均值
     deltaText: '',        // 与上周对比文案（↗/↘/→ +0.4 等）
-    monthInfo: null       // 月度小结 {label,total,days,top3,curAvg,delta}
+    monthInfo: null,       // 月度小结 {label,total,days,top3,curAvg,delta}
+    weekNote: '',        // 本周「对自己说」备注（本地周键缓存）
+    weekNoteHint: ''
+  },
+
+  _weekKey() {
+    const d = new Date();
+    const day = d.getDay() || 7;           // 周日=7
+    const monday = new Date(d.getFullYear(), d.getMonth(), d.getDate() - day + 1);
+    return `${monday.getFullYear()}-${monday.getMonth() + 1}-${monday.getDate()}`;
+  },
+
+  refreshNote() {
+    const key = this._weekKey();
+    const raw = wx.getStorageSync('hb_weekNote') || {};
+    if (raw.key === key) this.setData({ weekNote: raw.text || '' });
+    else this.setData({ weekNote: '' });
+  },
+
+  onNoteInput(e) {
+    this.setData({ weekNote: e.detail.value });
+  },
+
+  saveNote() {
+    wx.setStorageSync('hb_weekNote', { key: this._weekKey(), text: this.data.weekNote });
+    wx.showToast({ title: '备注已保存', icon: 'success' });
   },
 
   onLoad() {
@@ -40,7 +65,7 @@ Page({
     this.setData({ history: wx.getStorageSync('weekReportHistory') || [] });
   },
 
-  onShow() { this.fetchWeek(); this.fetchMonth(); },
+  onShow() { this.fetchWeek(); this.fetchMonth(); this.refreshNote(); },
 
   async fetchWeek() {
     let openid = app.globalData.openid;
@@ -229,6 +254,7 @@ Page({
        `主要情绪：${d.topLabel} ${d.topEmoji}`,
        `倾诉 ${d.chatCount} 次 · ${d.dayCount} 天有记录`,
        `给这周的你：${d.suggestion}`,
+       ...(d.weekNote ? [`对自己说：${d.weekNote}`] : []),
        '—— 用 AI 心理陪伴，记录你的情绪地图 🌱'].join('\n');
     wx.setClipboardData({
       data: text,
