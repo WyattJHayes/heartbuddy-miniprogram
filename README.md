@@ -79,11 +79,15 @@ heartbuddy-miniprogram/
 │   ├── mood/      情绪可视化（含自评入口）
 │   ├── assessment/ 考前焦虑自评（7 题）
 │   ├── ops/       运营看板（演示）
-│   ├── report/    周报
+│   ├── report/    周报 + canvas 分享卡（双模板）
 │   ├── helper/    求助中心
+│   ├── privacy/   隐私政策（全文）
 │   └── profile/   我的
+├── assets/banner.svg                  # README 封面
 ├── docs/视频脚本.md                    # 参赛演示视频分镜脚本
 ├── docs/参赛提交自查清单.md             # 提交前逐项打勾
+├── docs/答辩问答预判.md                # 评委 10 问 Q&A
+├── .github/workflows/check.yml         # CI：JS/JSON/SVG 自动校验
 └── cloudfunctions/
     ├── login/     静默登录（建 users 记录）
     ├── aiChat/    对话 + 情绪 + 危机（config / prompt / danger）
@@ -93,7 +97,7 @@ heartbuddy-miniprogram/
 ## 🔒 合规注意
 - 定位为「情绪陪伴」，**不出现「诊断 / 治疗 / 咨询机构」等医疗属性用语**
 - 对话需在隐私同意后使用；敏感语已做危机分流
-- 上线前：补充完整《隐私政策》页、内容安全过滤、热线号码复核
+- 已内置《隐私政策》页（`pages/privacy`）与欢迎页《用户须知与免责声明》；上线前再复核：内容安全过滤、热线号码（12356 / 400-161-9995）实际接通
 - 代码中 LLM Key 务必走环境变量，不提交到仓库
 
 ## 🧩 开源结合（可选进阶）

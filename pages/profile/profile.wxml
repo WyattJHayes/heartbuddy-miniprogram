@@ -41,6 +41,9 @@
     <view class="row" bindtap="viewPrivacy">
       <text>隐私声明</text><text class="arrow">›</text>
     </view>
+    <view class="row" bindtap="goPrivacy">
+      <text>隐私政策（全文）</text><text class="arrow">›</text>
+    </view>
     <view class="row" bindtap="goOps">
       <text>运营看板（演示）</text><text class="arrow">›</text>
     </view>

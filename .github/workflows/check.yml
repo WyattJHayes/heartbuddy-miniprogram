@@ -1,0 +1,44 @@
+name: 项目校验 CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: JS / JSON / SVG 静态校验
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: node --check 全部 JS（语法校验）
+        run: |
+          set -e
+          count=0
+          git ls-files '*.js' | while read -r f; do
+            node --check "$f"
+            count=$((count+1))
+            echo "OK $f"
+          done
+          echo "□ 共校验 $count 个 JS 文件"
+
+      - name: JSON 解析校验
+        run: |
+          set -e
+          git ls-files '*.json' | while read -r f; do
+            node -e "JSON.parse(require('fs').readFileSync(process.argv[1],'utf8'))" "$f"
+            echo "OK $f"
+          done
+
+      - name: SVG 可解析校验
+        run: |
+          set -e
+          node -e "require('fs').readdirSync('assets').filter(f=>f.endsWith('.svg')).forEach(f=>{const s=require('fs').readFileSync('assets/'+f,'utf8'); if(!/<svg[\s>]/.test(s)) throw new Error('bad svg '+f); console.log('OK '+f)})"
+
+      - name: 提交信息
+        run: echo "✅ ${{ github.sha }} 校验通过"

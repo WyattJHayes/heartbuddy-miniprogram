@@ -61,5 +61,7 @@ Page({
 
   goReport() { wx.navigateTo({ url: '/pages/report/report' }); },
 
-  goOps() { wx.navigateTo({ url: '/pages/ops/ops' }); }
+  goOps() { wx.navigateTo({ url: '/pages/ops/ops' }); },
+
+  goPrivacy() { wx.navigateTo({ url: '/pages/privacy/privacy' }); }
 });
