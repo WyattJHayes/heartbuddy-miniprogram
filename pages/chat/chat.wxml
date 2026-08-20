@@ -57,6 +57,14 @@
     </view>
   </scroll-view>
 
+  <!-- 倾诉后小结算：AI 回复打完后的一次性感受标签条 -->
+  <view class="feeling-bar" wx:if="{{showFeeling}}" aria-label="倾诉后此刻感受">
+    <view class="feeling-head">这轮说完，现在感觉更像…？<view class="feeling-close" bindtap="closeFeeling" role="button" aria-label="关闭">✕</view></view>
+    <view class="feeling-tags">
+      <view class="tag feeling-tag" wx:for="{{feelingTags}}" wx:key="*this" data-m="{{item}}" bindtap="onFeelingTap">{{item}}</view>
+    </view>
+  </view>
+
   <!-- 输入栏 -->
   <view class="input-bar">
     <view class="mood-tags">

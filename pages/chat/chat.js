@@ -42,6 +42,9 @@ Page({
     moodTag: '',         // 当前可选的情绪标签
     typing: false,       // AI 打字中
     typedText: '',
+    showFeeling: false,  // 倾诉后小结算：AI 回复打字完成后的一次性感受标签条
+    feelingDone: false,  // 本会话内只出现一次
+    feelingTags: ['开心', '平静', '难过', '焦虑', '生气', '孤独'],
     showQuick: false,    // 输入栏「⚡快捷」面板
     quickReplies,
     quickEnglish: [
@@ -253,7 +256,7 @@ Page({
       cancelText: '先不了',
       success: (r) => {
         if (!r.confirm) return;
-        this.setData({ messages: [], input: '', typing: false, loading: false });
+        this.setData({ messages: [], input: '', typing: false, loading: false, showFeeling: false, feelingDone: false });
         this.initSession();
         wx.showToast({ title: '已重新开始', icon: 'none' });
       }
@@ -282,12 +285,28 @@ Page({
       if (i >= fullText.length) {
         clearInterval(this.timer);
         this.setData({ typing: false, typedText: fullText });
+        this.maybeShowFeeling();
       } else {
         this.setData({ typedText: fullText.slice(0, i) });
       }
       this.scrollBottom();
     }, 30);
   },
+
+  // 倾诉后小结算：AI 回复打完后，本会话内只亮一次「此刻感觉」标签条
+  maybeShowFeeling() {
+    if (this.data.feelingDone || !this.data.messages.length) return;
+    const tags = this.data.feelingTags;
+    this.setData({ showFeeling: true, feelingDone: true });
+  },
+
+  onFeelingTap(e) {
+    const label = e.currentTarget.dataset.m;
+    this.setData({ showFeeling: false });
+    this.recordMood(label); // recordMood 自带 toast 与落库
+  },
+
+  closeFeeling() { this.setData({ showFeeling: false }); },
 
   scrollBottom() {
     wx.createSelectorQuery()

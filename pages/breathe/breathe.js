@@ -1,12 +1,12 @@
 // pages/breathe/breathe.js —— 呼吸练习引导（纯本地、无网络）
-// 每个圆 = 一轮：吸气(约 3.8s)→屏住(约 3.2s)→呼气(约 5.6s)，共 4 轮。
 const app = getApp();
 
 // [阶段名, 时长ms, 目标尺寸(rpx), transition 秒]
-const ROUNDS = [
-  ['in', 3800, 460, 3.9],
-  ['hold', 3200, 460, 0.6],
-  ['out', 5600, 150, 5.6]
+// 呼吸节奏预设：默认 4-4-6；盒式 4-4-4-4；长呼 6-2-6-2（长缓缓呼更放松）
+const PRESETS = [
+  { key: 'calm', label: '放松 · 4-4-6', rounds: [['in', 3800, 460, 3.9], ['hold', 3200, 460, 0.6], ['out', 5600, 150, 5.6]] },
+  { key: 'box', label: '盒式 · 4-4-4-4', rounds: [['in', 4000, 520, 4.1], ['hold', 4000, 520, 0.6], ['out', 4000, 150, 4.1], ['hold', 4000, 150, 0.6]] },
+  { key: 'long', label: '长呼 · 6-2-6-2', rounds: [['in', 6000, 520, 6.1], ['hold', 2000, 520, 0.6], ['out', 6000, 150, 6.1], ['hold', 2000, 150, 0.6]] }
 ];
 const PH_TEXT = {
   in: '吸气……把空气慢慢填满',
@@ -23,18 +23,37 @@ Page({
     ball: 150,
     trans: 0.5,
     text: '准备好了就开始',
-    calm: false
+    calm: false,
+    presets: PRESETS,
+    presetKey: 'calm'
   },
 
   onLoad() {
     this._timers = [];
     this._stop = false;
     this._running = false;
+    this._rounds = PRESETS[0].rounds;
   },
 
   onUnload() {
     this._stop = true;
     (this._timers || []).forEach((t) => clearTimeout(t));
+  },
+
+  // 切换呼吸节奏（未开始时生效；进行中会先结束当前练习）
+  setPreset(e) {
+    const key = e.currentTarget.dataset.key;
+    const p = PRESETS.find((x) => x.key === key);
+    if (!p) return;
+    if (this._running) {
+      this._stop = true;
+      this._running = false;
+      this._timers.forEach((t) => clearTimeout(t));
+      this._timers = [];
+    }
+    this._rounds = p.rounds;
+    this.setData({ presetKey: key, phase: 'ready', round: 0, ball: 150, trans: 0.5,
+      text: '已选「' + p.label + '」，点击开始跟着节奏呼吸', calm: false });
   },
 
   start() {
@@ -49,7 +68,8 @@ Page({
 
   runRound(r, step) {
     if (this._stop) return;
-    if (step >= ROUNDS.length) {
+    const rounds = this._rounds || PRESETS[0].rounds;
+    if (step >= rounds.length) {
       if (r < this.data.total) {
         this.runRound(r + 1, 0);
       } else {
@@ -58,7 +78,7 @@ Page({
       }
       return;
     }
-    const [phase, ms, ball, trans] = ROUNDS[step];
+    const [phase, ms, ball, trans] = rounds[step];
     this.setData({ round: r, phase, ball, trans, text: PH_TEXT[phase] });
     const timer = setTimeout(() => this.runRound(r, step + 1), ms);
     this._timers.push(timer);

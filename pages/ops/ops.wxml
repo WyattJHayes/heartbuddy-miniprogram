@@ -46,6 +46,20 @@
         <text class="rate-v">本周处理率 {{weekRate}}%</text>
         <text class="text-muted rate-d">处理 {{d.weekHandled}} / 出现 {{d.weekCrisis}} · 累计已处理 {{d.handledCrisis}} · 未处理 {{d.openCrisis}}（高 {{d.openHigh}}）</text>
       </view>
+      <!-- 月对比：本月 vs 上月（预警数 + 处理率） -->
+      <view class="month-comp" wx:if="{{monthStat && lastStat}}">
+        <view class="mc-row">
+          <text class="mc-age">本月</text>
+          <text class="mc-num">预警 {{monthStat.crisis}} · 已处理 {{monthStat.handled}}</text>
+          <text class="mc-rate">处理率 {{monthStat.rate}}%</text>
+        </view>
+        <view class="mc-row alt">
+          <text class="mc-age">上月</text>
+          <text class="mc-num">预警 {{lastStat.crisis}} · 已处理 {{lastStat.handled}}</text>
+          <text class="mc-rate">处理率 {{lastStat.rate}}%</text>
+        </view>
+        <view class="text-muted mc-tip">月度对比：<text class="{{monthStat.crisis > lastStat.crisis ? 'up' : (monthStat.crisis < lastStat.crisis ? 'down' : '')}}">{{monthStat.crisis > lastStat.crisis ? '预警数较上月上升' : (monthStat.crisis < lastStat.crisis ? '预警数较上月下降' : '预警数与上月持平')}}</text></view>
+      </view>
       <button class="btn-ghost trend-copy" bindtap="copyCrisisCsv">复制危机统计 CSV</button>
     </view>
 

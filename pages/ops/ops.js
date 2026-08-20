@@ -10,7 +10,9 @@ Page({
     d: null,
     trendPoints: [],
     handling: '',   // 正在“一键处理”的危机记录 id
-    weekRate: 0     // 本周危机处理率（%）
+    weekRate: 0,    // 本周危机处理率（%）
+    monthStat: null,  // 本月：{crisis, handled, rate}
+    lastStat: null    // 上月：{crisis, handled, rate}
   },
 
   onShow() { this.load(); },
@@ -26,7 +28,14 @@ Page({
       this.setData({ loading: false, admin: true, d: res.data || {} });
       const dd = res.data || {};
       const weekRate = dd.weekCrisis ? Math.round(((dd.weekHandled || 0) / dd.weekCrisis) * 100) : 0;
-      this.setData({ weekRate });
+      // 月度对比：本月 vs 上月（预警数 + 已处理 + 处理率）
+      const mk = (m) => {
+        const crisis = m.crisis || 0;
+        return { crisis, handled: m.handled || 0, rate: crisis ? Math.round(((m.handled || 0) / crisis) * 100) : 0 };
+      };
+      const thisMonth = mk({ crisis: dd.monthCrisis || 0, handled: dd.monthHandled || 0 });
+      const lastMonth = mk({ crisis: dd.lastCrisis || 0, handled: dd.lastHandled || 0 });
+      this.setData({ weekRate, monthStat: thisMonth, lastStat: lastMonth });
       this.loadTrend();
     } catch (e) {
       this.setData({ loading: false, noRight: true });
@@ -134,6 +143,8 @@ Page({
     rows.push(['指标', '数值']);
     [['累计用户', d.totalUsers], ['倾诉次数', d.totalChats], ['7日活跃', d.activeUsers7d],
       ['本周危机', d.weekCrisis], ['本周已处理', d.weekHandled], ['本周处理率%', this.data.weekRate],
+      ['本月危机', d.monthCrisis], ['本月已处理', d.monthHandled],
+      ['上月危机', d.lastCrisis], ['上月已处理', d.lastHandled],
       ['累计危机', d.totalCrisis], ['累计已处理', d.handledCrisis], ['未处理高危', d.openHigh]].forEach((r) => rows.push(r));
     const csv = rows.map((r) => r.map(esc).join(',')).join('\n');
     wx.setClipboardData({

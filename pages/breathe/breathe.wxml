@@ -1,6 +1,13 @@
 <view class="wrap">
   <view class="title">🧘 呼吸放松练习</view>
-  <view class="sub">跟着圆圈一起呼吸：吸气→屏住→呼气，共 {{total}} 轮。全程在本机进行，不联网。</view>
+  <view class="sub">跟着圆圈一起呼吸，共 {{total}} 轮。全程在本机进行，不联网。</view>
+
+  <!-- 呼吸节奏切换 -->
+  <view class="presets">
+    <view class="preset-chip {{presetKey === item.key ? 'on' : ''}}" wx:for="{{presets}}"
+          wx:key="key" data-key="{{item.key}}" bindtap="setPreset" role="button"
+          aria-label="切换到{{item.label}}节奏">{{item.label}}</view>
+  </view>
 
   <view class="ball-wrap">
     <view class="halo"></view>

@@ -14,3 +14,9 @@
 .primary { background: #5b8def; color: #fff; border-radius: 44rpx; font-weight: 600; width: 60%; }
 button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-radius: 44rpx; width: 70%; font-weight: 600; }
 .tip { margin-top: 18rpx; font-size: 23rpx; color: #98a2b5; text-align: center; line-height: 1.7; }.scan-link { color: #5b8def; }
+
+/* 呼吸节奏切换 */
+.presets { display: flex; justify-content: center; gap: 16rpx; margin-top: 28rpx; }
+.preset-chip { font-size: 23rpx; color: #7a8698; background: #f2f5fb; border: 1rpx solid #e3e9f4;
+  border-radius: 999rpx; padding: 10rpx 22rpx; }
+.preset-chip.on { color: #fff; background: #5b8def; border-color: #5b8def; font-weight: 600; }

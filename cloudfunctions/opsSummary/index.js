@@ -17,9 +17,14 @@ exports.main = async () => {
   }
 
   const weekAgo = Date.now() - 7 * 24 * 3600 * 1000;
+  // 月份对比：本月 / 上月 的危机预警数与已处理数
+  const now = new Date();
+  const y = now.getFullYear(), mo = now.getMonth();
+  const monthStart = new Date(y, mo, 1).getTime();
+  const lastMonthStart = new Date(y, mo - 1, 1).getTime();
 
   try {
-    const [users, moods, assessments, crisisTotal, crisisWeek, moodWeek, activeUsers, openHigh, openCrisis, handledCrisis, weekHandled, highWeek] =
+    const [users, moods, assessments, crisisTotal, crisisWeek, moodWeek, activeUsers, openHigh, openCrisis, handledCrisis, weekHandled, highWeek, monthCrisis, monthHandled, lastCrisis, lastHandled] =
       await Promise.all([
         db.collection('users').count(),
         db.collection('moods').count(),
@@ -32,7 +37,11 @@ exports.main = async () => {
         db.collection('crisisAlerts').where({ status: 'open' }).count(),
         db.collection('crisisAlerts').where({ status: 'handled' }).count(),
         db.collection('crisisAlerts').where({ status: 'handled', handledAt: _.gte(weekAgo) }).count(),
-        db.collection('crisisAlerts').where({ level: 'high', createdAt: _.gte(weekAgo) }).limit(200).get()
+        db.collection('crisisAlerts').where({ level: 'high', createdAt: _.gte(weekAgo) }).limit(200).get(),
+        db.collection('crisisAlerts').where({ createdAt: _.gte(monthStart) }).count(),
+        db.collection('crisisAlerts').where({ createdAt: _.gte(monthStart), status: 'handled' }).count(),
+        db.collection('crisisAlerts').where({ createdAt: _.gte(lastMonthStart), createdAt: _.lt(monthStart) }).count(),
+        db.collection('crisisAlerts').where({ createdAt: _.gte(lastMonthStart), createdAt: _.lt(monthStart), status: 'handled' }).count()
       ]);
 
     const byLevel = { high: 0, mid: 0, low: 0 };
@@ -96,6 +105,11 @@ exports.main = async () => {
         openCrisis: openCrisis.total,
         handledCrisis: handledCrisis.total,
         weekHandled: weekHandled.total,
+        // 月对比：本月 vs 上月（预警数/已处理/处理率在前端算）
+        monthCrisis: monthCrisis.total,
+        monthHandled: monthHandled.total,
+        lastCrisis: lastCrisis.total,
+        lastHandled: lastHandled.total,
         moodTrend7,
         crisisBySource: Object.keys(bySource).map((k) => ({ source: k, count: bySource[k] })),
         highTrend7,
