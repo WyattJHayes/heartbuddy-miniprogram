@@ -3,10 +3,10 @@ const app = getApp();
 const { MOOD_SCORE } = require('../../utils/moodscore');
 
 const MOOD_EMOJI = {
-  happy: '😊', peace: '😌', anxiety: '😰', sad: '😢', lonely: '🌫', angry: '😡'
+  happy: '😊', peace: '😌', expect: '🌟', anxiety: '😰', sad: '😢', lonely: '🌫', tired: '😴', angry: '😡'
 };
 const MOOD_LABEL = {
-  happy: '开心', peace: '平静', anxiety: '焦虑', sad: '难过', lonely: '孤独', angry: '生气'
+  happy: '开心', peace: '平静', expect: '期待', anxiety: '焦虑', sad: '难过', lonely: '孤独', tired: '疲惫', angry: '生气'
 };
 
 // 模板名（分享文案用；绘制配色在 components/share-card 内）
@@ -29,7 +29,8 @@ Page({
     history: [],          // 往期周报（本地缓存）
     weekAvg: null,        // 本周情绪均值
     prevAvg: null,        // 上周情绪均值
-    deltaText: ''         // 与上周对比文案（↗/↘/→ +0.4 等）
+    deltaText: '',        // 与上周对比文案（↗/↘/→ +0.4 等）
+    monthInfo: null       // 月度小结 {label,total,days,top3,curAvg,delta}
   },
 
   onLoad() {
@@ -39,7 +40,7 @@ Page({
     this.setData({ history: wx.getStorageSync('weekReportHistory') || [] });
   },
 
-  onShow() { this.fetchWeek(); },
+  onShow() { this.fetchWeek(); this.fetchMonth(); },
 
   async fetchWeek() {
     let openid = app.globalData.openid;
@@ -146,6 +147,55 @@ Page({
     } catch (e) {
       console.error('[report] 失败', e);
       this.setData({ loaded: true });
+    }
+  },
+
+  // 月度小结：本月记录/覆盖天数/构成 Top3/与上月均值对比（与周报并行加载）
+  async fetchMonth() {
+    try {
+      let openid = app.globalData.openid;
+      if (!openid) openid = await app.login();
+      if (!openid) return;
+      const db = wx.cloud.database();
+      const _ = db.command;
+      const now = new Date();
+      const mStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+      const prevStart = new Date(now.getFullYear(), now.getMonth() - 1, 1).getTime();
+      const [curRes, prevRes] = await Promise.all([
+        db.collection('moods').where({ openid, createdAt: _.gte(mStart) }).limit(300).get(),
+        db.collection('moods').where({ openid, createdAt: _.and(_.gte(prevStart), _.lt(mStart)) }).limit(300).get()
+      ]);
+      const curList = curRes.data || [];
+      if (!curList.length) { this.setData({ monthInfo: null }); return; }
+      const counts = {}; const daySet = new Set();
+      curList.forEach((m) => { counts[m.mood] = (counts[m.mood] || 0) + 1; daySet.add(new Date(m.createdAt).toDateString()); });
+      const top3 = Object.keys(counts).sort((a, b) => counts[b] - counts[a]).slice(0, 3)
+        .map((k) => ({ emoji: MOOD_EMOJI[k] || '😌', label: MOOD_LABEL[k] || '记录', count: counts[k] }));
+      const mean = (arr) => {
+        const v = (arr || []).map((m) => MOOD_SCORE[m.mood]).filter((x) => typeof x === 'number');
+        return v.length ? +(v.reduce((a, b) => a + b, 0) / v.length).toFixed(1) : null;
+      };
+      const curAvg = mean(curList);
+      const prevAvg = mean(prevRes.data || []);
+      let delta = '';
+      if (curAvg != null && prevAvg != null) {
+        const d = +(curAvg - prevAvg).toFixed(1);
+        delta = d > 0.05 ? `↗ 较上月高 ${d}` : d < -0.05 ? `↘ 较上月低 ${Math.abs(d)}` : '→ 与上月持平';
+      } else if (curAvg != null) {
+        delta = prevAvg == null ? '（上月无记录可对比）' : '';
+      }
+      this.setData({
+        monthInfo: {
+          label: `${now.getMonth() + 1}月`,
+          total: curList.length,
+          days: daySet.size,
+          top3,
+          curAvg,
+          delta
+        }
+      });
+    } catch (err) {
+      console.warn('[report] 月度小结失败', err);
     }
   },
 

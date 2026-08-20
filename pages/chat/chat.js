@@ -11,6 +11,7 @@ const GREETINGS = {
   morning: '早上好呀 ☀️ 今天想聊点什么？',
   afternoon: '下午好 🌤 我在这儿陪着你。',
   evening: '夜深了 🌙 有什么想说给我听吗？',
+  night: '这么晚还没睡呀 🌙 辛苦了。不用硬撑，想到什么都可以慢慢说，我在这儿。',
   first: '第一次见到你，真高兴 🌱 我是心语，会一直在。想从哪儿聊起都可以，我会认真听。'
 };
 
@@ -189,6 +190,7 @@ Page({
     const greeting =
       app.globalData.isNewUser
         ? GREETINGS.first
+        : hour >= 22 || hour < 5 ? GREETINGS.night
         : hour < 11 ? GREETINGS.morning : hour < 19 ? GREETINGS.afternoon : GREETINGS.evening;
     const sessionId = String(Date.now());
     this.setData({ sessionId });

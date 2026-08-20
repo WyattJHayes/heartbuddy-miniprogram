@@ -32,3 +32,14 @@
 .avg-cmp { font-size: 23rpx; color: #8a97ad; }
 .avg-delta { font-size: 23rpx; color: #28a06b; font-weight: 600; }
 .avg-delta.down { color: #c25b3a; }
+
+/* 月度小结 */
+.month-line { font-size: 25rpx; color: #5a6a85; margin-top: 8rpx; line-height: 1.6; }
+.hl { color: #3f6fe0; font-weight: 700; }
+.mtop { display: flex; align-items: center; gap: 14rpx; margin-top: 16rpx; }
+.mtop-e { font-size: 40rpx; width: 40rpx; }
+.mtop-l { font-size: 24rpx; color: #3a4a63; width: 72rpx; }
+.mtop-bar-bg { flex: 1; height: 14rpx; background: #f0f2f7; border-radius: 999rpx; overflow: hidden; }
+.mtop-bar { height: 100%; background: linear-gradient(90deg, #6c9ef5, #5b8def); border-radius: 999rpx; }
+.mtop-n { font-size: 24rpx; color: #9aa5b8; width: 84rpx; text-align: right; }
+.mdelta { margin-top: 16rpx; font-size: 25rpx; }

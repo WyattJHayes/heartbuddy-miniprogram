@@ -33,6 +33,19 @@
       <view class="advice">{{suggestion}}</view>
     </view>
 
+    <!-- 月度小结：本月构成 + 与上月对比 -->
+    <view class="card mt" wx:if="{{monthInfo}}">
+      <view class="section-title">📅 {{monthInfo.label}} 心情小结</view>
+      <view class="month-line">这个月你记录了 <text class="hl">{{monthInfo.total}}</text> 条心情，覆盖 <text class="hl">{{monthInfo.days}}</text> 天</view>
+      <view class="mtop" wx:for="{{monthInfo.top3}}" wx:key="index">
+        <text class="mtop-e">{{item.emoji}}</text>
+        <text class="mtop-l">{{item.label}}</text>
+        <view class="mtop-bar-bg"><view class="mtop-bar" style="width:{{item.count / monthInfo.total * 100}}%"></view></view>
+        <text class="mtop-n">{{item.count}} 次</text>
+      </view>
+      <view class="text-muted mdelta" wx:if="{{monthInfo.delta}}">{{monthInfo.delta}}</view>
+    </view>
+
     <button class="btn-ghost full mt" bindtap="openShare">生成分享卡片</button>
     <button class="btn-ghost full mt" bindtap="copyWeekText">复制文字版周报</button>
     <button class="btn-primary full mt" bindtap="goChat">继续和心语聊聊</button>

@@ -4,7 +4,7 @@ const { MOOD_META, MOOD_SCORE } = require('../../utils/moodscore');
 const planlib = require('../../utils/plan');
 
 // 一键快速记录（顺序即 UI 顺序）
-const QUICK_ORDER = ['happy', 'peace', 'anxiety', 'sad', 'lonely', 'angry'];
+const QUICK_ORDER = ['happy', 'peace', 'expect', 'tired', 'anxiety', 'sad', 'lonely', 'angry'];
 const quickList = QUICK_ORDER.filter((k) => MOOD_META[k]).map((k) => ({ key: k, ...MOOD_META[k] }));
 
 Page({
