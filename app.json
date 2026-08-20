@@ -2,6 +2,7 @@
   "pages": [
     "pages/welcome/welcome",
     "pages/chat/chat",
+    "pages/ops/ops",
     "pages/mood/mood",
     "pages/assessment/assessment",
     "pages/report/report",

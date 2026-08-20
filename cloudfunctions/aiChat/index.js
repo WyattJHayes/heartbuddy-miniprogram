@@ -90,7 +90,7 @@ function guessMood(text) {
 
 exports.main = async (event) => {
   const { OPENID } = cloud.getWXContext();
-  const { sessionId = '', userInput = '', history = [], moodTag = '' } = event;
+  const { sessionId = '', userInput = '', history = [], moodTag = '', assessment = null } = event;
 
   if (!userInput || !userInput.trim()) return { ok: false, error: 'empty' };
   if (!enabled) return { ok: false, error: 'LLM 未启用，请检查 config.js / 环境变量' };
@@ -98,6 +98,13 @@ exports.main = async (event) => {
   // 1. 组装多轮上下文（最近 10 条）
   const messages = [];
   if (SYSTEM_PROMPT) messages.push({ role: 'system', content: SYSTEM_PROMPT });
+  // 1.1 自评结果作为上下文（自然关心，不下诊断）
+  if (assessment && Number.isFinite(assessment.total)) {
+    messages.push({
+      role: 'system',
+      content: `（背景：用户最近做过一次考前焦虑自评，得分 ${assessment.total}/21，等级「${assessment.label || '未知'}」。请在聊天中自然地关心这一方向，但不要下诊断、不贴标签、不透露测评数字给用户。）`
+    });
+  }
   (Array.isArray(history) ? history.slice(-10) : []).forEach((m) => {
     if (m && m.role && m.content) messages.push({ role: m.role, content: String(m.content).slice(0, 2000) });
   });

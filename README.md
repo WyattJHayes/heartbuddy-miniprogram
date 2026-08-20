@@ -10,7 +10,8 @@
 | 💬 陪伴 | AI 多轮情绪对话（流式打字机），可标记当前心情 |
 | 🌱 心情 | 情绪记录与可视化（占比条 + 最近） |
 | 📝 周报 | 一键生成「本周情绪小报」，含针对性建议 |
-| 📋 自评 | 考前焦虑自评（7 题，GAD-7 风格自编）→ 结果与建议 |
+| 📋 自评 | 考前焦虑自评（7 题，GAD-7 风格自编）→ 结果与建议，并自动带入后续 AI 对话上下文 |
+| 📊 看板 | 运营数据看板（云函数汇总：用户/倾诉/危机分级/近 7 天记录） |
 | 🆘 求助 | 心理援助热线一键拨打 + 危机说明 |
 | ⚠️ 危机分级 | 三级响应：high 高危导诊求助页 / mid 温和引导 / low 不打扰，独立落库 |
 
@@ -36,7 +37,7 @@
 1. 工具栏点击 **云开发** → 开通（选基础版免费额度即可）
 2. 在控制台创建以下**集合**（数据库中）：
    - `users` / `moods` / `crisisAlerts` / `assessments` / `feedbacks`
-   - 每个集命集权限选择：**「仅创建者可读写」**
+   - 每个集合权限选择：**「仅创建者可读写」**
 
 ### 4. 配置大模型
 编辑 `cloudfunctions/aiChat/config.js`：
@@ -50,7 +51,8 @@ model: 'deepseek-chat',
 ### 5. 部署云函数
 1. 在编辑器中右键 `cloudfunctions/login` → **上传并部署：云端安装依赖**
 2. 右键 `cloudfunctions/aiChat` → **上传并部署：云端安装依赖**
-3. 编译运行，完成 🎉
+3. **（可选）运营看板**：右键 `cloudfunctions/opsSummary` 同样部署；然后把 `cloudfunctions/opsSummary/index.js` 顶部的 `ADMIN_OPENIDS` 换成你自己的 openid（可在云开发控制台→用户管理里查）
+4. 编译运行，完成 🎉
 
 ## 🧪 自测清单
 - [ ] 首次进入出现「隐私同意」页，同意后可进主页
@@ -58,6 +60,7 @@ model: 'deepseek-chat',
 - [ ] 在「心情」页能看到刚才的情绪记录
 - [ ] 在「心情」页进入「考前焦虑自评」，答完 7 题出结果
 - [ ] 故意输入「我不想活了」**测试用**，应触发求助引导弹窗
+- [ ] 「我的」→「运营看板」能看到统计数字（需部署 opsSummary + 填入自己 openid）
 - [ ] 在「求助」页点击拨打，能调起系统电话
 
 ## 🗂 目录结构
@@ -72,13 +75,15 @@ heartbuddy-miniprogram/
 │   ├── chat/      核心对话页
 │   ├── mood/      情绪可视化（含自评入口）
 │   ├── assessment/ 考前焦虑自评（7 题）
+│   ├── ops/       运营看板（演示）
 │   ├── report/    周报
 │   ├── helper/    求助中心
 │   └── profile/   我的
 ├── docs/视频脚本.md                    # 参赛演示视频分镜脚本
 └── cloudfunctions/
     ├── login/     静默登录（建 users 记录）
-    └── aiChat/    对话 + 情绪 + 危机（config / prompt / danger）
+    ├── aiChat/    对话 + 情绪 + 危机（config / prompt / danger）
+    └── opsSummary/ 数据汇总（填 ADMIN_OPENIDS 白名单）
 ```
 
 ## 🔒 合规注意

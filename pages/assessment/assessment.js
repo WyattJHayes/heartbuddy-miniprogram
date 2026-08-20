@@ -55,7 +55,7 @@ Page({
 
     this.setData({ done: true, total, label: lv.label, advice: lv.text, submitting: true });
 
-    // 落库（复用 openid）
+    // 落库（复用 openid）+ 写入本地，供对话页把结果带入 AI 上下文
     try {
       let openid = app.globalData.openid;
       if (!openid) openid = await app.login();
@@ -63,6 +63,7 @@ Page({
       await db.collection('assessments').add({
         data: { openid, name: '考前焦虑自评', total, level: lv.label, items: answers, createdAt: Date.now() }
       });
+      wx.setStorageSync('lastAssessment', { total, label: lv.label, ts: Date.now() });
     } catch (e) { console.error('[assessment] 落库失败', e); }
 
     this.setData({ submitting: false });

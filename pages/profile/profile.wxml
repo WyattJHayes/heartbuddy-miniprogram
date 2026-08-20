@@ -39,10 +39,13 @@
   <!-- 设置 -->
   <view class="card">
     <view class="row" bindtap="viewPrivacy">
-      <text>隐私说明</text><text class="arrow">›</text>
+      <text>隐私声明</text><text class="arrow">›</text>
+    </view>
+    <view class="row" bindtap="goOps">
+      <text>运营看板（演示）</text><text class="arrow">›</text>
     </view>
     <view class="row">
-      <text>版本</text><text class="muted">v0.1.0（参赛 MVP）</text>
+      <text>版本</text><text class="muted">v0.2.0（参赛 MVP）</text>
     </view>
   </view>
 </view>

@@ -108,7 +108,8 @@ Page({
       const res = await api.call('aiChat', {
         sessionId: this.data.sessionId,
         userInput: text,
-        history
+        history,
+        assessment: this.getLastAssessment()
       });
       const r = res.result || {};
       this.setData({ loading: false });
@@ -120,6 +121,16 @@ Page({
       this.setData({ loading: false });
       this.pushAI('😔 线上有点忙，请再试一次，我一直在。');
     }
+  },
+
+  // 最近一次自评（3 天内有效），供 AI 上下文使用
+  getLastAssessment() {
+    try {
+      const a = wx.getStorageSync('lastAssessment');
+      if (!a || !a.ts) return null;
+      if (Date.now() - a.ts > 3 * 24 * 3600 * 1000) return null;
+      return { total: a.total, label: a.label };
+    } catch (e) { return null; }
   },
 
   handleCrisis(crisis) {

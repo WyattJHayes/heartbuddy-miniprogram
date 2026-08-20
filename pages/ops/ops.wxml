@@ -1,0 +1,51 @@
+<view class="container">
+  <block wx:if="{{loading}}"><view class="text-muted center">加载中…</view></block>
+
+  <block wx:elif="{{noRight}}">
+    <view class="card center">
+      <view class="big">🔒</view>
+      <view class="sub">暂无访问权限</view>
+      <view class="text-muted">请在云函数 opsSummary 的 ADMIN_OPENIDS 里填入你的 openid。</view>
+    </view>
+  </block>
+
+  <block wx:elif="{{admin}}">
+    <!-- 顶部指标 -->
+    <view class="kpis">
+      <view class="kpi"><text class="v">{{d.totalUsers}}</text><text class="t">累计用户</text></view>
+      <view class="kpi"><text class="v">{{d.totalMills}}</text><text class="t">倾诉次数</text></view>
+      <view class="kpi"><text class="v">{{d.activeUsers7d}}</text><text class="t">7日活跃</text></view>
+      <view class="kpi"><text class="v warn">{{d.totalCrisis}}</text><text class="t">危机总数</text></view>
+    </view>
+
+    <!-- 本周危机分级 -->
+    <view class="card">
+      <view class="section-title">最近 7 天危机分级（共 {{d.weekCrisis}} 条）</view>
+      <view class="level">
+        <view class="lv lv-high"><text class="lv-num">{{d.byLevel.high}}</text><text class="lv-label">高危</text></view>
+        <view class="lv lv-mid"><text class="lv-num">{{d.byLevel.mid}}</text><text class="lv-label">中危</text></view>
+        <view class="lv lv-low"><text class="lv-num">{{d.byLevel.low}}</text><text class="lv-label">低危</text></view>
+      </view>
+    </view>
+
+    <!-- 最近危机记录 -->
+    <view class="card">
+      <view class="section-title">最近危机记录</view>
+      <view wx:if="{{!d.recentCrisis.length}}" class="text-muted">暂无记录</view>
+      <view class="crow" wx:for="{{d.recentCrisis}}" wx:key="index">
+        <text class="badge b-{{item.level}}">{{item.level}}</text>
+        <view class="cmain">
+          <view class="ckeys">{{item.keywords || '—'}}</view>
+          <view class="ctime">{{item.time}} · {{item.status}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="section-title">测评</view>
+      <view class="text-muted">累计完成 {{d.totalAssessments}} 人次考前焦虑自评。</view>
+    </view>
+
+    <button class="btn-ghost full" bindtap="refresh">刷新</button>
+  </block>
+</view>
