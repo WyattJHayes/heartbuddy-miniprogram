@@ -29,6 +29,23 @@
     </view>
   </view>
 
+  <!-- 每日心情提醒 -->
+  <view class="card remind-card">
+    <view class="remind-row">
+      <view class="remind-info">
+        <view class="section-title">每日心情提醒</view>
+        <view class="text-muted remind-sub">到点打开小程序时，轻轻提醒一句「今天心情如何」。</view>
+      </view>
+      <switch checked="{{remindOn}}" bindchange="toggleRemind" color="#5b8def" aria-label="开关每日心情提醒" />
+    </view>
+    <view class="remind-time" wx:if="{{remindOn}}">
+      <text class="remind-label">提醒时间</text>
+      <picker mode="time" value="{{remindTime}}" bindchange="onRemindTime" aria-label="选择每日提醒时间">
+        <view class="remind-pick">{{remindTime}}</view>
+      </picker>
+    </view>
+  </view>
+
   <!-- 时光信：写给 7 天后的自己 -->
   <view class="card letter-card">
     <view class="section-title">✉️ 写给 7 天后的自己</view>
@@ -116,6 +133,15 @@
           <view class="row-label">{{item.label}}</view>
           <view class="row-time">{{item.time}}</view>
         </view>
+      </view>
+    </view>
+
+    <!-- 演示模式（现场演示用，可一键清除） -->
+    <view class="card demo-card">
+      <view class="text-muted demo-note">现场演示用：一键写入 12 天示例心情，快速展示曲线/周报/周小结。</view>
+      <view class="demo-row">
+        <button class="demo-btn" bindtap="genDemo" loading="{{demoBusy}}">填充示例</button>
+        <button class="demo-btn ghost" bindtap="clearDemo" loading="{{demoBusy}}">清除示例</button>
       </view>
     </view>
   </block>

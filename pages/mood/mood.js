@@ -27,13 +27,143 @@ Page({
     letter: null,        // { content, createdAt }
     letterDue: -1,       // 已过天数（-1 表示还未写信）
     letterReady: false,  // 已到期可拆开
-    letterText: ''
+    letterText: '',
+    // 每日心情提醒（本地弱提醒，无模板订阅）
+    remindOn: false,
+    remindTime: '20:00',
+    demoBusy: false
   },
 
   onShow() {
     this.fetchMoods();
     this.refreshPlan();
     this.refreshLetter();
+    this.refreshRemind();
+  },
+
+  // ---- 每日心情提醒（本地轻提醒：打开应用时若到点且今日未提醒则提示一次）----
+  refreshRemind() {
+    const cfg = wx.getStorageSync('moodRemind') || {};
+    const on = !!cfg.on, time = cfg.time || '20:00';
+    this.setData({ remindOn: on, remindTime: time });
+    if (!on) return;
+    const now = new Date();
+    const today = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+    const last = wx.getStorageSync('moodRemindLast');
+    if (last === today) return;
+    const [h, m] = (time || '20:00').split(':').map(Number);
+    const nowMin = now.getHours() * 60 + now.getMinutes();
+    const targetMin = (h || 20) * 60 + (m || 0);
+    if (nowMin >= targetMin) {
+      wx.setStorageSync('moodRemindLast', today);
+      wx.showModal({
+        title: '🌙 该记录今天的情绪了',
+        content: '花 3 秒点一个心情，让心语伴知道今天的你。',
+        confirmText: '去记录',
+        cancelText: '晚点再说',
+        success: (r) => { if (r.confirm) { this.setData({ quicking: '' }); wx.vibrateShort && wx.vibrateShort({ type: 'light' }); } }
+      });
+    }
+  },
+
+  toggleRemind(e) {
+    const on = e.detail.value;
+    this.setData({ remindOn: on });
+    wx.setStorageSync('moodRemind', { on, time: this.data.remindTime });
+    wx.showToast({ title: on ? '已开启每日提醒' : '已关闭提醒', icon: 'none' });
+  },
+
+  onRemindTime(e) {
+    this.setData({ remindTime: e.detail.value });
+    if (this.data.remindOn) wx.setStorageSync('moodRemind', { on: true, time: e.detail.value });
+  },
+
+  // ---- 演示数据：一键生成 12 天示例心情（sessionId 前缀 demo-，可随时清除）----
+  genDemo() {
+    if (this.data.demoBusy) return;
+    wx.showModal({
+      title: '填充示例数据？',
+      content: '将为你写入 12 条示例心情（标记为“演示数据”），方便现场演示曲线/周小结/本周小结。可随时一键清除。',
+      confirmText: '填充',
+      success: async (r) => {
+        if (!r.confirm) return;
+        this.setData({ demoBusy: true });
+        wx.showLoading({ title: '写入中…' });
+        let openid = app.globalData.openid;
+        if (!openid) openid = await app.login();
+        if (!openid) { wx.hideLoading(); this.setData({ demoBusy: false }); return; }
+        const seq = [['happy', 5, 2], ['happy', 5, 3], ['peace', 4, 4], ['anxiety', 8, 2], ['lonely', 11, 2], ['sad', 12, 10], ['sad', 13, 6], ['anxiety', 15, 1], ['peace', 16, 4], ['happy', 17, 3], ['peace', 20, 2], ['happy', 21, 3]];
+        try {
+          const db = wx.cloud.database();
+          const now = Date.now();
+          for (let i = 0; i < seq.length; i++) {
+            const [mood, daysAgo, intensity] = seq[i];
+            await db.collection('moods').add({
+              data: {
+                openid,
+                sessionId: 'demo-' + now + '-' + i,
+                mood,
+                intensity,
+                trigger: '演示数据',
+                createdAt: now - daysAgo * 86400000
+              }
+            });
+          }
+          await this.fetchMoods(true);
+          wx.showToast({ title: '已写入 12 条演示记录', icon: 'success' });
+        } catch (e) {
+          console.error('[mood] 演示数据失败', e);
+          wx.showToast({ title: '写入失败，请重试', icon: 'none' });
+        } finally {
+          wx.hideLoading();
+          this.setData({ demoBusy: false });
+        }
+      }
+    });
+  },
+
+  clearDemo() {
+    if (this.data.demoBusy) return;
+    wx.showModal({
+      title: '清除示例数据？',
+      content: '只删除 sessionId 以 demo- 开头的记录，你自己的真实记录不受影响。',
+      confirmText: '清除',
+      success: async (r) => {
+        if (!r.confirm) return;
+        this.setData({ demoBusy: true });
+        wx.showLoading({ title: '清除中…' });
+        let openid = app.globalData.openid;
+        if (!openid) openid = await app.login();
+        if (!openid) { wx.hideLoading(); this.setData({ demoBusy: false }); return; }
+        try {
+          const db = wx.cloud.database();
+          const regexp = db.RegExp({ regexp: '^demo-' });
+          let removed = 0;
+          // 云端每次最多取 20 条，循环清理
+          while (true) {
+            const r = await db.collection('moods')
+              .where({ openid, sessionId: db.command.regexp(regexp) })
+              .limit(20)
+              .get();
+            if (!r.data || !r.data.length) break;
+            for (const doc of r.data) {
+              await db.collection('moods').doc(doc._id).remove();
+              removed += 1;
+            }
+            if (r.data.length < 20) break;
+          }
+          wx.hideLoading();
+          wx.showToast({ title: `已清除 ${removed} 条示例`, icon: 'success' });
+          this.fetchMoods(true);
+        } catch (e) {
+          wx.hideLoading();
+          console.error('[mood] 清除失败', e);
+          wx.showToast({ title: '清除失败，请重试', icon: 'none' });
+        } finally {
+          this.setData({ demoBusy: false });
+        }
+      }
+    });
   },
 
   // ---- 时光信：写给 7 天后的自己 ----

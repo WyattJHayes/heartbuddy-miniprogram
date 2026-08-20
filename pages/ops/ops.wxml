@@ -57,6 +57,29 @@
       <button class="btn-ghost trend-copy" bindtap="copyTrend">复制 14 日均值 JSON</button>
     </view>
 
+    <block wx:if="{{d.moodTrend7 && d.moodTrend7.length}}">
+      <view class="card">
+        <view class="section-title">7 日情绪均值快照<text class="plan-sub">云端聚合</text></view>
+        <view class="tm-item" wx:for="{{d.moodTrend7}}" wx:key="day">
+          <text class="tm-day">{{item.day}}</text>
+          <view class="tm-bar"><view class="tm-fill" style="width: {{item.avg / 5 * 100}}%"></view></view>
+          <text class="tm-val">{{item.avg}}</text>
+        </view>
+        <view class="text-muted trend-note">数据取自云函数 opsSummary 的 moodTrend7（近 7 天，非空日均值）。</view>
+      </view>
+    </block>
+
+    <block wx:if="{{d.crisisBySource && d.crisisBySource.length}}">
+      <view class="card">
+        <view class="section-title">危机来源分布<text class="plan-sub">近 7 天</text></view>
+        <view class="src-row" wx:for="{{d.crisisBySource}}" wx:key="source">
+          <text class="src-name">{{item.source === 'chat' ? '对话诊断' : item.source}}</text>
+          <view class="src-bar"><view class="src-fill" style="width: {{item.count / d.weekCrisis * 100}}%"></view></view>
+          <text class="src-num">{{item.count}} 条</text>
+        </view>
+      </view>
+    </block>
+
     <!-- 最近危机记录 -->
     <view class="card">
       <view class="section-title">最近危机记录</view>

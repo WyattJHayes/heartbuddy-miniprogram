@@ -48,3 +48,15 @@
 .rate-line { display: flex; flex-direction: column; gap: 6rpx; margin-top: 20rpx; padding-top: 20rpx; border-top: 1rpx solid #f0f2f7; }
 .rate-v { font-size: 28rpx; font-weight: 700; color: #3aa08a; }
 .rate-d { font-size: 22rpx; line-height: 1.6; }
+
+/* 7 日均值 + 来源分布 */
+.tm-item { display: flex; align-items: center; gap: 16rpx; margin: 10rpx 0; }
+.tm-day { width: 96rpx; font-size: 23rpx; color: #5b6b85; }
+.tm-bar { flex: 1; height: 22rpx; background: #eef1f6; border-radius: 999rpx; overflow: hidden; }
+.tm-fill { height: 100%; background: linear-gradient(90deg, #9dc2ff, #5b8def); border-radius: 999rpx; }
+.tm-val { width: 64rpx; text-align: right; font-size: 24rpx; font-weight: 600; color: #3a4a63; }
+.src-row { display: flex; align-items: center; gap: 16rpx; margin: 10rpx 0; }
+.src-name { width: 160rpx; font-size: 25rpx; color: #3a4a63; }
+.src-bar { flex: 1; height: 20rpx; background: #eef1f6; border-radius: 999rpx; overflow: hidden; }
+.src-fill { height: 100%; background: #f2a35c; border-radius: 999rpx; }
+.src-num { width: 96rpx; text-align: right; font-size: 23rpx; color: #5b6b85; }

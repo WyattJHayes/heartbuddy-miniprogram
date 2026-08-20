@@ -168,6 +168,7 @@ exports.main = async (event) => {
       await db.collection('crisisAlerts').add({
         data: {
           openid: OPENID,
+          source: 'chat',
           level: final.level,
           keywords: final.brief,
           aiSummary: final.brief,
