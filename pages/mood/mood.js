@@ -14,6 +14,7 @@ Page({
     statList: [],   // 各情绪占比 [{emoji,label,count,ratio}]
     recentList: [],  // 最近记录 [{time,mood,label}]
     moodLine: [],     // 近 7 天 [{label,value}]，无记录 value:null
+    healthIdx: null,     // 情绪健康指数 {score,emoji,label,note,deltaText}
     insight: '',       // 趋势的一句话 AI 解读（规则生成）
     weekSum: '',       // 本周小结（规则生成的完整文案）
     chartFooter: '',    // 曲线图 footer（随长图一并导出）
@@ -342,6 +343,7 @@ Page({
         recentList: list.slice(0, 7),
         moodLine,
         insight: this.buildInsight(moodLine),
+        healthIdx: this.buildHealth(moodLine),
         chartFooter: this.buildChartFooter(moodLine),
         weekSum: this.buildWeekSum(list),
         streak: streakNow,
@@ -437,6 +439,29 @@ Page({
 
   closeCalDay() {
     this.setData({ calDay: null });
+  },
+
+  // 情绪健康指数（规则推导）：近 7 天分值均值 → 0-100，附解读与昨日对比
+  buildHealth(moodLine) {
+    const vals = (moodLine || []).map((p) => p.value).filter((v) => typeof v === 'number');
+    if (!vals.length) return null;
+    const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+    const score = Math.max(0, Math.min(100, Math.round(((avg - 1) / 4) * 100)));
+    const meta =
+      score >= 80 ? { emoji: '🌈', label: '很好', note: '最近整体情绪状态很不错，继续保持觉察，记得享受好心情。' }
+      : score >= 65 ? { emoji: '🙂', label: '良好', note: '总体平稳，偶有起伏都是正常的，累了就歇一歇。' }
+      : score >= 45 ? { emoji: '😐', label: '中等', note: '情绪有些起伏，试着把压力拆小，每天给自己一个小目标。' }
+      : score >= 25 ? { emoji: '🌧', label: '偏低', note: '这几天可能消耗比较大，照顾好身体，必要时找信任的人聊聊。' }
+      : { emoji: '🌟', label: '需要关注', note: '整体有些低落，你不需要独自扛，求助不可耻——看看「求助」页。' };
+    // 与昨日对比（moodLine 最后一位=今天，倒数第二位=昨天）
+    const today = moodLine[moodLine.length - 1];
+    const yesterday = moodLine[moodLine.length - 2];
+    let deltaText = '';
+    if (yesterday && typeof today.value === 'number' && typeof yesterday.value === 'number') {
+      const d = today.value - yesterday.value;
+      deltaText = d > 0.01 ? `  较昨日 +${d.toFixed(1)}` : d < -0.01 ? `  较昨日 ${d.toFixed(1)}` : '  与昨日持平';
+    }
+    return { score, emoji: meta.emoji, label: meta.label, note: meta.text, deltaText };
   },
 
   // 近 7 天：每天取最后一次记录的分值（无记录为 null）

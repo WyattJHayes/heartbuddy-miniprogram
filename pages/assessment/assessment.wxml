@@ -45,6 +45,8 @@
         <text class="hval">{{item.total}} 分 · {{item.level}}</text>
       </view>
       <view wx:if="{{histDelta}}" class="text-muted hdelta">{{histDelta}}</view>
+      <view wx:if="{{topWeakText}}" class="hinsight">🧭 最常困扰你：<text class="hinsight-b">{{topWeakText}}</text></view>
+      <view wx:if="{{improveText}}" class="hinsight">💚 {{improveText}}</view>
     </view>
 
     <!-- 3 天陪伴计划 -->

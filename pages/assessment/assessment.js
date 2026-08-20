@@ -12,6 +12,8 @@ const QUESTIONS = [
   '我总感觉会有可怕的事情要发生'
 ];
 
+const Q_SHORT = ['紧张担忧', '难以止住担忧', '担心过度', '难以放松', '坐立不安', '易被激怒', '害怕坏事发生'];
+
 const LEVELS = [
   { max: 4, label: '低','text': '你的状态整体还好，继续保持规律作息，考前适当休息。' },
   { max: 11, label: '中度', text: '你有一定程度的焦虑，试着把压力拆小、写下来，每天做 5 分钟深呼吸。' },
@@ -34,8 +36,10 @@ Page({
     plan: null,       // 3 天陪伴计划（本地）
     planIdx: -1,
     planAllDone: false,
-    hist: [],          // 历次自评趋势 [{date,total,level}]
-    histDelta: ''      // 与最近一次对比文案
+    hist: [],          // 历次自评趋势 [{date,total,level,items}]
+    histDelta: '',     // 与最近一次对比文案
+    topWeakText: '',  // 历史最常困扰的 1-2 题
+    improveText: '',  // 正在变好的 1-2 题
   },
 
   onLoad() {
@@ -59,14 +63,35 @@ Page({
       const list = (res.data || []).map((a) => ({
         date: this.fmt(a.createdAt),
         total: a.total,
-        level: a.level || '—'
+        level: a.level || '—',
+        items: Array.isArray(a.items) ? a.items.slice(0, 7) : []
       }));
       let histDelta = '';
       if (list.length >= 2 && typeof list[0].total === 'number' && typeof list[1].total === 'number') {
         const d = list[0].total - list[1].total;
         histDelta = d < 0 ? `较上次低 ${-d} 分，焦虑在回落 👍` : d > 0 ? `较上次高 ${d} 分，建议多关注自己` : '与上次持平，保持关注';
       }
-      this.setData({ hist: list, histDelta });
+      // 逐题洞察：历史每题均值 → 最常困扰 vs 正在变好
+      let topWeakText = '';
+      let improveText = '';
+      const withItems = list.filter((x) => x.items.length === 7);
+      if (withItems.length >= 2) {
+        const means = [];
+        for (let q = 0; q < 7; q++) {
+          const nums = withItems.map((x) => Number(x.items[q])).filter((v) => !Number.isNaN(v));
+          means.push(nums.length ? nums.reduce((a, b) => a + b, 0) / nums.length : 0);
+        }
+        const order = means.map((m, q) => ({ m, q })).sort((a, b) => b.m - a.m);
+        const weak = order.filter((o) => o.m >= 0.5).slice(0, 2).map((o) => Q_SHORT[o.q]);
+        if (weak) topWeakText = weak.join(' · ');
+        // 与最近一次对比：哪些题比自己的历史均值低得最多（在变好）
+        const last = withItems[0].items;
+        const gains = means.map((m, q) => m - Number(last[q])).filter((v) => !Number.isNaN(v));
+        const best = gains.map((g, q) => ({ g, q })).sort((a, b) => b.g - a.g);
+        const imp = best.filter((o) => o.g > 0).slice(0, 2).map((o) => Q_SHORT[o.q]);
+        if (imp.length) improveText = `在改善：${imp.join('、')}`;
+      }
+      this.setData({ hist: list, histDelta, topWeakText, improveText });
     } catch (err) {
       console.warn('[assessment] 历史读取失败', err);
     }

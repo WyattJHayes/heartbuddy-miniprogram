@@ -46,6 +46,25 @@
     </view>
   </view>
 
+  <!-- 情绪健康指数：近 7 天均值 → 0-100，规则解读 -->
+  <view class="card health-card" wx:if="{{healthIdx}}">
+    <view class="section-title">情绪健康指数<text class="section-sub">近 7 天</text></view>
+    <view class="health-row">
+      <view class="health-num">{{healthIdx.score}}</view>
+      <view class="health-meta">
+        <view class="health-tag">
+          <text class="health-emoji">{{healthIdx.emoji}}</text>
+          <text class="health-label">{{healthIdx.label}}</text>
+          <text class="health-delta" wx:if="{{healthIdx.deltaText}}">{{healthIdx.deltaText}}</text>
+        </view>
+        <view class="health-note">{{healthIdx.note}}</view>
+      </view>
+    </view>
+    <view class="health-bar" aria-hidden="true">
+      <view class="health-bar-fill" style="width:{{healthIdx.score}}%"></view>
+    </view>
+  </view>
+
   <!-- 时光信：写给 7 天后的自己 -->
   <view class="card letter-card">
     <view class="section-title">✉️ 写给 7 天后的自己</view>

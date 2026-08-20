@@ -49,3 +49,8 @@
 .hbar { display: block; height: 100%; background: linear-gradient(90deg, #9dc2ff, #5b8def); border-radius: 999rpx; }
 .hval { width: 200rpx; text-align: right; font-size: 23rpx; color: #3a4a63; }
 .hdelta { margin-top: 12rpx; font-size: 23rpx; }
+
+/* 自评历史：逐题洞察 */
+.hinsight { margin-top: 12rpx; font-size: 25rpx; color: #4a5b76; line-height: 1.6; }
+.hinsight + .hinsight { margin-top: 6rpx; }
+.hinsight-b { font-weight: 600; color: #3f6fe0; }

@@ -4,6 +4,12 @@
     <text class="w-ico">{{weatherIco}}</text>
     <text class="w-text">{{weatherText}}</text>
   </view>
+  <!-- 今日心语：日轮换，点一下复制 -->
+  <view class="quote-bar" wx:if="{{dailyQuote}}" bindtap="copyQuote" role="button" aria-label="复制今日心语">
+    <text class="q-ico">💫</text>
+    <text class="q-text">{{dailyQuote}}</text>
+    <text class="q-copy">复制</text>
+  </view>
   <!-- 消息区 -->
   <scroll-view scroll-y class="msg-scroll" scroll-with-animation aria-live="polite">
     <view class="msg-list">

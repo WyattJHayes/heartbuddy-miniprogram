@@ -120,3 +120,17 @@
 .cal-day-title { font-size: 26rpx; color: #2a3b55; font-weight: 600; }
 .cal-day-row { margin-top: 12rpx; font-size: 24rpx; color: #4a5b76; }
 .cal-close { margin-top: 14rpx; font-size: 23rpx; color: #5b8def; }
+
+/* 情绪健康指数 */
+.health-card { background: linear-gradient(150deg, #eef6ff, #fff6ec); }
+.section-sub { font-size: 21rpx; color: #93a0b8; font-weight: 400; margin-left: 10rpx; }
+.health-row { display: flex; align-items: center; gap: 26rpx; margin-top: 8rpx; }
+.health-num { font-size: 88rpx; font-weight: 800; color: #3f6fe0; line-height: 1.1; min-width: 150rpx; text-align: left; }
+.health-meta { flex: 1; }
+.health-tag { display: flex; align-items: center; }
+.health-emoji { font-size: 34rpx; margin-right: 8rpx; }
+.health-label { font-size: 30rpx; font-weight: 600; color: #2a3b55; }
+.health-delta { font-size: 24rpx; color: #5b8def; margin-left: 12rpx; font-weight: 600; }
+.health-note { margin-top: 8rpx; font-size: 24rpx; color: #5a6b85; line-height: 1.6; }
+.health-bar { height: 14rpx; border-radius: 999rpx; background: #e6ebf4; margin-top: 16rpx; overflow: hidden; }
+.health-bar-fill { height: 100%; border-radius: 999rpx; background: linear-gradient(90deg, #8fb1f2, #5d8def); transition: width .4s; }

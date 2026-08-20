@@ -84,3 +84,9 @@
 .weather-bar { display: flex; align-items: center; gap: 10rpx; padding: 12rpx 30rpx; font-size: 23rpx; color: #5b6b85; background: #f4f8ff; border-bottom: 1rpx solid #e6edf8; }
 .w-ico { font-size: 26rpx; }
 .w-text { letter-spacing: 1rpx; }
+
+/* 今日心语 */
+.quote-bar { display: flex; align-items: center; gap: 10rpx; margin: 0 24rpx 16rpx; padding: 16rpx 20rpx; background: linear-gradient(135deg, #f2f7ff, #fff6ee); border-radius: 12rpx; }
+.q-ico { font-size: 28rpx; }
+.q-text { flex: 1; font-size: 25rpx; color: #4a5b76; line-height: 1.6; }
+.q-copy { font-size: 22rpx; color: #5d8def; flex-shrink: 0; }

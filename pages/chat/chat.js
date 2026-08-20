@@ -14,6 +14,22 @@ const GREETINGS = {
   first: '第一次见到你，真高兴 🌱 我是心语，会一直在。想从哪儿聊起都可以，我会认真听。'
 };
 
+// 每日心语：按年内第几天轮换，避免审美疲劳
+const DAILY_QUOTES = [
+  '你已经撑过了很多个「昨天」，今天也试试看。',
+  '情绪不是敌人，它只是来送信的。',
+  '慢慢来，比较快。',
+  '你不是一个人在战斗，请务必多爱自己一点。',
+  '今天，值得一个深呼吸。',
+  '把大目标拆小一点，小到不可能失败。',
+  '允许自己休息，不是罪过。',
+  '你在别人看不见的地方，拼尽全力地活着。',
+  '难过的时候翻开这一天：你比想象中坚强。',
+  '不求完美，只求完成。',
+  '愿你今天，也好好和自己相处。',
+  '风吹过的地方，都是路。'
+];
+
 Page({
   data: {
     loading: false,
@@ -40,7 +56,8 @@ Page({
     onboarding: false,
     onboardingStep: 0,
     weatherIco: '',   // ☀️/☁️/🌧…
-    weatherText: ''   // "10:00 · 晴 · 24℃"（免费 open-meteo，无 key）
+    weatherText: '',   // "10:00 · 晴 · 24℃"（免费 open-meteo，无 key）
+    dailyQuote: ''     // 今日心语（日轮换，可点复制）
   },
 
   async onLoad() {
@@ -53,6 +70,10 @@ Page({
     if (!wx.getStorageSync('hb_onboard_v1')) {
       this.setData({ onboard: true, onboardingStep: 0 });
     }
+    // 今日心语：按年内第几天轮换
+    const now0 = new Date();
+    const dayOfYear = Math.floor((now0 - new Date(now0.getFullYear(), 0, 0)) / 86400000);
+    this.setData({ dailyQuote: DAILY_QUOTES[dayOfYear % DAILY_QUOTES.length] });
     // 天气角（免费 open-meteo，定位失败静默降级为默认城市）
     this.loadWeather();
     // 耐心等登录完成（拿到 isNewUser 才能定制首次欢迎语；失败也不阻塞，用常规欢迎语兜底）
@@ -61,6 +82,14 @@ Page({
   },
 
   // ---- 天气角：open-meteo（免费、无需 key）----
+  copyQuote() {
+    if (!this.data.dailyQuote) return;
+    wx.setClipboardData({
+      data: this.data.dailyQuote,
+      success: () => wx.showToast({ title: '已复制今日心语', icon: 'success' })
+    });
+  },
+
   loadWeather() {
     const fetchBy = (lat, lon) => {
       wx.request({
