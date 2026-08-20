@@ -18,6 +18,8 @@
 .report { width: 100%; margin-top: 8rpx; }
 
 .chart-legend { font-size: 22rpx; color: #9ca3af; margin-top: 8rpx; line-height: 1.6; }
+.chart-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 14rpx; }
+.chart-actions .btn-ghost { margin: 0; }
 .insight { font-size: 26rpx; color: #4568c8; background: #eef4ff; border-radius: 999rpx; padding: 14rpx 24rpx; margin: 8rpx 0 16rpx; line-height: 1.6; }
 
 .row { display: flex; align-items: center; padding: 16rpx 0; border-bottom: 1rpx solid #f3f4f6; }

@@ -47,6 +47,7 @@ exports.main = async () => {
         openHigh: openHigh.total,
         openCrisis: openCrisis.total,
         recentCrisis: (crisisWeek.data || []).slice(0, 10).map((c) => ({
+          id: c._id,
           level: c.level,
           keywords: c.keywords || '',
           status: c.status || 'open',

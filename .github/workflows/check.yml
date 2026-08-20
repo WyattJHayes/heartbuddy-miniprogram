@@ -40,5 +40,10 @@ jobs:
           set -e
           node -e "require('fs').readdirSync('assets').filter(f=>f.endsWith('.svg')).forEach(f=>{const s=require('fs').readFileSync('assets/'+f,'utf8'); if(!/<svg[\s>]/.test(s)) throw new Error('bad svg '+f); console.log('OK '+f)})"
 
+      - name: 制图布局单测（chart-model）
+        run: |
+          set -e
+          node tools/chart-check.js
+
       - name: 提交信息
         run: echo "✅ ${{ github.sha }} 校验通过"

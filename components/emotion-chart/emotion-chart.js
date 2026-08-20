@@ -4,18 +4,23 @@
 //   minY / maxY  纵轴范围（默认 1–5）
 //   color   折线/数据点颜色
 //   unit    纵轴数值的单位说明（如 “分”）
-// 交互：长按保存为图片到相册
+//   footer  底部说明文本（可选，会一并写入图片，如“本周小结：…”）
+// 方法：save() 导出 PNG 并保存到相册；交互：长按同 save()
+// 布局纯函数来自 utils/chart-model，便于 node 单测回归
+const model = require('../../utils/chart-model');
+
 Component({
   properties: {
     points: { type: Array, value: [] },
     minY: { type: Number, value: 1 },
     maxY: { type: Number, value: 5 },
     color: { type: String, value: '#5b8def' },
-    unit: { type: String, value: '' }
+    unit: { type: String, value: '' },
+    footer: { type: String, value: '' }
   },
   data: { ready: false },
   observers: {
-    'points, minY, maxY, color': function () {
+    'points, minY, maxY, color, footer': function () {
       if (this.data.ready) this.draw();
     }
   },
@@ -54,20 +59,23 @@ Component({
       const n = pts.length;
       if (!n) { this._drawEmpty(W, H); return; }
 
-      const padL = 30, padR = 16, padT = 22, padB = 28;
+      // footer 文本（宽屏内换行，最多 2 行）
+      const footerLines = this._clipLines(this.data.footer);
+      const footerH = footerLines.length ? footerLines.length * 14 + 8 : 0;
+
+      const padL = 30, padR = 16, padT = 22, padB = 28 + footerH;
       const areaW = W - padL - padR, areaH = H - padT - padB;
       const lo = this.data.minY, hi = this.data.maxY;
       const span = hi - lo || 1;
-      const X = (i) => padL + areaW * (n === 1 ? 0.5 : i / (n - 1));
-      const Y = (v) => padT + areaH * (1 - (v - lo) / span);
+
+      const X = (i) => model.pointX(i, n, padL, areaW);
+      const Y = (v) => model.pointY(v, lo, span, padT, areaH);
 
       // 横向网格 + 左轴数值
       ctx.strokeStyle = '#e7ebf3';
       ctx.lineWidth = 1;
       ctx.setLineDash([4, 4]);
-      const steps = 4;
-      for (let s = 0; s <= steps; s += 1) {
-        const v = lo + (span * s) / steps;
+      model.gridValues(lo, hi, 4).forEach((v) => {
         const yy = Y(v);
         ctx.beginPath();
         ctx.moveTo(padL, yy);
@@ -79,10 +87,10 @@ Component({
         ctx.textAlign = 'right';
         ctx.fillText(Number.isInteger(v) ? String(v) : v.toFixed(1), padL - 6, yy + 3);
         ctx.setLineDash([4, 4]);
-      }
+      });
       ctx.setLineDash([]);
 
-      // 折线（跳过 null）
+      // 折线（跳过 null 空档）
       const color = this.data.color || '#5b8def';
       ctx.strokeStyle = color;
       ctx.lineWidth = 2.5;
@@ -97,7 +105,7 @@ Component({
       });
       ctx.stroke();
 
-      // 数据点 + 数值 + 底部日期
+      // 数据点 + 数值 + 日期
       pts.forEach((p, i) => {
         const px = X(i);
         if (p.value != null) {
@@ -120,12 +128,22 @@ Component({
         ctx.fillText(p.label || '', px, H - padB + 12);
       });
 
-      // 单位说明
+      // 单位说明（左上）
       if (this.data.unit) {
         ctx.fillStyle = '#9ca3af';
         ctx.font = '9px sans-serif';
         ctx.textAlign = 'left';
         ctx.fillText(this.data.unit, padL, 12);
+      }
+
+      // footer（底部多行说明，随图一起导出）
+      if (footerLines.length) {
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '9px sans-serif';
+        ctx.textAlign = 'left';
+        footerLines.forEach((ln, i) => {
+          ctx.fillText(ln, padL, H - footerLines.length * 14 + 2 + i * 14);
+        });
       }
     },
 
@@ -137,9 +155,19 @@ Component({
       ctx.fillText('暂无数据', W / 2, H / 2);
     },
 
-    // 长按 → 导出 PNG → 保存相册
-    onLongPress() {
-      if (!this.canvas) return;
+    _clipLines(text) {
+      if (!text) return [];
+      const W = this.size ? this.size.width : 320;
+      const maxW = W - 60;
+      return model.clipLines(String(text), maxW, 2, (s) => this.ctx.measureText(s).width);
+    },
+
+    // 导出 PNG → 保存相册（含权限回流）
+    save() {
+      if (!this.canvas) {
+        wx.showToast({ title: '图表还没就绪，稍候重试', icon: 'none' });
+        return;
+      }
       wx.canvasToTempFilePath(
         {
           canvas: this.canvas,
@@ -165,6 +193,8 @@ Component({
         },
         this
       );
-    }
+    },
+
+    onLongPress() { this.save(); }
   }
 });

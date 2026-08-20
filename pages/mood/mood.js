@@ -9,7 +9,8 @@ Page({
     statList: [],   // 各情绪占比 [{emoji,label,count,ratio}]
     recentList: [],  // 最近记录 [{time,mood,label}]
     moodLine: [],     // 近 7 天 [{label,value}]，无记录 value:null
-    insight: ''       // 趋势的一句话 AI 解读（规则生成）
+    insight: '',       // 趋势的一句话 AI 解读（规则生成）
+    chartFooter: ''    // 曲线图 footer（随长图一并导出）
   },
 
   onShow() { this.fetchMoods(); },
@@ -47,6 +48,7 @@ Page({
         recentList: list.slice(0, 7),
         moodLine,
         insight: this.buildInsight(moodLine),
+        chartFooter: this.buildChartFooter(moodLine),
         empty: list.length === 0,
         loaded: true
       });
@@ -102,6 +104,23 @@ Page({
     if (d <= -0.3) return '最近两天的曲线在往下走，好像有点累。允许自己慢下来，也可以现在就找我聊聊 🌱';
     if (d >= 0.3) return '最近情绪在回升，为你开心。记得把好心情也写进记录 🎈';
     return '这几天的情绪整体平稳，保持觉察本身就是很好的自我照顾 ✨';
+  },
+
+  // 曲线图 footer：日期区间 + 有记录天数（随长图导出，体现“周小结”）
+  buildChartFooter(line) {
+    const days = line || [];
+    const valid = days.filter((d) => d.value != null).length;
+    if (!valid) return '';
+    const first = days[0] && days[0].label;
+    const last = days[days.length - 1] && days[days.length - 1].label;
+    return `本周心情小结 · ${first}~${last} · 记录了 ${valid} 天 · 心语伴 AI`;
+  },
+
+  // 保存“曲线+小结”为一张图片
+  saveMoodSummary() {
+    const chart = this.selectComponent('#moodChart');
+    if (chart && chart.save) chart.save();
+    else wx.showToast({ title: '图表还没就绪，稍候重试', icon: 'none' });
   },
 
   renderStats(list) {

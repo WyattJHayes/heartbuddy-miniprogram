@@ -120,17 +120,20 @@ heartbuddy-miniprogram/
 ├── docs/部署运维手册-en.md            # 部署运维英文精简版（国际评委）
 ├── docs/评委体验口令卡.md             # 评委 3 分钟走 3 条路径（路演/答辩用）
 ├── tools/accessibility-check.py       # 无障碍自检脚本（本地 python3 运行）
-├── components/emotion-chart/          # 通用 Canvas2D 折线图（长按存图，mood/ops 复用）
+├── tools/chart-check.js                # 制图布局单测（node 运行，已入 CI）
+├── components/emotion-chart/          # 通用 Canvas2D 折线图（footer/长按/保存按钮，mood/ops 复用）
 ├── components/crisis-flow/            # 危机流程图组件（点击全屏/长按另存）
 ├── components/share-card/             # 周报分享卡组件（浅/深双模板，长按预览/保存）
 ├── utils/moodscore.js                 # 情绪→分值映射（mood/ops 共享）
+├── utils/chart-model.js               # 折线图布局纯函数（组件 + CI 单测共用）
 ├── docs/周报分享图文教程.md            # 生成分享卡 → 朋友圈 4 步图文教程
 ├── docs/README-English.md            # 英文版 README
-├── .github/workflows/check.yml        # CI：JS/JSON/SVG 自动校验
+├── .github/workflows/check.yml        # CI：JS/JSON/SVG + 制图布局单测自动校验
 └── cloudfunctions/
     ├── login/     静默登录（建 users 记录）
     ├── aiChat/    对话 + 情绪 + 危机（config / prompt / danger）
-    └── opsSummary/ 数据汇总（填 ADMIN_OPENIDS 白名单）
+    ├── opsSummary/ 数据汇总（填 ADMIN_OPENIDS 白名单）
+    └── opsHandleCrisis/ 危机一键闭环（标记已处理，同白名单）
 ```
 
 ## 🔒 合规注意

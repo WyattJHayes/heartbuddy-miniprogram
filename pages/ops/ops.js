@@ -8,7 +8,8 @@ Page({
     admin: false,
     noRight: false,
     d: null,
-    trendPoints: []
+    trendPoints: [],
+    handling: ''   // 正在“一键处理”的危机记录 id
   },
 
   onShow() { this.load(); },
@@ -65,6 +66,34 @@ Page({
   },
 
   refresh() { this.load(); },
+
+  // 一键把危机标记为已处理（写回 crisisAlerts，形成现场可点的闭环）
+  handleCrisis(e) {
+    const id = e.currentTarget.dataset.id;
+    if (!id) return;
+    wx.showModal({
+      title: '标记为已处理？',
+      content: '该条危机记录将更新状态并写入处理时间，可随时在 re:center 复位。',
+      confirmText: '标记已处理',
+      success: async (r) => {
+        if (!r.confirm) return;
+        this.setData({ handling: id });
+        try {
+          const res = await api.call('opsHandleCrisis', { id });
+          if (res && res.ok) {
+            wx.showToast({ title: '已处理 ✓', icon: 'success' });
+            this.load();
+          } else {
+            wx.showToast({ title: (res && res.error) || '处理失败', icon: 'none' });
+          }
+        } catch (err) {
+          wx.showToast({ title: '调用失败，请重试', icon: 'none' });
+        } finally {
+          this.setData({ handling: '' });
+        }
+      }
+    });
+  },
 
   // 复制近 14 日均值（便于答辩/Excel 使用）
   copyTrend() {
