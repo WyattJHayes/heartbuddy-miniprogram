@@ -18,6 +18,7 @@ Page({
     moodTag: '',         // 当前可选的情绪标签
     typing: false,       // AI 打字中
     typedText: '',
+    showQuick: false,    // 输入栏「⚡快捷」面板
     quickReplies
   },
 
@@ -85,7 +86,9 @@ Page({
     this.pushUser('我今天想倾诉情绪：' + e.currentTarget.dataset.m); // 直接发送情绪标签
   },
 
-  onQuick(e) { this.send(e.currentTarget.dataset.text); },
+  onQuick(e) { this.setData({ showQuick: false }); this.send(e.currentTarget.dataset.text); },
+
+  toggleQuick() { this.setData({ showQuick: !this.data.showQuick }); },
 
   onSend() {
     const text = this.data.input.trim();

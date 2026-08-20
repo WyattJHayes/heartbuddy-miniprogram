@@ -35,6 +35,7 @@
       <view class="tag {{moodTag==='生气'?'on':''}}" data-m="生气" bindtap="onMood">😡 生气</view>
     </view>
     <view class="input-row">
+      <view class="quick-toggle {{showQuick ? 'on' : ''}}" bindtap="toggleQuick">⚡快捷</view>
       <input
         class="input"
         placeholder="说点什么…"
@@ -44,6 +45,15 @@
         bindconfirm="onSend"
       />
       <button class="send" bindtap="onSend" loading="{{loading}}">发送</button>
+    </view>
+
+    <!-- 快捷面板（随时可展开） -->
+    <view class="quick-panel" wx:if="{{showQuick}}">
+      <view class="quick-panel-title">试试这样说</view>
+      <view class="quick-panel-list">
+        <view class="quick-panel-item" wx:for="{{quickReplies}}" wx:key="*this"
+              data-text="{{item}}" bindtap="onQuick">{{item}}</view>
+      </view>
     </view>
   </view>
 </view>

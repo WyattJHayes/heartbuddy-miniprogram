@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1240" viewBox="0 0 1240 1240" font-family="PingFang SC, Microsoft YaHei, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#dbe6ff"/>
+      <stop offset="0.55" stop-color="#eaf2ff"/>
+      <stop offset="1" stop-color="#f7fbff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1240" height="1240" fill="url(#bg)"/>
+
+  <!-- 顶栏 -->
+  <rect x="92" y="70" width="1056" height="168" rx="56" fill="#5b8def" opacity="0.12"/>
+  <text x="112" y="126" font-size="60" font-weight="bold" fill="#4568c8">心语伴 · 本周情绪小报</text>
+
+  <!-- 主表情：脸 -->
+  <circle cx="620" cy="360" r="120" fill="#ffd27a"/>
+  <circle cx="578" cy="336" r="13" fill="#5a4328"/>
+  <circle cx="662" cy="336" r="13" fill="#5a4328"/>
+  <path d="M558 388 Q620 430 682 388" stroke="#5a4328" stroke-width="13" fill="none" stroke-linecap="round"/>
+  <path d="M540 300 q80 -16 160 0" stroke="#ffffff" stroke-width="9" fill="none" stroke-linecap="round" opacity="0.9"/>
+
+  <!-- 情绪标签 -->
+  <text x="620" y="650" font-size="84" font-weight="bold" fill="#3a4a63" text-anchor="middle">本周主要情绪：焦虑</text>
+
+  <!-- 数据 -->
+  <text x="430" y="820" font-size="124" font-weight="bold" fill="#5b8def" text-anchor="middle">14</text>
+  <text x="810" y="820" font-size="124" font-weight="bold" fill="#5b8def" text-anchor="middle">5</text>
+  <text x="430" y="876" font-size="44" fill="#9ca3af" text-anchor="middle">次倾诉</text>
+  <text x="810" y="876" font-size="44" fill="#9ca3af" text-anchor="middle">天记录</text>
+
+  <!-- 分隔线 -->
+  <line x1="150" y1="952" x2="1090" y2="952" stroke="#5b8def" stroke-opacity="0.25" stroke-width="4"/>
+
+  <!-- 建议 -->
+  <text x="620" y="1036" font-size="50" fill="#5b6b85" text-anchor="middle">这周焦虑出现较多，试试每天睡前</text>
+  <text x="620" y="1104" font-size="50" fill="#5b6b85" text-anchor="middle">做 3 分钟深呼吸，把担心写下来。</text>
+
+  <!-- 底部 -->
+  <text x="620" y="1196" font-size="40" fill="#aab4c8" text-anchor="middle">2026.8.20 · 记录这周的每一天</text>
+</svg>
