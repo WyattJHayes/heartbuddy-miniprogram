@@ -73,6 +73,16 @@
     <view class="health-bar" aria-hidden="true">
       <view class="health-bar-fill" style="width:{{healthIdx.score}}%"></view>
     </view>
+    <!-- 近 14 天情绪色带：一眼看清这段时间的起起伏伏 -->
+    <view class="band-wrap" wx:if="{{band.length}}">
+      <view class="band-title">近 14 天情绪色带</view>
+      <view class="band-row" aria-hidden="true">
+        <view class="band-cell {{item.has ? '' : 'empty'}}" wx:for="{{band}}" wx:key="d">
+          <text class="band-e">{{item.e}}</text>
+          <text class="band-d">{{item.d}}</text>
+        </view>
+      </view>
+    </view>
   </view>
 
   <!-- 时光信：写给 7 天后的自己 -->

@@ -44,7 +44,8 @@ Page({
     calWeekday: ['日', '一', '二', '三', '四', '五', '六'],
     calTitle: '',
     calDay: null,          // 点选某天后的当日小结
-    smalls: []            // 今日三件小事 [{i,text,done}]
+    smalls: [],            // 今日三件小事 [{i,text,done}]
+    band: []               // 近 14 天情绪色带 [{d,e,has}]
   },
 
   onShow() {
@@ -388,6 +389,7 @@ Page({
         moodLine,
         insight: this.buildInsight(moodLine),
         healthIdx: this.buildHealth(moodLine),
+        band: this.buildBand(raw),
         chartFooter: this.buildChartFooter(moodLine),
         weekSum: this.buildWeekSum(list),
         streak: streakNow,
@@ -483,6 +485,25 @@ Page({
 
   closeCalDay() {
     this.setData({ calDay: null });
+  },
+
+  // 近 14 天情绪色带：每天取当天最新一条的 emoji，无记录则留空
+  buildBand(raw) {
+    const dayMap = {};
+    (raw || []).forEach((m) => {
+      const k = new Date(m.createdAt).toDateString();
+      if (!(k in dayMap)) {
+        const meta = MOOD_META[m.mood];
+        dayMap[k] = meta ? meta.emoji : '·';
+      }
+    });
+    const band = [];
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(Date.now() - i * 86400000);
+      const k = d.toDateString();
+      band.push({ d: `${d.getMonth() + 1}/${d.getDate()}`, e: dayMap[k] || '', has: !!dayMap[k] });
+    }
+    return band;
   },
 
   // 情绪健康指数（规则推导）：近 7 天分值均值 → 0-100，附解读与昨日对比

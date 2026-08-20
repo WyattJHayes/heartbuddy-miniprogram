@@ -57,7 +57,8 @@ Component({
       return this._initCanvas().then(() => {
         if (!this.canvas) throw new Error('canvas 未就绪');
         const ctx = this.canvas.getContext('2d');
-        const W = 620, H = 980;
+        const hasNote = !!(cd.weekNote && String(cd.weekNote).trim());
+        const W = 620, H = hasNote ? 1070 : 980;
         const win = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync();
         const dpr = win.pixelRatio || 2;
         this.canvas.width = W * dpr;
@@ -148,18 +149,29 @@ Component({
           ctx.fillText('近 7 天情绪曲线', W / 2, 690);
         }
 
-        // 建议（自动换行）
+        // 建议（自动换行；有备注时压缩为 2 行，给备注留位）
         ctx.fillStyle = t.sub;
         ctx.font = '27px sans-serif';
-        this._wrap(ctx, cd.suggestion || '', W / 2, 810, W - 150, 40, 3);
+        this._wrap(ctx, cd.suggestion || '', W / 2, 810, W - 150, 40, hasNote ? 2 : 3);
+
+        // 「本周对自己说」备注（有则加高画布，两行封顶）
+        if (hasNote) {
+          ctx.fillStyle = t.muted;
+          ctx.font = '21px sans-serif';
+          ctx.fillText('— 想对本周的自己说 —', W / 2, 908);
+          ctx.fillStyle = t.accent;
+          ctx.font = '26px sans-serif';
+          this._wrap(ctx, '「' + String(cd.weekNote).trim() + '」', W / 2, 946, W - 150, 38, 2);
+        }
 
         // 日期与底部
         const now = new Date();
         const dateStr = now.getFullYear() + '.' + (now.getMonth() + 1) + '.' + now.getDate();
+        const footTop = hasNote ? 1020 : 922;
         ctx.fillStyle = t.foot;
         ctx.font = '22px sans-serif';
-        ctx.fillText(dateStr + ' · 记录这周的每一天', W / 2, 922);
-        ctx.fillText('AI 情绪陪伴 · 非医疗诊断', W / 2, 964);
+        ctx.fillText(dateStr + ' · 记录这周的每一天', W / 2, footTop);
+        ctx.fillText('AI 情绪陪伴 · 非医疗诊断', W / 2, footTop + 42);
 
         return this._toTemp(W, H, dpr);
       });

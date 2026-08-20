@@ -285,6 +285,8 @@ Page({
     try {
       const comp = this.selectComponent('#shareCard');
       if (!comp || !comp.draw) throw new Error('分享卡组件未就绪');
+      // 打开时再合并最新「本周对自己说」，保证卡片上的备注是刚写的
+      this.setData({ cardData: Object.assign({}, this.data.cardData, { weekNote: this.data.weekNote }) });
       const url = await comp.draw();
       this.setData({ shareUrl: url || '' });
     } catch (e) {

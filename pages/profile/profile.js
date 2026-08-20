@@ -52,6 +52,28 @@ Page({
     wx.setClipboardData({ data: t, success: () => wx.showToast({ title: '已复制', icon: 'none' }) });
   },
 
+  // 长按单条珍藏 → 确认后删除
+  delFav(e) {
+    const i = Number(e.currentTarget.dataset.i);
+    const favs = this.data.favs || [];
+    if (!(i >= 0) || !favs[i]) return;
+    const snippet = favs[i].text.length > 12 ? favs[i].text.slice(0, 12) + '…' : favs[i].text;
+    wx.showModal({
+      title: '删除这条珍藏？',
+      content: `「${snippet}」`,
+      confirmText: '删除',
+      cancelText: '留下',
+      success: (r) => {
+        if (!r.confirm) return;
+        const next = favs.slice();
+        next.splice(i, 1);
+        wx.setStorageSync('hb_favs', next);
+        this.setData({ favs: next, favCount: next.length });
+        wx.showToast({ title: '已删除', icon: 'none' });
+      }
+    });
+  },
+
   clearFavs() {
     wx.showModal({
       title: '清空我的珍藏？',

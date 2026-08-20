@@ -143,3 +143,12 @@
 .sm-input { flex: 1; font-size: 26rpx; color: #3a4a63; }
 .sm-input.done { color: #b0b8c8; text-decoration: line-through; }
 .sm-hint { margin-top: 18rpx; font-size: 23rpx; }
+
+/* 近 14 天情绪色带 */
+.band-wrap { margin-top: 26rpx; border-top: 1rpx solid #f0f2f7; padding-top: 20rpx; }
+.band-title { font-size: 23rpx; color: #98a2b5; margin-bottom: 12rpx; }
+.band-row { display: flex; justify-content: space-between; }
+.band-cell { display: flex; flex-direction: column; align-items: center; width: 44rpx; }
+.band-e { font-size: 30rpx; height: 40rpx; line-height: 40rpx; }
+.band-cell.empty .band-e { color: #d7dde8; font-size: 26rpx; }
+.band-d { font-size: 18rpx; color: #b3bdcf; margin-top: 4rpx; transform: scale(0.86); white-space: nowrap; }
