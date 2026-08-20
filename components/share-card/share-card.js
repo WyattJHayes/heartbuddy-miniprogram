@@ -109,10 +109,20 @@ Component({
         ctx.lineTo(W - 70, 560);
         ctx.stroke();
 
+        // 本周 vs 上周均值（数据化升级）
+        ctx.fillStyle = t.data;
+        ctx.font = 'bold 30px sans-serif';
+        ctx.fillText((cd.weekAvg ? '本周均值 ' + cd.weekAvg : '本周均值 —') + (cd.prevAvg ? '   ·   上周 ' + cd.prevAvg : ''), W / 2, 600);
+        if (cd.deltaText) {
+          ctx.fillStyle = t.sub;
+          ctx.font = '23px sans-serif';
+          ctx.fillText(String(cd.deltaText).replace('（上周无记录可对比）', ''), W / 2, 636);
+        }
+
         // 建议（自动换行）
         ctx.fillStyle = t.sub;
         ctx.font = '27px sans-serif';
-        this._wrap(ctx, cd.suggestion || '', W / 2, 620, W - 150, 40, 3);
+        this._wrap(ctx, cd.suggestion || '', W / 2, 686, W - 150, 40, 3);
 
         // 日期与底部
         const now = new Date();

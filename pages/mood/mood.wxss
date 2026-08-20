@@ -91,3 +91,14 @@
 .demo-row { display: flex; gap: 20rpx; margin-top: 16rpx; }
 .demo-btn { flex: 1; background: #eef4ff; color: #3f6fd8; font-size: 25rpx; border-radius: 44rpx; font-weight: 600; }
 .demo-btn.ghost { background: #f1f3f7; color: #6b7b95; }
+
+/* 情绪日记详情弹层 */
+.mask { position: fixed; inset: 0; background: rgba(20,28,43,.5); z-index: 99; display: flex; align-items: flex-end; }
+.sheet { width: 100%; background: #fff; border-radius: 32rpx 32rpx 0 0; padding: 40rpx 36rpx 60rpx; box-sizing: border-box; }
+.sheet-title { text-align: center; font-size: 30rpx; font-weight: 700; color: #2d3b55; }
+.di-emoji { text-align: center; font-size: 72rpx; margin: 20rpx 0 10rpx; }
+.di-line { display: flex; justify-content: space-between; padding: 14rpx 8rpx; font-size: 27rpx; border-bottom: 1rpx dashed #eef1f6; }
+.di-line .lbl { color: #8a97ad; }
+.di-line .val { color: #2d3b55; font-weight: 600; }
+.di-del { margin-top: 30rpx; background: #fbefec; color: #c25a3a; border-radius: 999rpx; font-size: 27rpx; }
+.di-close { margin-top: 16rpx; background: #f2f4f8; color: #5b6b85; border-radius: 999rpx; font-size: 27rpx; }

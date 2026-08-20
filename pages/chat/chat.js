@@ -35,7 +35,10 @@ Page({
       "I feel like I can't cope right now",
       "I'm afraid I might hurt myself",
       "Please help me reach a real person"
-    ]
+    ],
+    // 新手引导（一次性）
+    onboarding: false,
+    onboardingStep: 0
   },
 
   async onLoad() {
@@ -44,9 +47,27 @@ Page({
       wx.redirectTo({ url: '/pages/welcome/welcome' });
       return;
     }
+    // 新手引导：仅第一次打开显示（本地标记 hb_onboard_v1）
+    if (!wx.getStorageSync('hb_onboard_v1')) {
+      this.setData({ onboard: true, onboardingStep: 0 });
+    }
     // 耐心等登录完成（拿到 isNewUser 才能定制首次欢迎语；失败也不阻塞，用常规欢迎语兜底）
     await app.login().catch(() => {});
     this.initSession();
+  },
+
+  onBoardNext() {
+    if (this.data.onboardingStep >= 2) {
+      wx.setStorageSync('hb_onboard_v1', true);
+      this.setData({ onboarding: false });
+    } else {
+      this.setData({ onboardingStep: this.data.onboardingStep + 1 });
+    }
+  },
+
+  onBoardSkip() {
+    wx.setStorageSync('hb_onboard_v1', true);
+    this.setData({ onboarding: false });
   },
 
   initSession() {

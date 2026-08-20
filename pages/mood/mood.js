@@ -31,7 +31,11 @@ Page({
     // 每日心情提醒（本地弱提醒，无模板订阅）
     remindOn: false,
     remindTime: '20:00',
-    demoBusy: false
+    demoBusy: false,
+    // 情绪日记：详情弹层
+    detail: null,        // { _id, time, label, emoji, intensity, trigger }
+    showDetail: false,
+    deleting: false
   },
 
   onShow() {
@@ -78,7 +82,37 @@ Page({
     if (this.data.remindOn) wx.setStorageSync('moodRemind', { on: true, time: e.detail.value });
   },
 
-  // ---- 演示数据：一键生成 12 天示例心情（sessionId 前缀 demo-，可随时清除）----
+  // 日记：点开 / 长按查看当日记录详情
+  noop() {},
+
+  openDetail(e) {
+    const item = e.currentTarget.dataset.item;
+    if (!item) return;
+    this.setData({ detail: item, showDetail: true });
+  },
+
+  closeDetail() {
+    if (this.data.deleting) return;
+    this.setData({ showDetail: false, detail: null });
+  },
+
+  async deleteDetail() {
+    const d = this.data.detail;
+    if (!d || !d._id || this.data.deleting) return;
+    try {
+      this.setData({ deleting: true });
+      const db = wx.cloud.database();
+      await db.collection('moods').doc(d._id).remove();
+      wx.showToast({ title: '已删除这条记录', icon: 'success' });
+      this.setData({ showDetail: false, detail: null });
+      this.fetchMoods(true);
+    } catch (err) {
+      console.error('[mood] 删除失败', err);
+      wx.showToast({ title: '删除失败，请重试', icon: 'none' });
+    } finally {
+      this.setData({ deleting: false });
+    }
+  },
   genDemo() {
     if (this.data.demoBusy) return;
     wx.showModal({
@@ -277,9 +311,13 @@ Page({
         const d = new Date(m.createdAt);
         const pad = (n) => (n < 10 ? '0' + n : n);
         return {
+          _id: m._id,
           time: `${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`,
+          fullTime: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`,
           label: meta.label,
-          emoji: meta.emoji
+          emoji: meta.emoji,
+          intensity: m.intensity || 0,
+          trigger: m.trigger || ''
         };
       });
 

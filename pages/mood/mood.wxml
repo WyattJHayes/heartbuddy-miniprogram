@@ -127,7 +127,7 @@
     <!-- 最近记录 -->
     <view class="card">
       <view class="section-title">最近记录</view>
-      <view class="row" wx:for="{{recentList}}" wx:key="index">
+      <view class="row" wx:for="{{recentList}}" wx:key="index" data-item="{{item}}" bindtap="openDetail" bindlongpress="openDetail" role="button" aria-label="查看 {{item.label}} 记录详情">
         <text class="row-emoji">{{item.emoji}}</text>
         <view class="row-main">
           <view class="row-label">{{item.label}}</view>
@@ -145,4 +145,18 @@
       </view>
     </view>
   </block>
+</view>
+
+<!-- 情绪日记详情弹层 -->
+<view class="mask" wx:if="{{showDetail}}" bindtap="closeDetail">
+  <view class="sheet" catchtap="noop">
+    <view class="sheet-title">📖 情绪日记</view>
+    <view class="di-emoji">{{detail.emoji}}</view>
+    <view class="di-line"><text class="lbl">情绪</text><text class="val">{{detail.label}}</text></view>
+    <view class="di-line"><text class="lbl">时间</text><text class="val">{{detail.fullTime}}</text></view>
+    <view class="di-line"><text class="lbl">强度</text><text class="val">{{detail.intensity}} / 10</text></view>
+    <view class="di-line"><text class="lbl">来源</text><text class="val">{{detail.trigger || '手动记录'}}</text></view>
+    <button class="di-del" bindtap="deleteDetail" loading="{{deleting}}">删除这条记录</button>
+    <button class="di-close" bindtap="closeDetail">关闭</button>
+  </view>
 </view>

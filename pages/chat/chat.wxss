@@ -66,3 +66,16 @@
 .quick-panel-item.emg { background: #fff2f0; color: #b33a2a; border: 1rpx solid #ffb4a8; }
 .quick-panel-title.emg { margin-top: 12rpx; font-size: 24rpx; color: #b0523f; }
 .emg-hint { font-size: 22rpx; color: #a0524a; margin-top: 10rpx; line-height: 1.6; }
+
+/* 新手引导（一次性） */
+.onboard { position: fixed; inset: 0; background: rgba(13,22,38,.58); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 60rpx; }
+.onboard-card { width: 100%; max-width: 560rpx; background: #fff; border-radius: 36rpx; padding: 56rpx 44rpx 40rpx; box-shadow: 0 20rpx 60rpx rgba(20,30,60,.25); text-align: center; }
+.ob-emoji { font-size: 96rpx; }
+.ob-title { font-size: 34rpx; font-weight: 700; color: #2a3b55; margin-top: 18rpx; }
+.ob-desc { font-size: 27rpx; color: #5b6b85; line-height: 1.7; margin-top: 14rpx; }
+.ob-dots { display: flex; justify-content: center; gap: 14rpx; margin-top: 34rpx; }
+.ob-dot { width: 14rpx; height: 14rpx; border-radius: 999rpx; background: #d7deea; }
+.ob-dot.on { width: 32rpx; background: #5b8def; }
+.ob-actions { display: flex; gap: 20rpx; margin-top: 40rpx; }
+.ob-skip { flex: 1; background: #f1f3f7; color: #6b7b95; border-radius: 999rpx; font-size: 27rpx; }
+.ob-next { flex: 2; background: #5b8def; color: #fff; border-radius: 999rpx; font-size: 27rpx; font-weight: 600; }

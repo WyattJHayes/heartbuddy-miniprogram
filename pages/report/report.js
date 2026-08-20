@@ -113,7 +113,10 @@ Page({
           topLabel: MOOD_LABEL[top] || '平稳',
           chatCount: list.length,
           dayCount: days.size,
-          suggestion: suggestions[top] || '继续保持觉察，记录本身就是一种照顾。'
+          suggestion: suggestions[top] || '继续保持觉察，记录本身就是一种照顾。',
+          weekAvg: weekAvg != null ? weekAvg.toFixed(1) : '',
+          prevAvg: prevAvg != null ? prevAvg.toFixed(1) : '',
+          deltaText
         }
       });
       this.pushHistory({

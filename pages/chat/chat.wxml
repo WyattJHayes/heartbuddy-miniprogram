@@ -79,3 +79,30 @@
     </view>
   </view>
 </view>
+<!-- 新手引导（仅第一次，hb_onboard_v1） -->
+<view class="onboard" wx:if="{{onboarding}}">
+  <view class="onboard-card" role="dialog" aria-label="新手引导">
+    <block wx:if="{{onboardingStep === 0}}">
+      <view class="ob-emoji">💬</view>
+      <view class="ob-title">在这里，随时聊聊</view>
+      <view class="ob-desc">底部输入框直接打字：说「我很焦虑」「今天有点难过」，我都会认真听。</view>
+    </block>
+    <block wx:elif="{{onboardingStep === 1}}">
+      <view class="ob-emoji">📊</view>
+      <view class="ob-title">你的心情会被好好保存</view>
+      <view class="ob-desc">每次记录都会变成情绪曲线、每周小结，还可以生成分享卡片，见证你的变化。</view>
+    </block>
+    <block wx:else>
+      <view class="ob-emoji">🛟</view>
+      <view class="ob-title">永远有退路</view>
+      <view class="ob-desc">特别难过时，点「紧急求助」—— 有心理热线和身边可信任的人等着你。</view>
+    </block>
+    <view class="ob-dots">
+      <view class="ob-dot {{onboardingStep === index ? 'on' : ''}}" wx:for="{{3}}" wx:key="index"></view>
+    </view>
+    <view class="ob-actions">
+      <button class="ob-skip" bindtap="onBoardSkip">跳过</button>
+      <button class="ob-next" bindtap="onBoardNext">{{onboardingStep >= 2 ? '开始使用' : '下一步'}}</button>
+    </view>
+  </view>
+</view>
