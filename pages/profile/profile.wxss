@@ -15,3 +15,4 @@
 .row:last-child { border-bottom: none; }
 .arrow { color: #c4c9d4; font-size: 36rpx; }
 .muted { color: #9ca3af; }
+.stat-tip { margin-top: 12rpx; font-size: 22rpx; line-height: 1.6; }

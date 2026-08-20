@@ -23,6 +23,17 @@
     </view>
   </view>
 
+  <!-- 数据与隐私 -->
+  <view class="card">
+    <view class="section-title">数据与隐私</view>
+    <view class="stats">
+      <view class="stat"><text class="stat-num">{{assessTotal}}</text><text class="stat-label">自评次数</text></view>
+      <view class="stat"><text class="stat-num">{{crisisTotal}}</text><text class="stat-label">危机提醒</text></view>
+      <view class="stat"><text class="stat-num">{{chatTotal}}</text><text class="stat-label">情绪记录</text></view>
+    </view>
+    <view class="text-muted stat-tip">以上仅本地展示·对话正文不入库，详阅「隐私政策（全文）」。</view>
+  </view>
+
   <!-- 反馈 -->
   <view class="card">
     <view class="section-title">给心语伴留言</view>

@@ -39,6 +39,12 @@
 
 三条链路：**前端 callFunction → 云函数（login / aiChat / opsSummary）→ 云数据库**；`aiChat` 额外接 **大模型 API**（OpenAI 兼容）与 **微信内容安全 msgSecCheck**。对话正文不进库，库中仅存情绪/测评脱敏字段。
 
+## 🚑 危机应对流程（内置「求助」页）
+
+<p align="center"><img src="assets/crisis-flow.png" alt="危机应对流程" width="72%"></p>
+
+三层防线：**双保险检测 → 三级分级 → 记录与真人接力**；危机记录脱敏进 `crisisAlerts`，运营看板可跟进「未处理高危」。
+
 ## 🚀 快速开始（约 30 分钟）
 
 > 图文分步教程见 **[docs/部署运维手册.md](docs/部署运维手册.md)**（导入 → 云开发 → 集合 → 云函数 → Key 配置 → 提审 → 日常运维）
@@ -102,6 +108,8 @@ heartbuddy-miniprogram/
 ├── assets/banner.svg                  # README 封面
 ├── assets/sharecard-preview.png       # 周报分享卡预览-浅色（.svg 生成）
 ├── assets/sharecard-preview-dark.png  # 周报分享卡预览-深色（.svg 生成）
+├── assets/architecture.svg            # 产品架构图（README 内嵌）
+├── assets/crisis-flow.svg/.png        # 危机应对流程图（SVG + 真机 PNG）
 ├── docs/视频脚本.md                    # 参赛演示视频分镜脚本
 ├── docs/演示录屏分镜卡.md              # 按镜头可拍的录制卡（S1–S10）
 ├── docs/演示视频逐句稿.md              # 口播 + 字幕逐字稿（S1–S10）
@@ -109,6 +117,7 @@ heartbuddy-miniprogram/
 ├── docs/竞赛提交包核对单.md            # 源码/视频/文档/配置 单张汇总
 ├── docs/答辩问答预判.md                # 评委 10 问 Q&A
 ├── docs/部署运维手册.md                # 部署/集合/Key/提审/运维/排障
+├── docs/部署运维手册-en.md            # 部署运维英文精简版（国际评委）
 ├── docs/周报分享图文教程.md            # 生成分享卡 → 朋友圈 4 步图文教程
 ├── docs/README-English.md            # 英文版 README
 ├── .github/workflows/check.yml        # CI：JS/JSON/SVG 自动校验

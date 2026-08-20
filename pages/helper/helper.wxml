@@ -31,6 +31,11 @@
   </view>
 
   <view class="card">
+    <view class="section-title">危机应对流程</view>
+    <image class="flow-img" src="/assets/crisis-flow.png" mode="widthFix" show-menu-by-longpress></image>
+  </view>
+
+  <view class="card">
     <view class="section-title">重要说明</view>
     <view class="text-muted">心语伴是 AI 情绪陪伴助手，不能替代专业医疗诊断与治疗。危机时刻请优先寻求专业或他人帮助。</view>
   </view>

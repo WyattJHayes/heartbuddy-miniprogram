@@ -17,3 +17,5 @@
 .dial { background: #5b8def; color: #fff; font-size: 26rpx; border-radius: 32rpx; padding: 0 32rpx; }
 
 .tip-item { font-size: 28rpx; line-height: 1.8; }
+
+.flow-img { width: 100%; border-radius: 16rpx; margin-top: 12rpx; }

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1240" viewBox="0 0 1240 1240" font-family="PingFang SC, Microsoft YaHei, sans-serif">
+  <defs>
+    <marker id="am" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0 0 L10 4 L0 8 z" fill="#9aa5b8"/>
+    </marker>
+  </defs>
+
+  <rect width="1240" height="1240" fill="#fdf7f5"/>
+
+  <text x="620" y="86" font-size="50" font-weight="bold" fill="#5b2a24" text-anchor="middle">危机应对流程 · 三道防线</text>
+  <text x="620" y="128" font-size="24" fill="#a0827c" text-anchor="middle">检测 → 分级 → 接力，把「最后一扇门」永远留给真实的人类</text>
+
+  <!-- 用户倾诉 -->
+  <rect x="340" y="180" width="560" height="84" rx="26" fill="#ffffff" stroke="#d9c4be" stroke-width="2"/>
+  <text x="620" y="224" font-size="27" fill="#5b3a34" text-anchor="middle" font-weight="bold">用户倾诉「我好像撑不下去了」</text>
+  <line x1="620" y1="242" x2="620" y2="286" stroke="#5aa2f5" stroke-width="6"/>
+
+  <!-- 双保险判定 -->
+  <rect x="210" y="286" width="820" height="86" rx="26" fill="#eaf2ff" stroke="#9dbdea" stroke-width="2"/>
+  <text x="620" y="334" font-size="27" font-weight="bold" fill="#2b4d83" text-anchor="middle">双保险判定：大模型结构化标记 × 本地规则 regex</text>
+
+  <!-- 四条分支箭头（肘形） -->
+  <polyline points="620,372 330,372 330,436" fill="none" stroke="#5a8ef0" stroke-width="4" marker-end="url(#am)"/>
+  <polyline points="620,372 875,372 875,436" fill="none" stroke="#5a8ef0" stroke-width="4" marker-end="url(#am)"/>
+  <polyline points="620,372 330,372 330,660" fill="none" stroke="#5a8ef0" stroke-width="4" marker-end="url(#am)"/>
+  <polyline points="620,372 875,372 875,660" fill="none" stroke="#5a8ef0" stroke-width="4" marker-end="url(#am)"/>
+
+  <!-- 高危 -->
+  <rect x="70" y="436" width="520" height="184" rx="26" fill="#ffe9e5" stroke="#e07b6f" stroke-width="3"/>
+  <circle cx="120" cy="488" r="16" fill="#d63b30"/>
+  <text x="150" y="498" font-size="34" font-weight="bold" fill="#b03a2c">高危</text>
+  <text x="120" y="546" font-size="24" fill="#7a4a42">全屏引导求助 → 进入「求助」页</text>
+  <text x="120" y="582" font-size="24" fill="#7a4a42">一键拨打热线 12356 / 120</text>
+
+  <!-- 未命中：正常 -->
+  <rect x="620" y="436" width="550" height="184" rx="26" fill="#eef9f0" stroke="#8fca9b" stroke-width="2"/>
+  <circle cx="672" cy="488" r="16" fill="#3c9d5e"/>
+  <text x="718" y="526" font-size="26" font-weight="bold" fill="#2f7a49">未命中 ✓</text>
+  <text x="670" y="566" font-size="24" fill="#4a7a58">正常共情对话，继续温柔陪伴</text>
+
+  <!-- 中危 -->
+  <rect x="70" y="648" width="520" height="176" rx="26" fill="#fff3e6" stroke="#eac38a" stroke-width="2"/>
+  <circle cx="120" cy="700" r="16" fill="#e07b2e"/>
+  <text x="168" y="716" font-size="32" font-weight="bold" fill="#a05a22">中危</text>
+  <text x="120" y="760" font-size="24" fill="#8a6a3c">温和陪伴 + 不评判</text>
+  <text x="120" y="796" font-size="24" fill="#8a6a3c">提示求助入口与热线</text>
+
+  <!-- 低危 -->
+  <rect x="620" y="648" width="520" height="176" rx="26" fill="#fff8e0" stroke="#e6d28a" stroke-width="2"/>
+  <circle cx="640" cy="700" r="16" fill="#d8a83a"/>
+  <text x="688" y="716" font-size="32" font-weight="bold" fill="#8a7015">低危</text>
+  <text x="668" y="760" font-size="24" fill="#7a7026">轻提示 + 情绪安抚句</text>
+  <text x="668" y="796" font-size="24" fill="#7a7026">如需再聊随时回来</text>
+
+  <!-- 记录与跟进 -->
+  <rect x="70" y="880" width="1070" height="120" rx="26" fill="#eef3ff" stroke="#9fb4e6" stroke-width="2"/>
+  <text x="620" y="932" font-size="27" font-weight="bold" fill="#2b4d83" text-anchor="middle">危机记录（脱敏）写入 crisisAlerts</text>
+  <text x="620" y="972" font-size="24" fill="#46619e" text-anchor="middle">运营看板展示「未处理高危」数量 · 人工尽快跟进闭环</text>
+
+  <!-- 真人接力 -->
+  <rect x="70" y="1050" width="1070" height="120" rx="26" fill="#ffffff" stroke="#d9c4be" stroke-width="2"/>
+  <text x="620" y="1094" font-size="27" font-weight="bold" fill="#5b3a34" text-anchor="middle">永远保留「人类的手」：热线与身边的人</text>
+  <text x="620" y="1132" font-size="24" fill="#8a6a64" text-anchor="middle">12356 全国心理援助热线 · 24 小时免费 ｜ 你也可以直接拨打 120</text>
+</svg>

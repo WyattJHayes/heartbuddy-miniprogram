@@ -1,76 +1,95 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1560" height="860" viewBox="0 0 1560 860" font-family="PingFang SC, Microsoft YaHei, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1060" viewBox="0 0 1600 1060" font-family="PingFang SC, Microsoft YaHei, sans-serif">
   <defs>
     <marker id="arr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
       <path d="M0 0 L10 4 L0 8 z" fill="#5b8def"/>
     </marker>
-    <linearGradient id="cardBg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset="1" stop-color="#f6f8ff"/>
+    <marker id="arrGrey" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0 0 L10 4 L0 8 z" fill="#9fb0cf"/>
+    </marker>
+    <linearGradient id="leftG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f3f6ff"/>
+    </linearGradient>
+    <linearGradient id="cloudG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eef3ff"/><stop offset="1" stop-color="#e3ecff"/>
     </linearGradient>
   </defs>
 
-  <rect width="1560" height="860" fill="#f2f5fc"/>
+  <rect width="1600" height="1060" fill="#f4f6fb" rx="26"/>
 
-  <!-- 标题 -->
-  <text x="780" y="64" font-size="64" font-weight="bold" fill="#2d3a56" text-anchor="middle">心语伴 · 产品架构</text>
-  <text x="780" y="104" font-size="26" fill="#8b96b0" text-anchor="middle">Heartbuddy Architecture — 微信小程序 + 云开发 + 大模型</text>
+  <text x="800" y="66" font-size="62" font-weight="bold" fill="#2c3a55" text-anchor="middle">心语伴 · 产品架构</text>
+  <text x="800" y="108" font-size="24" fill="#8b96b0" text-anchor="middle">Heartbuddy Architecture — WeChat Mini Program + CloudBase + LLM</text>
 
   <!-- 列头 -->
-  <text x="300" y="168" font-size="30" font-weight="bold" fill="#5b8def" text-anchor="middle">前端小程序层</text>
-  <text x="840" y="168" font-size="30" font-weight="bold" fill="#5b8def" text-anchor="middle">云函数层</text>
-  <text x="1380" y="168" font-size="30" font-weight="bold" fill="#5b8def" text-anchor="middle">数据与外部服务</text>
+  <text x="266" y="170" font-size="30" font-weight="bold" fill="#5b8def" text-anchor="middle">前端小程序层</text>
+  <text x="820" y="170" font-size="30" font-weight="bold" fill="#5b8def" text-anchor="middle">云函数层（腾讯云）</text>
+  <text x="1360" y="170" font-size="30" font-weight="bold" fill="#5b8def" text-anchor="middle">数据与外部</text>
 
-  <!-- 前端层 -->
-  <rect x="70" y="200" width="460" height="360" rx="28" fill="url(#cardBg)" stroke="#c9d4f2" stroke-width="2"/>
-  <text x="100" y="250" font-size="30" font-weight="bold" fill="#3a4a63">小程序前端（原生）</text>
-  <text x="100" y="312" font-size="25" fill="#4a5670">页面：welcome · chat · mood ·</text>
-  <text x="100" y="348" font-size="25" fill="#4a5670">assessment · report · helper ·</text>
-  <text x="100" y="384" font-size="25" fill="#4a5670">privacy · ops · profile</text>
-  <text x="100" y="446" font-size="25" fill="#4a5670">· app.js：cloud 初始化 + 静默登录</text>
-  <text x="100" y="482" font-size="25" fill="#4a5670">· utils/api.js：callFunction 封装</text>
-  <text x="100" y="518" font-size="25" fill="#4a5670">· 本地 Storage：隐私同意 / 上次模板</text>
+  <!-- 前端卡片 -->
+  <rect x="50" y="200" width="440" height="580" rx="26" fill="url(#leftG)" stroke="#ccd8f4" stroke-width="2"/>
+  <text x="90" y="252" font-size="28" font-weight="bold" fill="#33445f">小程序前端（原生）</text>
+  <text x="90" y="336" font-size="24" fill="#44536e">页面（9 个）</text>
+  <text x="90" y="380" font-size="23" fill="#44536e">· welcome · chat · mood</text>
+  <text x="90" y="416" font-size="23" fill="#44536e">· assessment · report</text>
+  <text x="90" y="452" font-size="23" fill="#44536e">· helper · privacy · ops</text>
+  <text x="90" y="488" font-size="23" fill="#44536e">· profile</text>
+  <text x="90" y="556" font-size="24" fill="#44536e">运行与工具</text>
+  <text x="90" y="590" font-size="23" fill="#4a5670">· app.js　云初始化 + 静默登录</text>
+  <text x="90" y="626" font-size="23" fill="#4a5670">· utils/api.js　云函数封装</text>
+  <text x="90" y="662" font-size="23" fill="#4a5670">· Storage　本地偏好与缓存</text>
 
-  <!-- 云函数层 -->
-  <rect x="600" y="200" width="460" height="96" rx="22" fill="#eef3ff" stroke="#b9cbf2" stroke-width="2"/>
-  <text x="630" y="246" font-size="28" font-weight="bold" fill="#3a5ca8">login</text>
-  <text x="630" y="280" font-size="24" fill="#5a73b5">登录 · 写 users · 返回 isNewUser</text>
+  <!-- 云函数卡片 -->
+  <rect x="560" y="200" width="520" height="140" rx="22" fill="url(#cloudG)" stroke="#aebfe8" stroke-width="2"/>
+  <text x="592" y="242" font-size="26" font-weight="bold" fill="#314e8f">login</text>
+  <text x="592" y="280" font-size="22" fill="#46619e">静默登录 · 建/查用户</text>
+  <text x="592" y="310" font-size="22" fill="#46619e">返回 openid + isNewUser</text>
 
-  <rect x="600" y="320" width="460" height="200" rx="22" fill="#eef3ff" stroke="#b9cbf2" stroke-width="2"/>
-  <text x="630" y="366" font-size="28" font-weight="bold" fill="#3c5ca8">aiChat（核心）</text>
-  <text x="630" y="404" font-size="24" fill="#5a73b5">· prompt / config / danger / secure</text>
-  <text x="630" y="440" font-size="24" fill="#5a73b5">· 多轮上下文（近 10 条）+ 情绪</text>
-  <text x="630" y="476" font-size="24" fill="#5a73b5">· 危机三级分级 + msgSecCheck 前置拦截</text>
+  <rect x="560" y="420" width="520" height="160" rx="22" fill="url(#cloudG)" stroke="#a9bfea" stroke-width="2"/>
+  <text x="592" y="462" font-size="26" font-weight="bold" fill="#314e8f">aiChat（核心 · 双保险）</text>
+  <text x="592" y="500" font-size="27" fill="#46619e">多轮共情对话 ＋ 情绪识别</text>
+  <text x="592" y="536" font-size="27" fill="#46619e">危机三级分级 ＋ 内容安全</text>
+  <text x="592" y="566" font-size="27" fill="#46619e">语言自适应（中 / EN）</text>
 
-  <rect x="600" y="544" width="460" height="96" rx="22" fill="#eef3ff" stroke="#b9cbf2" stroke-width="2"/>
-  <text x="630" y="590" font-size="28" font-weight="bold" fill="#3c5ca8">opsSummary</text>
-  <text x="630" y="624" font-size="24" fill="#5a73b5">运营统计 · ADMIN_OPENIDS 白名单</text>
+  <rect x="560" y="700" width="520" height="120" rx="22" fill="url(#cloudG)" stroke="#a9bfea" stroke-width="2"/>
+  <text x="592" y="742" font-size="26" font-weight="bold" fill="#314e8f">opsSummary</text>
+  <text x="592" y="778" font-size="27" fill="#46619e">运营数据聚合 · ADMIN 白名单</text>
 
-  <!-- 外部服务（下方） -->
-  <rect x="600" y="700" width="760" height="120" rx="26" fill="#fdf6ec" stroke="#e6cfa4" stroke-width="2"/>
-  <text x="630" y="744" font-size="28" font-weight="bold" fill="#9a6b22">外部依赖</text>
-  <text x="630" y="784" font-size="24" fill="#7a6b4b">大模型 API（OpenAI 兼容 · 环境变量 LLM_API_KEY） ｜ 微信内容安全 msgSecCheck ｜ 微信云开发环境（腾讯云）</text>
+  <text x="560" y="390" font-size="22" fill="#8b96b0">由 wx.cloud 提供调用与运行环境</text>
 
-  <!-- 数据层 -->
-  <rect x="1120" y="200" width="410" height="560" rx="28" fill="url(#cardBg)" stroke="#c9d4f2" stroke-width="2"/>
-  <text x="1150" y="252" font-size="30" font-weight="bold" fill="#24324a">云数据库（集合）</text>
-  <text x="1150" y="310" font-size="26" fill="#3a4755">· users         用户档案</text>
-  <text x="1150" y="354" font-size="26" fill="#3a4755">· moods        情绪标签</text>
-  <text x="1150" y="398" font-size="26" fill="#3a4755">· assessments  自评得分</text>
-  <text x="1150" y="442" font-size="26" fill="#3a4755">· crisisAlerts 危机（脱敏）</text>
-  <text x="1150" y="486" font-size="26" fill="#3a4755">· feedbacks    意见反馈</text>
-  <text x="1140" y="556" font-size="24" fill="#8b96b0">权限：仅创建者可读写</text>
-  <text x="1140" y="592" font-size="24" fill="#8b96b0">对话正文不进库 · 脱敏存必要字段</text>
+  <!-- 数据卡片 -->
+  <rect x="1160" y="200" width="420" height="470" rx="26" fill="#ffffff" stroke="#ccd8f4" stroke-width="2"/>
+  <text x="1200" y="252" font-size="28" font-weight="bold" fill="#2c3a55">云数据库（5 集合）</text>
+  <text x="1200" y="300" font-size="24" fill="#3a4755">users　用户档案</text>
+  <text x="1200" y="344" font-size="24" fill="#3a4755">moods　情绪记录</text>
+  <text x="1200" y="388" font-size="24" fill="#3a4755">assessments　自评得分</text>
+  <text x="1200" y="432" font-size="24" fill="#3a4755">crisisAlerts　危机（脱敏）</text>
+  <text x="1200" y="476" font-size="24" fill="#3a4755">feedbacks　意见反馈</text>
+  <text x="1220" y="538" font-size="22" fill="#8b96b0">仅创建者可读写</text>
+  <text x="1220" y="574" font-size="22" fill="#8b96b0">对话正文不入库</text>
+  <text x="1220" y="610" font-size="22" fill="#8b96b0">只存必要脱敏字段</text>
 
-  <!-- 连线 -->
-  <line x1="532" y1="390" x2="592" y2="390" stroke="#5b8def" stroke-width="4" marker-end="url(#arr)"/>
-  <text x="472" y="376" font-size="24" fill="#5b8def">callFunction</text>
+  <!-- 调用箭头：前端 → 云函数 -->
+  <line x1="492" y1="580" x2="556" y2="580" stroke="#5b8def" stroke-width="5" marker-end="url(#arr)"/>
+  <text x="430" y="540" font-size="23" fill="#5b8def" text-anchor="middle">wx.cloud</text>
+  <text x="430" y="566" font-size="20" fill="#5b8def" text-anchor="middle">.callFunction</text>
 
-  <line x1="1058" y1="410" x2="1112" y2="410" stroke="#5b8def" stroke-width="4" marker-end="url(#arr)"/>
-  <text x="1062" y="394" font-size="22" fill="#5b8def" text-anchor="middle">读写</text>
+  <!-- 数据箭头：云函数 → 数据 -->
+  <line x1="1042" y1="460" x2="1156" y2="460" stroke="#9fb0cf" stroke-width="4" marker-end="url(#arrGrey)"/>
+  <text x="1090" y="440" font-size="20" fill="#9fb0cf" text-anchor="middle">读写</text>
 
-  <line x1="1058" y1="250" x2="1112" y2="250" stroke="#c9d4f2" stroke-width="4" marker-end="url(#arr)"/>
-  <line x1="1058" y1="594" x2="1112" y2="594" stroke="#c9d4f2" stroke-width="4" marker-end="url(#arr)"/>
+  <line x1="1042" y1="270" x2="1156" y2="270" stroke="#9fb0cf" stroke-width="3" stroke-dasharray="6 6"/>
+  <text x="1090" y="256" font-size="19" fill="#9fb0cf" text-anchor="middle">users</text>
 
-  <line x1="830" y1="522" x2="830" y2="700" stroke="#d9a05b" stroke-width="4" marker-end="url(#arr)"/>
-  <text x="845" y="620" font-size="24" fill="#d9a05b" text-anchor="middle">调用大模型 / 内容安全</text>
+  <line x1="1042" y1="735" x2="1156" y2="735" stroke="#9fb0cf" stroke-width="3" stroke-dasharray="6 6"/>
+  <text x="1090" y="752" font-size="19" fill="#9fb0cf" text-anchor="middle">统计</text>
+
+  <!-- 底部外部依赖栏 -->
+  <rect x="50" y="880" width="1500" height="120" rx="24" fill="#fdf6ea" stroke="#e8d3a8" stroke-width="2"/>
+  <text x="90" y="924" font-size="26" font-weight="bold" fill="#8a6a24">外部依赖</text>
+  <text x="90" y="966" font-size="24" fill="#6f5d3a">OpenAI 兼容大模型</text>
+  <text x="420" y="966" font-size="24" fill="#6f5d3a">微信内容安全 msgSecCheck</text>
+  <text x="810" y="966" font-size="24" fill="#6f5d3a">云开发环境（腾讯云）</text>
+  <text x="1120" y="966" font-size="24" fill="#6f5d3a">应急热线（12356 等）</text>
+
+  <line x1="1122" y1="500" x2="1122" y2="878" stroke="#d9a05b" stroke-width="4" stroke-dasharray="8 8" marker-end="url(#arrGrey)"/>
+  <text x="1138" y="836" font-size="21" fill="#8a6a24">aiChat 调用外部能力</text>
 </svg>

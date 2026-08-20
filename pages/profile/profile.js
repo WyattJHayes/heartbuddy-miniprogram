@@ -6,6 +6,8 @@ Page({
     openid: '',
     shortId: '',
     chatTotal: 0,
+    assessTotal: 0,
+    crisisTotal: 0,
     feedback: '',
     submitting: false
   },
@@ -22,8 +24,16 @@ Page({
 
     try {
       const db = wx.cloud.database();
-      const res = await db.collection('moods').where({ openid }).count();
-      this.setData({ chatTotal: res.total || 0 });
+      const [moods, assessments, crisis] = await Promise.all([
+        db.collection('moods').where({ openid }).count(),
+        db.collection('assessments').where({ openid }).count().catch(() => ({ total: 0 })),
+        db.collection('crisisAlerts').where({ openid }).count().catch(() => ({ total: 0 }))
+      ]);
+      this.setData({
+        chatTotal: moods.total || 0,
+        assessTotal: assessments.total || 0,
+        crisisTotal: crisis.total || 0
+      });
     } catch (e) {
       console.error('[profile] 统计失败', e);
     }
