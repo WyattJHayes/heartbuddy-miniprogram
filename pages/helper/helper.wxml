@@ -11,6 +11,30 @@
     <view class="care-text">{{care.text}}</view>
   </view>
 
+  <!-- 我撑过来了：5 步自助引导（自救卡） -->
+  <view class="card self">
+    <block wx:if="{{selfStep === -1}}">
+      <view class="section-title">🪜 我撑过来了 <text class="self-sub">5 步自助</text></view>
+      <view class="self-text">情绪汹涌时，不必立刻“搞定”它。顺着这 5 个问题慢慢走一遍，写完常常会发现自己比想象中更有力量。</view>
+      <button class="btn-primary self-start" bindtap="selfStart">开始 5 步</button>
+      <view class="self-last" wx:if="{{selfLast}}">
+        <view class="self-last-title">上次的收尾（{{selfLast.date}}）</view>
+        <view class="self-last-text">{{selfLast.done}}</view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="self-steps">
+        <view class="self-dot {{selfStep === index ? 'on' : ''}}" wx:for="{{selfCare}}" wx:key="index"></view>
+      </view>
+      <view class="self-q">{{self[selfStep].q}}</view>
+      <textarea class="self-ta" value="{{selfInput}}" bindinput="onSelfInput" placeholder="想到多少写多少，不用写得很漂亮…" maxlength="300" auto-height />
+      <view class="self-actions">
+        <view class="self-skip" bindtap="selfClose">先收起</view>
+        <button class="btn-primary self-next" bindtap="selfNext">{{selfStep === 4 ? '完成这一次' : '下一步'}}</button>
+      </view>
+    </block>
+  </view>
+
   <view class="card urgent">
     <view class="section-title">如果你现在很不好</view>
     <view class="urgent-text">请优先联系最近的成年人、老师或直接拨打心理援助热线。你不需要独自承受。</view>

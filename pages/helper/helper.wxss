@@ -33,3 +33,20 @@
 .en-line { font-size: 27rpx; color: #3a4a63; }
 .en-zh { font-size: 23rpx; color: #8a97ad; margin-top: 6rpx; }
 .en-copy { font-size: 23rpx; color: #3f6fd8; background: #eef4ff; padding: 8rpx 22rpx; border-radius: 999rpx; font-weight: 600; }
+
+/* 我撑过来了：5 步自助 */
+.self { background: linear-gradient(160deg, #f2f7ff, #fff7ee); }
+.self-sub { font-size: 21rpx; color: #8a97ad; font-weight: 400; margin-left: 8rpx; }
+.self-text { margin-top: 10rpx; font-size: 25rpx; color: #5a6b85; line-height: 1.7; }
+.self-start { margin-top: 20rpx; }
+.self-last { margin-top: 20rpx; background: #fff; border-radius: 14rpx; padding: 18rpx 22rpx; }
+.self-last-title { font-size: 22rpx; color: #8a97ad; }
+.self-last-text { margin-top: 8rpx; font-size: 25rpx; color: #4a5b76; line-height: 1.6; }
+.self-steps { display: flex; gap: 12rpx; margin: 4rpx 0 18rpx; }
+.self-dot { width: 34rpx; height: 8rpx; border-radius: 999rpx; background: #e3e8f1; }
+.self-dot.on { background: #ffb054; }
+.self-q { font-size: 28rpx; font-weight: 600; color: #2a3b55; line-height: 1.6; }
+.self-ta { width: 100%; box-sizing: border-box; min-height: 140rpx; margin-top: 16rpx; background: #fff; border: 1rpx solid #e3e8f1; border-radius: 14rpx; padding: 18rpx; font-size: 26rpx; color: #3a4a63; }
+.self-actions { display: flex; align-items: center; justify-content: flex-end; gap: 24rpx; margin-top: 16rpx; }
+.self-skip { font-size: 25rpx; color: #a3aec4; }
+.self-next { margin: 0; }

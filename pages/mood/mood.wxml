@@ -124,7 +124,38 @@
       </view>
     </view>
 
-    <!-- 最近记录 -->
+    <!-- 心情日历：月视图签到 -->
+  <view class="card">
+    <view class="section-title cal-head">
+      <view class="cal-nav" bindtap="calNav" data-d="-1">‹</view>
+      <text>{{calTitle}}</text>
+      <view class="cal-nav" bindtap="calNav" data-d="1">›</view>
+    </view>
+    <view class="cal-week">
+      <view class="cal-wd" wx:for="{{calWeekday}}" wx:key="*this">{{item}}</view>
+    </view>
+    <view class="cal-grid">
+      <view
+        class="cal-cell {{item.inMonth ? '' : 'dim'}} {{item.isToday ? 'today' : ''}} {{item.count ? 'has' : ''}}"
+        wx:for="{{calCells}}"
+        wx:key="key"
+        bindtap="onCalDay"
+        data-k="{{item.key}}"
+        aria-label="{{item.inMonth ? item.num + '日' + (item.emoji || '无记录') : ''}}"
+      >
+        <text class="cc-num">{{item.num}}</text>
+        <text class="cc-emoji">{{item.count ? item.emoji : ''}}</text>
+      </view>
+    </view>
+    <view class="cal-tip" wx:if="{{!calDay}}">点亮小表情的日期是记录过心情的日子，点一下看当日小结</view>
+    <view class="cal-day-info" wx:if="{{calDay}}">
+      <view class="cal-day-title">📅 {{calDay.date}} · 共 {{calDay.total}} 条记录</view>
+      <view class="cal-day-row" wx:for="{{calDay.list}}" wx:key="label">{{item.label}} × {{item.count}}</view>
+      <view class="cal-close" bindtap="closeCalDay">收起</view>
+    </view>
+  </view>
+
+  <!-- 最近记录 -->
     <view class="card">
       <view class="section-title">最近记录</view>
       <view class="row" wx:for="{{recentList}}" wx:key="index" data-item="{{item}}" bindtap="openDetail" bindlongpress="openDetail" role="button" aria-label="查看 {{item.label}} 记录详情">

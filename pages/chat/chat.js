@@ -114,6 +114,33 @@ Page({
     return '⛈';
   },
 
+  // ---- 消息长按：复制 / 珍藏 ----
+  onMsgLongPress(e) {
+    const idx = Number(e.currentTarget.dataset.index);
+    const item = this.data.messages[idx];
+    if (!item) return;
+    const content = item.content || '';
+    wx.showActionSheet({
+      itemList: ['复制这条消息', '珍藏（存到我的珍藏）'],
+      success: (r) => {
+        if (r.tapIndex === 0) {
+          wx.setClipboardData({ data: content, success: () => wx.showToast({ title: '已复制', icon: 'none' }) });
+        } else if (r.tapIndex === 1) {
+          const favs = wx.getStorageSync('hb_favs') || [];
+          if (favs.length >= 5) favs.shift();
+          favs.push({
+            text: content,
+            role: item.role,
+            time: new Date().toLocaleString('zh-CN', { hour12: false })
+          });
+          wx.setStorageSync('hb_favs', favs);
+          wx.showToast({ title: '已珍藏 💛', icon: 'none' });
+          if (!wx.getStorageSync('ach_fav')) wx.setStorageSync('ach_fav', true);
+        }
+      }
+    });
+  },
+
   onBoardNext() {
     if (this.data.onboardingStep >= 2) {
       wx.setStorageSync('hb_onboard_v1', true);

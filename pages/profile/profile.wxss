@@ -37,3 +37,16 @@
 .foot-week { display: flex; gap: 12rpx; }
 .fw-cell { flex: 1; height: 44rpx; border-radius: 12rpx; background: #f0f2f7; }
 .fw-cell.on { background: linear-gradient(135deg, #9dc2ff, #5b8def); }
+
+/* 我的珍藏 */
+.fav-mask { position: fixed; inset: 0; background: rgba(20, 28, 46, .45); z-index: 99; display: flex; align-items: flex-end; }
+.fav-sheet { width: 100%; background: #fff; border-radius: 28rpx 28rpx 0 0; padding: 26rpx 30rpx calc(34rpx + env(safe-area-inset-bottom)); max-height: 74vh; display: flex; flex-direction: column; }
+.fav-head { display: flex; align-items: center; justify-content: space-between; }
+.fav-title { font-size: 30rpx; font-weight: 700; color: #2a3b55; }
+.fav-clear { font-size: 24rpx; color: #e8666b; }
+.fav-list { flex: 1; overflow: hidden; margin-top: 18rpx; }
+.fav-empty { text-align: center; color: #a5b0c2; font-size: 25rpx; padding: 40rpx 0; }
+.fav-item { padding: 20rpx 0; border-bottom: 1rpx solid #f1f3f8; }
+.fav-time { font-size: 21rpx; color: #a3aec4; }
+.fav-text { margin-top: 8rpx; font-size: 27rpx; color: #3a4a63; line-height: 1.6; }
+.fav-foot { margin-top: 18rpx; text-align: center; font-size: 27rpx; color: #5b8def; font-weight: 600; }

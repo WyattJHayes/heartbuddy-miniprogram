@@ -77,6 +77,9 @@
 
   <!-- 设置 -->
   <view class="card">
+    <view class="row" bindtap="openFavs">
+      <text>我的珍藏<text class="muted" wx:if="{{favCount}}">（{{favCount}} 条）</text></text><text class="arrow">›</text>
+    </view>
     <view class="row" bindtap="viewPrivacy">
       <text>隐私声明</text><text class="arrow">›</text>
     </view>
@@ -96,4 +99,22 @@
       <text>版本</text><text class="muted">v0.3.0（参赛 MVP）</text>
     </view>
   </view>
+
+<!-- 我的珍藏弹层 -->
+<view class="fav-mask" wx:if="{{showFavs}}" bindtap="closeFavs">
+  <view class="fav-sheet" catchtap="noop">
+    <view class="fav-head">
+      <text class="fav-title">💛 我的珍藏</text>
+      <text class="fav-clear" bindtap="clearFavs">清空</text>
+    </view>
+    <scroll-view scroll-y class="fav-list" aria-label="我的珍藏列表">
+      <view class="fav-empty" wx:if="{{!favs.length}}">长按聊天消息即可珍藏一句</view>
+      <view class="fav-item" wx:for="{{favs}}" wx:key="index">
+        <view class="fav-time">{{item.role === 'user' ? '我' : '心语伴'}} · {{item.time}}</view>
+        <view class="fav-text" bindtap="copyFav" data-text="{{item.text}}">{{item.text}}</view>
+      </view>
+    </scroll-view>
+    <view class="fav-foot" bindtap="closeFavs">关闭</view>
+  </view>
+</view>
 </view>

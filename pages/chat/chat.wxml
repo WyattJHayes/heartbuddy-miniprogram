@@ -9,7 +9,8 @@
     <view class="msg-list">
       <block wx:for="{{messages}}" wx:key="index">
         <view class="row {{item.role === 'user' ? 'right' : 'left'}}">
-          <view class="msg {{item.role === 'user' ? 'user-msg' : 'ai-msg'}}">{{item.content}}</view>
+          <view class="msg {{item.role === 'user' ? 'user-msg' : 'ai-msg'}}"
+                bindlongpress="onMsgLongPress" data-index="{{index}}">{{item.content}}</view>
         </view>
       </block>
 

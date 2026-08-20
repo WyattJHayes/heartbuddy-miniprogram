@@ -18,12 +18,52 @@ Page({
     firstDate: '',     // 最早一条记录
     streakDays: 0,     // 当前连续打卡天数（本地估算）
     mood7: [],         // 近 7 天是否记录（true/false × 7，最左是最老）
-    footprintSum: 0
+    footprintSum: 0,
+    // 我的珍藏（聊天长按珍藏，本地保存）
+    favs: [],
+    showFavs: false,
+    favCount: 0
   },
 
   onShow() {
     this.loadStats();
     this.refreshBadges();
+    this.refreshFavs();
+  },
+
+  // ---- 我的珍藏（聊天页长按消息珍藏，本地）----
+  refreshFavs() {
+    const favs = wx.getStorageSync('hb_favs') || [];
+    this.setData({ favCount: favs.length });
+  },
+
+  openFavs() {
+    const favs = wx.getStorageSync('hb_favs') || [];
+    this.setData({ showFavs: true, favs });
+  },
+
+  closeFavs() { this.setData({ showFavs: false }); },
+
+  noop() {},
+
+  copyFav(e) {
+    const t = e.currentTarget.dataset.text;
+    if (!t) return;
+    wx.setClipboardData({ data: t, success: () => wx.showToast({ title: '已复制', icon: 'none' }) });
+  },
+
+  clearFavs() {
+    wx.showModal({
+      title: '清空我的珍藏？',
+      content: '本地珍藏将全部删除，不可恢复。',
+      confirmText: '清空',
+      success: (r) => {
+        if (!r.confirm) return;
+        wx.removeStorageSync('hb_favs');
+        this.setData({ showFavs: false, favs: [], favCount: 0 });
+        wx.showToast({ title: '已清空', icon: 'none' });
+      }
+    });
   },
 
   // 成就徽章（本地记录解锁情况）
@@ -37,6 +77,7 @@ Page({
       { key: 'ach_assess',      emoji: '📋', title: '认识自己', desc: '完成一次自评' },
       { key: 'ach_letter',      emoji: '💌', title: '写给未来', desc: '寄出时光信' },
       { key: 'ach_care',        emoji: '💛', title: '也请心语来看我', desc: '安排一次 24h 回访' },
+      { key: 'ach_fav',         emoji: '📌', title: '念念不忘', desc: '珍藏一句话' },
       { key: 'ach_share',       emoji: '🤝', title: '陪伴他人', desc: '把心语伴分享出去' }
     ];
     const badges = defs.map((b) => ({ ...b, got: !!wx.getStorageSync(b.key) }));

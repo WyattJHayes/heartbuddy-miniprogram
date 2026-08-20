@@ -102,3 +102,21 @@
 .di-line .val { color: #2d3b55; font-weight: 600; }
 .di-del { margin-top: 30rpx; background: #fbefec; color: #c25a3a; border-radius: 999rpx; font-size: 27rpx; }
 .di-close { margin-top: 16rpx; background: #f2f4f8; color: #5b6b85; border-radius: 999rpx; font-size: 27rpx; }
+
+/* 心情日历 */
+.cal-head { display: flex; align-items: center; gap: 24rpx; }
+.cal-nav { width: 44rpx; height: 44rpx; line-height: 40rpx; text-align: center; color: #5b8def; font-size: 32rpx; background: #eef4ff; border-radius: 12rpx; }
+.cal-week { display: flex; margin: 14rpx 0 8rpx; }
+.cal-wd { flex: 1; text-align: center; font-size: 21rpx; color: #8a97ad; }
+.cal-grid { display: flex; flex-wrap: wrap; }
+.cal-cell { width: 14.28%; height: 84rpx; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box; border-radius: 12rpx; font-size: 24rpx; color: #3a4a63; }
+.cal-cell.dim { color: #c5ccd8; }
+.cal-cell.today { background: #eef4ff; }
+.cal-cell.has { background: #fff3f7; }
+.cc-emoji { font-size: 26rpx; line-height: 1.2; }
+.cc-num { font-size: 22rpx; color: #8a97ad; }
+.cal-tip { margin-top: 14rpx; font-size: 22rpx; color: #8a97ad; }
+.cal-day-info { margin-top: 16rpx; background: #f6f9ff; border-radius: 16rpx; padding: 20rpx 24rpx; }
+.cal-day-title { font-size: 26rpx; color: #2a3b55; font-weight: 600; }
+.cal-day-row { margin-top: 12rpx; font-size: 24rpx; color: #4a5b76; }
+.cal-close { margin-top: 14rpx; font-size: 23rpx; color: #5b8def; }

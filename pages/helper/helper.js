@@ -12,13 +12,27 @@ const CARE_NOTES = [
   { emoji: '🌙', title: '今晚早点睡', text: '入睡前 30 分钟放下手机，让大脑慢慢冷却下来。' }
 ];
 
+// 我撑过来了：5 步自助（剖析 → 行动 → 陪伴 → 收尾）
+const SELF_STEPS = [
+  { q: '先停一下，说出此刻的感受是什么？（害怕 / 委屈 / 喘不上气…都可以）' },
+  { q: '此刻最让你难受的那件事，具体是什么？' },
+  { q: '如果现在只能做一件小事让自己好受一点，会是什么？' },
+  { q: '如果此刻你信任的人就在身边，你想告诉他“我…”？' },
+  { q: '给你自己一句收尾的话（今天你已经很好了）' }
+];
+
 Page({
   data: {
     hotlines,
     safety: false, // 是否已设置 24 小时回访
     safetyHint: '',
     care: null,      // 今日关怀 { emoji, title, text }
-    englishPhrases: []  // 英文小抄（一键复制）
+    englishPhrases: [],  // 英文小抄（一键复制）
+    // 我撑过来了 5 步
+    self: SELF_STEPS,
+    selfStep: -1,       // -1=未开始；0-4=进行中
+    selfInput: '',
+    selfLast: null      // { date, done } 上次收尾
   },
 
   onLoad() {
@@ -81,6 +95,42 @@ Page({
         wx.showToast({ title: '已安排回访 🌱', icon: 'success' });
       }
     });
+  },
+
+  // ---- 我撑过来了：5 步自助 ----
+  selfStart() {
+    this.setData({ selfStep: 0, selfInput: '', selfAnswers: [] });
+  },
+
+  onSelfInput(e) {
+    this.setData({ selfInput: e.detail.value });
+  },
+
+  // 收起：不保存
+  selfClose() {
+    this.setData({ selfStep: -1, selfInput: '', selfAnswers: [] });
+  },
+
+  selfNext() {
+    const answers = this.data.selfAnswers || [];
+    answers.push((this.data.selfInput || '').trim());
+    if (this.data.selfStep < 4) {
+      this.setData({ selfStep: this.data.selfStep + 1, selfInput: '', selfAnswers: answers });
+    } else {
+      // 完成：收尾存本地，轻轻给一句肯定
+      const d = new Date();
+      const pad = (n) => (n < 10 ? '0' + n : n);
+      const last = {
+        date: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`,
+        done: answers[answers.length - 1] || '（没想好也没关系，今天就先到这里）'
+      };
+      const hist = wx.getStorageSync('selfCareLog') || [];
+      hist.push(last);
+      if (hist.length > 5) hist.shift();
+      wx.setStorageSync('selfCareLog', hist);
+      this.setData({ selfStep: -1, selfInput: '', selfAnswers: [], selfLast: last });
+      wx.showToast({ title: '收尾成功，辛苦了 🌱', icon: 'none' });
+    }
   },
 
   goChat() { wx.switchTab({ url: '/pages/chat/chat' }); }

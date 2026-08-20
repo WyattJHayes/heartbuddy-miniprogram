@@ -35,7 +35,14 @@ Page({
     // 情绪日记：详情弹层
     detail: null,        // { _id, time, label, emoji, intensity, trigger }
     showDetail: false,
-    deleting: false
+    deleting: false,
+    // 心情日历（月视图签到）
+    calYear: 0,
+    calMonth: 0,          // 1-12
+    calCells: [],         // [{num,inMonth,emoji,count,isToday,key}]
+    calWeekday: ['日', '一', '二', '三', '四', '五', '六'],
+    calTitle: '',
+    calDay: null          // 点选某天后的当日小结
   },
 
   onShow() {
@@ -341,10 +348,95 @@ Page({
         empty: list.length === 0,
         loaded: true
       });
+      this._raw = raw;
+      this.buildCal(raw);
     } catch (e) {
       console.error('[mood] 读取失败', e);
       this.setData({ loaded: true });
     }
+  },
+
+  // ---- 心情日历（月视图签到：按月看每天记了什么）----
+  buildCal(raw) {
+    let y = this.data.calYear, m = this.data.calMonth;
+    if (!y || !m) {
+      const now = new Date();
+      y = now.getFullYear();
+      m = now.getMonth() + 1;
+    }
+    const rawArr = raw || this._raw || [];
+    // dateKey -> {emoji, count}
+    const map = {};
+    rawArr.forEach((r) => {
+      const d = new Date(r.createdAt);
+      const k = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+      if (!map[k]) map[k] = { emoji: (MOOD_META[r.mood] || MOOD_META.peace).emoji, count: 0 };
+      map[k].count += 1;
+    });
+    const firstDow = new Date(y, m - 1, 1).getDay(); // 0=周日
+    const total = new Date(y, m, 0).getDate();
+    const prevTotal = new Date(y, m - 1, 0).getDate();
+    const now = new Date();
+    const todayK = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+    const cells = [];
+    const dayKey = (yy, mm, dd) => `${yy}-${mm}-${dd}`;
+    // 上月补齐
+    for (let i = firstDow - 1; i >= 0; i--) {
+      const d = prevTotal - i;
+      const ny = m === 1 ? y - 1 : y, nm = m === 1 ? 12 : m - 1;
+      const k = dayKey(ny, nm, d);
+      cells.push({ num: d, inMonth: false, emoji: (map[k] || {}).emoji || '', count: (map[k] || {}).count || 0, isToday: false, key: k });
+    }
+    // 本月
+    for (let d = 1; d <= total; d++) {
+      const k = dayKey(y, m, d);
+      cells.push({ num: d, inMonth: true, emoji: (map[k] || {}).emoji || '', count: (map[k] || {}).count || 0, isToday: k === todayK, key: k });
+    }
+    // 下月补齐（凑满整周）
+    let trailingDay = 1;
+    while (cells.length % 7 !== 0) {
+      const ny = m === 12 ? y + 1 : y, nm = m === 12 ? 1 : m + 1;
+      cells.push({ num: trailingDay, inMonth: false, emoji: '', count: 0, isToday: false, key: `${nm}-${trailingDay}` });
+      trailingDay += 1;
+    }
+    this.setData({
+      calYear: y,
+      calMonth: m,
+      calCells: cells,
+      calTitle: `${y} 年 ${m} 月`
+    });
+  },
+
+  calNav(e) {
+    const d = Number(e.currentTarget.dataset.d) || 0;
+    let y = this.data.calYear, m = this.data.calMonth;
+    m += d;
+    if (m < 1) { m = 12; y -= 1; }
+    if (m > 12) { m = 1; y += 1; }
+    this.setData({ calYear: y, calMonth: m, calDay: null });
+    this.buildCal();
+  },
+
+  onCalDay(e) {
+    const k = e.currentTarget.dataset.k;
+    const cell = this.data.calCells.find((c) => c.key === k);
+    if (!cell || !cell.count) { wx.showToast({ title: '这天还没有记录', icon: 'none' }); return; }
+    // 汇总当日各情绪
+    const raw = this._raw || [];
+    const names = {};
+    raw.forEach((r) => {
+      const d = new Date(r.createdAt);
+      const ck = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+      if (ck !== k) return;
+      const meta = MOOD_META[r.mood] || MOOD_META.peace;
+      names[meta.label] = (names[meta.label] || 0) + 1;
+    });
+    const list = Object.keys(names).map((label) => ({ label, count: names[label] })).sort((a, b) => b.count - a.count);
+    this.setData({ calDay: { date: k, total: cell.count, list } });
+  },
+
+  closeCalDay() {
+    this.setData({ calDay: null });
   },
 
   // 近 7 天：每天取最后一次记录的分值（无记录为 null）
