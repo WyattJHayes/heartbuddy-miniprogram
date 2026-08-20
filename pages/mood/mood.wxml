@@ -73,11 +73,13 @@
     <view class="health-bar" aria-hidden="true">
       <view class="health-bar-fill" style="width:{{healthIdx.score}}%"></view>
     </view>
-    <!-- 近 14 天情绪色带：一眼看清这段时间的起起伏伏 -->
+    <!-- 近 14 天情绪色带：一眼看清这段时间的起起伏伏，点某天看小结 -->
     <view class="band-wrap" wx:if="{{band.length}}">
-      <view class="band-title">近 14 天情绪色带</view>
-      <view class="band-row" aria-hidden="true">
-        <view class="band-cell {{item.has ? '' : 'empty'}}" wx:for="{{band}}" wx:key="d">
+      <view class="band-title">近 14 天情绪色带<text class="band-tip">点某天看当日小结</text></view>
+      <view class="band-row">
+        <view class="band-cell {{item.has ? '' : 'empty'}}" wx:for="{{band}}" wx:key="d"
+              data-k="{{item.k}}" data-d="{{item.d}}" bindtap="tapBand"
+              role="button" aria-label="{{item.d}}{{item.has ? '，当日情绪 ' + item.e + '，点看小结' : '，无记录'}}">
           <text class="band-e">{{item.e}}</text>
           <text class="band-d">{{item.d}}</text>
         </view>

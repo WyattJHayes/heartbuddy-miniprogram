@@ -42,6 +42,12 @@
 }
 .quick-toggle.on { background: #5b8def; color: #fff; }
 
+.reset-chat {
+  flex-shrink: 0; font-size: 26rpx; color: #8a94a8; background: #f1f3f8;
+  width: 56rpx; height: 56rpx; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; margin: 0 4rpx 0 12rpx;
+}
+
 .quick-panel { margin-top: 16rpx; padding: 16rpx; background: #f7f9ff; border-radius: 20rpx; }
 .quick-panel-title { color: #9ca3af; font-size: 24rpx; margin-bottom: 12rpx; }
 .quick-panel-list { display: flex; flex-wrap: wrap; gap: 14rpx; }

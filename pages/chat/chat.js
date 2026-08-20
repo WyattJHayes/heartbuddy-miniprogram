@@ -3,6 +3,7 @@ const app = getApp();
 const api = require('../../utils/api');
 const { quickReplies } = require('../../config/index');
 const { MOOD_META } = require('../../utils/moodscore');
+const planlib = require('../../utils/plan');
 
 // 中文情绪标签 → 落库 key（与心情页保持一致）
 const MOOD_KEY = { '开心': 'happy', '平静': 'peace', '焦虑': 'anxiety', '难过': 'sad', '孤独': 'lonely', '生气': 'angry' };
@@ -209,11 +210,29 @@ Page({
       wx.setStorageSync('hb_nudgeMorning', todayKey);
       greeting = greeting.replace(/。$/, '') + '。今天还没记录过心情，花 5 秒记下就好 🌅';
     }
+    // 自评陪伴计划进行中：每天轻提一句今天的任务（每天仅一次，打完卡不再提）
+    const plan = planlib.load();
+    const pi = planlib.activeIndex(plan);
+    const planHintKey = `hb_planHint_${pi}`;
+    if (plan && pi >= 0 && pi < plan.days.length
+        && !(plan.done && plan.done[pi])
+        && wx.getStorageSync(planHintKey) !== todayKey) {
+      wx.setStorageSync(planHintKey, todayKey);
+      const day = plan.days[pi];
+      this.pushPlanHintLater(`📋 陪伴计划第 ${pi + 1} 天：「${day.title}」——${day.desc}`);
+    }
     const sessionId = String(Date.now());
     this.setData({ sessionId });
     this.setAI(5); // 初始会话 ID 就绪后可向云函数获取历史；MVP 简化为固定 ID
     this.pushAI(greeting, false);
     this.maybeCheckIn();
+  },
+
+  // 计划提示比问候晚 1.2s 出现，避免两条消息挤在一起
+  pushPlanHintLater(text) {
+    setTimeout(() => {
+      if (this.data.messages.length) this.pushAI(text, false);
+    }, 1200);
   },
 
   // 危机回访：helper 页设置过 24h 回执，到期后在会话里温柔问候一次（一次性）
@@ -222,6 +241,22 @@ Page({
     if (!ts || ts > Date.now()) return;
     wx.removeStorageSync('crisisCheck');
     this.pushAI("已经过去一天了哦。你现在感觉怎么样？无论有没有好一点，都允许自己慢慢来。想聊的话我一直都在 🌱", false);
+  },
+
+  // 重新开始这轮对话：清空当前消息流、换新会话；情绪记录与成就不受影响
+  resetChat() {
+    wx.showModal({
+      title: '重新开始这轮对话？',
+      content: '当前聊天内容会清空，重新打个招呼。你的情绪记录、成就和珍藏都不会变。',
+      confirmText: '重新开始',
+      cancelText: '先不了',
+      success: (r) => {
+        if (!r.confirm) return;
+        this.setData({ messages: [], input: '', typing: false, loading: false });
+        this.initSession();
+        wx.showToast({ title: '已重新开始', icon: 'none' });
+      }
+    });
   },
 
   setAI(timeout) {

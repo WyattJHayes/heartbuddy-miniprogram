@@ -152,3 +152,4 @@
 .band-e { font-size: 30rpx; height: 40rpx; line-height: 40rpx; }
 .band-cell.empty .band-e { color: #d7dde8; font-size: 26rpx; }
 .band-d { font-size: 18rpx; color: #b3bdcf; margin-top: 4rpx; transform: scale(0.86); white-space: nowrap; }
+.band-tip { margin-left: 12rpx; color: #b3bdcf; transform: scale(0.92); display: inline-block; }

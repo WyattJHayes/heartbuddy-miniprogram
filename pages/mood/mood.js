@@ -501,9 +501,34 @@ Page({
     for (let i = 13; i >= 0; i--) {
       const d = new Date(Date.now() - i * 86400000);
       const k = d.toDateString();
-      band.push({ d: `${d.getMonth() + 1}/${d.getDate()}`, e: dayMap[k] || '', has: !!dayMap[k] });
+      band.push({ d: `${d.getMonth() + 1}/${d.getDate()}`, k: `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`, e: dayMap[k] || '', has: !!dayMap[k] });
     }
     return band;
+  },
+
+  // 点色带某天 → 弹当日心情小结（与心情日历同一套汇总口径）
+  tapBand(e) {
+    const k = e.currentTarget.dataset.k;
+    const d = e.currentTarget.dataset.d;
+    const raw = this._raw || [];
+    const names = {};
+    let total = 0;
+    raw.forEach((r) => {
+      const dt = new Date(r.createdAt);
+      const ck = `${dt.getFullYear()}-${dt.getMonth() + 1}-${dt.getDate()}`;
+      if (ck !== k) return;
+      const meta = MOOD_META[r.mood] || MOOD_META.peace;
+      names[meta.label] = (names[meta.label] || 0) + 1;
+      total++;
+    });
+    if (!total) { wx.showToast({ title: '这天还没有记录', icon: 'none' }); return; }
+    const line = Object.keys(names).map((label) => `${label} × ${names[label]}`).join('、');
+    wx.showModal({
+      title: `${d} 心情小结`,
+      content: `共 ${total} 条记录：${line}`,
+      showCancel: false,
+      confirmText: '好的'
+    });
   },
 
   // 情绪健康指数（规则推导）：近 7 天分值均值 → 0-100，附解读与昨日对比
