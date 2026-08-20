@@ -42,6 +42,11 @@
         <view class="lv lv-mid"><text class="lv-num">{{d.byLevel.mid}}</text><text class="lv-label">中危</text></view>
         <view class="lv lv-low"><text class="lv-num">{{d.byLevel.low}}</text><text class="lv-label">低危</text></view>
       </view>
+      <view class="rate-line">
+        <text class="rate-v">本周处理率 {{weekRate}}%</text>
+        <text class="text-muted rate-d">处理 {{d.weekHandled}} / 出现 {{d.weekCrisis}} · 累计已处理 {{d.handledCrisis}} · 未处理 {{d.openCrisis}}（高 {{d.openHigh}}）</text>
+      </view>
+      <button class="btn-ghost trend-copy" bindtap="copyCrisisCsv">复制危机统计 CSV</button>
     </view>
 
     <!-- 近 14 日情绪均值趋势 -->

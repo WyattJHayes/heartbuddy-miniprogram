@@ -55,6 +55,15 @@ Page({
     this.setData({ sessionId });
     this.setAI(5); // 初始会话 ID 就绪后可向云函数获取历史；MVP 简化为固定 ID
     this.pushAI(greeting, false);
+    this.maybeCheckIn();
+  },
+
+  // 危机回访：helper 页设置过 24h 回执，到期后在会话里温柔问候一次（一次性）
+  maybeCheckIn() {
+    const ts = wx.getStorageSync('crisisCheck');
+    if (!ts || ts > Date.now()) return;
+    wx.removeStorageSync('crisisCheck');
+    this.pushAI("已经过去一天了哦。你现在感觉怎么样？无论有没有好一点，都允许自己慢慢来。想聊的话我一直都在 🌱", false);
   },
 
   setAI(timeout) {

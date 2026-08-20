@@ -9,7 +9,8 @@ Page({
     noRight: false,
     d: null,
     trendPoints: [],
-    handling: ''   // 正在“一键处理”的危机记录 id
+    handling: '',   // 正在“一键处理”的危机记录 id
+    weekRate: 0     // 本周危机处理率（%）
   },
 
   onShow() { this.load(); },
@@ -23,6 +24,9 @@ Page({
         return;
       }
       this.setData({ loading: false, admin: true, d: res.data || {} });
+      const dd = res.data || {};
+      const weekRate = dd.weekCrisis ? Math.round(((dd.weekHandled || 0) / dd.weekCrisis) * 100) : 0;
+      this.setData({ weekRate });
       this.loadTrend();
     } catch (e) {
       this.setData({ loading: false, noRight: true });
@@ -95,7 +99,26 @@ Page({
     });
   },
 
-  // 复制近 14 日均值（便于答辩/Excel 使用）
+  // 复制危机统计 CSV（答辩/归档友好）
+  copyCrisisCsv() {
+    const d = this.data.d || {};
+    const esc = (v) => `"${String(v == null ? '' : v).replace(/"/g, '""')}"`;
+    const rows = [];
+    rows.push(['等级', '关键词', '状态', '时间']);
+    (d.recentCrisis || []).forEach((c) => {
+      rows.push([c.level, c.keywords || '', c.status === 'handled' ? '已处理' : '待处理', c.time]);
+    });
+    rows.push(['', '', '', '']);
+    rows.push(['指标', '数值']);
+    [['累计用户', d.totalUsers], ['倾诉次数', d.totalChats], ['7日活跃', d.activeUsers7d],
+      ['本周危机', d.weekCrisis], ['本周已处理', d.weekHandled], ['本周处理率%', this.data.weekRate],
+      ['累计危机', d.totalCrisis], ['累计已处理', d.handledCrisis], ['未处理高危', d.openHigh]].forEach((r) => rows.push(r));
+    const csv = rows.map((r) => r.map(esc).join(',')).join('\n');
+    wx.setClipboardData({
+      data: csv,
+      success: () => wx.showToast({ title: '已复制危机统计 CSV', icon: 'success' })
+    });
+  },
   copyTrend() {
     const pts = this.data.trendPoints || [];
     if (!pts.some((p) => p.value != null)) {

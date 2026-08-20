@@ -16,7 +16,7 @@ exports.main = async () => {
   const weekAgo = Date.now() - 7 * 24 * 3600 * 1000;
 
   try {
-    const [users, moods, assessments, crisisTotal, crisisWeek, activeUsers, openHigh, openCrisis] =
+    const [users, moods, assessments, crisisTotal, crisisWeek, activeUsers, openHigh, openCrisis, handledCrisis, weekHandled] =
       await Promise.all([
         db.collection('users').count(),
         db.collection('moods').count(),
@@ -25,7 +25,9 @@ exports.main = async () => {
         db.collection('crisisAlerts').where({ createdAt: _.gte(weekAgo) }).limit(50).get(),
         db.collection('users').where({ lastChatAt: _.gte(weekAgo) }).count(),
         db.collection('crisisAlerts').where({ level: 'high', status: 'open' }).count(),
-        db.collection('crisisAlerts').where({ status: 'open' }).count()
+        db.collection('crisisAlerts').where({ status: 'open' }).count(),
+        db.collection('crisisAlerts').where({ status: 'handled' }).count(),
+        db.collection('crisisAlerts').where({ status: 'handled', handledAt: _.gte(weekAgo) }).count()
       ]);
 
     const byLevel = { high: 0, mid: 0, low: 0 };
@@ -46,6 +48,8 @@ exports.main = async () => {
         activeUsers7d: activeUsers.total,
         openHigh: openHigh.total,
         openCrisis: openCrisis.total,
+        handledCrisis: handledCrisis.total,
+        weekHandled: weekHandled.total,
         recentCrisis: (crisisWeek.data || []).slice(0, 10).map((c) => ({
           id: c._id,
           level: c.level,

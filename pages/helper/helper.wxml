@@ -24,6 +24,12 @@
   </view>
 
   <view class="card">
+    <view class="section-title">已经缓过来了？</view>
+    <view class="text-muted tip">如果你此刻已经感到安全、有了依靠，可以在这里打个回执。心语会在 24 小时后轻声回访一次，不会打扰，只想知道你现在好不好。</view>
+    <button class="btn-ghost full" bindtap="checkSafe" disabled="{{safety}}">{{safety ? '已安排 24 小时回访 ✓' : '我已安全，请 24 小时后来看看我'}}</button>
+  </view>
+
+  <view class="card">
     <view class="section-title">还能做什么</view>
     <view class="tip-item">· 找一位信任的家人/老师/朋友聊一聊</view>
     <view class="tip-item">· 去正规医院的临床心理科挂号咨询</view>

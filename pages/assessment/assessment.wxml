@@ -37,7 +37,19 @@
     </view>
 
     <button class="btn-primary full" bindtap="goChat">和心语聊聊</button>
+    <button class="btn-ghost full mt" bindtap="openCard">生成焦虑应对卡（可保存图片）</button>
     <button class="btn-ghost full mt" bindtap="goHelper">去看求助热线</button>
     <button class="btn-ghost full mt" bindtap="restart">重新测评</button>
   </block>
+
+  <!-- 应对卡浮层 -->
+  <view class="mask" wx:if="{{showCard}}" bindtap="closeCard" catchtouchmove="noop">
+    <view class="sheet" catchtap="noop">
+      <canvas type="2d" id="cardCanvas" class="card-canvas"></canvas>
+      <view class="card-actions">
+        <button class="btn-primary full" bindtap="saveCardImg" loading="{{drawing}}">保存到相册</button>
+        <button class="btn-ghost full mt" bindtap="closeCard">关闭</button>
+      </view>
+    </view>
+  </view>
 </view>

@@ -44,3 +44,7 @@
 .alert-r { flex: 1; }
 .alert-title { font-size: 30rpx; font-weight: 700; color: #b33a2a; margin-bottom: 8rpx; }
 .alert-desc { font-size: 24rpx; color: #a35c52; line-height: 1.6; }
+/* 本周处理率 */
+.rate-line { display: flex; flex-direction: column; gap: 6rpx; margin-top: 20rpx; padding-top: 20rpx; border-top: 1rpx solid #f0f2f7; }
+.rate-v { font-size: 28rpx; font-weight: 700; color: #3aa08a; }
+.rate-d { font-size: 22rpx; line-height: 1.6; }
