@@ -29,6 +29,23 @@
     </view>
   </view>
 
+  <!-- 时光信：写给 7 天后的自己 -->
+  <view class="card letter-card">
+    <view class="section-title">✉️ 写给 7 天后的自己</view>
+    <block wx:if="{{!letter}}">
+      <textarea class="letter-area" placeholder="对未来的自己说点什么？…" value="{{letterText}}" bindinput="onLetterInput" maxlength="240" />
+      <button class="btn-primary letter-send" bindtap="sendLetter">寄出这封信</button>
+    </block>
+    <block wx:elif="{{!letterReady}}">
+      <view class="letter-due">这封信已在路上，还有 <text class="letter-num">{{7 - letterDue}}</text> 天可以打开。</view>
+      <button class="btn-ghost letter-ghost" bindtap="openLetter" disabled>还不能拆开哦</button>
+    </block>
+    <block wx:else>
+      <view class="letter-due">✨ 7 天到了，来自 7 天前的你有一封信。</view>
+      <button class="letter-primary" bindtap="openLetter">拆开看看</button>
+    </block>
+  </view>
+
   <!-- 今日陪伴任务（评测页生成的 3 天计划在此打卡） -->
   <view wx:if="{{plan}}" class="card plan-card">
     <view class="section-title">今日陪伴任务<text class="plan-sub">{{plan.label}}</text></view>

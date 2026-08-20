@@ -19,6 +19,10 @@ Page({
     wx.makePhoneCall({ phoneNumber: number, fail: () => {} });
   },
 
+  goBreathe() {
+    wx.navigateTo({ url: '/pages/breathe/breathe' });
+  },
+
   // 已安全回执：24 小时后在「陪伴」页轻声回访一次
   checkSafe() {
     wx.showModal({

@@ -34,6 +34,7 @@
     <view class="tip-item">· 找一位信任的家人/老师/朋友聊一聊</view>
     <view class="tip-item">· 去正规医院的临床心理科挂号咨询</view>
     <view class="tip-item">· 回到「陪伴」页，让心语陪你说说话</view>
+    <view class="tip-item breathe-link" role="button" bindtap="goBreathe">🧘 如果很焦虑，先跟着 4 轮呼吸放松一下 →</view>
   </view>
 
   <view class="card">

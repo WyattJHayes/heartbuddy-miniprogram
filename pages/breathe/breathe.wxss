@@ -1,0 +1,16 @@
+/* pages/breathe/breathe.wxss */
+.wrap { padding: 48rpx 40rpx; display: flex; flex-direction: column; align-items: center; }
+.title { font-size: 40rpx; font-weight: 700; color: #2d3a52; }
+.sub { font-size: 24rpx; color: #8a94a8; margin-top: 12rpx; text-align: center; line-height: 1.7; }
+
+.ball-wrap { position: relative; width: 520rpx; height: 520rpx; margin: 56rpx 0 24rpx; display: flex; align-items: center; justify-content: center; }
+.halo { position: absolute; width: 520rpx; height: 520rpx; border-radius: 50%; background: rgba(91, 141, 239, 0.10); }
+.ball { background: radial-gradient(circle at 32% 28%, #9dc2ff, #5b8def 62%, #3f6fd8); border-radius: 50%; box-shadow: 0 12rpx 40rpx rgba(91, 141, 239, 0.35); }
+
+.phase-text { font-size: 30rpx; color: #3a4a63; font-weight: 600; min-height: 44rpx; text-align: center; }
+.rounds { font-size: 24rpx; color: #98a2b5; margin-top: 12rpx; }
+
+.actions { margin-top: 40rpx; display: flex; justify-content: center; gap: 24rpx; width: 100%; }
+.primary { background: #5b8def; color: #fff; border-radius: 44rpx; font-weight: 600; width: 60%; }
+button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-radius: 44rpx; width: 70%; font-weight: 600; }
+.tip { margin-top: 18rpx; font-size: 23rpx; color: #98a2b5; text-align: center; line-height: 1.7; }

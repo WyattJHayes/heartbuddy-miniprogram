@@ -66,3 +66,12 @@
 .plan-note { margin-top: 8rpx; font-size: 23rpx; }
 
 .week-sum { font-size: 25rpx; color: #5b6b85; background: #f7f9fd; border: 1rpx solid #edf0f6; border-radius: 16rpx; padding: 16rpx 20rpx; margin: 0 0 16rpx; line-height: 1.7; }
+
+/* 时光信：写给 7 天后的自己 */
+.letter-card { border: 2rpx dashed #cfe0ff; background: #fbfdff; }
+.letter-area { width: 100%; min-height: 140rpx; background: #f7f9fd; border: 1rpx solid #e4eaf3; border-radius: 16rpx; padding: 20rpx; font-size: 26rpx; line-height: 1.6; box-sizing: border-box; }
+.letter-send { margin-top: 16rpx; background: #5b8def; color: #fff; border-radius: 44rpx; font-size: 27rpx; font-weight: 600; }
+.letter-due { font-size: 26rpx; color: #5b6b85; line-height: 1.7; margin-bottom: 16rpx; }
+.letter-num { color: #5b8def; font-weight: 700; font-size: 30rpx; }
+.letter-primary { background: #5b8def; color: #fff; border-radius: 44rpx; font-size: 27rpx; font-weight: 600; }
+.letter-ghost { margin-top: 8rpx; background: #eef1f6; color: #8a94a8; border-radius: 44rpx; font-size: 26rpx; }

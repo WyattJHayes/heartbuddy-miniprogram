@@ -22,12 +22,55 @@ Page({
     quicking: '',        // 正在提交的 key
     plan: null,          // 3 天陪伴计划（评测页生成，本地共享）
     planIdx: -1,
-    planAllDone: false
+    planAllDone: false,
+    // 时光信：写给 7 天后的自己（本地保存）
+    letter: null,        // { content, createdAt }
+    letterDue: -1,       // 已过天数（-1 表示还未写信）
+    letterReady: false,  // 已到期可拆开
+    letterText: ''
   },
 
   onShow() {
     this.fetchMoods();
     this.refreshPlan();
+    this.refreshLetter();
+  },
+
+  // ---- 时光信：写给 7 天后的自己 ----
+  refreshLetter() {
+    const raw = wx.getStorageSync('timeLetter');
+    if (!raw || !raw.content) { this.setData({ letter: null, letterReady: false, letterDue: -1 }); return; }
+    const due = Math.floor((Date.now() - raw.createdAt) / 86400000);
+    this.setData({ letter: raw, letterDue: due, letterReady: due >= 7 });
+  },
+
+  onLetterInput(e) { this.setData({ letterText: e.detail.value }); },
+
+  sendLetter() {
+    const content = (this.data.letterText || '').trim();
+    if (!content) { wx.showToast({ title: '先写点什么吧', icon: 'none' }); return; }
+    wx.showModal({
+      title: '寄出这封信？',
+      content: '寄出后 7 天才能打开，那一天的你会收到此刻的心情。',
+      confirmText: '寄出',
+      success: (res) => {
+        if (!res.confirm) return;
+        wx.setStorageSync('timeLetter', { content, createdAt: Date.now() });
+        this.setData({ letterText: '', letter: { content, createdAt: Date.now() }, letterDue: 0, letterReady: false });
+        wx.showToast({ title: '已寄出，7 天后见', icon: 'success' });
+      }
+    });
+  },
+
+  openLetter() {
+    const l = this.data.letter;
+    if (!l) return;
+    wx.showModal({
+      title: `第 ${this.data.letterDue} 天 · 来自 7 天前的你`,
+      content: l.content,
+      showCancel: false,
+      confirmText: '收到'
+    });
   },
 
   refreshPlan() {

@@ -54,6 +54,54 @@ Page({
     }
   },
 
+  // 一键导出本人数据（数据可携带权）：读自己全部集合 → 复制 JSON 文本
+  async exportData() {
+    let openid = app.globalData.openid;
+    if (!openid) openid = await app.login();
+    if (!openid) { wx.showToast({ title: '登录中，请稍后再试', icon: 'none' }); return; }
+    const db = wx.cloud.database();
+    const grab = (coll) =>
+      db.collection(coll).where({ openid }).orderBy('createdAt', 'desc').limit(30).get()
+        .then((r) => (r && r.data) || [])
+        .catch(() => []);
+    try {
+      const [moods, assessments, crisis, feedbacks] = await Promise.all([
+        grab('moods'), grab('assessments'), grab('crisisAlerts'), grab('feedbacks')
+      ]);
+      const payload = {
+        app: 'heartbuddy-miniprogram',
+        exportedAt: new Date().toISOString(),
+        note: '以下数据仅为你在本小程序中的记录（对话内容不入库），openid 已脱敏。',
+        counts: { moods: moods.length, assessments: assessments.length, crisisAlerts: crisis.length, feedbacks: feedbacks.length },
+        data: {
+          moods: this.mask(moods),
+          assessments: assessments.length,
+          crisisAlerts: crisis.length,
+          feedbacks: feedbacks.length
+        }
+      };
+      const text = JSON.stringify(payload, null, 2);
+      const total = payload.counts.moods + payload.counts.assessments + payload.counts.crisisAlerts + payload.counts.feedbacks;
+      wx.setClipboardData({
+        data: text,
+        success: () => wx.showModal({
+          title: '已复制导出数据',
+          content: `共 ${total} 条记录已按 JSON 复制到剪贴板（仅本人数据，已脱敏）。粘贴到备忘录即可保存。`,
+          showCancel: false,
+          confirmText: '知道了'
+        })
+      });
+    } catch (e) {
+      console.error('[profile] 导出失败', e);
+      wx.showToast({ title: '导出失败，请重试', icon: 'none' });
+    }
+  },
+
+  // 简单脱敏：openid 只保留前 6 位
+  mask(list) {
+    return list.map((it) => ({ ...it, openid: (it.openid || '').slice(0, 6) + '…' }));
+  },
+
   onFeedback(e) {
     this.setData({ feedback: e.detail.value });
   },

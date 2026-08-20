@@ -99,13 +99,14 @@ heartbuddy-miniprogram/
 ├── pages/
 │   ├── welcome/   隐私 & AI 说明
 │   ├── chat/      核心对话页（快捷情绪双闭环·英文角）
-│   ├── mood/      情绪可视化（快速记录/打卡 streak/曲线+小结图/今日任务/本周小结）
+│   ├── mood/      情绪可视化（快速记录/打卡 streak/曲线+小结图/今日任务/本周小结/时光信）
 │   ├── assessment/ 考前焦虑自评（7 题）+ 应对卡导出 + 3 天陪伴计划
 │   ├── ops/       运营看板（危机闭环/处理率/CSV 导出）
 │   ├── report/    周报 + canvas 分享卡（双模板）+ 复制文字版/往期回看
-│   ├── helper/    求助中心（热线/已安全回执·24h 回访）
+│   ├── helper/    求助中心（热线/已安全回执·24h 回访/呼吸放松入口）
+│   ├── breathe/   呼吸放松练习（4 轮引导·结束记录平静心情）
 │   ├── privacy/   隐私政策（全文）
-│   └── profile/   我的（成就徽章）
+│   └── profile/   我的（成就徽章/一键导出本人数据）
 ├── assets/banner.svg                  # README 封面
 ├── assets/sharecard-preview.png       # 周报分享卡预览-浅色（.svg 生成）
 ├── assets/sharecard-preview-dark.png  # 周报分享卡预览-深色（.svg 生成）

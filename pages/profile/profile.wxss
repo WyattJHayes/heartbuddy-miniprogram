@@ -25,3 +25,4 @@
 .b-emoji { font-size: 52rpx; line-height: 1; }
 .b-title { font-size: 26rpx; font-weight: 600; color: #3a4a63; margin-top: 10rpx; }
 .b-desc { font-size: 21rpx; color: #98a2b5; margin-top: 4rpx; text-align: center; }
+.export-btn { margin-top: 18rpx; background: #eef4ff; color: #3f6fd8; border-radius: 44rpx; font-size: 26rpx; font-weight: 600; }
