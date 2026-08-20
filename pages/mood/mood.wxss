@@ -15,8 +15,18 @@
 .ae-desc { font-size: 24rpx; color: #9ca3af; margin-top: 4rpx; }
 .ae-arrow { color: #c4c9d4; font-size: 40rpx; }
 
-.stat { display: flex; align-items: center; margin-bottom: 20rpx; }
+.stats-row { display: flex; }
+.quick-card { margin-top: 0; }
+.quick-sub { font-size: 22rpx; color: #9ca3af; font-weight: 400; margin-left: 10rpx; }
+.quick-row { display: flex; flex-wrap: wrap; gap: 16rpx; margin-top: 8rpx; }
+.quick-btn { flex: 1 1 28%; min-width: 140rpx; display: flex; align-items: center; justify-content: center; flex-direction: row; background: #fff; border: 1rpx solid #e5e9f2; border-radius: 999rpx; font-size: 24rpx; color: #3e5ba3; padding: 12rpx 8rpx; margin: 0; }
+.quick-btn::after { border: none; }
+.quick-btn.on { background: #eef4ff; border-color: #5b8def; }
+.quick-emoji { font-size: 34rpx; line-height: 1; }
+.quick-label { font-size: 22rpx; color: #7a8698; margin-top: 4rpx; }
+.quick-btn.on .quick-label { color: #4568c8; }
 .stat-emoji { width: 56rpx; }
+.stat { display: flex; align-items: center; margin-bottom: 20rpx; }
 .stat-label { width: 100rpx; font-size: 26rpx; }
 .bar-bg { flex: 1; height: 22rpx; background: #f0f2f7; border-radius: 20rpx; margin: 0 16rpx; overflow: hidden; }
 .bar { height: 100%; background: linear-gradient(90deg, #8fb4ff, #5b8def); border-radius: 20rpx; }

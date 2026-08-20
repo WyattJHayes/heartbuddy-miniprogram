@@ -2,6 +2,10 @@
 const app = getApp();
 const { MOOD_META, MOOD_SCORE } = require('../../utils/moodscore');
 
+// 一键快速记录（顺序即 UI 顺序）
+const QUICK_ORDER = ['happy', 'peace', 'anxiety', 'sad', 'lonely', 'angry'];
+const quickList = QUICK_ORDER.filter((k) => MOOD_META[k]).map((k) => ({ key: k, ...MOOD_META[k] }));
+
 Page({
   data: {
     loaded: false,
@@ -11,10 +15,44 @@ Page({
     moodLine: [],     // 近 7 天 [{label,value}]，无记录 value:null
     insight: '',       // 趋势的一句话 AI 解读（规则生成）
     chartFooter: '',    // 曲线图 footer（随长图一并导出）
-    streak: { n: 0, today: false }  // 连续打卡天数
+    streak: { n: 0, today: false },  // 连续打卡天数
+    quickList,           // 快速记录按钮
+    quicking: ''         // 正在提交的 key
   },
 
   onShow() { this.fetchMoods(); },
+
+  // 一键快速记录：直接把此刻心情写入 moods 集合
+  async tapQuick(e) {
+    const key = e.currentTarget.dataset.key;
+    const meta = MOOD_META[key];
+    if (!meta || this.data.quicking) return;
+    let openid = app.globalData.openid;
+    if (!openid) openid = await app.login();
+    if (!openid) return;
+    this.setData({ quicking: key });
+    try {
+      const db = wx.cloud.database();
+      await db.collection('moods').add({
+        data: {
+          openid,
+          sessionId: 'quick-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+          mood: key,
+          intensity: 3,
+          trigger: '快速记录',
+          createdAt: Date.now()
+        }
+      });
+      wx.vibrateShort && wx.vibrateShort({ type: 'light' });
+      wx.showToast({ title: meta.label + ' / 已记下', icon: 'success' });
+      this.fetchMoods();
+    } catch (e) {
+      console.error('[mood] 快速记录失败', e);
+      wx.showToast({ title: '记录失败，请重试', icon: 'none' });
+    } finally {
+      this.setData({ quicking: '' });
+    }
+  },
 
   async fetchMoods() {
     let openid = app.globalData.openid;

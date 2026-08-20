@@ -13,6 +13,10 @@
 .advice { font-size: 28rpx; line-height: 1.7; }
 .full { width: 100%; }
 .mt { margin-top: 20rpx; }
+.hrow { display: flex; align-items: center; padding: 16rpx 0; border-bottom: 1rpx solid #f3f4f6; }
+.hrow:last-child { border-bottom: none; }
+.hdate { font-size: 24rpx; color: #9ca3af; width: 180rpx; flex-shrink: 0; }
+.htext { font-size: 26rpx; }
 
 /* 分享卡浮层 */
 .mask { position: fixed; inset: 0; background: rgba(20, 26, 40, 0.55); display: flex; align-items: center; justify-content: center; z-index: 999; }

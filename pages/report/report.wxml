@@ -31,6 +31,14 @@
     <button class="btn-ghost full mt" bindtap="openShare">生成分享卡片</button>
     <button class="btn-ghost full mt" bindtap="copyWeekText">复制文字版周报</button>
     <button class="btn-primary full mt" bindtap="goChat">继续和心语聊聊</button>
+
+    <view wx:if="{{history.length}}" class="card mt">
+      <view class="section-title">往期周报</view>
+      <view class="hrow" wx:for="{{history}}" wx:key="date">
+        <text class="hdate">{{item.date}}</text>
+        <text class="htext">{{item.topLabel}} {{item.topEmoji}} · 倾诉 {{item.chatCount}} 次 · {{item.dayCount}} 天</text>
+      </view>
+    </view>
   </block>
 </view>
 

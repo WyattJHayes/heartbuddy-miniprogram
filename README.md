@@ -99,10 +99,10 @@ heartbuddy-miniprogram/
 ├── pages/
 │   ├── welcome/   隐私 & AI 说明
 │   ├── chat/      核心对话页
-│   ├── mood/      情绪可视化（含自评入口）
+│   ├── mood/      情绪可视化（快速记录/打卡 streak/曲线+小结图）
 │   ├── assessment/ 考前焦虑自评（7 题）
 │   ├── ops/       运营看板（演示）
-│   ├── report/    周报 + canvas 分享卡（双模板）
+│   ├── report/    周报 + canvas 分享卡（双模板）+ 复制文字版/往期回看
 │   ├── helper/    求助中心
 │   ├── privacy/   隐私政策（全文）
 │   └── profile/   我的

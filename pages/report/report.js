@@ -24,13 +24,15 @@ Page({
     showShare: false,
     shareUrl: '',
     drawing: false,
-    cardData: {}        // 传给 share-card 组件的数据
+    cardData: {},        // 传给 share-card 组件的数据
+    history: []          // 往期周报（本地缓存）
   },
 
   onLoad() {
     // 记住上次选择的模板（区别于每次默认浅色）
     const saved = wx.getStorageSync('reportTpl');
     if (saved === 'light' || saved === 'dark') this.setData({ tpl: saved });
+    this.setData({ history: wx.getStorageSync('weekReportHistory') || [] });
   },
 
   onShow() { this.fetchWeek(); },
@@ -88,6 +90,13 @@ Page({
           suggestion: suggestions[top] || '继续保持觉察，记录本身就是一种照顾。'
         }
       });
+      this.pushHistory({
+        date: this.today() + (this.data.tpl === 'dark' ? ' · 夜' : ''),
+        topEmoji: MOOD_EMOJI[top] || '😌',
+        topLabel: MOOD_LABEL[top] || '平稳',
+        chatCount: list.length,
+        dayCount: days.size
+      });
     } catch (e) {
       console.error('[report] 失败', e);
       this.setData({ loaded: true });
@@ -95,6 +104,22 @@ Page({
   },
 
   goChat() { wx.switchTab({ url: '/pages/chat/chat' }); },
+
+  today() {
+    const d = new Date();
+    const p = (x) => (x < 10 ? '0' + x : x);
+    return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+  },
+
+  // 往期周报（本地缓存最多 12 条，同一周覆写）
+  pushHistory(item) {
+    if (!item || !item.date) return;
+    const list = (wx.getStorageSync('weekReportHistory') || []).filter((x) => x.date !== item.date);
+    list.unshift(item);
+    const kept = list.slice(0, 12);
+    wx.setStorageSync('weekReportHistory', kept);
+    this.setData({ history: kept });
+  },
 
   // 复制文字版周报（答辩/聊天分享友好）
   copyWeekText() {

@@ -110,5 +110,19 @@ Page({
     });
   },
 
-  goPrivacy() { wx.navigateTo({ url: '/pages/privacy/privacy' }); }
+  goPrivacy() { wx.navigateTo({ url: '/pages/privacy/privacy' }); },
+
+  // 隐私合规：重新查看《用户须知与免责声明》（清除本机已同意标记，回到欢迎页）
+  resetPrivacy() {
+    wx.showModal({
+      title: '重新查看隐私指引？',
+      content: '将退出当前会话并回到欢迎页，重新展示《用户须知与免责声明》，需要再次点击同意才能继续。',
+      confirmText: '重新查看',
+      success: (r) => {
+        if (!r.confirm) return;
+        wx.removeStorageSync('privacyAgreed');
+        wx.reLaunch({ url: '/pages/welcome/welcome' });
+      }
+    });
+  }
 });

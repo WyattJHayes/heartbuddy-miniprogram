@@ -9,6 +9,26 @@
     <view class="ae-arrow">›</view>
   </view>
 
+  <!-- 一键快速记录 -->
+  <view class="card quick-card">
+    <view class="section-title">此刻心情？<text class="quick-sub">一键记下，曲线实时更新</text></view>
+    <view class="quick-row">
+      <button
+        class="quick-btn {{quicking === item.key ? 'on' : ''}}"
+        wx:for="{{quickList}}"
+        wx:key="key"
+        data-key="{{item.key}}"
+        bindtap="tapQuick"
+        loading="{{quicking === item.key}}"
+        disabled="{{quicking !== ''}}"
+        aria-label="{{item.label}}心情记录按钮"
+      >
+        <text class="quick-emoji">{{item.emoji}}</text>
+        <text class="quick-label">{{item.label}}</text>
+      </button>
+    </view>
+  </view>
+
   <block wx:if="{{!loaded}}">
     <view class="text-muted center">加载中…</view>
   </block>
