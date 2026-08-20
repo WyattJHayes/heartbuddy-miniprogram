@@ -112,6 +112,16 @@ exports.main = async (event) => {
 
   // 1. 组装多轮上下文（最近 10 条）
   const messages = [];
+  // 1.0 语言自适应：输入以英文为主（且无中文）→ 让模型用英文回复（中英文自动跟随）
+  const latinCount = (userInput.match(/[A-Za-z]/g) || []).length;
+  const cjkCount = (userInput.match(/[\u4e00-\u9fff]/g) || []).length;
+  const isEnglish = latinCount >= 4 && cjkCount === 0;
+  if (isEnglish) {
+    messages.push({
+      role: 'system',
+      content: 'The user is writing in English. Please continue answering in English, keeping the same warm, caring, non-judgmental tone (switch back to Chinese if the user writes Chinese).'
+    });
+  }
   if (SYSTEM_PROMPT) messages.push({ role: 'system', content: SYSTEM_PROMPT });
   // 1.1 自评结果作为上下文（自然关心，不下诊断）
   if (assessment && Number.isFinite(assessment.total)) {

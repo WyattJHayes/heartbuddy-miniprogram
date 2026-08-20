@@ -109,6 +109,7 @@ heartbuddy-miniprogram/
 ├── docs/竞赛提交包核对单.md            # 源码/视频/文档/配置 单张汇总
 ├── docs/答辩问答预判.md                # 评委 10 问 Q&A
 ├── docs/部署运维手册.md                # 部署/集合/Key/提审/运维/排障
+├── docs/周报分享图文教程.md            # 生成分享卡 → 朋友圈 4 步图文教程
 ├── docs/README-English.md            # 英文版 README
 ├── .github/workflows/check.yml        # CI：JS/JSON/SVG 自动校验
 └── cloudfunctions/

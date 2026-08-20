@@ -3,6 +3,20 @@
   <view class="title">心语伴</view>
   <view class="slogan">随时在线的情绪陪伴者</view>
 
+  <!-- 快捷入口：演示/新用户 1 步触发核心能力 -->
+  <view class="quick-entries">
+    <view class="qentry q-chat" bindtap="goChat">
+      <view class="qe-emoji">💬</view>
+      <view class="qe-t">和心语聊聊</view>
+      <view class="qe-d">AI 情绪陪伴对话</view>
+    </view>
+    <view class="qentry q-test" bindtap="goTest">
+      <view class="qe-emoji">📋</view>
+      <view class="qe-t">情绪自评</view>
+      <view class="qe-d">7 题 · 约 3 分钟</view>
+    </view>
+  </view>
+
   <view class="card notice">
     <view class="section-title">在开始前，请了解</view>
     <view class="item">· 我是 AI 心理陪伴助手，<text class="hl">不替代专业诊疗</text>。</view>

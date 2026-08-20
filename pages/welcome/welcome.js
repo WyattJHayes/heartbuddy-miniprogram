@@ -29,5 +29,9 @@ Page({
     wx.hideLoading();
     wx.setStorageSync('privacyAgreed', true);
     wx.switchTab({ url: '/pages/chat/chat' });
-  }
+  },
+
+  goChat() { wx.switchTab({ url: '/pages/chat/chat' }); },
+
+  goTest() { wx.navigateTo({ url: '/pages/assessment/assessment' }); }
 });
