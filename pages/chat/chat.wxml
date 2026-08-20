@@ -27,6 +27,11 @@
         <view class="quick-item en" wx:for="{{quickEnglish}}" wx:key="*this"
               data-text="{{item}}" bindtap="onQuickEn">{{item}}</view>
       </view>
+      <view class="quick-list emg-list">
+        <view class="quick-item emg" wx:for="{{quickEmergency}}" wx:key="*this"
+              data-text="{{item}}" bindtap="onQuickEn">🚨 {{item}}</view>
+      </view>
+      <view class="emg-hint">危急时刻不要独自面对 —— 我会立刻帮你连接心理热线与身边可信任的人。</view>
       <view class="bilingual-hint">中英文都行 —— 直接说「我很焦虑」，或 "I've been so anxious lately"，我都能接住 🌱</view>
     </view>
   </scroll-view>
@@ -62,6 +67,11 @@
       <view class="quick-panel-title en">EN 英语角 · one tap to send</view>
       <view class="quick-panel-list">
         <view class="quick-panel-item en" wx:for="{{quickEnglish}}" wx:key="*this"
+              data-text="{{item}}" bindtap="onQuickEn">{{item}}</view>
+      </view>
+      <view class="quick-panel-title emg">🚨 紧急时刻 · English urgent needs</view>
+      <view class="quick-panel-list">
+        <view class="quick-panel-item emg" wx:for="{{quickEmergency}}" wx:key="*this"
               data-text="{{item}}" bindtap="onQuickEn">{{item}}</view>
       </view>
     </view>

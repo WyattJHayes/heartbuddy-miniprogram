@@ -25,6 +25,12 @@ Page({
       "I've been so anxious lately…",
       "I feel lonely tonight",
       "I can't fall asleep, my mind keeps racing"
+    ],
+    // 关键时刻（危机语境）英语快捷句：会触发求助页与热线的安全网
+    quickEmergency: [
+      "I feel like I can't cope right now",
+      "I'm afraid I might hurt myself",
+      "Please help me reach a real person"
     ]
   },
 

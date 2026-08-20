@@ -59,3 +59,10 @@
 .quick-item.en { background: #eef7f0; color: #3c8d5c; }
 .quick-panel-item.en { background: #eef7f0; color: #3c8d5c; }
 .quick-panel-title.en { margin-top: 12rpx; font-size: 24rpx; color: #9ca3af; }
+
+/* 紧急时刻英语角 */
+.emg-list { margin-top: 12rpx; }
+.quick-item.emg { background: #fff2f0; color: #b33a2a; border: 1rpx solid #ffb4a8; }
+.quick-panel-item.emg { background: #fff2f0; color: #b33a2a; border: 1rpx solid #ffb4a8; }
+.quick-panel-title.emg { margin-top: 12rpx; font-size: 24rpx; color: #b0523f; }
+.emg-hint { font-size: 22rpx; color: #a0524a; margin-top: 10rpx; line-height: 1.6; }

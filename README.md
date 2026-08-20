@@ -118,6 +118,7 @@ heartbuddy-miniprogram/
 ├── docs/答辩问答预判.md                # 评委 10 问 Q&A
 ├── docs/部署运维手册.md                # 部署/集合/Key/提审/运维/排障
 ├── docs/部署运维手册-en.md            # 部署运维英文精简版（国际评委）
+├── docs/评委体验口令卡.md             # 评委 3 分钟走 3 条路径（路演/答辩用）
 ├── tools/accessibility-check.py       # 无障碍自检脚本（本地 python3 运行）
 ├── docs/周报分享图文教程.md            # 生成分享卡 → 朋友圈 4 步图文教程
 ├── docs/README-English.md            # 英文版 README
