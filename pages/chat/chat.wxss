@@ -54,3 +54,8 @@
   padding: 0 32rpx; font-size: 30rpx;
 }
 .send { background: #5b8def; color: #fff; border-radius: 40rpx; padding: 0 40rpx; font-size: 28rpx; }
+/* 英语角 */
+.en-list { margin-top: 12rpx; }
+.quick-item.en { background: #eef7f0; color: #3c8d5c; }
+.quick-panel-item.en { background: #eef7f0; color: #3c8d5c; }
+.quick-panel-title.en { margin-top: 12rpx; font-size: 24rpx; color: #9ca3af; }

@@ -20,7 +20,12 @@ Page({
     typing: false,       // AI 打字中
     typedText: '',
     showQuick: false,    // 输入栏「⚡快捷」面板
-    quickReplies
+    quickReplies,
+    quickEnglish: [
+      "I've been so anxious lately…",
+      "I feel lonely tonight",
+      "I can't fall asleep, my mind keeps racing"
+    ]
   },
 
   async onLoad() {
@@ -92,6 +97,9 @@ Page({
   },
 
   onQuick(e) { this.setData({ showQuick: false }); this.send(e.currentTarget.dataset.text); },
+
+  // 英语角：点一下直接发送（等同 onQuick，英文输入会自动触发英文回复）
+  onQuickEn(e) { this.setData({ showQuick: false }); this.send(e.currentTarget.dataset.text); },
 
   toggleQuick() { this.setData({ showQuick: !this.data.showQuick }); },
 
