@@ -67,6 +67,15 @@
       <view class="tag {{moodTag==='孤独'?'on':''}}" data-m="孤独" bindtap="onMood">🌫 孤独</view>
       <view class="tag {{moodTag==='生气'?'on':''}}" data-m="生气" bindtap="onMood">😡 生气</view>
     </view>
+    <!-- 此刻强度滑条：1–5，随情绪标签落库，月度小结会算平均值 -->
+    <view class="intensity-row">
+      <text class="intensity-label">此刻强度</text>
+      <slider class="intensity-slider" min="1" max="5" step="1" value="{{intensity}}"
+              activeColor="#5b8def" backgroundColor="#e3e9f4" block-size="20" block-color="#5b8def"
+              bindchanging="onIntensity" bindchange="onIntensity"
+              aria-label="此刻情绪强度，1 到 5" />
+      <text class="intensity-num {{intensity >= 4 ? 'high' : ''}}">{{intensity}}</text>
+    </view>
     <view class="input-row">
       <view class="quick-toggle {{showQuick ? 'on' : ''}}" bindtap="toggleQuick">⚡快捷</view>
       <view class="reset-chat" bindtap="resetChat" role="button" aria-label="重新开始这轮对话">↻</view>

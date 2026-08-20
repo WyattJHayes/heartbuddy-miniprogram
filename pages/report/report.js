@@ -202,6 +202,28 @@ Page({
       };
       const curAvg = mean(curList);
       const prevAvg = mean(prevRes.data || []);
+      // 平均强度（chat 强度滑条 / 快速记录的 intensity 字段）
+      const ints = curList.map((m) => m.intensity).filter((v) => typeof v === 'number' && v > 0);
+      const avgInt = ints.length ? +(ints.reduce((a, b) => a + b, 0) / ints.length).toFixed(1) : null;
+      // 情绪词云：情绪标签为主词，触发来源为辅词，字号按频次加权（纯前端统计）
+      const words = Object.keys(counts).map((k) => ({
+        text: MOOD_LABEL[k] || '记录', emoji: MOOD_EMOJI[k] || '😌', count: counts[k], mood: true
+      }));
+      const trigCounts = {};
+      curList.forEach((m) => {
+        const t = (m.trigger || '').trim();
+        if (t) trigCounts[t] = (trigCounts[t] || 0) + 1;
+      });
+      Object.keys(trigCounts).forEach((t) => {
+        if (!words.some((w) => w.text === t)) words.push({ text: t, emoji: '', count: trigCounts[t], mood: false });
+      });
+      words.sort((a, b) => b.count - a.count);
+      const maxC = words.length ? words[0].count : 1;
+      const cloud = words.slice(0, 10).map((w) => ({
+        text: w.text, emoji: w.emoji, count: w.count,
+        size: 24 + Math.round(18 * (w.count / maxC)),
+        color: w.mood ? '#3f6fe0' : '#8a94a8'
+      }));
       let delta = '';
       if (curAvg != null && prevAvg != null) {
         const d = +(curAvg - prevAvg).toFixed(1);
@@ -216,6 +238,8 @@ Page({
           days: daySet.size,
           top3,
           curAvg,
+          avgInt,
+          cloud,
           delta
         }
       });

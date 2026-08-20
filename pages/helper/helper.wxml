@@ -16,7 +16,8 @@
     <block wx:if="{{selfStep === -1}}">
       <view class="section-title">🪜 我撑过来了 <text class="self-sub">5 步自助</text></view>
       <view class="self-text">情绪汹涌时，不必立刻“搞定”它。顺着这 5 个问题慢慢走一遍，写完常常会发现自己比想象中更有力量。</view>
-      <button class="btn-primary self-start" bindtap="selfStart">开始 5 步</button>
+      <button wx:if="{{selfResumeStep}}" class="btn-primary self-start" bindtap="selfResume">接着上次的第 {{selfResumeStep}} 步走</button>
+      <button class="{{selfResumeStep ? 'btn-ghost' : 'btn-primary'}} self-start" bindtap="selfStart">{{selfResumeStep ? '重新开始 5 步' : '开始 5 步'}}</button>
       <view class="self-last" wx:if="{{selfLast}}">
         <view class="self-last-title">上次的收尾（{{selfLast.date}}）</view>
         <view class="self-last-text">{{selfLast.done}}</view>

@@ -32,12 +32,21 @@ Page({
     self: SELF_STEPS,
     selfStep: -1,       // -1=未开始；0-4=进行中
     selfInput: '',
-    selfLast: null      // { date, done } 上次收尾
+    selfLast: null,     // { date, done } 上次收尾
+    selfResumeStep: 0   // >0 表示有未走完的存档（第几步），可一键接着走
   },
 
   onLoad() {
     const t = wx.getStorageSync('crisisCheck');
     if (t && t > Date.now()) this.setData({ safety: true });
+    // 五步自助：恢复 3 天内未走完的存档（记住走到第几步、写过的答案）
+    const prog = wx.getStorageSync('selfCareProgress');
+    if (prog && prog.step >= 0 && prog.step < 4 && Date.now() - (prog.ts || 0) < 3 * 86400000) {
+      this._resume = prog;
+      this.setData({ selfResumeStep: prog.step + 1 });
+    } else if (prog) {
+      wx.removeStorageSync('selfCareProgress'); // 过期存档清掉
+    }
     // 今日关怀：按「年内第几天」取一条日轮换，另加一句时间文案
     const today = new Date();
     const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
@@ -103,25 +112,40 @@ Page({
 
   // ---- 我撑过来了：5 步自助 ----
   selfStart() {
-    this.setData({ selfStep: 0, selfInput: '', selfAnswers: [] });
+    wx.removeStorageSync('selfCareProgress'); // 重新开始 = 放弃旧存档
+    this._resume = null;
+    this.setData({ selfStep: 0, selfInput: '', selfAnswers: [], selfResumeStep: 0 });
+  },
+
+  // 接着上次的存档继续走（答案原样带回）
+  selfResume() {
+    const p = this._resume;
+    if (!p) return;
+    this.setData({ selfStep: p.step, selfInput: p.input || '', selfAnswers: p.answers || [] });
   },
 
   onSelfInput(e) {
     this.setData({ selfInput: e.detail.value });
   },
 
-  // 收起：不保存
+  // 收起：界面归位，但存档保留，下次进来还能接着走
   selfClose() {
     this.setData({ selfStep: -1, selfInput: '', selfAnswers: [] });
+    if (wx.getStorageSync('selfCareProgress')) {
+      wx.showToast({ title: '已存档，下次接着走 🌱', icon: 'none' });
+    }
   },
 
   selfNext() {
     const answers = this.data.selfAnswers || [];
     answers.push((this.data.selfInput || '').trim());
     if (this.data.selfStep < 4) {
-      this.setData({ selfStep: this.data.selfStep + 1, selfInput: '', selfAnswers: answers });
+      const next = this.data.selfStep + 1;
+      this.setData({ selfStep: next, selfInput: '', selfAnswers: answers });
+      // 每走一步都存档（step=下一步待填，answers=已答）
+      wx.setStorageSync('selfCareProgress', { step: next, answers, input: '', ts: Date.now() });
     } else {
-      // 完成：收尾存本地，轻轻给一句肯定
+      // 完成：收尾存本地，清掉进度存档，轻轻给一句肯定
       const d = new Date();
       const pad = (n) => (n < 10 ? '0' + n : n);
       const last = {
@@ -132,7 +156,9 @@ Page({
       hist.push(last);
       if (hist.length > 5) hist.shift();
       wx.setStorageSync('selfCareLog', hist);
-      this.setData({ selfStep: -1, selfInput: '', selfAnswers: [], selfLast: last });
+      wx.removeStorageSync('selfCareProgress');
+      this._resume = null;
+      this.setData({ selfStep: -1, selfInput: '', selfAnswers: [], selfLast: last, selfResumeStep: 0 });
       wx.showToast({ title: '收尾成功，辛苦了 🌱', icon: 'none' });
     }
   },

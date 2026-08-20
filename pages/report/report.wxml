@@ -50,7 +50,14 @@
         <view class="mtop-bar-bg"><view class="mtop-bar" style="width:{{item.count / monthInfo.total * 100}}%"></view></view>
         <text class="mtop-n">{{item.count}} 次</text>
       </view>
-      <view class="text-muted mdelta" wx:if="{{monthInfo.delta}}">{{monthInfo.delta}}</view>
+      <!-- 情绪词云：情绪标签为主、触发来源为辅，字号按频次加权 -->
+      <view class="cloud-wrap" wx:if="{{monthInfo.cloud.length}}">
+        <view class="cloud-title">☁️ 情绪词云 · 本月</view>
+        <view class="cloud-row" aria-label="本月情绪词云">
+          <text class="cloud-w" style="font-size:{{item.size}}rpx; color:{{item.color}}" wx:for="{{monthInfo.cloud}}" wx:key="text">{{item.emoji ? item.emoji + ' ' : ''}}{{item.text}}<text class="cloud-n">{{item.count}}</text></text>
+        </view>
+      </view>
+      <view class="text-muted mdelta" wx:if="{{monthInfo.delta}}">{{monthInfo.delta}}<text wx:if="{{monthInfo.avgInt}}"> · 平均强度 {{monthInfo.avgInt}}</text></view>
     </view>
 
     <button class="btn-ghost full mt" bindtap="openShare">生成分享卡片</button>

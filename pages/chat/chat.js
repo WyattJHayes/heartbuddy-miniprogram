@@ -37,6 +37,7 @@ Page({
     loading: false,
     sessionId: '',
     messages: [],        // [{ role: 'user'|'ai', content }]
+    intensity: 3,        // 此刻强度 1–5（滑条，随情绪记录落库）
     input: '',
     moodTag: '',         // 当前可选的情绪标签
     typing: false,       // AI 打字中
@@ -299,6 +300,11 @@ Page({
 
   onInput(e) { this.setData({ input: e.detail.value }); },
 
+  // 此刻强度滑条（1–5）：影响下一次情绪记录的 intensity 字段
+  onIntensity(e) {
+    this.setData({ intensity: e.detail.value });
+  },
+
   onMood(e) {
     const label = e.currentTarget.dataset.m;
     this.setData({ moodTag: label });
@@ -320,12 +326,13 @@ Page({
           openid,
           sessionId: 'chat-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
           mood: key,
-          intensity: 3,
+          intensity: this.data.intensity || 3,
           trigger: '聊天标签',
           createdAt: Date.now()
         }
       });
       if (!wx.getStorageSync('ach_firstRecord')) wx.setStorageSync('ach_firstRecord', true);
+      wx.setStorageSync('hb_lastMoodDate', new Date().toDateString());
       wx.vibrateShort && wx.vibrateShort({ type: 'light' });
       wx.showToast({ title: '心情已记录，到心情页看曲线', icon: 'none' });
     } catch (e) {
@@ -362,6 +369,7 @@ Page({
         sessionId: this.data.sessionId,
         userInput: text,
         history,
+        intensity: this.data.intensity || 3, // 此刻强度（云函数可用可忽略）
         assessment: this.getLastAssessment()
       });
       const r = res.result || {};

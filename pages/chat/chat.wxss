@@ -102,3 +102,11 @@
 .night-title { display: block; font-size: 24rpx; color: #4a5b76; font-weight: 600; }
 .night-chips { display: flex; flex-wrap: wrap; gap: 14rpx; margin-top: 14rpx; }
 .night-chip { font-size: 23rpx; color: #3f6fe0; background: #fff; border: 1rpx solid #dbe4f5; border-radius: 999rpx; padding: 10rpx 22rpx; }
+
+/* 此刻强度滑条 */
+.intensity-row { display: flex; align-items: center; margin: 10rpx 6rpx 14rpx; }
+.intensity-label { flex-shrink: 0; font-size: 22rpx; color: #8a94a8; margin-right: 14rpx; }
+.intensity-slider { flex: 1; margin: 0 10rpx; }
+.intensity-num { flex-shrink: 0; width: 44rpx; height: 44rpx; border-radius: 50%; background: #eef3ff; color: #4a6fc4;
+  font-size: 24rpx; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.intensity-num.high { background: #ffe9e6; color: #e25c4a; }
