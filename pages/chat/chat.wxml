@@ -18,11 +18,12 @@
 
     <!-- 快捷问题 -->
     <view class="quick" wx:if="{{messages.length <= 1 && !typing}}">
-      <view class="quick-title">试试这样说</view>
+      <view class="quick-title">试试这样说 · Try saying</view>
       <view class="quick-list">
         <view class="quick-item" wx:for="{{quickReplies}}" wx:key="*this"
               data-text="{{item}}" bindtap="onQuick">{{item}}</view>
       </view>
+      <view class="bilingual-hint">中英文都行 —— 直接说「我很焦虑」，或 "I've been so anxious lately"，我都能接住 🌱</view>
     </view>
   </scroll-view>
 
@@ -49,7 +50,7 @@
 
     <!-- 快捷面板（随时可展开） -->
     <view class="quick-panel" wx:if="{{showQuick}}">
-      <view class="quick-panel-title">试试这样说</view>
+      <view class="quick-panel-title">试试这样说 · Try: "I've been feeling down…"</view>
       <view class="quick-panel-list">
         <view class="quick-panel-item" wx:for="{{quickReplies}}" wx:key="*this"
               data-text="{{item}}" bindtap="onQuick">{{item}}</view>

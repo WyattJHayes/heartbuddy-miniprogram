@@ -18,6 +18,9 @@
   background: #eef3ff; color: #4a6fc4; font-size: 26rpx;
   padding: 14rpx 24rpx; border-radius: 32rpx;
 }
+.bilingual-hint {
+  margin-top: 16rpx; font-size: 24rpx; color: #9ca3af; line-height: 1.6;
+}
 
 .input-bar {
   border-top: 1rpx solid #eee;

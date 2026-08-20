@@ -33,6 +33,12 @@
   <img src="assets/sharecard-preview-dark.png" alt="深色模板" width="300">
 </p>
 
+## 🗺️ 架构总览
+
+<p align="center"><img src="assets/architecture.svg" alt="产品架构图" width="100%"></p>
+
+三条链路：**前端 callFunction → 云函数（login / aiChat / opsSummary）→ 云数据库**；`aiChat` 额外接 **大模型 API**（OpenAI 兼容）与 **微信内容安全 msgSecCheck**。对话正文不进库，库中仅存情绪/测评脱敏字段。
+
 ## 🚀 快速开始（约 30 分钟）
 
 > 图文分步教程见 **[docs/部署运维手册.md](docs/部署运维手册.md)**（导入 → 云开发 → 集合 → 云函数 → Key 配置 → 提审 → 日常运维）
@@ -100,6 +106,7 @@ heartbuddy-miniprogram/
 ├── docs/演示录屏分镜卡.md              # 按镜头可拍的录制卡（S1–S10）
 ├── docs/演示视频逐句稿.md              # 口播 + 字幕逐字稿（S1–S10）
 ├── docs/参赛提交自查清单.md             # 提交前逐项打勾
+├── docs/竞赛提交包核对单.md            # 源码/视频/文档/配置 单张汇总
 ├── docs/答辩问答预判.md                # 评委 10 问 Q&A
 ├── docs/部署运维手册.md                # 部署/集合/Key/提审/运维/排障
 ├── docs/README-English.md            # 英文版 README
