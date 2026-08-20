@@ -23,6 +23,18 @@
     </view>
   </view>
 
+  <!-- 成就徽章 -->
+  <view class="card">
+    <view class="section-title">成就徽章</view>
+    <view class="badges">
+      <view class="badge {{item.got ? 'got' : 'lock'}}" wx:for="{{badges}}" wx:key="key">
+        <text class="b-emoji">{{item.got ? item.emoji : '🔒'}}</text>
+        <text class="b-title">{{item.title}}</text>
+        <text class="b-desc">{{item.desc}}</text>
+      </view>
+    </view>
+  </view>
+
   <!-- 数据与隐私 -->
   <view class="card">
     <view class="section-title">数据与隐私</view>

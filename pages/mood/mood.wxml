@@ -29,6 +29,18 @@
     </view>
   </view>
 
+  <!-- 今日陪伴任务（评测页生成的 3 天计划在此打卡） -->
+  <view wx:if="{{plan}}" class="card plan-card">
+    <view class="section-title">今日陪伴任务<text class="plan-sub">{{plan.label}}</text></view>
+    <block wx:if="{{planIdx >= 0 && planIdx < plan.days.length}}">
+      <view class="plan-t-day">DAY {{planIdx + 1}} · {{plan.days[planIdx].title}}</view>
+      <view class="plan-t-desc">{{plan.days[planIdx].desc}}</view>
+      <button class="plan-check {{plan.done[planIdx] ? 'ok' : ''}}" bindtap="togglePlanDay">{{plan.done[planIdx] ? '已完成 ✓' : '标记，今日完成'}}</button>
+    </block>
+    <view wx:elif="{{planAllDone}}" class="plan-t-desc">✨ 3 天任务全部完成，为你骄傲。可回测评页重新定制。</view>
+    <view wx:else class="plan-t-desc">陪伴计划尚未到开始日，先照顾好自己。</view>
+  </view>
+
   <block wx:if="{{!loaded}}">
     <view class="text-muted center">加载中…</view>
   </block>

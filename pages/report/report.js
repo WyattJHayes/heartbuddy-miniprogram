@@ -198,13 +198,14 @@ Page({
   },
 
   onShareAppMessage() {
+    wx.setStorageSync('ach_share', true); // 成就：迈向分享
     const tpl = this.data.tpl;
     return {
       title:
         '我在心语伴记下了「' + this.data.topLabel +
         '」——' + this.data.chatCount + ' 次倾诉 · ' + this.data.dayCount + ' 天记录（' +
         (TPL_NAME[tpl] || TPL_NAME.light) + '），一起来记录心情吧',
-      path: '/pages/welcome/welcome'
+      path: '/pages/welcome/welcome?src=share'
     };
   }
 });

@@ -36,6 +36,26 @@
       <view class="text-muted r-note">自评仅作参考，不能代替专业诊断。</view>
     </view>
 
+    <!-- 3 天陪伴计划 -->
+    <view class="card mt" wx:if="{{plan}}">
+      <view class="section-title">3 天陪伴计划 · {{plan.label}}</view>
+      <view class="plan-row" wx:for="{{plan.days}}" wx:key="n">
+        <text class="pd-num">{{item.n}}</text>
+        <view class="pd-main">
+          <view class="pd-title">{{item.title}}</view>
+          <view class="pd-desc">{{item.desc}}</view>
+        </view>
+        <text class="pd-check {{plan.done[index] ? (index < planIdx ? 'done' : 'on') : ''}}" wx:if="{{index < planIdx || plan.done[index]}}" aria-label="第{{item.n}}天已完成">✓</text>
+        <text class="pd-check do" wx:if="{{index === planIdx && !plan.done[index]}}" data-i="{{index}}" bindtap="toggleDay" aria-label="打卡第{{item.n}}天">☐</text>
+      </view>
+      <view class="text-muted plan-note">
+        <block wx:if="{{planIdx < 0}}">计划未到开始日，先照顾好自己。</block>
+        <block wx:elif="{{planAllDone}}">✨ 3 天任务全部完成，为你骄傲。</block>
+        <block wx:else>今天 · 第 {{planIdx + 1}} 天可打卡（每日一章）</block>
+      </view>
+    </view>
+    <button class="btn-ghost full mt" wx:else bindtap="startPlan">生成 3 天陪伴计划</button>
+
     <button class="btn-primary full" bindtap="goChat">和心语聊聊</button>
     <button class="btn-ghost full mt" bindtap="openCard">生成焦虑应对卡（可保存图片）</button>
     <button class="btn-ghost full mt" bindtap="goHelper">去看求助热线</button>

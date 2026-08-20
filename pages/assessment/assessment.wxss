@@ -28,3 +28,16 @@
 .card-canvas { width: 620rpx; height: 1060rpx; border-radius: 16rpx; background: #fff; }
 .card-actions { width: 100%; margin-top: 24rpx; }
 .card-actions .mt { margin-top: 16rpx; }
+
+/* 3 天陪伴计划（与心情页风格一致） */
+.plan-row { display: flex; align-items: flex-start; gap: 16rpx; padding: 16rpx 0; border-bottom: 1rpx solid #f3f4f6; }
+.plan-row:last-child { border-bottom: none; }
+.pd-num { width: 44rpx; height: 44rpx; border-radius: 12rpx; background: #eef4ff; color: #3e5ba3; font-size: 24rpx; font-weight: 600; text-align: center; line-height: 44rpx; flex-shrink: 0; }
+.pd-main { flex: 1; }
+.pd-title { font-size: 27rpx; font-weight: 600; }
+.pd-desc { font-size: 23rpx; color: #8a95a7; line-height: 1.6; margin-top: 4rpx; }
+.pd-check { width: 44rpx; height: 44rpx; border-radius: 50%; border: 2rpx solid #c9ccd5; color: transparent; font-size: 30rpx; line-height: 44rpx; text-align: center; flex-shrink: 0; margin-top: 2rpx; }
+.pd-check.done { border-color: #2f8f72; background: #e2f6ee; color: #2f8f72; }
+.pd-check.on { border-color: #5b8def; background: #eef4ff; color: #5b8def; }
+.pd-check.do { color: #b7c1d0; }
+.plan-note { margin-top: 8rpx; font-size: 23rpx; }

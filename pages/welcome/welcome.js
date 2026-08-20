@@ -2,13 +2,14 @@
 const app = getApp();
 
 Page({
-  data: { loading: true, openid: '', showNotice: false },
+  data: { loading: true, openid: '', showNotice: false, shared: false },
 
   openNotice() { this.setData({ showNotice: true }); },
   closeNotice() { this.setData({ showNotice: false }); },
   noop() {},
 
-  onLoad() {
+  onLoad(options) {
+    if (options && options.src === 'share') this.setData({ shared: true });
     if (!wx.getStorageSync('privacyAgreed')) {
       this.setData({ loading: false });
       return;

@@ -3,6 +3,11 @@
   <view class="title">心语伴</view>
   <view class="slogan">随时在线的情绪陪伴者</view>
 
+  <!-- 来自朋友的分享 -->
+  <view class="share-banner" wx:if="{{shared}}">
+    🌱 你的朋友把「心语伴」分享给了你。看完须知就能开始，随时聊聊。
+  </view>
+
   <!-- 快捷入口：演示/新用户 1 步触发核心能力 -->
   <view class="quick-entries">
     <view class="qentry q-chat" bindtap="goChat">

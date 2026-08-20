@@ -10,11 +10,25 @@ Page({
     assessTotal: 0,
     crisisTotal: 0,
     feedback: '',
-    submitting: false
+    submitting: false,
+    badges: []
   },
 
   onShow() {
     this.loadStats();
+    this.refreshBadges();
+  },
+
+  // 成就徽章（本地记录解锁情况）
+  refreshBadges() {
+    const defs = [
+      { key: 'ach_firstRecord', emoji: '🌱', title: '走出第一步', desc: '记录第一条心情' },
+      { key: 'ach_streak3', emoji: '🔥', title: '坚持 3 天', desc: '连续打卡 3 天' },
+      { key: 'ach_assess',     emoji: '📋', title: '认识自己', desc: '完成一次自评' },
+      { key: 'ach_share',      emoji: '🤝', title: '陪伴他人', desc: '把心语伴分享出去' }
+    ];
+    const badges = defs.map((b) => ({ ...b, got: !!wx.getStorageSync(b.key) }));
+    this.setData({ badges });
   },
 
   async loadStats() {

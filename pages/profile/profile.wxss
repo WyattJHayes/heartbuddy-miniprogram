@@ -17,3 +17,11 @@
 .row.danger { color: #e05c4e; }
 .muted { color: #9ca3af; }
 .stat-tip { margin-top: 12rpx; font-size: 22rpx; line-height: 1.6; }
+/* 成就徽章 */
+.badges { display: flex; flex-wrap: wrap; gap: 20rpx; margin-top: 8rpx; }
+.badge { flex: 1 1 42%; min-width: 280rpx; display: flex; flex-direction: column; align-items: center; padding: 24rpx 16rpx; border-radius: 20rpx; background: #f4f6fa; border: 2rpx solid transparent; }
+.badge.got { background: #f0f7ff; border-color: #bcd9ff; }
+.badge.lock { opacity: 0.65; }
+.b-emoji { font-size: 52rpx; line-height: 1; }
+.b-title { font-size: 26rpx; font-weight: 600; color: #3a4a63; margin-top: 10rpx; }
+.b-desc { font-size: 21rpx; color: #98a2b5; margin-top: 4rpx; text-align: center; }

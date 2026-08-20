@@ -1,6 +1,7 @@
 // pages/mood/mood.js —— 情绪记录 & 可视化
 const app = getApp();
 const { MOOD_META, MOOD_SCORE } = require('../../utils/moodscore');
+const planlib = require('../../utils/plan');
 
 // 一键快速记录（顺序即 UI 顺序）
 const QUICK_ORDER = ['happy', 'peace', 'anxiety', 'sad', 'lonely', 'angry'];
@@ -17,10 +18,36 @@ Page({
     chartFooter: '',    // 曲线图 footer（随长图一并导出）
     streak: { n: 0, today: false },  // 连续打卡天数
     quickList,           // 快速记录按钮
-    quicking: ''         // 正在提交的 key
+    quicking: '',        // 正在提交的 key
+    plan: null,          // 3 天陪伴计划（评测页生成，本地共享）
+    planIdx: -1,
+    planAllDone: false
   },
 
-  onShow() { this.fetchMoods(); },
+  onShow() {
+    this.fetchMoods();
+    this.refreshPlan();
+  },
+
+  refreshPlan() {
+    const p = planlib.load();
+    if (!p) { this.setData({ plan: null }); return; }
+    this.setData({ plan: p, planIdx: planlib.activeIndex(p), planAllDone: planlib.activeIndex(p) >= p.days.length });
+  },
+
+  // 今日任务打卡（与测评页共享同一份计划）
+  togglePlanDay() {
+    const p = this.data.plan;
+    const i = this.data.planIdx;
+    if (!p || i < 0 || i >= p.days.length) return;
+    p.done[i] = !p.done[i];
+    wx.setStorageSync('companionPlan', p);
+    this.refreshPlan();
+    if (p.done[i]) {
+      wx.vibrateShort && wx.vibrateShort({ type: 'light' });
+      wx.showToast({ title: '今日任务完成 ✓', icon: 'success' });
+    }
+  },
 
   // 一键快速记录：直接把此刻心情写入 moods 集合
   async tapQuick(e) {
@@ -44,6 +71,7 @@ Page({
         }
       });
       wx.vibrateShort && wx.vibrateShort({ type: 'light' });
+      if (!wx.getStorageSync('ach_firstRecord')) wx.setStorageSync('ach_firstRecord', true); // 成就：走出第一步
       wx.showToast({ title: meta.label + ' / 已记下', icon: 'success' });
       this.fetchMoods();
     } catch (e) {
@@ -83,12 +111,16 @@ Page({
 
       this.renderStats(list);
       const moodLine = this.buildLine(raw);
+      const streakNow = this.computeStreak(raw);
+      if (streakNow.n >= 3 && !wx.getStorageSync('ach_streak3')) {
+        wx.setStorageSync('ach_streak3', true); // 成就：坚持 3 天
+      }
       this.setData({
         recentList: list.slice(0, 7),
         moodLine,
         insight: this.buildInsight(moodLine),
         chartFooter: this.buildChartFooter(moodLine),
-        streak: this.computeStreak(raw),
+        streak: streakNow,
         empty: list.length === 0,
         loaded: true
       });
@@ -201,5 +233,13 @@ Page({
 
   goReport() { wx.navigateTo({ url: '/pages/report/report' }); },
 
-  goAssessment() { wx.navigateTo({ url: '/pages/assessment/assessment' }); }
+  goAssessment() { wx.navigateTo({ url: '/pages/assessment/assessment' }); },
+
+  onShareAppMessage() {
+    wx.setStorageSync('ach_share', true); // 成就：分享给朋友
+    return {
+      title: '我把心情记进了「心语伴」，也欢迎你的心里话 🌱',
+      path: '/pages/welcome/welcome?src=share'
+    };
+  }
 });

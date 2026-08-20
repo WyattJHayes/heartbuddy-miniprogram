@@ -1,5 +1,6 @@
 // pages/assessment/assessment.js —— 考前焦虑自评（GAD-7 风格，题目自编）
 const app = getApp();
+const planlib = require('../../utils/plan');
 
 const QUESTIONS = [
   '过去两周，我经常感到紧张、焦虑或提心吊胆',
@@ -29,11 +30,37 @@ Page({
     submitting: false,
     showCard: false,  // 应对卡浮层
     cardUrl: '',
-    drawing: false
+    drawing: false,
+    plan: null,       // 3 天陪伴计划（本地）
+    planIdx: -1,
+    planAllDone: false
   },
 
   onLoad() {
     this.setData({ answers: QUESTIONS.map(() => null) });
+    this.refreshPlan();
+  },
+
+  refreshPlan() {
+    const p = planlib.load();
+    if (!p) this.setData({ plan: null });
+    else this.setData({ plan: p, planIdx: planlib.activeIndex(p), planAllDone: planlib.activeIndex(p) >= p.days.length });
+  },
+
+  startPlan() {
+    const p = planlib.build(this.data.label || '低');
+    wx.setStorageSync('companionPlan', p);
+    this.refreshPlan();
+    wx.showToast({ title: '计划已生成，去心情页查看', icon: 'none' });
+  },
+
+  toggleDay(e) {
+    const i = Number(e.currentTarget.dataset.i);
+    const p = this.data.plan;
+    if (!p || i !== this.data.planIdx) return; // 只能打卡“今天”那一天
+    p.done[i] = !p.done[i];
+    wx.setStorageSync('companionPlan', p);
+    this.refreshPlan();
   },
 
   pick(e) {
@@ -67,6 +94,7 @@ Page({
         data: { openid, name: '考前焦虑自评', total, level: lv.label, items: answers, createdAt: Date.now() }
       });
       wx.setStorageSync('lastAssessment', { total, label: lv.label, ts: Date.now() });
+      wx.setStorageSync('ach_assess', true); // 成就：认识自己
     } catch (e) { console.error('[assessment] 落库失败', e); }
 
     this.setData({ submitting: false });
