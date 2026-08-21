@@ -45,11 +45,19 @@ Page({
     return (Array.isArray(ts) ? ts : []).filter((t) => t >= t0).length;
   },
 
+  todayCount() {
+    const t0 = new Date().setHours(0, 0, 0, 0);
+    const ts = (wx.getStorageSync('breatheWeek') || []);
+    return (Array.isArray(ts) ? ts : []).filter((t) => t >= t0).length;
+  },
+
   onShow() {
     // 累计练习次数展示条（本地计数）
     const count = wx.getStorageSync('breatheCount') || 0;
     const wk = this.weekCount();
-    this.setData({ breatheCount: count, breatheWeek: wk, lastDone: count ? `已累计练习 ${count} 次 🌿` : '还没有练习记录，来一次吗？' });
+    const td = this.todayCount();
+    this.setData({ breatheCount: count, breatheWeek: wk, breatheToday: td,
+      lastDone: count ? `已累计练习 ${count} 次 🌿` : '还没有练习记录，来一次吗？' });
   },
 
   onUnload() {
@@ -132,7 +140,7 @@ Page({
         const wk = wx.getStorageSync('breatheWeek') || [];
         wk.push(Date.now());
         wx.setStorageSync('breatheWeek', wk);
-        this.setData({ breatheWeek: this.weekCount() });
+        this.setData({ breatheWeek: this.weekCount(), breatheToday: this.todayCount() });
         if (!wx.getStorageSync('ach_breathe')) wx.setStorageSync('ach_breathe', true);
         if (bc >= 5 && !wx.getStorageSync('ach_breathe5')) wx.setStorageSync('ach_breathe5', true);
         wx.vibrateShort && wx.vibrateShort({ type: 'light' });

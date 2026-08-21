@@ -642,6 +642,11 @@ Page({
           if (r.confirm) wx.switchTab({ url: '/pages/helper/helper' });
         }
       });
+      // 高危信号第一次出现时，多说一句「请认真对待我的提醒」（只出现一次）
+      if (!wx.getStorageSync('hb_crisis_serious')) {
+        wx.setStorageSync('hb_crisis_serious', 1);
+        this.pushAI('我不只是程序，我是认真的：当你听到「请立刻求助」，请一定照着做。你的安全，比什么都重要。');
+      }
     } else if (crisis.level === 'mid') {
       wx.showModal({
         title: '我听到你了',

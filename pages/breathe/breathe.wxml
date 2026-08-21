@@ -7,6 +7,7 @@
     <text class="bs-dot">🌿</text>
     <text class="bs-text">{{lastDone}}</text>
     <text class="bs-week" wx:if="{{breatheWeek > 0}}">本周 {{breatheWeek}} 次</text>
+    <text class="bs-week" wx:if="{{breatheToday > 0}}">今天 {{breatheToday}} 次 · 再来一次也没关系</text>
   </view>
 
   <!-- 呼吸节奏切换 -->

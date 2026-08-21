@@ -119,6 +119,16 @@ exports.main = async () => {
       return d.getMonth() + 1 + '月' + d.getDate() + '日 ' +
         String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
     };
+    // 近 7 天高危发生的时段分布（24 小时桶，判断课间/深夜高峰）
+    const crisisHours = (function () {
+      const h = new Array(24).fill(0);
+      (highWeek.data || []).forEach((c) => {
+        const hh = new Date(c.createdAt).getHours();
+        h[hh] = (h[hh] || 0) + 1;
+      });
+      const hourMax = Math.max(1, ...h);
+      return { hours: h, bars: h.map((n, idx) => ({ hour: idx, n, w: Math.max(6, Math.round((n / hourMax) * 100)) })) };
+    })();
     const highUserList = Object.keys(highUsers)
       .sort((a, b) => highUsers[b] - highUsers[a])
       .slice(0, 6)
@@ -158,6 +168,7 @@ exports.main = async () => {
         highTrend7,
         highRate7,
         highUserList,
+        crisisHours,
         recentCrisis: (crisisWeek.data || []).slice(0, 10).map((c) => ({
           id: c._id,
           level: c.level,

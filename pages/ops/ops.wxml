@@ -120,6 +120,17 @@
         <view class="text-muted trend-note">近 7 天高危级危机记录分日计数（柱宽按 /5 缩放）。</view>
       </view>
 
+      <view class="card" wx:if="{{d.crisisHours && d.crisisHours.bars && d.crisisHours.bars.length}}">
+        <view class="section-title">🕐 高危时段分布 <text class="plan-sub">近7天·按小时</text></view>
+        <view class="h-bar-row">
+          <view class="h-hour" wx:for="{{d.crisisHours.bars}}" wx:key="index">
+            <view class="h-hour-bar"><view class="h-hour-fill" style="height: {{item.w}}%" aria-hidden="true"></view></view>
+            <text class="h-hour-n">{{item.hour}}时</text>
+          </view>
+        </view>
+        <view class="text-muted trend-note">把 24 小时压成一排看高峰，便于安排巡查与人工回访时段。</view>
+      </view>
+
       <!-- 近 7 日高危处理率：当日已处理占比（无预警=空） -->
       <view class="card" wx:if="{{d.highRate7 && d.highRate7.length}}">
         <view class="section-title">🛡️ 高危危机·近 7 日处理率</view>
