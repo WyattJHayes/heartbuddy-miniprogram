@@ -25,7 +25,8 @@ const SELF_STEPS = [
 
 Page({
   data: {
-    triageDone: false, // 当天的“现在最需要什么”是否已用过（当日一次）
+    triageDone: false,
+    safePeople: '',               // 安全包：可信赖的人称呼（本地）
     hotlines,
     safety: false, // 是否已设置 24 小时回访
     safetyHint: '',
@@ -82,6 +83,28 @@ Page({
     this.loadSmartTip();
     // 当天已用过“方向选择”→ 隐藏（次日恢复）
     this.setData({ triageDone: wx.getStorageSync('hb_triageDone') === new Date().toDateString() });
+    // 安全包：预先填写的「可信赖的人」称呼（本地）
+    const ppl = wx.getStorageSync('hbSafePeople') || '';
+    if (ppl !== this.data.safePeople) this.setData({ safePeople: ppl });
+  },
+
+  // 安全包：唤起填写/修改「我想让谁记得我」（本地保存 3 人以内）
+  editSafePeople() {
+    wx.showModal({
+      title: '安全包 · 我的求助名单',
+      content: '是谁，能在你最难受的时候找到？写 1-3 个称呼（如：妈妈、王老师、室友），危急时心语会提醒你联系她们。',
+      editable: true,
+      placeholderText: '妈妈、王老师、室友',
+      confirmText: '保存',
+      success: (r) => {
+        if (!r.confirm) return;
+        const raw = (r.content || '').trim();
+        const names = raw.split(/[，,、\s]+/).filter(Boolean).slice(0, 3);
+        wx.setStorageSync('hbSafePeople', names.join('、'));
+        this.setData({ safePeople: names.join('、') });
+        wx.showToast({ title: names.length ? '已收进安全包 🌱' : '已清空', icon: 'none' });
+      }
+    });
   },
 
   // 智能分流：按时段 + 最近连续低情绪天数，给一条最相关的此刻建议（轻提示条，不打扰）
@@ -260,18 +283,21 @@ Page({
     wx.navigateTo({ url: '/pages/station/station' });
   },
 
-  // 已安全回执：24 小时后在「陪伴」页轻声回访一次
+  // 已安全回执：安排「温暖陪伴计划」——1 小时后 / 1 天 / 3 天 / 7 天，在陪伴页分阶段轻声回访
   checkSafe() {
     wx.showModal({
-      title: '安排 24 小时回访',
-      content: '心语会在 24 个小时后，在「陪伴」页轻轻和你说一句“现在好吗”。可以吗？',
+      title: '安排温柔回访',
+      content: '心语会分四次来找你：1 小时后问问你现在好不好、一天后、三天后、还有七天后。像一位在后面陪着你走的朋友。可以吗？',
       confirmText: '好的',
       success: (r) => {
         if (!r.confirm) return;
-        wx.setStorageSync('crisisCheck', Date.now() + 24 * 3600 * 1000);
-        if (!wx.getStorageSync('ach_care')) wx.setStorageSync('ach_care', true); // 成就：也请心语来看我
+        const now = Date.now();
+        const H = 3600 * 1000;
+        const plan = [{ t: now + 1 * H, s: 0 }, { t: now + 24 * H, s: 1 }, { t: now + 3 * 24 * H, s: 2 }, { t: now + 7 * 24 * H, s: 3 }];
+        wx.setStorageSync('hbCarePlan', plan);
+        if (!wx.getStorageSync('ach_care')) wx.setStorageSync('ach_care', true); // 成就：也请心语陪我
         this.setData({ safety: true });
-        wx.showToast({ title: '已安排回访 🌱', icon: 'success' });
+        wx.showToast({ title: '已安排 4 次回访 🌱', icon: 'success' });
       }
     });
   },

@@ -122,6 +122,12 @@
   <view class="card urgent">
     <view class="section-title">如果你现在很不好</view>
     <view class="urgent-text">请优先联系最近的成年人、老师或直接拨打心理援助热线。你不需要独自承受。</view>
+    <view class="urgent-safe" wx:if="{{safePeople}}">
+      <text class="urgent-safe-t">🔒 你提前放好的安全包：</text>
+      <text class="urgent-safe-n">{{safePeople}}</text>
+      <view class="urgent-edit" bindtap="editSafePeople">改</view>
+    </view>
+    <view class="urgent-safe-set" wx:else bindtap="editSafePeople" role="button" aria-label="准备好自己的安全包">🛟 提前放好「我信任的人」 → 危急时心语会第一个提醒你找他们</view>
     <view class="urgent-num">
       <view class="urgent-num-main">
         <view class="urgent-num-hl">你永远可以拨打 12356</view>

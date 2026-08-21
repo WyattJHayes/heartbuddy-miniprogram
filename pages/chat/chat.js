@@ -439,12 +439,26 @@ Page({
     }, 1200);
   },
 
-  // 危机回访：helper 页设置过 24h 回执，到期后在会话里温柔问候一次（一次性）
+  // 危机回访：helper 页设置过「温暖回访计划」（1h / 24h / 3 天 / 7 天），到期后按阶段轻轻问候
   maybeCheckIn() {
-    const ts = wx.getStorageSync('crisisCheck');
-    if (!ts || ts > Date.now()) return;
-    wx.removeStorageSync('crisisCheck');
-    this.pushAI("已经过去一天了哦。你现在感觉怎么样？无论有没有好一点，都允许自己慢慢来。想聊的话我一直都在 🌱", false);
+    // 旧版单次 24h 回执（crisisCheck）兼容
+    const legacy = wx.getStorageSync('crisisCheck');
+    if (legacy && legacy <= Date.now()) {
+      wx.removeStorageSync('crisisCheck');
+      this.pushAI("已经过去一天了哦。你现在感觉怎么样？无论有没有好一点，都允许自己慢慢来。想聊的话我一直都在 🌱", false);
+    }
+    const plan = wx.getStorageSync('hbCarePlan');
+    if (!Array.isArray(plan) || !plan.length) return;
+    const now = Date.now();
+    const due = plan.filter((p) => p && p.t <= now);
+    if (!due.length) return;
+    const keep = plan.filter((p) => p && p.t > now);
+    wx.setStorageSync('hbCarePlan', keep);
+    const stage = ['刚刚那阵一定很难受。先陪自己做 3 个深呼吸，我在。',
+      '过了一天了，想问你：现在还好吗？不管答案是什么，我都在这 🌱',
+      '几天过去了 —— 有没有哪一个时刻，你觉得其实没那么糟？',
+      '7 天啦，这一周你一直在学习照顾自己。要是愿意，去「心情」记一笔现在的感受吧。'];
+    due.forEach((p) => this.pushAI(stage[(p.s || 0) % stage.length], false));
   },
 
   // 重新开始这轮对话：清空当前消息流、换新会话；情绪记录与成就不受影响
