@@ -75,7 +75,9 @@
     </view>
     <!-- 近 14 天情绪色带：一眼看清这段时间的起起伏伏，点某天看小结 -->
     <view class="band-wrap" wx:if="{{band.length}}">
-      <view class="band-title">近 14 天情绪色带<text class="band-tip">点某天看当日小结</text></view>
+      <view class="band-title">近 14 天情绪色带<text class="band-tip">点某天看小结 / 写一句</text>
+        <text class="band-write-btn" bindtap="writeNoteToday" role="button" aria-label="给今天补写一句心情日记">✍️ 写一句</text>
+      </view>
       <view class="band-row">
         <view class="band-cell {{item.has ? '' : 'empty'}}" wx:for="{{band}}" wx:key="d"
               data-k="{{item.k}}" data-d="{{item.d}}" bindtap="tapBand"

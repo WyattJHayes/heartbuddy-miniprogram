@@ -37,6 +37,7 @@ Page({
     planIdx: -1,
     planAllDone: false,
     hist: [],          // 历次自评趋势 [{date,total,level,items}]
+    trendText: '',     // 顶部温和趋势提醒（≥2 次历史才显示）
     histDelta: '',     // 与最近一次对比文案
     topWeakText: '',  // 历史最常困扰的 1-2 题
     improveText: '',  // 正在变好的 1-2 题
@@ -67,9 +68,16 @@ Page({
         items: Array.isArray(a.items) ? a.items.slice(0, 7) : []
       }));
       let histDelta = '';
+      let trendText = '';
       if (list.length >= 2 && typeof list[0].total === 'number' && typeof list[1].total === 'number') {
         const d = list[0].total - list[1].total;
         histDelta = d < 0 ? `较上次低 ${-d} 分，焦虑在回落 👍` : d > 0 ? `较上次高 ${d} 分，建议多关注自己` : '与上次持平，保持关注';
+        // 结果页顶部温和趋势提醒（不足 2 次不显示）
+        trendText = d < 0
+          ? `比上次低了 ${-d} 分，焦虑在回落，做到了就用力夸夸自己 🌈`
+          : d > 0
+            ? `这次比上次高了 ${d} 分，可能最近压力有点大——先做 3 分钟呼吸，别急 🌿`
+            : '和上次分数一样，说明状态稳定，继续保持觉察就好 😌';
       }
       // 逐题洞察：历史每题均值 → 最常困扰 vs 正在变好
       let topWeakText = '';
@@ -91,7 +99,7 @@ Page({
         const imp = best.filter((o) => o.g > 0).slice(0, 2).map((o) => Q_SHORT[o.q]);
         if (imp.length) improveText = `在改善：${imp.join('、')}`;
       }
-      this.setData({ hist: list, histDelta, topWeakText, improveText });
+      this.setData({ hist: list, histDelta, trendText, topWeakText, improveText });
     } catch (err) {
       console.warn('[assessment] 历史读取失败', err);
     }

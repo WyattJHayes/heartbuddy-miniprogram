@@ -34,6 +34,8 @@
       <view class="r-score">得分 {{total}} / 21</view>
       <view class="r-advice">{{advice}}</view>
       <view class="text-muted r-note">自评仅作参考，不能代替专业诊断。</view>
+      <!-- 历史波动提醒：≥2 次测评后，对比最近两次总分给温和趋势 -->
+      <view class="trend-pill" wx:if="{{trendText}}" role="note" aria-label="历史测评趋势提醒">{{trendText}}</view>
     </view>
 
     <!-- 自评历史回顾：最近几次变化 -->

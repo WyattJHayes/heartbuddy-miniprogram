@@ -60,3 +60,12 @@
 .fc-text { margin-top: 10rpx; font-size: 25rpx; color: #5a3a2a; line-height: 1.7; }
 .fc-due { margin-top: 8rpx; font-size: 23rpx; color: #c98a6b; }
 .fc-btn { margin-top: 20rpx; }
+
+/* 快捷练习直达卡 */
+.quick-tools { }
+.qt-row { display: flex; gap: 20rpx; }
+.qt-card { flex: 1; background: #f4f8ff; border: 1rpx solid #e0eaff; border-radius: 18rpx;
+  padding: 24rpx 20rpx; display: flex; flex-direction: column; align-items: center; }
+.qt-emoji { font-size: 52rpx; line-height: 1.2; }
+.qt-name { margin-top: 10rpx; font-size: 28rpx; font-weight: 600; color: #2d3a55; }
+.qt-sub { margin-top: 4rpx; font-size: 22rpx; color: #9aa7bf; }

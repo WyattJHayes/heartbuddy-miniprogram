@@ -54,3 +54,7 @@
 .hinsight { margin-top: 12rpx; font-size: 25rpx; color: #4a5b76; line-height: 1.6; }
 .hinsight + .hinsight { margin-top: 6rpx; }
 .hinsight-b { font-weight: 600; color: #3f6fe0; }
+
+/* 历史波动提醒 */
+.trend-pill { margin-top: 18rpx; padding: 16rpx 20rpx; border-radius: 14rpx; background: #eef6ff;
+  border: 1rpx solid #d5e6ff; font-size: 26rpx; color: #3d6bb3; line-height: 1.7; }

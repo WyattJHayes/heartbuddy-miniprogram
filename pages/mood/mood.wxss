@@ -153,3 +153,6 @@
 .band-cell.empty .band-e { color: #d7dde8; font-size: 26rpx; }
 .band-d { font-size: 18rpx; color: #b3bdcf; margin-top: 4rpx; transform: scale(0.86); white-space: nowrap; }
 .band-tip { margin-left: 12rpx; color: #b3bdcf; transform: scale(0.92); display: inline-block; }
+
+/* 情绪日记入口：写一句按钮 */
+.band-write-btn { float: right; font-size: 23rpx; color: #5b8def; font-weight: 600; }

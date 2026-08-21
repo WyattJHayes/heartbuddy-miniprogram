@@ -506,13 +506,14 @@ Page({
     return band;
   },
 
-  // 点色带某天 → 弹当日心情小结（与心情日历同一套汇总口径）
+  // 点色带某天 → 弹当日心情小结，并可顺手写一句当日补记（落库到当天最新一条 mood）
   tapBand(e) {
     const k = e.currentTarget.dataset.k;
     const d = e.currentTarget.dataset.d;
     const raw = this._raw || [];
     const names = {};
     let total = 0;
+    let latest = null; // 当天最新一条（用于挂补记 note）
     raw.forEach((r) => {
       const dt = new Date(r.createdAt);
       const ck = `${dt.getFullYear()}-${dt.getMonth() + 1}-${dt.getDate()}`;
@@ -520,15 +521,52 @@ Page({
       const meta = MOOD_META[r.mood] || MOOD_META.peace;
       names[meta.label] = (names[meta.label] || 0) + 1;
       total++;
+      if (!latest || r.createdAt > latest.createdAt) latest = r;
     });
-    if (!total) { wx.showToast({ title: '这天还没有记录', icon: 'none' }); return; }
+    if (!total) { wx.showToast({ title: '这天还没有记录，先点一个心情吧', icon: 'none' }); return; }
     const line = Object.keys(names).map((label) => `${label} × ${names[label]}`).join('、');
+    const hasNote = latest && latest.note;
     wx.showModal({
-      title: `${d} 心情小结`,
-      content: `共 ${total} 条记录：${line}`,
-      showCancel: false,
-      confirmText: '好的'
+      title: `${d} · 心情小结`,
+      content: `共 ${total} 条记录：${line}${hasNote ? `\n\n已补写：「${latest.note}」` : ''}${
+        hasNote ? '' : '\n\n想补写一句当天的话？在下面写吧。'
+      }`,
+      editable: true,
+      placeholderText: hasNote ? '再次写下这句（会替换上一条）' : '写一句给当天的自己…（可留空关闭）',
+      confirmText: '写一句',
+      cancelText: '关闭',
+      success: async (r) => {
+        const text = (r.content || '').trim();
+        if (!r.confirm || !text || !latest) return;
+        await this.saveDayNote(latest, text, d);
+      }
     });
+  },
+
+  // 当日情绪补记：把一句话写进当天最新一条 moods 的 note 字段（增强洞察）
+  async saveDayNote(latest, text, d) {
+    if (!latest || !latest._id) return;
+    wx.showLoading({ title: '保存中…' });
+    try {
+      const db = wx.cloud.database();
+      await db.collection('moods').doc(latest._id).update({
+        data: { note: text, noteAt: Date.now() }
+      });
+      if (!latest.note) latest.note = text;
+      wx.hideLoading();
+      wx.showToast({ title: `已为 ${d} 写下这句 ✍️`, icon: 'success' });
+      this.fetchMoods();
+    } catch (err) {
+      wx.hideLoading();
+      console.error('[mood] 补记失败', err);
+      wx.showToast({ title: '写入失败，请重试', icon: 'none' });
+    }
+  },
+
+  // 顶部「✍️ 写一句」：补今天
+  writeNoteToday() {
+    const today = this.data.band[this.data.band.length - 1];
+    if (today) this.tapBand({ currentTarget: { dataset: { k: today.k, d: today.d } } });
   },
 
   // 情绪健康指数（规则推导）：近 7 天分值均值 → 0-100，附解读与昨日对比

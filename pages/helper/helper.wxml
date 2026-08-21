@@ -12,6 +12,23 @@
     <button class="btn-primary fc-btn" bindtap="goChat">去和心语聊聊</button>
   </view>
 
+  <!-- 快捷练习：呼吸 / 身体扫描 一路直达 -->
+  <view class="card quick-tools">
+    <view class="section-title">立刻做点什么</view>
+    <view class="qt-row">
+      <view class="qt-card" role="button" bindtap="goBreathe" aria-label="去 3 分钟呼吸练习">
+        <view class="qt-emoji">🧘</view>
+        <view class="qt-name">呼吸练习</view>
+        <view class="qt-sub">3 分钟 · 快速放松</view>
+      </view>
+      <view class="qt-card" role="button" bindtap="goScan" aria-label="去 5 分钟身体扫描">
+        <view class="qt-emoji">🧭</view>
+        <view class="qt-name">身体扫描</view>
+        <view class="qt-sub">5 分钟 · 安静下来</view>
+      </view>
+    </view>
+  </view>
+
   <!-- 今日关怀：日轮换轻贴士 -->
   <view class="card care" wx:if="{{care}}">
     <view class="care-head">
