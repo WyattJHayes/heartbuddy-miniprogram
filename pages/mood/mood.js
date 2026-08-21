@@ -58,6 +58,7 @@ Page({
     dayNote: '',           // 今日小结（21 点后的收尾）
     aidPack: null,         // 情绪急救包（记录负性情绪后给即时可做的小事）
     quickInt: 3,           // 快速记录可选强度 1-5（默认 3）
+    bandDays: 14,          // 情绪色带天数：14 / 30 可切换
     dayNoteBanner: false,  // 21 点后还没写小结 → 温柔提示
     yesterdayNote: ''      // 昨天的小结（次日回看）
   },
@@ -454,6 +455,11 @@ Page({
     this.setData({ trig: arr });
   },
 
+  toggleBandDays() {
+    const next = (this.data.bandDays === 14) ? 30 : 14;
+    this.setData({ bandDays: next, band: this.buildBand(this._raw, next) });
+  },
+
   setQuickInt(e) {
     const v = Number(e.currentTarget.dataset.v);
     if (v >= 1 && v <= 5) this.setData({ quickInt: v });
@@ -600,7 +606,7 @@ Page({
         insight: this.buildInsight(raw),
         likeToday: this.buildLikeToday(raw),
         healthIdx: this.buildHealth(moodLine),
-        band: this.buildBand(raw),
+        band: this.buildBand(raw, this.data.bandDays || 14),
         chartFooter: this.buildChartFooter(moodLine),
         weekSum: this.buildWeekSum(list),
         streak: streakNow,
@@ -874,7 +880,8 @@ Page({
     return set.size;
   },
 
-  buildBand(raw) {
+  buildBand(raw, days) {
+    const N = days || 14;
     const dayMap = {};
     (raw || []).forEach((m) => {
       const k = new Date(m.createdAt).toDateString();
@@ -884,7 +891,7 @@ Page({
       }
     });
     const band = [];
-    for (let i = 13; i >= 0; i--) {
+    for (let i = N - 1; i >= 0; i--) {
       const d = new Date(Date.now() - i * 86400000);
       const k = d.toDateString();
       band.push({ d: `${d.getMonth() + 1}/${d.getDate()}`, k: `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`, e: dayMap[k] || '', has: !!dayMap[k] });

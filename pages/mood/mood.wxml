@@ -132,7 +132,7 @@
     </view>
     <!-- 近 14 天情绪色带：一眼看清这段时间的起起伏伏，点某天看小结 -->
     <view class="band-wrap" wx:if="{{band.length}}">
-      <view class="band-title">近 14 天情绪色带<text class="band-tip">点某天看小结 / 写一句</text>
+      <view class="band-title">近 {{bandDays}} 天情绪色带<text class="band-switch" bindtap="toggleBandDays" role="button" aria-label="切换色带显示天数">⇄ {{bandDays === 14 ? '30' : '14'}} 天</text><text class="band-tip">点某天看小结 / 写一句</text>
         <text class="band-write-btn" bindtap="writeNoteToday" role="button" aria-label="给今天补写一句心情日记">✍️ 写一句</text>
       </view>
       <view class="band-row">

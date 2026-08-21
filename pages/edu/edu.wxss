@@ -31,3 +31,5 @@ page { background: #F7F8FB; }
 .lq-opt.right { background: #e8f7ec; border-color: #b7e2c3; color: #2f7a4d; }
 .lq-opt.wrong { background: #fdeeee; border-color: #f2c9c9; color: #b05252; }
 .lq-why { margin-top: 14rpx; font-size: 22rpx; color: #7a86a6; line-height: 1.7; }
+
+.ep-streak { margin-left: 16rpx; color: #e07b39; font-weight: 600; }

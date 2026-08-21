@@ -6,7 +6,7 @@
 
   <!-- 完成度进度条 -->
   <view class="edu-progress" role="progressbar" aria-label="课程完成度 {{doneCount}}/{{total}}">
-    <view class="ep-num">已学完 {{doneCount}} / {{total}} 节</view>
+    <view class="ep-num">已学完 {{doneCount}} / {{total}} 节<text wx:if="{{streak >= 2}}" class="ep-streak">🔥 连续学习 {{streak}} 天</text></view>
     <view class="ep-bar"><view class="ep-fill" style="width: {{doneCount / total * 100}}%"></view></view>
   </view>
 

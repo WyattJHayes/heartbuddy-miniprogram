@@ -63,3 +63,12 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 
 .echo-main { flex: 1; }
 .echo-link { margin-top: 8rpx; font-size: 22rpx; color: #4a8a63; text-decoration: underline; }
+
+.heat-wrap { margin-top: 16rpx; }
+.heat-row { display: flex; flex-wrap: wrap; gap: 6rpx; }
+.heat-cell { width: calc((100% - 36rpx) / 7); height: 30rpx; border-radius: 6rpx; background: #edf0f5; }
+.heat-cell.lv1 { background: #cfe6d8; }
+.heat-cell.lv2 { background: #8fc9a6; }
+.heat-cell.lv3 { background: #4f9e6b; }
+.heat-cell.future { opacity: .25; }
+.heat-sub { margin-top: 10rpx; font-size: 20rpx; color: #9aa3b8; }

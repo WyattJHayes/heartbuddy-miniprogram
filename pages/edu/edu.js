@@ -108,6 +108,7 @@ Page({
     doneMap: {},   // key -> true
     quizOk: {},    // key -> 随堂小测已答对
     answered: {},  // key -> 已选的选项下标
+    streak: 0,     // 连续学习天数
     doneCount: 0,
     total: LESSONS.length,
     openIdx: -1
@@ -118,7 +119,7 @@ Page({
     try { done = wx.getStorageSync(DONE_KEY) || []; } catch (e) {}
     const doneMap = {};
     (done || []).forEach((k) => { doneMap[k] = true; });
-    this.setData({ lessons: LESSONS, doneMap, doneCount: Object.keys(doneMap).length, quizOk: {}, answered: {} });
+    this.setData({ lessons: LESSONS, doneMap, doneCount: Object.keys(doneMap).length, quizOk: {}, answered: {}, streak: this.calcStreak() });
   },
 
   toggle(e) {
@@ -145,19 +146,41 @@ Page({
     this.setData({ doneMap, doneCount: Object.keys(doneMap).length });
   },
 
+  // 连续学习天数：hb_eduDays 存学习日队列（答对即算当天学过）
+  calcStreak() {
+    const set = new Set(wx.getStorageSync('hb_eduDays') || []);
+    if (!set.size) return 0;
+    const today = new Date().toDateString();
+    const yest = new Date(Date.now() - 86400000).toDateString();
+    if (!set.has(today) && !set.has(yest)) return 0;
+    let n = 0;
+    let cur = set.has(today) ? new Date() : new Date(Date.now() - 86400000);
+    for (let i = 0; i < 365; i++) {
+      if (set.has(cur.toDateString())) { n++; cur = new Date(cur.getTime() - 86400000); }
+      else break;
+    }
+    return n;
+  },
+  markStudyToday() {
+    const days = wx.getStorageSync('hb_eduDays') || [];
+    const t = new Date().toDateString();
+    if (!days.includes(t)) { days.push(t); wx.setStorageSync('hb_eduDays', days.slice(-400)); }
+  },
+
   // 随堂小测：答对自动点亮「学完」
   answerQuiz(e) {
     const i = Number(e.currentTarget.dataset.i);
     const o = Number(e.currentTarget.dataset.o);
     const l = this.data.lessons[i];
     if (!l || !l.quiz) return;
+    this.markStudyToday();
     const key = l.key;
     const answered = this.data.answered;
     answered[key] = o;
     if (o === l.quiz.ans) {
       const quizOk = this.data.quizOk;
       quizOk[key] = true;
-      this.setData({ answered, quizOk });
+      this.setData({ answered, quizOk, streak: this.calcStreak() });
       let done = wx.getStorageSync(DONE_KEY) || [];
       if (!done.includes(key)) {
         done.push(key);

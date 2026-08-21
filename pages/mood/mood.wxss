@@ -227,3 +227,5 @@
 .qint-label { font-size: 22rpx; color: #9aa3b8; margin-right: 14rpx; }
 .qint-chip { width: 52rpx; height: 52rpx; line-height: 50rpx; text-align: center; border-radius: 50%; background: #f1f3f8; color: #7a86a6; font-size: 24rpx; margin-right: 12rpx; border: 1rpx solid #e4e8f1; }
 .qint-chip.on { background: #5b8def; color: #fff; border-color: #5b8def; font-weight: 700; }
+
+.band-switch { font-size: 22rpx; color: #5b8def; margin-left: 16rpx; padding: 2rpx 12rpx; border: 1rpx solid #d9e4f8; border-radius: 999rpx; }

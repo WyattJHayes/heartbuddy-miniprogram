@@ -19,6 +19,14 @@
     </view>
     <view class="dg-bar"><view class="dg-fill" style="width: {{dayPct}}%"></view></view>
     <text class="dg-sub" wx:if="{{dayDone}}">连续 {{dayStreak}} 天达标，你越来越会照顾自己</text>
+    <!-- 近 4 周放松热力图：颜色越深练得越多 -->
+    <view class="heat-wrap" wx:if="{{heat.length}}" role="img" aria-label="近 4 周放松热力图">
+      <view class="heat-row">
+        <view class="heat-cell lv{{item.lv}} {{item.future ? 'future' : ''}}" wx:for="{{heat}}" wx:key="d"
+              aria-label="{{item.d}} 练习 {{item.n}} 次"></view>
+      </view>
+      <view class="heat-sub">近 4 周放松热力 · 一共 {{breatheWeek}} 次本周 / 颜色越深越勤 🌊</view>
+    </view>
     <text class="dg-sub" wx:else>一天两次呼吸，就是给自己护好 10 分钟</text>
     <view class="dg-log" wx:if="{{recentLog.length}}">
       <text class="dg-log-title">最近 {{recentLog.length}} 次放松</text>

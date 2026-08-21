@@ -48,6 +48,7 @@ Page({
     calmInt: 3,          // 记录「平静」时的强度（1-5，默认 3）
     dayGoal: DAILY_GOAL_MIN, // 面向 WXML 展示
     echoText: '',          // 完成一次呼吸后的「呼吸回响」
+    heat: [],              // 近 4 周放松热力图 [{d, n, lv}]（周一列×7 行）
     presets: PRESETS.concat([{ key: 'custom', label: '自定义 · 4-4-6', rounds: [] }]),
     presetKey: 'calm',
     customCfg: { in: 4, hold: 4, out: 6 }
@@ -122,6 +123,25 @@ Page({
   },
 
   // 本周已展示（本地周计数，周一重置）
+  // 近 4 周放松热力图：28 格，颜色随当天次数加深（周一为第一列）
+  buildHeat(wk) {
+    const dayCnt = {};
+    (wk || []).forEach((ts) => {
+      const k = new Date(ts).toDateString();
+      dayCnt[k] = (dayCnt[k] || 0) + 1;
+    });
+    const cells = [];
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const offset = (today.getDay() + 6) % 7; // 今天是本周第几天（周一=0）
+    const start = new Date(today.getTime() - offset * 86400000 - 21 * 86400000); // 上上周一
+    for (let i = 0; i < 28; i++) {
+      const d = new Date(start.getTime() + i * 86400000);
+      const n = dayCnt[d.toDateString()] || 0;
+      cells.push({ d: (d.getMonth() + 1) + '/' + d.getDate(), n, lv: n >= 3 ? 3 : n, future: d > today });
+    }
+    return cells;
+  },
+
   // 呼吸回响：完成一次后温柔的一句（按完成次数轮换）
   nextEcho() {
     const pool = [
@@ -158,6 +178,7 @@ Page({
     const mins = (wx.getStorageSync('hb_breatheMins') || 0);
     const wk = this.weekCount();
     const td = this.todayCount();
+    this.setData({ heat: this.buildHeat(wk) });
     this.setData({ breatheCount: count, breatheMins: mins, breatheWeek: wk, breatheToday: td,
       lastDone: count ? `已累计练习 ${count} 次 · ${mins} 分钟 🌿` : '还没有练习记录，来一次吗？' });
   },
@@ -282,6 +303,7 @@ Page({
         wk.push(Date.now());
         wx.setStorageSync('breatheWeek', wk);
         this.setData({ breatheWeek: this.weekCount(), breatheToday: this.todayCount() });
+        this.setData({ heat: this.buildHeat(wx.getStorageSync('breatheWeek') || []) });
         this.touchDayGoal(5); // 每次约 5 分钟平静 → 累计到今日目标
         if (!wx.getStorageSync('ach_breathe')) wx.setStorageSync('ach_breathe', true);
         if (bc >= 5 && !wx.getStorageSync('ach_breathe5')) wx.setStorageSync('ach_breathe5', true);
