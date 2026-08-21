@@ -72,6 +72,13 @@
       <view wx:if="{{improveText}}" class="hinsight">💚 {{improveText}}</view>
     </view>
 
+    <!-- 7 维感受雷达：每题得分可视化，看一眼“自己现在的形状” -->
+    <view class="card mt" wx:if="{{showRadar && done}}">
+      <view class="section-title">🧭 现在的你像什么样</view>
+      <canvas type="2d" id="radarCanvas" class="radar-canvas" aria-label="7道题焦虑程度雷达图"></canvas>
+      <view class="text-muted radar-note">越靠近边缘的维度越接近满分（3 分）。</view>
+    </view>
+
     <!-- 3 天陪伴计划 -->
     <view class="card mt" wx:if="{{plan}}">
       <view class="section-title">3 天陪伴计划 · {{plan.label}}</view>

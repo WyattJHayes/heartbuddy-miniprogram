@@ -33,6 +33,15 @@
         <text class="quick-label">{{item.label}}</text>
       </button>
     </view>
+    <!-- 触发来源快选：记录心情时顺便点一下「因为什么」（多选，入库） -->
+    <view class="trig-row" wx:if="{{trigChips.length}}">
+      <text class="trig-cap">因为什么？</text>
+      <view
+        class="trig-chip {{trig.indexOf(item) >= 0 ? 'on' : ''}}"
+        wx:for="{{trigChips}}" wx:key="*this"
+        data-t="{{item}}" bindtap="toggleTrig"
+        role="button" aria-label="选择触发来源{{item}}">{{item}}</view>
+    </view>
     <view class="quick-word" wx:if="{{quickWord}}" role="note" aria-label="记录后的暖心回应">✨ {{quickWord}}</view>
   </view>
 

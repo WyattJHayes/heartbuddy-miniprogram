@@ -53,6 +53,11 @@ Page({
       { k: 'coach', emoji: '⚡', t: '清醒教练' }
     ],
     persona: '',           // 本次陪伴身份（本地记住，''=默认）
+    feelList: [
+      '我今天其实还行，就是有点累。',
+      '说实话有点难过，但不知怎么开口。',
+      '不太想给建议，就想有人陪我聊聊。'
+    ],
     typing: false,       // AI 打字中
     typedText: '',
     showFeeling: false,  // 倾诉后小结算：AI 回复打字完成后的一次性感受标签条

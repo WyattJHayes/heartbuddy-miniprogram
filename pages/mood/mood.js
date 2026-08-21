@@ -20,6 +20,8 @@ Page({
     chartFooter: '',    // 曲线图 footer（随长图一并导出）
     streak: { n: 0, today: false },  // 连续打卡天数
     quickList,           // 快速记录按钮
+    trig: [],            // 本次选中的触发来源（多选）
+    trigChips: ['作业·考试', '朋友·室友', '家里人', '身体不舒服', '睡不着', '加班·DDL', '天气', '说不出原因'],
     quicking: '',        // 正在提交的 key
     plan: null,          // 3 天陪伴计划（评测页生成，本地共享）
     planIdx: -1,
@@ -315,6 +317,16 @@ Page({
   },
 
   // 一键快速记录：直接把此刻心情写入 moods 集合
+  // 触发来源 chips：多选、可反选
+  toggleTrig(e) {
+    const t = e.currentTarget.dataset.t;
+    if (!t) return;
+    const arr = (this.data.trig || []).slice();
+    const i = arr.indexOf(t);
+    if (i >= 0) arr.splice(i, 1); else arr.push(t);
+    this.setData({ trig: arr });
+  },
+
   async tapQuick(e) {
     const key = e.currentTarget.dataset.key;
     const meta = MOOD_META[key];
@@ -331,7 +343,7 @@ Page({
           sessionId: 'quick-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
           mood: key,
           intensity: 3,
-          trigger: '快速记录',
+          trigger: this.data.trig && this.data.trig.length ? '快速记录·' + this.data.trig.join('、') : '快速记录',
           createdAt: Date.now()
         }
       });

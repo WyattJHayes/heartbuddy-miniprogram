@@ -193,6 +193,9 @@ Page({
     const lv = total <= 4 ? LEVELS[0] : total <= 11 ? LEVELS[1] : LEVELS[2];
 
     this.setData({ done: true, total, label: lv.label, advice: lv.text, submitting: true });
+    if (!this.data.showRadar) this.setData({ showRadar: true });
+    const items = (this.data.answers || answers);
+    wx.nextTick(() => this.drawRadar(items));
 
     // 落库（复用 openid）+ 写入本地，供对话页把结果带入 AI 上下文
     try {
@@ -255,6 +258,44 @@ Page({
   },
 
   noop() {},
+
+  // 7 维雷达：每题得分 0-3 → 五边形/七边形星图（只读一下“形状自己”）
+  drawRadar(list) {
+    this.createSelectorQuery().select('#radarCanvas').fields({ node: true, size: true }).exec((res) => {
+      if (!res || !res[0] || !res[0].node) return;
+      try {
+        const canvas = res[0].node;
+        const ctx = canvas.getContext('2d');
+        const W = 320, H = 300, cx = 150, cy = 128, R = 118;
+        canvas.width = W * 2; canvas.height = H * 2;
+        ctx.scale(2, 2);
+        ctx.clearRect(0, 0, W, H);
+        const n = 7;
+        const vals = (list && list.length === 7) ? list.map((v) => Math.max(0, Math.min(3, Number(v) || 0))) : Array(n).fill(0);
+        const ang = (i) => (i * 2 * Math.PI) / n - Math.PI / 2;
+        const pt = (r, i) => [cx + Math.cos(ang(i)) * r, cy + Math.sin(ang(i)) * r];
+        // 网格圈
+        for (const ring of [0.25, 0.5, 0.75, 1]) {
+          ctx.beginPath();
+          for (let i = 0; i <= n; i++) { const [x2, y2] = pt(R * ring, i % n); i ? ctx.lineTo(x2, y2) : ctx.moveTo(x2, y2); }
+          ctx.strokeStyle = '#e9eef8'; ctx.lineWidth = 1; ctx.stroke();
+        }
+        // 轴线
+        for (let i = 0; i < n; i++) { const [x2, y2] = pt(R, i); ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x2, y2); ctx.strokeStyle = '#eef2fa'; ctx.stroke(); }
+        // 数据多边形
+        ctx.beginPath();
+        for (let i = 0; i < n; i++) { const [x2, y2] = pt((vals[i] / 3) * R, i); i ? ctx.lineTo(x2, y2) : ctx.moveTo(x2, y2); }
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(95,141,239,0.20)'; ctx.fill();
+        ctx.strokeStyle = 'rgba(79,126,224,0.95)'; ctx.lineWidth = 2; ctx.stroke();
+        // 顶点圆点
+        for (let i = 0; i < n; i++) { const [x2, y2] = pt((vals[i] / 3) * R, i); ctx.beginPath(); ctx.arc(x2, y2, 3, 0, Math.PI * 2); ctx.fillStyle = '#4f7ee0'; ctx.fill(); }
+        // 维度名
+        ctx.font = '11px sans-serif'; ctx.fillStyle = '#5a6a8b'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        for (let i = 0; i < n; i++) { const [x2, y2] = pt((vals[i] / 3) * R + 18, i); ctx.fillText(Q_SHORT[i], x2, y2); }
+      } catch (e) { console.error('[assessment] 雷达绘制失败', e); }
+    });
+  },
 
   async drawCardCanvas() {
     if (this.data.drawing) return;

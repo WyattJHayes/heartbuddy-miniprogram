@@ -76,3 +76,7 @@
 
 .retest-due { margin-top: 16rpx; font-size: 24rpx; color: #b3392c; background: #fdeaea; border: 1rpx solid #f6c6c0; border-radius: 10rpx; padding: 14rpx 16rpx; }
 .rd-btn { margin-top: 10rpx; display: inline-block; background: #d8482a; color: #fff; border-radius: 999rpx; padding: 6rpx 22rpx; font-size: 24rpx; }
+
+
+.radar-canvas { width:320rpx; height:320rpx; margin:14rpx auto 0; display:block; }
+.radar-note { font-size:22rpx; color:#a3adc4; margin-top:6rpx; }

@@ -74,6 +74,11 @@
         <view class="quick-item" wx:for="{{quickReplies}}" wx:key="*this"
               data-text="{{item}}" bindtap="onQuick">{{item}}</view>
       </view>
+      <!-- 此刻的心里话：不用想措辞，点一下就行（同样会被认真回应） -->
+      <view class="quick-list feel-list">
+        <view class="quick-item feel" wx:for="{{feelList}}" wx:key="*this"
+              data-text="{{item}}" bindtap="onQuick">{{item}}</view>
+      </view>
       <view class="quick-list en-list">
         <view class="quick-item en" wx:for="{{quickEnglish}}" wx:key="*this"
               data-text="{{item}}" bindtap="onQuickEn">{{item}}</view>

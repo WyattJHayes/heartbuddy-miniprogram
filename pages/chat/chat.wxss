@@ -166,3 +166,9 @@
 .p-chip { font-size:22rpx; color:#6a7694; background:#f2f4fa; border:1rpx solid #e4e8f2; border-radius:999rpx; padding:6rpx 18rpx; }
 .p-chip.on { color:#fff; background:#5b8def; border-color:#5b8def; }
 .persona-hint { font-size:20rpx; color:#b0b8c9; margin-left:auto; }
+
+
+.feel-list { margin-top:10rpx; }
+.quick-item.feel { background:#fff3ec; color:#a9643f; border:1rpx solid #f6dcc8; }
+.quick-item.feel:nth-child(2) { background:#f3f2ff; color:#5a5aa8; border-color:#e2e0fb; }
+.quick-item.feel:nth-child(3) { background:#eefaf2; color:#3f7a58; border-color:#d5eedd; }
