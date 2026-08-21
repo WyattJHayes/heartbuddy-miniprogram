@@ -98,6 +98,13 @@ Page({
     const dayOfYear = Math.floor((now0 - new Date(now0.getFullYear(), 0, 0)) / 86400000);
     const hour = now0.getHours();
     this.setData({ dailyQuote: DAILY_QUOTES[dayOfYear % DAILY_QUOTES.length], nightShow: hour >= 22 || hour < 5 });
+    // 输入框占位符按时段 / 心情轮换（陪伴感，不废话）
+    const phs = hour < 5 ? ['还没睡？想说就说，我听着。'] :
+      hour < 11 ? ['早上好，今天想先聊点什么？'] :
+      hour < 14 ? ['午间慢慢来，把想说的放在这。'] :
+      hour < 18 ? ['下午好，心里冒出什么都可以发给我。'] :
+      ['晚上好，今天过得怎么样？我在这听。'];
+    this.setData({ inputPh: phs[Math.floor(Math.random() * phs.length)] });
     // 天气角（免费 open-meteo，定位失败静默降级为默认城市）
     this.loadWeather();
     // 耐心等登录完成（拿到 isNewUser 才能定制首次欢迎语；失败也不阻塞，用常规欢迎语兜底）

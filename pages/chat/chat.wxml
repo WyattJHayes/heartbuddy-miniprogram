@@ -113,7 +113,7 @@
       <view class="reset-chat" bindtap="resetChat" role="button" aria-label="重新开始这轮对话">↻</view>
       <input
         class="input"
-        placeholder="说点什么…"
+        placeholder="{{inputPh || '说点什么…'}}"
         value="{{input}}"
         confirm-type="send"
         bindinput="onInput"

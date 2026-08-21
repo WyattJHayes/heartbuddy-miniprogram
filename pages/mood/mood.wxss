@@ -170,3 +170,7 @@
 
 .streak-go { flex-shrink: 0; font-size: 24rpx; color: #3f6fe0; margin-left: 16rpx;
   background: #eef3ff; border-radius: 999rpx; padding: 8rpx 18rpx; }
+
+.quick-word { margin-top: 14rpx; font-size: 24rpx; color: #7b6b52; background: #faf3e6;
+  border-radius: 10rpx; padding: 10rpx 16rpx; line-height: 1.6; }
+.stat-tip { margin-top: 10rpx; font-size: 24rpx; color: #8b7a60; line-height: 1.6; background:#faf7f0; border-radius:10rpx; padding:10rpx 16rpx; }

@@ -340,12 +340,30 @@ Page({
       wx.setStorageSync('hb_lastMoodDate', new Date().toDateString()); // 供 chat 晨间提醒判断
       wx.showToast({ title: meta.label + ' / 已记下', icon: 'success' });
       this.fetchMoods();
+      // 一句随心情的暖心回应（本地文案，保持陪伴感）
+      this.setData({ quickWord: this.randomWord(key) });
     } catch (e) {
       console.error('[mood] 快速记录失败', e);
       wx.showToast({ title: '记录失败，请重试', icon: 'none' });
     } finally {
       this.setData({ quicking: '' });
     }
+  },
+
+  /* 快速记录后的一句暖心回应（本地词库，不落库） */
+  randomWord(key) {
+    const pool = {
+      happy: ['记录这份开心，它也记住了你 🌸', '开心的时刻值得被记住。', '今天有开心的事，真好。'],
+      peace: ['平静也是一种力量。', '稳定的你，在慢慢变好。', '这份平静，今天属于你。'],
+      tired: ['累了就休息一会儿，我在呢。', '允许自己疲惫，也是一种勇敢。', '好好照顾自己，包括允许累。'],
+      angry: ['生气时先呼一口气，我等你说。', '你能记下它，就迈出了第一步。', '情绪来了，不代表真正是你。'],
+      sad: ['难过是可以的，我陪你慢慢待着。', '谢谢你愿意把它记下来。', '想哭的话，眼泪也是照顾自己。'],
+      anxious: ['担心是正常的，先把它放一放。', '你比自己想的更有力量。', '深呼吸一次，它在慢慢过去。'],
+      lonely: ['你并不孤单，我会一直在这。', '有人在认真听你说话。', '孤独会被理解照亮一点。'],
+      guilty: ['你已经在尽力了，足够好了。', '对自己温柔一点。', '先心疼自己一会儿。']
+    };
+    const arr = pool[key] || pool.peace;
+    return arr[Math.floor(Math.random() * arr.length)];
   },
 
   async fetchMoods() {
@@ -889,7 +907,16 @@ Page({
         return { emoji: meta.emoji, label, count: counts[label], ratio: Math.round((counts[label] / total) * 100) };
       })
       .sort((a, b) => b.count - a.count);
-    this.setData({ statList });
+    // 一句状态解读：最近记录里出现最多的心情是什么（陪伴感的总结）
+    let stateTip = '';
+    if (statList.length) {
+      const top = statList[0];
+      const dayN = new Set(list.map((m) => new Date(m.createdAt).toDateString())).size;
+      stateTip = dayN > 0
+        ? `${top.label}出现了 ${top.count} 次，占这 ${dayN} 天记录的 ${top.ratio}%。它来过，也被你看见过。`
+        : '';
+    }
+    this.setData({ statList, stateTip });
   },
 
   goReport() { wx.navigateTo({ url: '/pages/report/report' }); },
