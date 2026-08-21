@@ -526,10 +526,11 @@ Page({
     if (!total) { wx.showToast({ title: '这天还没有记录，先点一个心情吧', icon: 'none' }); return; }
     const line = Object.keys(names).map((label) => `${label} × ${names[label]}`).join('、');
     const hasNote = latest && latest.note;
+    // 情绪笔记回看：有补记时先看到「之前写」，可再次编辑覆盖
     wx.showModal({
       title: `${d} · 心情小结`,
-      content: `共 ${total} 条记录：${line}${hasNote ? `\n\n已补写：「${latest.note}」` : ''}${
-        hasNote ? '' : '\n\n想补写一句当天的话？在下面写吧。'
+      content: `共 ${total} 条记录：${line}${hasNote ? `\n\n💬 之前写：「${latest.note}」` : ''}${
+        hasNote ? '\n\n想改一改？在下面直接重写即可（会替换这句）。' : '\n\n想写一句当天的话？在下面写吧。'
       }`,
       editable: true,
       placeholderText: hasNote ? '再次写下这句（会替换上一条）' : '写一句给当天的自己…（可留空关闭）',

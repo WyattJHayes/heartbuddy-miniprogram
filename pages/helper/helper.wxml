@@ -1,4 +1,13 @@
 <view class="container">
+  <!-- 求助后静音关怀：安排回访 3 天内，顶部一条轻量关怀（不弹窗、可关闭、当天不再显示） -->
+  <view class="card hush-care" wx:if="{{hushCare}}">
+    <view class="hc-head">
+      <view class="hc-title">我在，等你回来找到我 🌿</view>
+      <view class="hc-close" bindtap="closeHushCare" role="button" aria-label="关闭这条关怀">✕</view>
+    </view>
+    <view class="hc-text">你把今天的担子交给了心语。这三天不用急，照顾好自己；想说话的时候，我一直在听。</view>
+  </view>
+
   <!-- 回访关怀卡：管理员安排的回访，用户端可见（有回访才显示） -->
   <view class="card follow-care" wx:if="{{followCare}}">
     <view class="fc-head">

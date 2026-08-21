@@ -69,3 +69,10 @@
 .qt-emoji { font-size: 52rpx; line-height: 1.2; }
 .qt-name { margin-top: 10rpx; font-size: 28rpx; font-weight: 600; color: #2d3a55; }
 .qt-sub { margin-top: 4rpx; font-size: 22rpx; color: #9aa7bf; }
+
+/* 求助后静音关怀 */
+.hush-care { background: linear-gradient(135deg, #f0f7ee, #fafdf8); border-color: #dcecd8; }
+.hc-head { display: flex; align-items: center; justify-content: space-between; }
+.hc-title { font-size: 28rpx; font-weight: 700; color: #3d6b3a; }
+.hc-close { font-size: 30rpx; color: #9ab895; padding: 4rpx 8rpx; }
+.hc-text { margin-top: 10rpx; font-size: 25rpx; color: #6a8f66; line-height: 1.7; }

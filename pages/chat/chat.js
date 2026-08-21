@@ -48,6 +48,7 @@ Page({
     typedText: '',
     showFeeling: false,  // 倾诉后小结算：AI 回复打字完成后的一次性感受标签条
     feelingDone: false,  // 本会话内只出现一次
+    _draft: '',          // AI 打字被新消息打断时的半句草稿（下一条接续）
     feelingTags: ['开心', '平静', '难过', '焦虑', '生气', '孤独'],
     showQuick: false,    // 输入栏「⚡快捷」面板
     quickReplies,
@@ -260,7 +261,7 @@ Page({
       cancelText: '先不了',
       success: (r) => {
         if (!r.confirm) return;
-        this.setData({ messages: [], input: '', typing: false, loading: false, showFeeling: false, feelingDone: false, moodTag: '', aiFace: '' });
+        this.setData({ messages: [], input: '', typing: false, loading: false, showFeeling: false, feelingDone: false, moodTag: '', aiFace: '', _draft: '' });
         this.initSession();
         wx.showToast({ title: '已重新开始', icon: 'none' });
       }
@@ -380,6 +381,12 @@ Page({
   async send(text) {
     this.pushUser(text);
     this.setData({ moodTag: '' });
+    // AI 打字中收到新消息：把已打出的半句存为草稿，让下一条回复接着它继续（不丢失、不覆盖）
+    if (this.data.typing && this.data.typedText) {
+      this._draft = this.data.typedText;
+      if (this.timer) clearInterval(this.timer);
+      this.setData({ typing: false, typedText: '' });
+    }
     // 组装历史（最近 10 条）
     const history = this.data.messages.slice(-10).map((m) => ({
       role: m.role === 'user' ? 'user' : 'assistant',
@@ -397,7 +404,14 @@ Page({
       });
       const r = res.result || {};
       this.setData({ loading: false });
-      this.pushAI(r.content || '我在，慢慢说。');
+      // 接续草稿：若上一条被打断，把半句续在开头，让倾诉连续不丢失
+      const draft = this._draft || '';
+      this._draft = '';
+      const reply = r.content || '我在，慢慢说。';
+      const joined = draft
+        ? (/[。！？…~]$/.test(draft) ? draft : draft + '…') + reply
+        : reply;
+      this.pushAI(joined);
 
       // 危机分级响应（high 弹窗推送求助页 / mid 温和引导 / low 不打扰）
       this.handleCrisis(r.crisis);

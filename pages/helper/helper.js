@@ -35,9 +35,33 @@ Page({
     selfLast: null,     // { date, done } 上次收尾
     selfResumeStep: 0,   // >0 表示有未走完的存档（第几步），可一键接着走
     followCare: null     // 回访关怀卡 { note, dueAt, dueText }
+    ,hushCare: false   // 求助后静音关怀：安排回访 3 天内，顶部一条轻量不打扰的卡
   },
 
-  onShow() { this.loadFollowUp(); },
+  onShow() {
+    this.loadFollowUp();
+    this.loadHushCare();
+  },
+
+  // 求助后静音关怀：安排回访 3 天内，顶部显示一条轻量关怀卡（不弹窗、可关闭、当天不再显示）
+  loadHushCare() {
+    try {
+      const seen = wx.getStorageSync('helperHushSeen') || '';
+      if (seen === new Date().toDateString()) { this.setData({ hushCare: false }); return; }
+      const ok = wx.getStorageSync('crisisCheck');
+      if (!ok) { this.setData({ hushCare: false }); return; }
+      const wentAt = ok - 24 * 3600 * 1000; // 回安排时间（crisisCheck=到期时刻，减去 24h）
+      if (Date.now() - wentAt > 3 * 86400000) { this.setData({ hushCare: false }); return; }
+      this.setData({ hushCare: true });
+    } catch (e) {
+      this.setData({ hushCare: false });
+    }
+  },
+
+  closeHushCare() {
+    try { wx.setStorageSync('helperHushSeen', new Date().toDateString()); } catch (e) {}
+    this.setData({ hushCare: false });
+  },
 
   // 回访关怀卡：读取 followUps 最近一条「待回访」记录（到期未超 3 天），展示给用户
   async loadFollowUp() {
