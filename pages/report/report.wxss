@@ -75,3 +75,7 @@
 .week-bar.cur { background:#4f7ef0; }
 .week-num { font-size:24rpx; color:#33415c; font-weight:600; }
 .week-label { font-size:20rpx; color:#98a2b6; }
+
+.one-liner { display:flex; align-items:flex-start; gap:12rpx; background:#f3f8ff; border:1rpx solid #dcebfb; }
+.one-liner .ol-mark { font-size:32rpx; line-height:1.4; }
+.one-liner .ol-text { font-size:28rpx; line-height:1.6; color:#33415c; }

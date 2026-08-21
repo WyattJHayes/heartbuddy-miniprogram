@@ -35,3 +35,11 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .cp-chip.on { background: #4c7a52; color: #fff; }
 
 .bs-week { margin-left: 16rpx; font-size: 22rpx; color: #4c7a52; font-weight: 600; }
+
+.daygoal { margin:16rpx 24rpx 0; background:linear-gradient(90deg,#eef6ff,#f7f9ff); border:1rpx solid #dfe9f8; border-radius:16rpx; padding:18rpx 20rpx; }
+.dg-top { display:flex; justify-content:space-between; align-items:center; }
+.dg-t { font-size:26rpx; color:#33415c; font-weight:600; }
+.dg-num { font-size:24rpx; color:#4a73d8; }
+.dg-bar { height:14rpx; background:#e3eaf8; border-radius:999rpx; margin:12rpx 0 8rpx; overflow:hidden; }
+.dg-fill { height:100%; width:0; background:linear-gradient(90deg,#7fb0ff,#4f8ef7); border-radius:999rpx; transition:width .4s; }
+.dg-sub { font-size:22rpx; color:#8a95b3; }

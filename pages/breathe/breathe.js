@@ -9,6 +9,8 @@ const PRESETS = [
   { key: 'long', label: '长呼 · 6-2-6-2', rounds: [['in', 6000, 520, 6.1], ['hold', 2000, 520, 0.6], ['out', 6000, 150, 6.1], ['hold', 2000, 150, 0.6]] },
   { key: 'stare', label: '发呆 · 2 分钟', rounds: [['stare', 120000, 150, 2]] }
 ];
+const DAILY_GOAL_MIN = 10; // 每日放松目标：累计 10 分钟（同一次约 5 分钟 → 两次达标）
+
 const PH_TEXT = {
   in: '吸气……把空气慢慢填满',
   hold: '屏住呼吸',
@@ -27,6 +29,7 @@ Page({
     text: '准备好了就开始',
     calm: false,
     calmInt: 3,          // 记录「平静」时的强度（1-5，默认 3）
+    dayGoal: DAILY_GOAL_MIN, // 面向 WXML 展示
     presets: PRESETS,
     presetKey: 'calm'
   },
@@ -38,7 +41,51 @@ Page({
     this._rounds = PRESETS[0].rounds;
   },
 
-  // 本周已练次数（本地周计数，周一重置）
+  // ---- 每日放松目标：累计分钟数 → 进度条 + 达标庆祝 + 连续天数（纯本地）----
+  refreshDayGoal() {
+    const today = new Date().toDateString();
+    const d = wx.getStorageSync('hb_breatheDay');
+    const cur = d && typeof d === 'object' && d.date === today ? d : { mins: 0, done: false };
+    const st = wx.getStorageSync('hb_breatheStreak');
+    this.setData({
+      dayMins: cur.mins || 0,
+      dayPct: Math.min(100, Math.round(((cur.mins || 0) / DAILY_GOAL_MIN) * 100)),
+      dayDone: !!cur.done,
+      dayStreak: (st && st.n) || 0
+    });
+  },
+
+  touchDayGoal(addMin) {
+    const today = new Date().toDateString();
+    let d = wx.getStorageSync('hb_breatheDay');
+    if (!d || typeof d !== 'object' || d.date !== today) {
+      d = { date: today, mins: 0, done: false };
+    }
+    d.mins = Math.min((d.mins || 0) + addMin, DAILY_GOAL_MIN);
+    d.done = d.mins >= DAILY_GOAL_MIN;
+    wx.setStorageSync('hb_breatheDay', d);
+    // 连击：达标才推进
+    let st = wx.getStorageSync('hb_breatheStreak');
+    if (!st || typeof st !== 'object') st = { date: '', n: 0 };
+    const y = new Date(Date.now() - 86400000).toDateString();
+    if (d.done && st.date !== today) {
+      st = { date: today, n: (st.date === y ? st.n : 0) + 1 };
+      wx.setStorageSync('hb_breatheStreak', st);
+      if (st.n === 1) wx.setStorageSync('ach_breatheDay', true);
+      if (st.n === 3 && !wx.getStorageSync('ach_breathe3day')) wx.setStorageSync('ach_breathe3day', true);
+      setTimeout(() => {
+        wx.showModal({
+          title: '🌸 今日放松目标达成',
+          content: `今天累计放松了 ${d.mins} 分钟。已经连续 ${st.n} 天做到了这样一件照顾自己的小事。`,
+          showCancel: false,
+          confirmText: '夸自己一下'
+        });
+      }, 350);
+    }
+    this.refreshDayGoal();
+  },
+
+  // 本周已练（本地周计数，周一重置）
   weekCount() {
     const now = new Date();
     const wStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - ((now.getDay() + 6) % 7));
@@ -54,6 +101,7 @@ Page({
   },
 
   onShow() {
+    this.refreshDayGoal();
     // 累计练习次数展示条（本地计数）
     const count = wx.getStorageSync('breatheCount') || 0;
     const mins = (wx.getStorageSync('hb_breatheMins') || 0);
@@ -160,6 +208,7 @@ Page({
         wk.push(Date.now());
         wx.setStorageSync('breatheWeek', wk);
         this.setData({ breatheWeek: this.weekCount(), breatheToday: this.todayCount() });
+        this.touchDayGoal(5); // 每次约 5 分钟平静 → 累计到今日目标
         if (!wx.getStorageSync('ach_breathe')) wx.setStorageSync('ach_breathe', true);
         if (bc >= 5 && !wx.getStorageSync('ach_breathe5')) wx.setStorageSync('ach_breathe5', true);
         wx.vibrateShort && wx.vibrateShort({ type: 'light' });

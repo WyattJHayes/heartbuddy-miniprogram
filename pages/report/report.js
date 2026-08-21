@@ -191,6 +191,19 @@ Page({
         practiceText = '本周想和你一起试试：睡前 3 分钟呼吸，让自己慢下来。';
       }
 
+      // 本周一句话总结（模板自动拼词，只给叙事不给判断）
+      let oneLiner = '';
+      if (weekAvg != null) {
+        const tone = weekAvg >= 4 ? '整体不赖' : weekAvg >= 3 ? '整体平稳' : '辛苦了一点点';
+        const dir = deltaText.indexOf('↘') >= 0 ? '，比上周松快了些'
+          : deltaText.indexOf('↗') >= 0 ? '，比上周更难一些'
+          : deltaText.indexOf('持平') >= 0 ? '，和上周差不多' : '';
+        const who = bestIdx >= 0
+          ? `尤其周${['日','一','二','三','四','五','六'][new Date(_td.getFullYear(),_td.getMonth(),_td.getDate()-(6-bestIdx)).getDay()]}给了你不错的一天`
+          : '没有大起大落，稳稳地撑住了';
+        oneLiner = `本周：${tone}（均分 ${weekAvg.toFixed(1)}）${dir}，${who}。`;
+      }
+
       const suggestions = {
         anxiety: '这周焦虑出现较多，试着每天睡前做 3 分钟深呼吸，把担心的事写下来。',
         sad: '这周难过占比较多，允许自己低落，也别忘了和信任的人分享一点。',
@@ -216,6 +229,7 @@ Page({
         highStreakTip: this.buildHighStreakTip(avg7),
         lowStreakTip: this.buildLowStreakTip(avg7),
         bestDayText,
+        oneLiner,
         practiceText,
         cardData: {
           topEmoji: MOOD_EMOJI[top] || '😌',

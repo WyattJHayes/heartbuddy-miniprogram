@@ -41,6 +41,12 @@
       <view class="best-tip" wx:if="{{practiceText}}" role="note" aria-label="本周练习足迹">{{practiceText}}</view>
     </view>
 
+    <!-- 一句话总结：拼词不加判断，开头先给一句安心的 -->
+    <view class="card one-liner" wx:if="{{oneLiner}}" role="note" aria-label="本周一句话总结">
+      <text class="ol-mark">🗒</text>
+      <text class="ol-text">{{oneLiner}}</text>
+    </view>
+
     <!-- 本周对自己说（可写进文字版周报） -->
     <view class="card mt">
       <view class="section-title">想对本周的自己说<text class="section-sub">会附在文字版周报末尾</text></view>
