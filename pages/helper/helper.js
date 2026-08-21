@@ -1,5 +1,7 @@
 // pages/helper/helper.js —— 求助中心
 const { hotlines } = require('../../config/index');
+const { MOOD_SCORE } = require('../../utils/moodscore');
+const app = getApp();
 
 // 今日关怀：按当日轮换的轻量贴士（本地生成，无网络依赖）
 const CARE_NOTES = [
@@ -36,11 +38,63 @@ Page({
     selfResumeStep: 0,   // >0 表示有未走完的存档（第几步），可一键接着走
     followCare: null     // 回访关怀卡 { note, dueAt, dueText }
     ,hushCare: false   // 求助后静音关怀：安排回访 3 天内，顶部一条轻量不打扰的卡
+    ,smartTip: null      // 智能分流：此刻建议（按时段/连续低情绪天数，轻提示不打扰）
   },
 
   onShow() {
     this.loadFollowUp();
     this.loadHushCare();
+    this.loadSmartTip();
+  },
+
+  // 智能分流：按时段 + 最近连续低情绪天数，给一条最相关的此刻建议（轻提示条，不打扰）
+  async loadSmartTip() {
+    let lowStreak = 0;
+    try {
+      let openid = app.globalData.openid;
+      if (!openid) openid = await app.login();
+      if (!openid) return;
+      const db = wx.cloud.database();
+      const r = await db.collection('moods').where({ openid }).orderBy('createdAt', 'desc').limit(30).get();
+      // 只保留最近 7 天的「每日最低分」（一天多条取当天最低，最能反映低情绪）
+      const dayLow = new Map();
+      const DAY = 86400000;
+      const now0 = new Date(); now0.setHours(0, 0, 0, 0);
+      (r.data || []).forEach((m) => {
+        const d = new Date(m.createdAt);
+        d.setHours(0, 0, 0, 0);
+        if (now0 - d > 6 * DAY) return;
+        const k = d.getTime();
+        const sc = MOOD_SCORE[m.mood];
+        if (sc === undefined) return;
+        dayLow.set(k, Math.min(dayLow.has(k) ? dayLow.get(k) : 5, sc));
+      });
+      // 从今天（无记录则从昨天）往过去数连续低分天数
+      const ks = Array.from(dayLow.keys()).sort((a, b) => b - a);
+      let cursor = now0.getTime();
+      ks.forEach((k) => {
+        if (k <= cursor) {
+          if (dayLow.get(k) < 3.5) lowStreak += 1;
+          else lowStreak = 0;
+          cursor = k - DAY;
+        }
+      });
+    } catch (e) { /* 不影响页面 */ }
+
+    const hour = new Date().getHours();
+    let tip = null;
+    if (hour >= 22 || hour < 6) {
+      tip = { emoji: '🌙', title: '深夜里，别独自硬扛', text: '先做 3 分钟呼吸，或去「写给自己一句」把心事放下来；撑不住时，点上方热线号码。' };
+    } else if (lowStreak >= 3) {
+      tip = { emoji: '💙', title: `连续 ${lowStreak} 天有点低`, text: '辛苦了。先喝口水、慢慢呼吸；也可以把最近的事说给我听，或先打给热线喘口气。' };
+    } else if (lowStreak >= 2) {
+      tip = { emoji: '🌱', title: '最近两天不太稳', text: '试试下方「呼吸练习」3 分钟，或直接戳一个信任的人聊聊，别一个人扛。' };
+    } else if (hour < 11) {
+      tip = { emoji: '🌤', title: '早上的你，值得被温柔以待', text: '今天从喝一杯水开始。如果心里闷，「我撑过来了」5 步自助也许能帮你理一理。' };
+    } else {
+      tip = { emoji: '🧭', title: '先把眼前的一小步走好', text: '此刻不舒服的话，先做 3 分钟呼吸；需要人陪，也可以先在聊天里找我。' };
+    }
+    this.setData({ smartTip: tip });
   },
 
   // 求助后静音关怀：安排回访 3 天内，顶部显示一条轻量关怀卡（不弹窗、可关闭、当天不再显示）

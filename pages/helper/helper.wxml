@@ -8,6 +8,15 @@
     <view class="hc-text">你把今天的担子交给了心语。这三天不用急，照顾好自己；想说话的时候，我一直在听。</view>
   </view>
 
+  <!-- 智能分流：此刻建议（按时段/连续低情绪天数，轻提示条） -->
+  <view class="card smart-tip" wx:if="{{smartTip}}">
+    <view class="st-head">
+      <view class="st-emoji">{{smartTip.emoji}}</view>
+      <view class="st-title">{{smartTip.title}}</view>
+    </view>
+    <view class="st-text">{{smartTip.text}}</view>
+  </view>
+
   <!-- 回访关怀卡：管理员安排的回访，用户端可见（有回访才显示） -->
   <view class="card follow-care" wx:if="{{followCare}}">
     <view class="fc-head">

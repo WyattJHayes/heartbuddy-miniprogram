@@ -76,3 +76,10 @@
 .hc-title { font-size: 28rpx; font-weight: 700; color: #3d6b3a; }
 .hc-close { font-size: 30rpx; color: #9ab895; padding: 4rpx 8rpx; }
 .hc-text { margin-top: 10rpx; font-size: 25rpx; color: #6a8f66; line-height: 1.7; }
+
+/* 智能分流：此刻建议 */
+.smart-tip { background: linear-gradient(135deg, #f3f8ff, #fafcff); border-color: #dbe7fb; }
+.st-head { display: flex; align-items: center; gap: 12rpx; }
+.st-emoji { font-size: 32rpx; }
+.st-title { font-size: 27rpx; font-weight: 700; color: #3a5a8c; }
+.st-text { margin-top: 8rpx; font-size: 25rpx; color: #5b6f8d; line-height: 1.7; }

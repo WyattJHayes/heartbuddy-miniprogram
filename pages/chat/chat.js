@@ -69,7 +69,8 @@ Page({
     weatherIco: '',   // ☀️/☁️/🌧…
     weatherText: '',   // "10:00 · 晴 · 24℃"（免费 open-meteo，无 key）
     dailyQuote: '',    // 今日心语（日轮换，可点复制）
-    nightShow: false  // 深夜（22:00–5:00）显示深夜工具箱
+    nightShow: false,  // 深夜（22:00–5:00）显示深夜工具箱
+    replyToMsg: null,  // 引用条：{ role, text } 长按「引用这条」后带入输入框
   },
 
   async onLoad() {
@@ -202,18 +203,24 @@ Page({
     return '⛈';
   },
 
-  // ---- 消息长按：复制 / 珍藏 ----
+  // ---- 消息长按：复制 / 珍藏 / 引用 ----
   onMsgLongPress(e) {
     const idx = Number(e.currentTarget.dataset.index);
     const item = this.data.messages[idx];
     if (!item) return;
     const content = item.content || '';
     wx.showActionSheet({
-      itemList: ['复制这条消息', '珍藏（存到我的珍藏）'],
+      itemList: ['复制这条消息', '引用这条', '珍藏（存到我的珍藏）'],
       success: (r) => {
         if (r.tapIndex === 0) {
           wx.setClipboardData({ data: content, success: () => wx.showToast({ title: '已复制', icon: 'none' }) });
         } else if (r.tapIndex === 1) {
+          // 引用这条：把原句带进输入框（可修改后发送）
+          this.setData({
+            replyToMsg: { role: item.role, text: content },
+            input: content
+          });
+        } else if (r.tapIndex === 2) {
           const favs = wx.getStorageSync('hb_favs') || [];
           if (favs.length >= 5) favs.shift();
           favs.push({
@@ -227,6 +234,11 @@ Page({
         }
       }
     });
+  },
+
+  // 取消引用（点 ✕ 收起引用条，输入框内容保留）
+  clearReply() {
+    this.setData({ replyToMsg: null });
   },
 
   onBoardNext() {
@@ -418,6 +430,8 @@ Page({
   },
 
   async send(text) {
+    // 发送时收起引用条
+    if (this.data.replyToMsg) this.setData({ replyToMsg: null });
     this.pushUser(text);
     this.setData({ moodTag: '' });
     // AI 打字中收到新消息：把已打出的半句存为草稿，让下一条回复接着它继续（不丢失、不覆盖）

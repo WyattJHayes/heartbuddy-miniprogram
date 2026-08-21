@@ -150,7 +150,8 @@ Page({
         weekAvg: weekAvg != null ? weekAvg.toFixed(1) : null,
         prevAvg: prevAvg != null ? prevAvg.toFixed(1) : null,
         deltaText,
-        // 连续低日提醒：从最近一天往前数连续 <2.5 的天数，≥2 天时给温和建议
+        // 连续低日提醒 + 正向鼓励条（高分接连）二选一，都不触发则都不显示
+        highStreakTip: this.buildHighStreakTip(avg7),
         lowStreakTip: this.buildLowStreakTip(avg7),
         cardData: {
           topEmoji: MOOD_EMOJI[top] || '😌',
@@ -175,6 +176,20 @@ Page({
       console.error('[report] 失败', e);
       this.setData({ loaded: true });
     }
+  },
+
+  // 正向鼓励条：最近连续 ≥3 天日均分 ≥4（4=平和/5=开心）时给一句鼓励（与低日提醒互斥）
+  buildHighStreakTip(avg7) {
+    let streak = 0;
+    for (let i = avg7.length - 1; i >= 0; i--) {
+      const v = avg7[i];
+      if (v == null) break;      // 无记录的一天会截断连续
+      if (v >= 4) streak += 1;
+      else break;
+    }
+    if (streak < 3) return '';
+    return streak >= 5 ? `连续 ${streak} 天状态都很不错，你有在好好照顾自己，为自己骄傲吧 🌈`
+      : `最近连续 ${streak} 天都还不错，继续保持觉察，也别忘了好好吃饭 🌈`;
   },
 
   // 连续低日提醒：最近连续 <2.5 的记录天数 ≥2 时，给一句温和建议

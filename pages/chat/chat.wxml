@@ -87,6 +87,12 @@
               aria-label="此刻情绪强度，1 到 5" />
       <text class="intensity-num {{intensity >= 4 ? 'high' : ''}}">{{intensity}}</text>
     </view>
+    <!-- 引用条：长按「引用这条」后，把原句带进输入框（可修改后发送） -->
+    <view class="reply-bar" wx:if="{{replyToMsg}}" role="note" aria-label="正在引用消息">
+      <view class="reply-tag">{{replyToMsg.role === 'user' ? '引用 · 我说' : '引用 · 心语说'}}</view>
+      <view class="reply-text">{{replyToMsg.text}}</view>
+      <view class="reply-close" bindtap="clearReply" role="button" aria-label="取消引用">✕</view>
+    </view>
     <view class="input-row">
       <view class="quick-toggle {{showQuick ? 'on' : ''}}" bindtap="toggleQuick">⚡快捷</view>
       <view class="reset-chat" bindtap="resetChat" role="button" aria-label="重新开始这轮对话">↻</view>

@@ -122,3 +122,11 @@
 .feeling-close { color: #b3bdcf; font-size: 28rpx; padding: 0 8rpx; }
 .feeling-tags { display: flex; flex-wrap: wrap; gap: 14rpx; margin-top: 14rpx; }
 .feeling-tag { background: #eef3ff; border-radius: 999rpx; padding: 8rpx 22rpx; font-size: 25rpx; color: #3f6fe0; }
+
+/* 引用条：长按「引用这条」后带入输入框 */
+.reply-bar { display: flex; align-items: flex-start; gap: 12rpx; padding: 12rpx 16rpx;
+  background: #f2f6ff; border-left: 6rpx solid #5b8def; border-radius: 10rpx; margin-bottom: 12rpx; }
+.reply-tag { flex-shrink: 0; font-size: 20rpx; color: #4a7be0; font-weight: 600; margin-top: 4rpx; }
+.reply-text { flex: 1; font-size: 23rpx; color: #4a5568; line-height: 1.6;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.reply-close { flex-shrink: 0; color: #98a2b5; font-size: 28rpx; padding: 0 4rpx; }
