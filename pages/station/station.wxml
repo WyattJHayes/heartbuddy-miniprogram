@@ -7,7 +7,9 @@
 
   <view class="st-cards">
     <!-- 今天的一句（换日轮换，纯本地） -->
-  <view class="daily-line" wx:if="{{todayLine}}" role="note" aria-label="今天的一句话">{{todayLine}}</view>
+  <view class="daily-line" wx:if="{{todayLine}}" role="note" aria-label="今天的一句话">{{todayLine}}
+    <text class="dl-shuffle" bindtap="reshuffleLine" role="button" aria-label="换一句">换一句</text>
+  </view>
 
   <view class="st-card" wx:for="{{cards}}" wx:key="title">
       <view class="st-head" data-index="{{index}}" bindtap="toggleCard" bindlongpress="toggleFav" data-t="{{item.title}}"

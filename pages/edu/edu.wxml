@@ -39,6 +39,14 @@
     </view>
   </view>
 
+  <!-- 结业卡：全部学完显示（本地留念） -->
+  <view class="grad-card" wx:if="{{doneCount >= total}}" role="note" aria-label="心理小课结业卡">
+    <view class="gc-emoji">🎓</view>
+    <view class="gc-title">全部学完，结业啦！</view>
+    <view class="gc-text">这 7 节课不会让情绪永远不来，但会让它来的时候，你知道该怎么办。</view>
+    <view class="gc-btn" bindtap="copyGradText" role="button" aria-label="复制结业词留念">复制我的结业词</view>
+  </view>
+
   <view class="edu-foot" role="note" aria-label="免责说明">
     课程来自公开的心理健康科普，不替代专业诊断。如果情绪长时间很重，
     <text class="ef-link" role="button" aria-label="拨打心理援助热线" bindtap="callHotline">可拨打 12356 心理援助热线</text>

@@ -218,6 +218,21 @@ Page({
     wx.showToast({ title: '已重开', icon: 'none' });
   },
 
+  // 结业卡：全部学完后可复制的一段「结业词」（本地，留念/分享）
+  copyGradText() {
+    const d = new Date();
+    const t = [
+      '🎓 我在「心语伴」学完了全部 7 节心理小课',
+      '（认识情绪 · 考前焦虑 · 睡不着 · 低落 · 朋友 · 社媒 · 求助）',
+      '结业时间：' + d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月 ' + d.getDate() + ' 日',
+      '',
+      '情绪没有好坏，它们都是信号；',
+      '我学会在它来的时候，先命名，再照顾，然后求助如果需要。',
+      '—— 这份证书属于一直没放弃照顾自己的我。'
+    ].join('\n');
+    wx.setClipboardData({ data: t, success: () => wx.showToast({ title: '已复制结业词 🎓', icon: 'success' }) });
+  },
+
   callHotline() {
     wx.makePhoneCall({ phoneNumber: '12356', fail: () => {} });
   }

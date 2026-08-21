@@ -15,7 +15,7 @@
     <view class="dn-text">{{todayNote}}</view>
   </view>
   <view class="daynote-card yest" wx:if="{{yesterdayNote && !todayNote}}">
-    <view class="dn-title">🌅 昨天的你</view>
+    <view class="dn-title">🌅 昨天的你<text class="dn-copy" bindtap="copyYesterdayNote" role="button" aria-label="复制昨天写的小结">复制</text></view>
     <view class="dn-text">{{yesterdayNote}}</view>
   </view>
 

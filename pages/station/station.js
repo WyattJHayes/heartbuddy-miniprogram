@@ -176,6 +176,16 @@ Page({
   goBreathe() {
     wx.navigateTo({ url: '/pages/breathe/breathe' });
   },
+  // 换一句：当日轮换之外，手动换一张（当日一次，换过的当天不再换）
+  reshuffleLine() {
+    const key = 'hb_lineShuffled_' + new Date().toDateString();
+    if (wx.getStorageSync(key)) { wx.showToast({ title: '今天已经换过一次啦', icon: 'none' }); return; }
+    const cur = (this.data.todayLine || '').replace('🫧 ', '');
+    const pool = DAILY_LINES.filter((l) => l !== cur);
+    wx.setStorageSync(key, true);
+    this.setData({ todayLine: '🫧 ' + pool[Math.floor(Math.random() * pool.length)] });
+  },
+
   getDailyLine() {
     try {
       const idx = Math.floor(Date.now() / 86400000) % DAILY_LINES.length;

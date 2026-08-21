@@ -101,6 +101,12 @@ Page({
     wx.showToast({ title: '今日已收尾 🌙', icon: 'success' });
   },
   // 21 点后的轻提醒：点一下 → 弹出书写
+  copyYesterdayNote() {
+    const t = this.data.yesterdayNote;
+    if (!t) return;
+    wx.setClipboardData({ data: '昨天的我写给自己：\n' + t, success: () => wx.showToast({ title: '已复制', icon: 'success' }) });
+  },
+
   openDayNote() {
     wx.showModal({
       title: '给今天收个尾',

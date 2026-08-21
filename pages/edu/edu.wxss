@@ -33,3 +33,9 @@ page { background: #F7F8FB; }
 .lq-why { margin-top: 14rpx; font-size: 22rpx; color: #7a86a6; line-height: 1.7; }
 
 .ep-streak { margin-left: 16rpx; color: #e07b39; font-weight: 600; }
+
+.grad-card { margin-top: 24rpx; background: linear-gradient(160deg, #fff7e8, #fdf1f4); border: 1rpx solid #f0d9c8; border-radius: 18rpx; padding: 26rpx; text-align: center; }
+.gc-emoji { font-size: 56rpx; }
+.gc-title { font-size: 30rpx; font-weight: 700; color: #a05a2c; margin-top: 10rpx; }
+.gc-text { font-size: 24rpx; color: #8a6a4f; line-height: 1.8; margin-top: 10rpx; }
+.gc-btn { margin-top: 16rpx; background: #e8935c; color: #fff; border-radius: 999rpx; padding: 14rpx 0; font-size: 25rpx; }

@@ -24,3 +24,6 @@
 .daily-line { margin:18rpx 24rpx 6rpx; font-size:26rpx; color:#5a6a8b; background:linear-gradient(90deg,#fdf6ec,#fff); border:1rpx solid #f0e2cc; border-radius:14rpx; padding:16rpx 20rpx; line-height:1.6; }
 
 .st-fav { color: #ffb347; font-size: 26rpx; margin-left: 10rpx; }
+
+.daily-line { position: relative; padding-right: 120rpx; }
+.dl-shuffle { position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 20rpx; color: #5b8def; border: 1rpx solid #d9e4f8; border-radius: 999rpx; padding: 4rpx 14rpx; }
