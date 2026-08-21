@@ -195,7 +195,8 @@
 
   <view class="card">
     <view class="section-title">心理援助热线</view>
-    <view class="line" wx:for="{{hotlines}}" wx:key="name">
+    <view class="line" wx:for="{{hotlines}}" wx:key="name" bindlongpress="copyHotline" data-n="{{item.number}}"
+          aria-label="{{item.name}}，号码 {{item.number}}，长按复制号码">
       <view class="line-main">
         <view class="line-name">{{item.name}}</view>
         <view class="line-desc">{{item.free}} · {{item.number}}</view>

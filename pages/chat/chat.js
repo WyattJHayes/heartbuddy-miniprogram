@@ -531,16 +531,17 @@ Page({
   },
 
   resetChat() {
-    wx.showModal({
-      title: '重新开始这轮对话？',
-      content: '当前聊天内容会清空，重新打个招呼。你的情绪记录、成就和珍藏都不会变。',
-      confirmText: '重新开始',
-      cancelText: '先不了',
+    wx.showActionSheet({
+      itemList: ['直接重新开始', '先复制一份对话再清空'],
       success: (r) => {
-        if (!r.confirm) return;
-        this.setData({ messages: [], input: '', typing: false, loading: false, showFeeling: false, feelingDone: false, moodTag: '', aiFace: '', _draft: '' });
+        if (r.tapIndex === 1) {
+          const msgs = this.data.messages || [];
+          const lines = msgs.map((m) => (m.role === 'user' ? '我：' : '心语：') + (m.text || m.content || ''));
+          wx.setClipboardData({ data: '—— 我和心语伴的对话备份 ——\n' + lines.join('\n') });
+        } else if (r.tapIndex !== 0) return;
+        this.setData({ messages: [], input: '', typing: false, loading: false, showFeeling: false, feelingDone: false, moodTag: '', aiFace: '', _draft: '', sumTip: false });
         this.initSession();
-        wx.showToast({ title: '已重新开始', icon: 'none' });
+        wx.showToast({ title: r.tapIndex === 1 ? '已备份并重新开始' : '已重新开始', icon: 'none' });
       }
     });
   },

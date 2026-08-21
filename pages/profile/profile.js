@@ -174,6 +174,7 @@ Page({
       if (b.key === 'ach_scan3' && scanCount >= 3) got = true;
       return { ...b, got };
     });
+    badges.sort((a, b) => (b.got ? 1 : 0) - (a.got ? 1 : 0)); // 已点亮排前面，一眼看到成绩
     const gotCount = badges.filter((b) => b.got).length;
     // 下一枚徽章提示（最靠前的未解锁项，答辩/日常都更有目标感）
     const next = badges.find((b) => !b.got) || null;

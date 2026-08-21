@@ -149,6 +149,12 @@ Page({
     wx.setClipboardData({ data: t, success: () => wx.showToast({ title: '已复制，谢谢你愿意帮 TA', icon: 'success' }) });
   },
 
+  copyHotline(e) {
+    const n = e.currentTarget.dataset.n;
+    if (!n) return;
+    wx.setClipboardData({ data: String(n), success: () => wx.showToast({ title: '号码已复制', icon: 'none' }) });
+  },
+
   pushHist(t) {
     const h = (wx.getStorageSync('hb_scriptHist') || []).filter((x) => x.t !== t);
     h.unshift({ t, time: new Date().toLocaleDateString() });
