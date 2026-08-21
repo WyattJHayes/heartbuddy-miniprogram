@@ -25,6 +25,15 @@
   <view class="today-n" wx:if="{{todayN > 0}}" role="note" aria-label="今天已倾诉次数">
     ☁️ 今天第 {{todayN}} 次来找我，谢谢你愿意和我说话
   </view>
+  <!-- 想让我怎么陪你：三段身份，本地记住 -->
+  <view class="persona-bar">
+    <view
+      class="p-chip {{persona === item.k ? 'on' : ''}}"
+      wx:for="{{personas}}" wx:key="k"
+      data-k="{{item.k}}" bindtap="setPersona"
+      role="button" aria-label="让心语以{{item.t}}身份陪我">{{item.emoji}} {{item.t}}</view>
+    <text class="persona-hint">选今天想要的陪伴</text>
+  </view>
   <!-- 深夜工具箱（22:00–5:00）：失眠/烦躁时的三个小出口 -->
   <view class="night-bar" wx:if="{{nightShow}}">
     <text class="night-title">🌙 这么晚还醒着？给你几个出口</text>

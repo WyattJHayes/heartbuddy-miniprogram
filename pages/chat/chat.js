@@ -47,6 +47,12 @@ Page({
     input: '',
     moodTag: '',         // 当前可选的情绪标签
     aiFace: '',          // AI 头像情绪态：随当前情绪标签切换（''=默认🌱）
+    personas: [
+      { k: 'friend', emoji: '🤗', t: '朋友' },
+      { k: 'vault', emoji: '🌿', t: '树洞' },
+      { k: 'coach', emoji: '⚡', t: '清醒教练' }
+    ],
+    persona: '',           // 本次陪伴身份（本地记住，''=默认）
     typing: false,       // AI 打字中
     typedText: '',
     showFeeling: false,  // 倾诉后小结算：AI 回复打字完成后的一次性感受标签条
@@ -86,6 +92,7 @@ Page({
   },
 
   async onLoad() {
+    this.setData({ persona: wx.getStorageSync('hb_persona') || '' });
     // 首次进入且未同意隐私 -> 去欢迎页
     if (!wx.getStorageSync('privacyAgreed')) {
       wx.redirectTo({ url: '/pages/welcome/welcome' });
@@ -381,6 +388,9 @@ Page({
         ? GREETINGS.first
         : hour >= 22 || hour < 5 ? GREETINGS.night
         : hour < 11 ? GREETINGS.morning : hour < 19 ? GREETINGS.afternoon : GREETINGS.evening;
+    if (this.data.persona === 'vault') greeting += ' 你想说的，我都接着，不评判。';
+    else if (this.data.persona === 'coach') greeting += ' 今天想怎么面对？我陪你一条一条捋。';
+    else if (this.data.persona === 'friend') greeting += ' 今天也当你的朋友，怎么舒服怎么来。';
     // 上午（5–11 点）今天还没记录心情时，轻轻提醒一次（每天仅一次）
     const todayKey = new Date().toDateString();
     if (hour >= 5 && hour < 11
@@ -489,10 +499,34 @@ Page({
     this.typewriter(content);
   },
 
-  pushUser(content) {
+  // 选择陪伴身份：朋友 / 树洞 / 清醒教练（本地记住，下次自动沿用）
+  setPersona(e) {
+    const k = e.currentTarget.dataset.k;
+    if (!k) return;
+    wx.setStorageSync('hb_persona', k);
+    this.setData({ persona: k });
+    const tip = k === 'vault' ? '好，我安静地接着，不评判。' : k === 'coach' ? '好，我们清醒地聊，问题一个个拆。' : '好，朋友模式：平等、轻松、像隔壁桌那个人。';
+    wx.showToast({ title: tip.split('。')[0], icon: 'none' });
+  },
+
+  // 陪伴里程碑：她说得越多，陪伴的重量越实（本地累计，到了就点亮一次）
+  touchMilestone() {
+    const total = (wx.getStorageSync('hb_chatLife') || 0) + 1;
+    wx.setStorageSync('hb_chatLife', total);
+    const marks = [[111, '我们已经聊了 111 句。每一句都被认真接住了，谢谢你一直来找我'], [333, '333 句了。你慢慢说得越开，我也越来越懂你'], [999, '999 句，是几乎每天的陪伴。你心里有个角落，永远是亮的']];
+    for (const [n, txt] of marks) {
+      if (total === n && !wx.getStorageSync('ach_milestone_' + n)) {
+        wx.setStorageSync('ach_milestone_' + n, true);
+        setTimeout(() => wx.showModal({ title: '💛 一个小里程碑', content: txt + '。', confirmText: '好', showCancel: false }), 400);
+      }
+    }
+  },
+
+  pushUser(v) {
     const ts = Date.now();
     this.setData({ messages: this.data.messages.concat([{ role: 'user', content, ts }]) });
     this.setData({ todayN: this.data.todayN + 1 });
+    this.touchMilestone();
     this.refreshChatStats();
   },
 

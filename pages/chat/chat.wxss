@@ -161,3 +161,8 @@
 
 .collapse-bar { text-align:center; font-size: 23rpx; color:#4a6fd8; background:#eef2fb; border-radius:999rpx; margin: 8rpx 40rpx; padding: 8rpx 0; }
 .fold-bar { text-align:center; font-size: 22rpx; color:#b0a48d; padding: 6rpx 0; }
+
+.persona-bar { display:flex; align-items:center; gap:10rpx; padding:10rpx 24rpx; }
+.p-chip { font-size:22rpx; color:#6a7694; background:#f2f4fa; border:1rpx solid #e4e8f2; border-radius:999rpx; padding:6rpx 18rpx; }
+.p-chip.on { color:#fff; background:#5b8def; border-color:#5b8def; }
+.persona-hint { font-size:20rpx; color:#b0b8c9; margin-left:auto; }
