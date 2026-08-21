@@ -1,4 +1,4 @@
-<view class="chat-page">
+<view class="chat-page {{isNight ? 'night' : ''}}">
   <!-- 连续低落情绪关怀条：最近 2 天连续偏低时出现，非打扰、当天一次 -->
   <view class="low-care" wx:if="{{lowCare}}" role="note" aria-label="连续低落情绪关怀">
     <view class="lc-body">

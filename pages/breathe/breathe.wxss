@@ -53,3 +53,10 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .echo-card { display:flex; align-items:center; margin:20rpx 24rpx; background:#eef8f0; border:1rpx solid #d4ecd9; border-radius:16rpx; padding:22rpx 24rpx; }
 .echo-emoji { font-size:34rpx; margin-right:14rpx; }
 .echo-text { flex:1; font-size:26rpx; color:#3f7a58; line-height:1.6; }
+
+.custom-box { margin: 16rpx 24rpx 0; background: #fff; border: 1rpx solid #e8eef9; border-radius: 14rpx; padding: 16rpx 20rpx; }
+.cb-row { display: flex; align-items: center; justify-content: space-between; padding: 8rpx 0; }
+.cb-name { font-size: 26rpx; color: #3f4d68; width: 200rpx; }
+.cb-ops { display: flex; }
+.cb-op { width: 64rpx; height: 64rpx; line-height: 60rpx; text-align: center; border-radius: 50%; background: #eef3fc; color: #4a6ab0; font-size: 34rpx; margin-left: 14rpx; border: 1rpx solid #dbe6f8; }
+.cb-tip { margin-top: 10rpx; font-size: 22rpx; color: #9aa3b8; line-height: 1.6; }

@@ -172,3 +172,12 @@
 .quick-item.feel { background:#fff3ec; color:#a9643f; border:1rpx solid #f6dcc8; }
 .quick-item.feel:nth-child(2) { background:#f3f2ff; color:#5a5aa8; border-color:#e2e0fb; }
 .quick-item.feel:nth-child(3) { background:#eefaf2; color:#3f7a58; border-color:#d5eedd; }
+
+/* 夜间柔和模式（22:00-6:00 自动）：降低亮度与对比，保护睡前眼睛 */
+.chat-page.night { background: #1e2330; }
+.chat-page.night .ai-msg { background: #2a3142; color: #d7dce8; }
+.chat-page.night .user-msg { background: #3d5a99; }
+.chat-page.night .input-bar { background: #262c3b; }
+.chat-page.night .input { background: #1a1f2b; color: #d7dce8; }
+.chat-page.night .ai-avatar { background: #2a3142; border-color: #39415a; }
+.chat-page.night .chat-stats { color: #7c86a0; }

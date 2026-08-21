@@ -10,6 +10,23 @@ const PRESETS = [
   { key: 'stare', label: '发呆 · 2 分钟', rounds: [['stare', 120000, 150, 2]] }
 ];
 const DAILY_GOAL_MIN = 10; // 每日放松目标：累计 10 分钟（同一次约 5 分钟 → 两次达标）
+const CUSTOM_STORE = 'hbBreathCustom'; // 自定义节奏 { in, hold, out } 秒
+
+// 由 吸/屏/呼 秒数 生成 rounds（与内置节奏同构）
+function buildCustomRounds(cfg) {
+  const i = Math.max(2, Math.min(10, cfg.in || 4));
+  const h = Math.max(0, Math.min(10, cfg.hold == null ? 4 : cfg.hold));
+  const o = Math.max(2, Math.min(10, cfg.out || 6));
+  const ballMax = 150 + Math.round(i * 80);
+  const r = [['in', i * 1000, ballMax, i]];
+  if (h > 0) r.push(['hold', h * 1000, ballMax, 0.6]);
+  r.push(['out', o * 1000, 150, o]);
+  return r;
+}
+function customLabel(cfg) {
+  const c = cfg || { in: 4, hold: 4, out: 6 };
+  return '自定义 · ' + c.in + '-' + (c.hold || 0) + '-' + c.out;
+}
 
 const PH_TEXT = {
   in: '吸气……把空气慢慢填满',
@@ -31,8 +48,9 @@ Page({
     calmInt: 3,          // 记录「平静」时的强度（1-5，默认 3）
     dayGoal: DAILY_GOAL_MIN, // 面向 WXML 展示
     echoText: '',          // 完成一次呼吸后的「呼吸回响」
-    presets: PRESETS,
-    presetKey: 'calm'
+    presets: PRESETS.concat([{ key: 'custom', label: '自定义 · 4-4-6', rounds: [] }]),
+    presetKey: 'calm',
+    customCfg: { in: 4, hold: 4, out: 6 }
   },
 
   onLoad() {
@@ -40,6 +58,12 @@ Page({
     this._stop = false;
     this._running = false;
     this._rounds = PRESETS[0].rounds;
+    try {
+      const c = wx.getStorageSync(CUSTOM_STORE);
+      if (c && c.in && c.out) {
+        this.setData({ customCfg: c, presets: PRESETS.concat([{ key: 'custom', label: customLabel(c), rounds: buildCustomRounds(c) }]) });
+      }
+    } catch (e) {}
   },
 
   // ---- 每日放松目标：累计分钟数 → 进度条 + 达标庆祝 + 连续天数（纯本地）----
@@ -146,7 +170,10 @@ Page({
   // 切换呼吸节奏（未开始时生效；进行中会先结束当前练习）
   setPreset(e) {
     const key = e.currentTarget.dataset.key;
-    const p = PRESETS.find((x) => x.key === key);
+    const isCustom = key === 'custom';
+    const p = isCustom
+      ? { key: 'custom', label: customLabel(this.data.customCfg), rounds: buildCustomRounds(this.data.customCfg) }
+      : PRESETS.find((x) => x.key === key);
     if (!p) return;
     if (this._running) {
       this._stop = true;
@@ -201,6 +228,24 @@ Page({
   },
 
   // 结束后把此刻情绪记成「平静」（与心情页/曲线无缝联动）
+  // 自定义节奏：吸/屏/呼 秒数加减（2-10 秒，屏气可为 0）
+  adjCustom(e) {
+    const f = e.currentTarget.dataset.f;
+    const d = Number(e.currentTarget.dataset.d);
+    const lim = f === 'hold' ? [0, 10] : [2, 10];
+    const c = Object.assign({}, this.data.customCfg);
+    const v = Math.max(lim[0], Math.min(lim[1], (Number(c[f]) || lim[0]) + d));
+    c[f] = v;
+    wx.setStorageSync(CUSTOM_STORE, c);
+    const rounds = buildCustomRounds(c);
+    const patch = { customCfg: c, presets: PRESETS.concat([{ key: 'custom', label: customLabel(c), rounds }]) };
+    if (this.data.presetKey === 'custom' && !this._running) {
+      this._rounds = rounds;
+      patch.text = '已选「' + customLabel(c) + '」，点击开始跟着节奏呼吸';
+    }
+    this.setData(patch);
+  },
+
   goScan() {
     wx.navigateTo({ url: '/pages/scan/scan' });
   },

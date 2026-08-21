@@ -97,6 +97,9 @@ Page({
   },
 
   async onLoad() {
+    // 夜间柔和模式：22:00-6:00 自动切换深色氛围（仅陪伴页，减少刺眼）
+    const _h = new Date().getHours();
+    this.setData({ isNight: _h >= 22 || _h < 6 });
     this.setData({ persona: wx.getStorageSync('hb_persona') || '' });
     // 首次进入且未同意隐私 -> 去欢迎页
     if (!wx.getStorageSync('privacyAgreed')) {

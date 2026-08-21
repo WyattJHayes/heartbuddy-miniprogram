@@ -33,6 +33,32 @@
           aria-label="切换到{{item.label}}节奏">{{item.label}}</view>
   </view>
 
+  <!-- 自定义节奏调节：选中「自定义」后出现 -->
+  <view class="custom-box" wx:if="{{presetKey === 'custom' && phase !== 'done'}}" role="group" aria-label="自定义呼吸节奏">
+    <view class="cb-row">
+      <text class="cb-name">吸 {{customCfg.in}} 秒</text>
+      <view class="cb-ops">
+        <view class="cb-op" bindtap="adjCustom" data-f="in" data-d="-1" role="button" aria-label="吸气减少 1 秒">−</view>
+        <view class="cb-op" bindtap="adjCustom" data-f="in" data-d="1" role="button" aria-label="吸气增加 1 秒">＋</view>
+      </view>
+    </view>
+    <view class="cb-row">
+      <text class="cb-name">屏 {{customCfg.hold}} 秒</text>
+      <view class="cb-ops">
+        <view class="cb-op" bindtap="adjCustom" data-f="hold" data-d="-1" role="button" aria-label="屏气减少 1 秒">−</view>
+        <view class="cb-op" bindtap="adjCustom" data-f="hold" data-d="1" role="button" aria-label="屏气增加 1 秒">＋</view>
+      </view>
+    </view>
+    <view class="cb-row">
+      <text class="cb-name">呼 {{customCfg.out}} 秒</text>
+      <view class="cb-ops">
+        <view class="cb-op" bindtap="adjCustom" data-f="out" data-d="-1" role="button" aria-label="呼气减少 1 秒">−</view>
+        <view class="cb-op" bindtap="adjCustom" data-f="out" data-d="1" role="button" aria-label="呼气增加 1 秒">＋</view>
+      </view>
+    </view>
+    <view class="cb-tip">呼气比吸气长一点，会更放松（经典 4-7-8 助眠）。</view>
+  </view>
+
   <view class="ball-wrap">
     <view class="halo"></view>
     <view class="ball" style="width: {{ball}}rpx; height: {{ball}}rpx; transition: all {{trans}}s ease-in-out;"></view>
