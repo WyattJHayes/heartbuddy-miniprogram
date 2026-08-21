@@ -33,3 +33,5 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .cp-chip { flex: 1; text-align: center; padding: 10rpx 0; border-radius: 999rpx;
   background: #f2f4f8; color: #6b7280; font-size: 24rpx; }
 .cp-chip.on { background: #4c7a52; color: #fff; }
+
+.bs-week { margin-left: 16rpx; font-size: 22rpx; color: #4c7a52; font-weight: 600; }

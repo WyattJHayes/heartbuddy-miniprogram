@@ -6,6 +6,7 @@
   <view class="breathe-stats" wx:if="{{breatheCount > 0}}" role="note" aria-label="累计练习统计">
     <text class="bs-dot">🌿</text>
     <text class="bs-text">{{lastDone}}</text>
+    <text class="bs-week" wx:if="{{breatheWeek > 0}}">本周 {{breatheWeek}} 次</text>
   </view>
 
   <!-- 呼吸节奏切换 -->

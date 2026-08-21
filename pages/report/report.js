@@ -108,6 +108,9 @@ Page({
       };
       const weekAvg = mean(list);
       const prevAvg = mean(prevRes.data || []);
+      // 本周平均强度（1-5，情绪滑条/快速记录 intensity）
+      const wInts = list.map((m) => m.intensity).filter((v) => typeof v === 'number' && v > 0);
+      const weekInt = wInts.length ? +(wInts.reduce((a, b) => a + b, 0) / wInts.length).toFixed(1) : null;
       let deltaText = '';
       if (weekAvg != null && prevAvg != null) {
         const d = +(weekAvg - prevAvg).toFixed(1);
@@ -175,6 +178,7 @@ Page({
         dayCount: days.size,
         suggestion: suggestions[top] || '继续保持觉察，记录本身就是一种照顾。',
         weekAvg: weekAvg != null ? weekAvg.toFixed(1) : null,
+        weekInt: weekInt,
         prevAvg: prevAvg != null ? prevAvg.toFixed(1) : null,
         deltaText,
         // 连续低日提醒 + 正向鼓励条（高分接连）二选一，都不触发则都不显示

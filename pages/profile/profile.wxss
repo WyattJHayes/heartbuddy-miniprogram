@@ -60,3 +60,5 @@
   background: #eef4ff; border-radius: 14rpx; margin-bottom: 14rpx; }
 .dg-emoji { font-size: 30rpx; }
 .dg-text { font-size: 25rpx; color: #4a5f8f; line-height: 1.5; }
+
+.fav-ops { display: flex; gap: 24rpx; }

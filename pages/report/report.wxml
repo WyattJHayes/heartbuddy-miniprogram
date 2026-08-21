@@ -25,6 +25,7 @@
         <text class="avg-num">本周均值 {{weekAvg}}</text>
         <text wx:if="{{prevAvg}}" class="avg-cmp">上周 {{prevAvg}}</text>
         <text class="avg-delta {{deltaText[0] === '↘' ? 'down' : ''}}">{{deltaText}}</text>
+        <text wx:if="{{weekInt}}" class="avg-cmp">· 平均强度 {{weekInt}}/5</text>
       </view>
     </view>
 

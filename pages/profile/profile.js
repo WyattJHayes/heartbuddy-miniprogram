@@ -62,6 +62,21 @@ Page({
 
   closeFavs() { this.setData({ showFavs: false }); },
 
+  // 一键复制全部珍藏（整理成一段可归档的文字）
+  copyAllFavs() {
+    const favs = this.data.favs || [];
+    if (!favs.length) {
+      wx.showToast({ title: '还没有珍藏的内容', icon: 'none' });
+      return;
+    }
+    const head = '【心语伴 · 我的珍藏】' + favs.length + ' 条\n\n';
+    const body = favs.map((f, i) => `${i + 1}. ${f.text}`).join('\n');
+    wx.setClipboardData({
+      data: head + body,
+      success: () => wx.showToast({ title: '已复制全部珍藏', icon: 'success' })
+    });
+  },
+
   noop() {},
 
   copyFav(e) {

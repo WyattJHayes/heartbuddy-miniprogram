@@ -115,7 +115,10 @@
   <view class="fav-sheet" catchtap="noop">
     <view class="fav-head">
       <text class="fav-title">💛 我的珍藏</text>
-      <text class="fav-clear" bindtap="clearFavs">清空</text>
+      <view class="fav-ops">
+        <text class="fav-clear" bindtap="copyAllFavs" role="button" aria-label="一键复制全部珍藏">复制全部</text>
+        <text class="fav-clear" bindtap="clearFavs" role="button" aria-label="清空珍藏">清空</text>
+      </view>
     </view>
     <scroll-view scroll-y class="fav-list" aria-label="我的珍藏列表">
       <view class="fav-empty" wx:if="{{!favs.length}}">长按聊天消息即可珍藏一句</view>

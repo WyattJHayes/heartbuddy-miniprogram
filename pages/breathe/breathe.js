@@ -36,10 +36,20 @@ Page({
     this._rounds = PRESETS[0].rounds;
   },
 
+  // 本周已练次数（本地周计数，周一重置）
+  weekCount() {
+    const now = new Date();
+    const wStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - ((now.getDay() + 6) % 7));
+    const t0 = wStart.getTime();
+    const ts = (wx.getStorageSync('breatheWeek') || []);
+    return (Array.isArray(ts) ? ts : []).filter((t) => t >= t0).length;
+  },
+
   onShow() {
     // 累计练习次数展示条（本地计数）
     const count = wx.getStorageSync('breatheCount') || 0;
-    this.setData({ breatheCount: count, lastDone: count ? `已累计练习 ${count} 次 🌿` : '还没有练习记录，来一次吗？' });
+    const wk = this.weekCount();
+    this.setData({ breatheCount: count, breatheWeek: wk, lastDone: count ? `已累计练习 ${count} 次 🌿` : '还没有练习记录，来一次吗？' });
   },
 
   onUnload() {
@@ -118,6 +128,11 @@ Page({
         // 呼吸练习徽章：完成 1 次 / 累计 5 次
         const bc = (wx.getStorageSync('breatheCount') || 0) + 1;
         wx.setStorageSync('breatheCount', bc);
+        // 本周进度（时间戳队列，跨周自动重置）
+        const wk = wx.getStorageSync('breatheWeek') || [];
+        wk.push(Date.now());
+        wx.setStorageSync('breatheWeek', wk);
+        this.setData({ breatheWeek: this.weekCount() });
         if (!wx.getStorageSync('ach_breathe')) wx.setStorageSync('ach_breathe', true);
         if (bc >= 5 && !wx.getStorageSync('ach_breathe5')) wx.setStorageSync('ach_breathe5', true);
         wx.vibrateShort && wx.vibrateShort({ type: 'light' });
