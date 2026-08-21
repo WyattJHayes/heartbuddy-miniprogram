@@ -3,6 +3,7 @@ const { dailyQuotes: DAILY_LINES } = require('../../config/index');
 Page({
   data: {
     todayLine: '',
+    favTitles: [],      // 收藏的卡片标题（最多 3 张，置顶+★）
     cards: [
       {
         emoji: '🌀',
@@ -114,8 +115,40 @@ Page({
     open: -1   // 当前展开的卡片索引
   },
 
+  // 收藏置顶：长按卡片头 ★ 收藏/取消（本地，最多 3 张）
+  applyFavs() {
+    const favs = wx.getStorageSync('hb_stFavs') || [];
+    const cards = (this.data.cards || []).slice();
+    cards.sort((a, b) => {
+      const fa = favs.indexOf(a.title), fb = favs.indexOf(b.title);
+      if (fa === -1 && fb === -1) return 0;
+      if (fa === -1) return 1;
+      if (fb === -1) return -1;
+      return fa - fb;
+    });
+    this.setData({ cards, favTitles: favs });
+  },
+
+  toggleFav(e) {
+    const t = e.currentTarget.dataset.t;
+    if (!t) return;
+    let favs = wx.getStorageSync('hb_stFavs') || [];
+    if (favs.includes(t)) favs = favs.filter((x) => x !== t);
+    else {
+      if (favs.length >= 3) { wx.showToast({ title: '最多收藏 3 张，先取消一张', icon: 'none' }); return; }
+      favs.push(t);
+    }
+    wx.setStorageSync('hb_stFavs', favs);
+    const open = favs.includes(t) ? (this.data.cards || []).findIndex((c) => c.title === t) : this.data.open;
+    this.setData({ favTitles: favs });
+    this.applyFavs();
+    if (open >= 0) this.setData({ open });
+    wx.showToast({ title: favs.includes(t) ? '已收藏置顶 ★' : '已取消收藏', icon: 'none' });
+  },
+
   onShow() {
     this.setData({ todayLine: this.getDailyLine() });
+    this.applyFavs();
   },
 
   toggleCard(e) {

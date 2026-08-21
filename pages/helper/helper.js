@@ -37,6 +37,7 @@ Page({
     scriptSituation: '',
     scriptText: '',
     careGrad: false,            // 四段陪伴计划走完后的「毕业卡」（一次性）
+    safeContacts: [],           // 安全包（升级版）：[{n:'妈妈', p:'138…'}]，支持一键拨打
     hotlines,
     safety: false, // 是否已设置 24 小时回访
     safetyHint: '',
@@ -145,6 +146,8 @@ Page({
     // 毕业卡：四段陪伴走完且未看过 → 显示一次
     const grad = wx.getStorageSync('hbCareGrad');
     this.setData({ careGrad: !!(grad && !wx.getStorageSync('hbCareGradSeen')) });
+    // 安全包（升级版）：兼容旧的纯称呼格式
+    this.setData({ safeContacts: this.loadSafeContacts() });
   },
 
   // 毕业卡关闭：记住已看，不再打扰
@@ -157,21 +160,40 @@ Page({
     wx.navigateTo({ url: '/pages/edu/edu' });
   },
 
+  // 安全包解析：新格式「称呼:电话」、旧格式「称呼」都兼容
+  loadSafeContacts() {
+    const rawNew = wx.getStorageSync('hbSafeContacts');
+    if (Array.isArray(rawNew) && rawNew.length) return rawNew.slice(0, 3);
+    const legacy = wx.getStorageSync('hbSafePeople') || '';
+    return legacy.split(/[、，,\s]+/).filter(Boolean).slice(0, 3).map((n) => ({ n, p: '' }));
+  },
+  callSafe(e) {
+    const p = e.currentTarget.dataset.p;
+    if (!p) { this.editSafePeople(); return; }
+    wx.makePhoneCall({ phoneNumber: String(p).replace(/\D/g, ''), fail: () => {} });
+  },
+
   // 安全包：唤起填写/修改「我想让谁记得我」（本地保存 3 人以内）
   editSafePeople() {
     wx.showModal({
       title: '安全包 · 我的求助名单',
-      content: '是谁，能在你最难受的时候找到？写 1-3 个称呼（如：妈妈、王老师、室友），危急时心语会提醒你联系她们。',
+      content: '是谁，能在你最难受的时候找到？写 1-3 个，格式「称呼:电话」（电话可留空），危急时可以一键拨打。',
       editable: true,
-      placeholderText: '妈妈、王老师、室友',
+      placeholderText: '妈妈:138xxxxxxxx、班主任、表姐:139xxxxxxxx',
       confirmText: '保存',
       success: (r) => {
         if (!r.confirm) return;
         const raw = (r.content || '').trim();
-        const names = raw.split(/[，,、\s]+/).filter(Boolean).slice(0, 3);
-        wx.setStorageSync('hbSafePeople', names.join('、'));
-        this.setData({ safePeople: names.join('、') });
-        wx.showToast({ title: names.length ? '已收进安全包 🌱' : '已清空', icon: 'none' });
+        const contacts = raw.split(/[，,、]+/).map((x) => x.trim()).filter(Boolean).slice(0, 3)
+          .map((x) => {
+            const i = Math.min(x.indexOf(':') >= 0 ? x.indexOf(':') : 9999, x.indexOf('：') >= 0 ? x.indexOf('：') : 9999);
+            if (i >= 9999) return { n: x, p: '' };
+            return { n: x.slice(0, i).trim(), p: x.slice(i + 1).replace(/\D/g, '') };
+          }).filter((c) => c.n);
+        wx.setStorageSync('hbSafeContacts', contacts);
+        wx.setStorageSync('hbSafePeople', contacts.map((c) => c.n).join('、')); // 兼容旧字段展示
+        this.setData({ safePeople: contacts.map((c) => c.n).join('、'), safeContacts: contacts });
+        wx.showToast({ title: contacts.length ? '已收进安全包 🌱' : '已清空', icon: 'none' });
       }
     });
   },

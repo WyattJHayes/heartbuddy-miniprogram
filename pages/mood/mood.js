@@ -531,6 +531,23 @@ Page({
     return arr[Math.floor(Math.random() * arr.length)];
   },
 
+  // 记录里程碑：第 10 / 50 / 100 / 200 条，一次性庆祝（本地）
+  celebrateMilestone(total) {
+    const marks = [10, 50, 100, 200];
+    const hit = marks.filter((m) => total >= m).pop();
+    if (!hit) return;
+    const seen = wx.getStorageSync('hb_milestone') || 0;
+    if (seen >= hit) return;
+    wx.setStorageSync('hb_milestone', hit);
+    const words = { 10: '10 条心情，是你对自己 10 次的诚实。', 50: '50 条了——你一直在认真照顾自己。', 100: '100 条心情！这本情绪日记已经很有分量了。', 200: '200 条记录，你是最了不起的坚持者。' };
+    wx.showModal({
+      title: '🎉 里程碑',
+      content: '你已经记录了 ' + words[hit],
+      confirmText: '继续加油',
+      showCancel: false
+    });
+  },
+
   async fetchMoods() {
     let openid = app.globalData.openid;
     if (!openid) {
@@ -593,6 +610,7 @@ Page({
         todayTip: this.shouldShowTodayTip(raw)
       });
       this._raw = raw;
+      this.celebrateMilestone(list.length);
       this.buildCal(raw);
       this.setData({ monthDays: this.buildMonthDays(raw) });
       this.setData({ trigMonth: this.buildTrigMonth(raw) });

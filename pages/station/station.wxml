@@ -10,9 +10,11 @@
   <view class="daily-line" wx:if="{{todayLine}}" role="note" aria-label="今天的一句话">{{todayLine}}</view>
 
   <view class="st-card" wx:for="{{cards}}" wx:key="title">
-      <view class="st-head" data-index="{{index}}" bindtap="toggleCard" role="button" aria-label="展开或收起{{item.title}}">
+      <view class="st-head" data-index="{{index}}" bindtap="toggleCard" bindlongpress="toggleFav" data-t="{{item.title}}"
+            role="button" aria-label="展开或收起{{item.title}}，长按收藏">
         <text class="st-emoji">{{item.emoji}}</text>
         <text class="st-title">{{item.title}}</text>
+        <text class="st-fav" wx:if="{{favTitles.indexOf(item.title) > -1}}">★</text>
         <text class="st-arrow {{open === index ? 'up' : ''}}">▾</text>
       </view>
       <view class="st-body" wx:if="{{open === index}}">
