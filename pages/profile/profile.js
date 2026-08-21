@@ -342,6 +342,35 @@ Page({
 
   goEdu() { wx.navigateTo({ url: '/pages/edu/edu' }); },
 
+  // 清除本地记录：只清本机的小结/小课/安全包等，云端心情与成就徽章都保留
+  clearLocalData() {
+    wx.showModal({
+      title: '清除本机记录？',
+      content: '会清掉小结日记、小课进度、安全包、常用语、珍藏等本机数据；云端的心情记录和你的成就徽章都会保留。此操作不可撤销。',
+      confirmText: '继续',
+      cancelText: '再想想',
+      success: (r) => {
+        if (!r.confirm) return;
+        wx.showModal({
+          title: '最后确认',
+          content: '真的要清空吗？（安全包也会被清掉，危急时就没法一键拨打了）',
+          confirmText: '清空',
+          cancelText: '取消',
+          success: (r2) => {
+            if (!r2.confirm) return;
+            const keys = ['hbDayNote', 'hb_eduDone', 'hb_eduDays', 'hb_eduNote', 'hbSafeContacts', 'hbSafePeople',
+              'hb_stFavs', 'hb_small', 'hb_scanFeel', 'hbThoughtBox', 'hbThought', 'timeLetter', 'hbLetterBox',
+              'hb_myPhrases', 'hb_favs', 'breatheWeek', 'hb_breatheStreak', 'hb_breatheDay', 'hb_breatheMins',
+              'breatheCount', 'hb_milestone', 'hb_night_msg', 'hb_weekRecap', 'hb_triageDone', 'chatLowCareSeen'];
+            keys.forEach((k) => wx.removeStorageSync(k));
+            this.setData({ safePeople: '', favCount: 0, eduDone: 0 });
+            wx.showToast({ title: '本机记录已清空', icon: 'success' });
+          }
+        });
+      }
+    });
+  },
+
   viewDataMap() {
     wx.showModal({
       title: '你的数据放在哪',

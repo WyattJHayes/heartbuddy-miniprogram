@@ -63,7 +63,9 @@ Page({
     dayNoteBanner: false,  // 21 点后还没写小结 → 温柔提示
     yesterdayNote: '',     // 昨天的小结（次日回看）
     nightGreet: '',        // 晚间温柔提醒（21 点后一次性）
-    emptyTip: ''           // 连续空白天数提醒（≥3 天，温柔语气）
+    emptyTip: '',          // 连续空白天数提醒（≥3 天，温柔语气）
+    noteList: [],          // 小结日记本（全部历史小结，倒序）
+    noteBookOpen: false    // 日记本展开状态
   },
 
   onShow() {
@@ -99,7 +101,15 @@ Page({
     const ynote = map[ykey] || '';
     // 21 点后、今天还没写小结、且今天记录过心情时才提示（避免打扰）
     const want = !mine && d.getHours() >= 21;
-    this.setData({ todayNote: mine, yesterdayNote: ynote, dayNoteBanner: want });
+    // 小结日记本：全部按日期倒序（最多 30 条）
+    const noteList = Object.keys(map)
+      .sort((a, b) => {
+        const pa = a.split('-').map(Number), pb = b.split('-').map(Number);
+        return (pb[0] - pa[0]) || (pb[1] - pa[1]) || (pb[2] - pa[2]);
+      })
+      .slice(0, 30)
+      .map((k) => ({ date: k, text: map[k] }));
+    this.setData({ todayNote: mine, yesterdayNote: ynote, dayNoteBanner: want, noteList });
   },
   onDayNoteInput(e) { this.setData({ dayNoteInput: e.detail.value }); },
   saveDayNote() {
@@ -116,6 +126,13 @@ Page({
     wx.showToast({ title: '今日已收尾 🌙', icon: 'success' });
   },
   // 21 点后的轻提醒：点一下 → 弹出书写
+  toggleNoteBook() { this.setData({ noteBookOpen: !this.data.noteBookOpen }); },
+  copyNoteItem(e) {
+    const t = e.currentTarget.dataset.t;
+    if (!t) return;
+    wx.setClipboardData({ data: t, success: () => wx.showToast({ title: '已复制这条小结', icon: 'success' }) });
+  },
+
   copyYesterdayNote() {
     const t = this.data.yesterdayNote;
     if (!t) return;

@@ -245,3 +245,15 @@
 .empty-tip { margin: 16rpx 24rpx 0; background: #f6fbf6; border: 1rpx solid #d9ecd9; border-radius: 16rpx; padding: 18rpx 22rpx; font-size: 25rpx; color: #4e7a58; line-height: 1.7; }
 
 .ws-copy { position: absolute; right: 0; top: 2rpx; font-size: 20rpx; color: #5b8def; border: 1rpx solid #d9e4f8; border-radius: 999rpx; padding: 4rpx 14rpx; }
+
+.notebook { margin: 16rpx 24rpx 0; background: #fff; border: 1rpx solid #eceef5; border-radius: 16rpx; overflow: hidden; }
+.nb-head { display: flex; align-items: center; justify-content: space-between; padding: 18rpx 22rpx; }
+.nb-title { font-size: 26rpx; color: #2f3b54; font-weight: 600; }
+.nb-arrow { color: #b0b7c8; font-size: 24rpx; transition: transform .2s; }
+.nb-arrow.up { transform: rotate(180deg); }
+.nb-list { border-top: 1rpx solid #f0f2f7; padding: 6rpx 22rpx 18rpx; }
+.nb-item { margin-top: 14rpx; }
+.nb-date { font-size: 22rpx; color: #9aa3b8; }
+.nb-copy { float: right; font-size: 20rpx; color: #5b8def; }
+.nb-text { font-size: 25rpx; color: #3a465e; line-height: 1.7; margin-top: 4rpx; white-space: pre-wrap; }
+.nb-empty-note { font-size: 22rpx; color: #b6bdcc; padding: 12rpx 0; }

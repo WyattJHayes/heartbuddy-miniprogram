@@ -11,6 +11,23 @@
   <!-- 晚间温柔提醒（21 点后一次性） -->
   <view class="night-greet" wx:if="{{nightGreet}}" role="note" aria-label="晚间提醒">{{nightGreet}}</view>
 
+  <!-- 小结日记本：所有写过的小结，随时翻回去看 -->
+  <view class="notebook" wx:if="{{noteList.length}}">
+    <view class="nb-head" bindtap="toggleNoteBook" role="button" aria-label="展开或收起小结日记本">
+      <text class="nb-title">📖 小结日记本 · {{noteList.length}} 篇</text>
+      <text class="nb-arrow {{noteBookOpen ? 'up' : ''}}">▾</text>
+    </view>
+    <view class="nb-list" wx:if="{{noteBookOpen}}">
+      <view class="nb-item" wx:for="{{noteList}}" wx:key="date">
+        <view class="nb-date">{{item.date}}
+          <text class="nb-copy" bindtap="copyNoteItem" data-t="{{item.text}}" role="button" aria-label="复制这篇小结">复制</text>
+        </view>
+        <view class="nb-text">{{item.text}}</view>
+      </view>
+      <view class="nb-empty-note" wx:if="{{!noteList.length}}">还没有写过小结</view>
+    </view>
+  </view>
+
   <!-- 21 点后的收尾提示 + 昨天的小结回看 -->
   <view class="daynote-banner" wx:if="{{dayNoteBanner}}" role="note" aria-label="给今天收个尾" bindtap="openDayNote">
     <text class="dn-t">🌙 快 21 点了 —— 今天辛苦了。要不要给今天收个尾？</text>
