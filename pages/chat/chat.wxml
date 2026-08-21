@@ -4,6 +4,7 @@
     <view class="lc-body">
       <view class="lc-text">{{lowCareText}}</view>
       <view class="lc-actions">
+        <view class="lc-say" bindtap="writeToSelf" role="button" aria-label="写一句给此刻的自己">写一句给此刻的自己 ✍️</view>
         <view class="lc-later" bindtap="closeLowCare" role="button" aria-label="今天先不提醒">今天先不提醒</view>
       </view>
     </view>

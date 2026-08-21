@@ -42,7 +42,10 @@
       <view class="r-score">得分 {{total}} / 21</view>
       <view class="r-advice">{{advice}}</view>
       <view class="text-muted r-note">自评仅作参考，不能代替专业诊断。</view>
-      <!-- 结果后轻引导：不舒服时先去充电站/求助 -->
+      <!-- 安全责任：明确就医指引（得分高时显式提醒，低分也给出求助入口） -->
+      <view class="care-note" wx:if="{{total >= 8}}" role="note" aria-label="更专业的帮助在等你">
+        如果这份感受已经持续一段时间，或影响到了吃饭睡觉，欢迎你向校心理中心、医院心理科或咨询师求助，你不必一个人扛。
+      </view>
       <view class="r-link" role="button" aria-label="去情绪充电站看舒缓方法" bindtap="goStation">🔋 想先缓一缓？去情绪充电站看看舒缓方法 →</view>
       <!-- 历史波动提醒：≥2 次测评后，对比最近两次总分给温和趋势 -->
       <view class="trend-pill" wx:if="{{trendText}}" role="note" aria-label="历史测评趋势提醒">{{trendText}}</view>

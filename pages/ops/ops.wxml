@@ -139,7 +139,7 @@
         <view class="section-title">高危用户（近 7 天）<text class="plan-sub">top {{d.highUserList.length}}</text></view>
         <view class="huser" wx:for="{{d.highUserList}}" wx:key="openid">
           <text class="huser-id">{{item.short}}</text>
-          <text class="huser-cnt">{{item.count}} 次高危</text>
+          <text class="huser-cnt">{{item.count}} 次高危<text wx:if="{{item.lastAt}}" class="huser-last">{{item.lastAt}}</text></text>
           <button class="huser-btn" data-full="{{item.openid}}" bindtap="scheduleFollow">安排 24h 回访</button>
         </view>
         <view class="text-muted trend-note">回访到期后，用户下次开口时 AI 会自然地关心一次（旁白内部机制不明说）。</view>

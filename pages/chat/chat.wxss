@@ -144,3 +144,5 @@
 /* 自我安抚短句（快捷面板） */
 .quick-panel-title.sooth { color: #7a5aa0; }
 .quick-panel-item.sooth { background: #f4effa; color: #6d4d97; }
+
+.lc-say { font-size: 22rpx; color: #b36b98; text-decoration: underline; margin-right: 20rpx; }

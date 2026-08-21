@@ -106,10 +106,23 @@ exports.main = async () => {
       }
       return out;
     })();
+    const highLastAt = {};
+    (highWeek.data || []).forEach((c) => {
+      if (c.openid) {
+        const at = Number(c.createdAt) || 0;
+        if (at > (highLastAt[c.openid] || 0)) highLastAt[c.openid] = at;
+      }
+    });
+    const fmtShort = (t) => {
+      if (!t) return '';
+      const d = new Date(t);
+      return d.getMonth() + 1 + '月' + d.getDate() + '日 ' +
+        String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+    };
     const highUserList = Object.keys(highUsers)
       .sort((a, b) => highUsers[b] - highUsers[a])
       .slice(0, 6)
-      .map((o) => ({ openid: o, short: o.slice(0, 6) + '…', count: highUsers[o] }));
+      .map((o) => ({ openid: o, short: o.slice(0, 6) + '…', count: highUsers[o], lastAt: fmtShort(highLastAt[o]) }));
 
     return {
       ok: true,

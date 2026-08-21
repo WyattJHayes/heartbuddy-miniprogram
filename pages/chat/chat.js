@@ -154,6 +154,12 @@ Page({
     this.setData({ lowCare: false });
   },
 
+  // 连续低落时的轻引导：顺手写一句给此刻的自己（复用深夜暗语，只存给自己）
+  writeToSelf() {
+    this.setData({ lowCare: false });
+    this.nightToSelf();
+  },
+
   // ---- 天气角：open-meteo（免费、无需 key）----
   copyQuote() {
     if (!this.data.dailyQuote) return;

@@ -109,3 +109,5 @@
 
 .feed-tag { display: inline-block; font-size: 20rpx; color: #4c8a5c; background: #e8f4ec;
   border-radius: 6rpx; padding: 2rpx 8rpx; margin-right: 8rpx; }
+
+.huser-last { color: #b08b4d; font-size: 20rpx; margin-left: 6rpx; }
