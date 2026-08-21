@@ -83,3 +83,17 @@
 .mc-tip { margin-top: 10rpx; font-size: 23rpx; }
 .mc-tip .up { color: #e25c4a; font-weight: 700; }
 .mc-tip .down { color: #3aa08a; font-weight: 700; }
+
+/* 危机快报：今日新增 + 最新一条 */
+.crisis-flash { display: flex; align-items: center; gap: 20rpx; margin-top: 16rpx; padding: 16rpx 0;
+  border-top: 1rpx dashed #e6ebf5; }
+.cf-left { display: flex; align-items: baseline; gap: 8rpx; flex-shrink: 0; }
+.cf-num { font-size: 44rpx; font-weight: 700; color: #e74c3c; line-height: 1; }
+.cf-label { font-size: 22rpx; color: #98a2b5; }
+.cf-line { flex: 1; display: flex; align-items: center; gap: 12rpx; min-width: 0; }
+.cf-text { flex: 1; font-size: 24rpx; color: #5b6b85; line-height: 1.6; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap; }
+.cf-tag { flex-shrink: 0; font-size: 20rpx; padding: 4rpx 12rpx; border-radius: 8rpx; color: #fff; }
+.cf-tag.high { background: #e74c3c; }
+.cf-tag.mid { background: #f39c12; }
+.cf-tag.low { background: #95a5a6; }

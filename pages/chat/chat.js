@@ -109,6 +109,45 @@ Page({
   nightLater() {
     wx.showToast({ title: '把烦心事留给明天的你吧，先去睡 🛌', icon: 'none' });
   },
+  // 写给自己：把此刻想说的一句话写进 mood note（trigger='深夜暗语'）
+  nightToSelf() {
+    wx.showModal({
+      title: '写给自己 🌙',
+      content: '把此刻想说的一句话存进心情笔记，只有你自己看得到，天亮后再读给自己。',
+      editable: true,
+      placeholderText: '想对自己说什么…',
+      confirmText: '写下',
+      cancelText: '算了',
+      success: async (r) => {
+        const text = (r.content || '').trim();
+        if (!r.confirm || !text) return;
+        wx.showLoading({ title: '存下中…' });
+        try {
+          let openid = app.globalData.openid;
+          if (!openid) openid = await app.login();
+          if (!openid) return;
+          await wx.cloud.database().collection('moods').add({
+            data: {
+              openid,
+              sessionId: 'night-' + Date.now(),
+              mood: 'peace',
+              intensity: 3,
+              note: text,
+              noteAt: Date.now(),
+              trigger: '深夜暗语',
+              createdAt: Date.now()
+            }
+          });
+          wx.hideLoading();
+          wx.showToast({ title: '已存下，晚安 🌙', icon: 'success' });
+        } catch (err) {
+          wx.hideLoading();
+          console.error('[chat] 深夜暗语写入失败', err);
+          wx.showToast({ title: '存入失败，请重试', icon: 'none' });
+        }
+      }
+    });
+  },
 
   loadWeather() {
     const fetchBy = (lat, lon) => {

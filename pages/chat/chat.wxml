@@ -12,9 +12,10 @@
   </view>
   <!-- 深夜工具箱（22:00–5:00）：失眠/烦躁时的三个小出口 -->
   <view class="night-bar" wx:if="{{nightShow}}">
-    <text class="night-title">🌙 这么晚还醒着？给你三个出口</text>
+    <text class="night-title">🌙 这么晚还醒着？给你几个出口</text>
     <view class="night-chips">
       <view class="night-chip" bindtap="nightBreathe" role="button" aria-label="试试深呼吸">3 分钟呼吸</view>
+      <view class="night-chip" bindtap="nightToSelf" role="button" aria-label="写给自己一句话">写给自己一句</view>
       <view class="night-chip" bindtap="nightWrite" role="button" aria-label="写下烦心事">写下烦心事</view>
       <view class="night-chip" bindtap="nightLater" role="button" aria-label="把烦恼留给明天">把烦恼留给明天</view>
     </view>

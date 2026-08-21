@@ -46,6 +46,20 @@
         <text class="rate-v">本周处理率 {{weekRate}}%</text>
         <text class="text-muted rate-d">处理 {{d.weekHandled}} / 出现 {{d.weekCrisis}} · 累计已处理 {{d.handledCrisis}} · 未处理 {{d.openCrisis}}（高 {{d.openHigh}}）</text>
       </view>
+      <!-- 危机快报：今日新增 + 最新一条摘要（进入看板即可见） -->
+      <view class="crisis-flash" wx:if="{{d.todayCrisis !== undefined}}">
+        <view class="cf-left">
+          <view class="cf-num">{{d.todayCrisis}}</view>
+          <view class="cf-label">今日新增危机</view>
+        </view>
+        <view class="cf-line" wx:if="{{d.latestCrisis}}">
+          <view class="cf-text">🕘 {{d.latestCrisis.time}} · {{d.latestCrisis.keywords}}</view>
+          <view class="cf-tag {{d.latestCrisis.level}}">{{d.latestCrisis.level === 'high' ? '高危' : (d.latestCrisis.level === 'mid' ? '中危' : '低危')}}</view>
+        </view>
+        <view class="cf-line" wx:else>
+          <view class="cf-text">今日暂无新的危机记录 🌿</view>
+        </view>
+      </view>
       <!-- 月对比：本月 vs 上月（预警数 + 处理率） -->
       <view class="month-comp" wx:if="{{monthStat && lastStat}}">
         <view class="mc-row">

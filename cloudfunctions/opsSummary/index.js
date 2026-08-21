@@ -22,9 +22,10 @@ exports.main = async () => {
   const y = now.getFullYear(), mo = now.getMonth();
   const monthStart = new Date(y, mo, 1).getTime();
   const lastMonthStart = new Date(y, mo - 1, 1).getTime();
+  const dayStart = new Date(y, mo, now.getDate()).getTime();
 
   try {
-    const [users, moods, assessments, crisisTotal, crisisWeek, moodWeek, activeUsers, openHigh, openCrisis, handledCrisis, weekHandled, highWeek, monthCrisis, monthHandled, lastCrisis, lastHandled] =
+    const [users, moods, assessments, crisisTotal, crisisWeek, moodWeek, activeUsers, openHigh, openCrisis, handledCrisis, weekHandled, highWeek, monthCrisis, monthHandled, lastCrisis, lastHandled, todayCrisis, todayLatest] =
       await Promise.all([
         db.collection('users').count(),
         db.collection('moods').count(),
@@ -41,7 +42,10 @@ exports.main = async () => {
         db.collection('crisisAlerts').where({ createdAt: _.gte(monthStart) }).count(),
         db.collection('crisisAlerts').where({ createdAt: _.gte(monthStart), status: 'handled' }).count(),
         db.collection('crisisAlerts').where({ createdAt: _.gte(lastMonthStart), createdAt: _.lt(monthStart) }).count(),
-        db.collection('crisisAlerts').where({ createdAt: _.gte(lastMonthStart), createdAt: _.lt(monthStart), status: 'handled' }).count()
+        db.collection('crisisAlerts').where({ createdAt: _.gte(lastMonthStart), createdAt: _.lt(monthStart), status: 'handled' }).count(),
+        // 今日新增危机计数 + 今日最新一条（危机快报）
+        db.collection('crisisAlerts').where({ createdAt: _.gte(dayStart) }).count(),
+        db.collection('crisisAlerts').where({ createdAt: _.gte(dayStart) }).orderBy('createdAt', 'desc').limit(1).get()
       ]);
 
     const byLevel = { high: 0, mid: 0, low: 0 };
@@ -110,6 +114,15 @@ exports.main = async () => {
         monthHandled: monthHandled.total,
         lastCrisis: lastCrisis.total,
         lastHandled: lastHandled.total,
+        // 危机快报：今日新增数 + 今日最新一条摘要
+        todayCrisis: todayCrisis.total,
+        latestCrisis: ((todayLatest.data || [])[0] || null)
+          ? {
+              keywords: (todayLatest.data[0].keywords || '') || (todayLatest.data[0].aiSummary || ''),
+              level: todayLatest.data[0].level || '',
+              time: new Date(todayLatest.data[0].createdAt).toLocaleString('zh-CN', { hour12: false })
+            }
+          : null,
         moodTrend7,
         crisisBySource: Object.keys(bySource).map((k) => ({ source: k, count: bySource[k] })),
         highTrend7,

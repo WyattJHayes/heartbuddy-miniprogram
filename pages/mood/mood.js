@@ -575,6 +575,67 @@ Page({
     if (today) this.tapBand({ currentTarget: { dataset: { k: today.k, d: today.d } } });
   },
 
+  // 长按色带某天 → 操作菜单：查看/编辑补记、删除当天最新一条记录
+  longpressBand(e) {
+    const k = e.currentTarget.dataset.k;
+    const d = e.currentTarget.dataset.d;
+    const raw = this._raw || [];
+    let latest = null;
+    let hasNote = false;
+    raw.forEach((r) => {
+      const dt = new Date(r.createdAt);
+      const ck = `${dt.getFullYear()}-${dt.getMonth() + 1}-${dt.getDate()}`;
+      if (ck !== k) return;
+      if (!latest || r.createdAt > latest.createdAt) latest = r;
+    });
+    if (!latest || !latest._id) {
+      wx.showToast({ title: '这天还没有记录', icon: 'none' });
+      return;
+    }
+    hasNote = !!latest.note;
+    const items = [
+      ...(hasNote ? ['查看 / 编辑这句补记'] : []),
+      '删除当天最新一条记录',
+      '取消'
+    ];
+    wx.showActionSheet({
+      itemList: items,
+      success: async (r) => {
+        const pick = items[r.tapIndex];
+        if (pick === '查看 / 编辑这句补记') {
+          this.tapBand(e); // 复用编辑弹窗（已显示「之前写」）
+        } else if (pick === '删除当天最新一条记录') {
+          await this.deleteDayNote(latest, d);
+        }
+      }
+    });
+  },
+
+  // 删除当天最新一条 moods 记录（轻量管理）
+  async deleteDayNote(latest, d) {
+    wx.showModal({
+      title: `删除 ${d} 的记录？`,
+      content: '将删除当天最新一条心情记录，删除后不可恢复。',
+      confirmText: '删除',
+      confirmColor: '#e74c3c',
+      success: async (r) => {
+        if (!r.confirm) return;
+        wx.showLoading({ title: '删除中…' });
+        try {
+          const db = wx.cloud.database();
+          await db.collection('moods').doc(latest._id).remove();
+          wx.hideLoading();
+          wx.showToast({ title: '已删除', icon: 'success' });
+          this.fetchMoods();
+        } catch (err) {
+          wx.hideLoading();
+          console.error('[mood] 删除失败', err);
+          wx.showToast({ title: '删除失败，请重试', icon: 'none' });
+        }
+      }
+    });
+  },
+
   // 情绪健康指数（规则推导）：近 7 天分值均值 → 0-100，附解读与昨日对比
   buildHealth(moodLine) {
     const vals = (moodLine || []).map((p) => p.value).filter((v) => typeof v === 'number');
