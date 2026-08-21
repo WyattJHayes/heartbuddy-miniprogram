@@ -34,6 +34,18 @@
   <view class="card quick-tools">
     <view class="section-title">立刻做点什么</view>
     <view class="qt-row">
+      <view class="qt-card" role="button" bindtap="onComfort" aria-label="要一句安慰的话">
+        <view class="qt-emoji">💬</view>
+        <view class="qt-name">要一句安慰</view>
+        <view class="qt-sub">一句话 · 先接住此刻</view>
+      </view>
+      <view class="qt-card" role="button" bindtap="goChat" aria-label="去找心语聊一聊">
+        <view class="qt-emoji">🌱</view>
+        <view class="qt-name">找心语聊聊</view>
+        <view class="qt-sub">随时都在 · 不评判</view>
+      </view>
+    </view>
+    <view class="qt-row">
       <view class="qt-card" role="button" bindtap="goBreathe" aria-label="去 3 分钟呼吸练习">
         <view class="qt-emoji">🧘</view>
         <view class="qt-name">呼吸练习</view>

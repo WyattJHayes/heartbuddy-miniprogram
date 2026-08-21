@@ -1,6 +1,7 @@
 // pages/profile/profile.js —— 我的
 const app = getApp();
 const api = require('../../utils/api');
+const planlib = require('../../utils/plan');
 
 Page({
   data: {
@@ -30,6 +31,7 @@ Page({
 
   onShow() {
     this.setGreet();
+    this.loadPlanInfo();
     this.loadStats();
     this.refreshBadges();
     this.refreshFavs();
@@ -49,7 +51,22 @@ Page({
     if (this.data.greetText !== cur[1]) this.setData({ greetEmoji: cur[0], greetText: cur[1] });
   },
 
-  // ---- 我的珍藏（聊天页长按消息珍藏，本地）----
+  // 陪伴计划进度：今天第几天、今天任务是什么
+  loadPlanInfo() {
+    const plan = planlib.load();
+    let planInfo = null;
+    if (plan) {
+      const pi = planlib.activeIndex(plan);
+      if (pi >= 0 && pi < plan.days.length) {
+        planInfo = { cur: pi + 1, total: plan.days.length, title: plan.days[pi].title, done: !!(plan.done && plan.done[pi]) };
+      }
+    }
+    this.setData({ planInfo });
+  },
+
+  goPlan() { wx.navigateTo({ url: '/pages/assessment/assessment' }); },
+
+  // ---- 我的珍藏（聊天页长按珍藏，本地）----
   refreshFavs() {
     const favs = wx.getStorageSync('hb_favs') || [];
     this.setData({ favCount: favs.length });

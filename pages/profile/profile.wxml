@@ -48,6 +48,14 @@
     </view>
   </view>
 
+  <!-- 陪伴计划进行中：今天第几天 · 今天任务 -->
+  <view class="card" wx:if="{{planInfo}}">
+    <view class="section-title">🧭 陪伴计划 <text class="plan-sub">第 {{planInfo.cur}}/{{planInfo.total}} 天{{planInfo.done ? ' · 已完成今天' : ''}}</text></view>
+    <view class="plan-line">今天想陪你做：{{planInfo.title}}</view>
+    <view class="badge-progress"><view class="badge-progress-fill" style="width: {{planInfo.cur / planInfo.total * 100}}%"></view></view>
+    <view class="plan-btn" bindtap="goPlan" role="button" aria-label="去看看今天的小任务">{{planInfo.done ? '看看明天 ›' : '去做今天的小任务 ›'}}</view>
+  </view>
+
   <!-- 成就徽章 -->
   <view class="card">
     <view class="section-title">成就徽章<text class="plan-sub">{{gotCount}}/{{badgeTotal}} 已点亮</text></view>

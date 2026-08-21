@@ -86,3 +86,5 @@
 
 .sms-btn { margin-top: 18rpx; text-align: center; font-size: 26rpx; color: #3f6fe0;
   background: #eef3ff; border-radius: 999rpx; padding: 16rpx 20rpx; }
+
+.qt-card.comfort { background: linear-gradient(160deg,#fff6ec,#ffe9d6); }

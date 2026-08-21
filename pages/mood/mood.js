@@ -430,6 +430,7 @@ Page({
       this._raw = raw;
       this.buildCal(raw);
       this.setData({ monthDays: this.buildMonthDays(raw) });
+      this.setData({ trigMonth: this.buildTrigMonth(raw) });
     } catch (e) {
       console.error('[mood] 读取失败', e);
       this.setData({ loaded: true });
@@ -658,6 +659,24 @@ Page({
       date: best.g.key,
       note: best.g.notes[best.g.notes.length - 1] || ''
     };
+  },
+
+  // 本月触发来源排行（trigger 频率 Top4，读懂「最近一个月情绪从哪里来」）
+  buildTrigMonth(raw) {
+    const now = new Date();
+    const y = now.getFullYear(), mo = now.getMonth();
+    const cnt = {};
+    (raw || []).forEach((r) => {
+      const d = new Date(r.createdAt);
+      if (d.getFullYear() === y && d.getMonth() === mo) {
+        const k = r.trigger || '其他';
+        cnt[k] = (cnt[k] || 0) + 1;
+      }
+    });
+    return Object.keys(cnt)
+      .map((k) => ({ k, c: cnt[k] }))
+      .sort((a, b) => b.c - a.c)
+      .slice(0, 4);
   },
 
   // 本月已记录的天数（去重）

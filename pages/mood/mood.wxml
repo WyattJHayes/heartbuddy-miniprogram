@@ -229,6 +229,15 @@
     </view>
   </view>
 
+  <!-- 本月情绪由来：触发来源排行 -->
+  <view class="card" wx:if="{{trigMonth.length}}">
+    <view class="section-title">本月情绪从哪里来<text class="plan-sub">触发来源 Top{{trigMonth.length}}</text></view>
+    <view class="trig-row">
+      <view class="trig-chip" wx:for="{{trigMonth}}" wx:key="k">{{item.k}} × {{item.c}}</view>
+    </view>
+    <view class="trig-tip">同一类场面反复出现？可能是个值得留意的小信号 🌱</view>
+  </view>
+
   <!-- 最近记录 -->
     <view class="card">
       <view class="section-title">最近记录</view>

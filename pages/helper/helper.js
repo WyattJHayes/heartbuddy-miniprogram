@@ -41,6 +41,26 @@ Page({
     ,smartTip: null      // 智能分流：此刻建议（按时段/连续低情绪天数，轻提示不打扰）
   },
 
+  // ---- 要一句安慰的话：随机温和短句，可记住 / 可复制给自己 ----
+  onComfort() {
+    const P = [
+      '抱撑到现在已经很好了，今天也辛苦啦。',
+      '允许自己今天只是「停着」，不用立刻好起来。',
+      '你不是一个人，我一直在这里陪着你。',
+      '慢慢来，你不需要马上变好。',
+      '把此刻先放下，明天再想也不迟。',
+      '难受是真实的，但它不会一直这么大。'
+    ];
+    const t = P[Math.floor(Math.random() * P.length)];
+    wx.showModal({
+      title: '🌿 先接住这句话',
+      content: t,
+      confirmText: '记住了',
+      cancelText: '复制给自己',
+      success: (r) => { if (!r.confirm) wx.setClipboardData({ data: t }); }
+    });
+  },
+
   onShow() {
     this.loadFollowUp();
     this.loadHushCare();

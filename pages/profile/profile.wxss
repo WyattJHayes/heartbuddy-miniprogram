@@ -76,3 +76,6 @@
 .mc-title{font-size:28rpx;color:#7a5a2e;font-weight:600;}
 .mc-sub{font-size:24rpx;color:#a08a5c;margin-top:4rpx;}
 .mc-btn{color:#b06f2c;font-size:24rpx;}
+
+.plan-progress { margin-top: 8rpx; }
+.plan-btn { margin-top: 14rpx; display:inline-block; background:#5b8def; color:#fff; border-radius:999rpx; padding:8rpx 26rpx; font-size:24rpx; }
