@@ -27,6 +27,15 @@ Page({
   data: {
     triageDone: false,
     safePeople: '',               // 安全包：可信赖的人称呼（本地）
+    askSituations: [              // 开口求助：处境选项（本地生成话术）
+      { k: 'sleep',    label: '我最近睡不好' },
+      { k: 'anxious',  label: '我很焦虑、静不下心' },
+      { k: 'low',      label: '我最近很低落' },
+      { k: 'pressure', label: '学习压力快撑不住了' },
+      { k: 'talk',     label: '我想找心理老师聊聊' }
+    ],
+    scriptSituation: '',
+    scriptText: '',
     hotlines,
     safety: false, // 是否已设置 24 小时回访
     safetyHint: '',
@@ -55,6 +64,52 @@ Page({
         if (url === '/pages/chat/chat' || url === '/pages/mood/mood') wx.switchTab({ url });
         else wx.navigateTo({ url });
       }
+    });
+  },
+
+  // ---- 开口求助话术生成器（本地模板，可复制发送）----
+  pickSituation(e) {
+    const k = e.currentTarget.dataset.k;
+    this.setData({ scriptSituation: k });
+    this.regenScript(k);
+  },
+  regenScript(k) {
+    const key = k || this.data.scriptSituation;
+    if (!key) return;
+    const first = (wx.getStorageSync('hbSafePeople') || '').split('、')[0].trim();
+    const call = first && first.length <= 6 ? first : '您';
+    const TPL = {
+      sleep: [
+        `老师/爸妈，想跟您说一件事：我最近入睡很难，躺在床上一两个小时都睡不着，白天上课也很困。我不是偷玩手机，是真的睡不着。想请您陪我想想办法，或者去看看医生。`,
+        `跟您说个事：这段时间我总是睡不好，半夜会醒，早上起来很累。我有点撑不住了，想找您聊聊，也想知道要不要寻求专业帮助。`
+      ],
+      anxious: [
+        `${call === '您' ? '老师' : call}，我最近心里总是很慌，静不下心学习，有时候心跳很快、手心出汗。我试着调节过，但没什么用。我想让您知道，也希望有人能帮帮我。`,
+        `我想说一件事：最近我总是莫名紧张，考试前尤其严重，脑子里停不下来。我怕一直这样下去，想找您或专业的人聊一聊。`
+      ],
+      low: [
+        `跟您说这些有点难，但我最近情绪一直很低落，对什么都提不起兴趣，有时候觉得撑不下去了。我不想让您担心，但我真的需要有人陪我。`,
+        `我最近状态很差，经常想哭，也吃不下饭。我知道这样不对劲，想请您帮帮我，或者带我去看一次心理医生。`
+      ],
+      pressure: [
+        `我最近学习压力特别大，作业和考试排得很满，我感觉快撑不住了。不是我不想努力，是我真的太累了。想跟您商量一下，能不能帮我减掉一点，或者教我怎么安排。`,
+        `想跟您坦白：这段时间我一直咬牙撑着，但越撑越焦虑，晚上也睡不好。我怕这样下去会垮掉，希望您能听我说说，帮我一起想想办法。`
+      ],
+      talk: [
+        `老师，我最近心里有些事，一直自己扛着，有点扛不住了。想找您聊一聊，大概需要 20 分钟。如果您这周有时间，请告诉我什么时候方便。`,
+        `老师您好，我想预约一次心理谈话。这段时间我情绪不太好，也睡不好，想找专业的人聊聊。您方便的时候回我一下就好。`
+      ]
+    };
+    const arr = TPL[key] || [];
+    if (!arr.length) { this.setData({ scriptText: '' }); return; }
+    const pick = arr[Math.floor(Math.random() * arr.length)];
+    this.setData({ scriptText: pick });
+  },
+  copyScript() {
+    if (!this.data.scriptText) return;
+    wx.setClipboardData({
+      data: this.data.scriptText,
+      success: () => wx.showToast({ title: '已复制，发给信任的人', icon: 'success' })
     });
   },
 

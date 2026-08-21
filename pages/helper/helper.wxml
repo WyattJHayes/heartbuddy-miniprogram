@@ -119,6 +119,24 @@
     </block>
   </view>
 
+  <!-- 开口求助话术：最难的一步往往是「说出来」，帮你生成第一句 -->
+  <view class="card askfor">
+    <view class="section-title">💬 不知道怎么开口？让心语帮你写第一句</view>
+    <view class="af-text">很多时候不是不想求助，是不知道怎么开始。选一个最接近你处境的选项，我帮你生成一段可以复制发送的话。</view>
+    <view class="af-chips">
+      <view class="af-chip {{scriptSituation === item.k ? 'on' : ''}}" wx:for="{{askSituations}}" wx:key="k"
+            bindtap="pickSituation" data-k="{{item.k}}" role="button" aria-label="{{item.label}}">{{item.label}}</view>
+    </view>
+    <view class="af-out" wx:if="{{scriptText}}">
+      <view class="af-out-text" user-select>{{scriptText}}</view>
+      <view class="af-actions">
+        <view class="af-btn" bindtap="copyScript" role="button" aria-label="复制这段话">复制这段话</view>
+        <view class="af-btn ghost" bindtap="regenScript" role="button" aria-label="换一种说法">换一种说法</view>
+      </view>
+      <view class="af-hint">发给谁由你决定：父母、班主任、心理老师，或任何一个你信任的大人。</view>
+    </view>
+  </view>
+
   <view class="card urgent">
     <view class="section-title">如果你现在很不好</view>
     <view class="urgent-text">请优先联系最近的成年人、老师或直接拨打心理援助热线。你不需要独自承受。</view>

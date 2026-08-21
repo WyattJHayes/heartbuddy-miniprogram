@@ -57,6 +57,18 @@
         role="button" aria-label="选择触发来源{{item}}">{{item}}</view>
     </view>
     <view class="quick-word" wx:if="{{quickWord}}" role="note" aria-label="记录后的暖心回应">✨ {{quickWord}}</view>
+  <!-- 情绪急救包：记录负性情绪后，马上能做的 3 件小事 -->
+  <view class="aid-pack" wx:if="{{aidPack}}" role="note" aria-label="情绪急救包">
+    <view class="ap-head">
+      <text class="ap-title">{{aidPack.icon}} 情绪急救包 · 现在就能做</text>
+      <text class="ap-close" bindtap="closeAidPack" role="button" aria-label="收起急救包">✕</text>
+    </view>
+    <view class="ap-item" wx:for="{{aidPack.list}}" wx:key="*this">· {{item}}</view>
+    <view class="ap-actions">
+      <view class="ap-btn" bindtap="goBreatheNow" role="button" aria-label="去做呼吸练习">🧘 做 60 秒呼吸</view>
+      <view class="ap-btn ghost" bindtap="goStationNow" role="button" aria-label="去情绪充电站">🔋 去充电站</view>
+    </view>
+  </view>
   </view>
 
   <!-- 每日心情提醒 -->

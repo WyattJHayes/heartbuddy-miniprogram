@@ -24,3 +24,10 @@ page { background: #F7F8FB; }
 .edu-foot { margin-top: 24rpx; font-size: 22rpx; color: #9aa3b8; line-height: 1.7; }
 .ef-link { color: #5B8DEF; text-decoration: underline; }
 .edu-reset { margin-top: 28rpx; font-size: 24rpx; color: #b0b7c8; text-align: center; }
+
+.ls-quiz { margin-top: 18rpx; background: #f4f7fd; border-radius: 12rpx; padding: 16rpx 18rpx; }
+.lq-q { font-size: 24rpx; color: #47597c; font-weight: 600; line-height: 1.6; }
+.lq-opt { margin-top: 12rpx; font-size: 24rpx; color: #5b6b8c; background: #fff; border: 1rpx solid #dbe4f4; border-radius: 10rpx; padding: 12rpx 16rpx; }
+.lq-opt.right { background: #e8f7ec; border-color: #b7e2c3; color: #2f7a4d; }
+.lq-opt.wrong { background: #fdeeee; border-color: #f2c9c9; color: #b05252; }
+.lq-why { margin-top: 14rpx; font-size: 22rpx; color: #7a86a6; line-height: 1.7; }

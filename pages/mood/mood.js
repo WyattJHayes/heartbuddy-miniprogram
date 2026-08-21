@@ -56,6 +56,7 @@ Page({
     band: [],              // 近 14 天情绪色带 [{d,e,has}]
     todayTip: false,       // 今日未记录心情时的轻提醒（当天一次可关）
     dayNote: '',           // 今日小结（21 点后的收尾）
+    aidPack: null,         // 情绪急救包（记录负性情绪后给即时可做的小事）
     dayNoteBanner: false,  // 21 点后还没写小结 → 温柔提示
     yesterdayNote: ''      // 昨天的小结（次日回看）
   },
@@ -481,8 +482,8 @@ Page({
         setTimeout(() => wx.showToast({ title: '夜深了，记完早点休息 🌙', icon: 'none' }), 600);
       }
       this.fetchMoods();
-      // 一句随心情的暖心回应（本地文案，保持陪伴感）
-      this.setData({ quickWord: this.randomWord(key) });
+      // 一句随心情的暖心回应（本地文案，保持陪伴感）＋ 情绪急救包
+      this.setData({ quickWord: this.randomWord(key), aidPack: this.buildAid(key) });
     } catch (e) {
       console.error('[mood] 快速记录失败', e);
       wx.showToast({ title: '记录失败，请重试', icon: 'none' });
@@ -490,6 +491,23 @@ Page({
       this.setData({ quicking: '' });
     }
   },
+
+  /* 情绪急救包：记录负性情绪后，给 3 件「现在就能做」的小事（本地） */
+  buildAid(key) {
+    const AID = {
+      angry:  { icon: '🌋', list: ['先离开让你炸毛的现场 30 秒', '喝一口温水，慢慢咽下去', '想骂的话先写在纸上，再撕掉它'] },
+      anxious:{ icon: '🌀', list: ['把担心写下来，只挑一件现在能做的', '做 3 次 4-4-6 深呼吸', '起来走 2 分钟，看看窗外'] },
+      sad:    { icon: '🌧', list: ['给自己倒杯温水，双手握着它', '允许自己哭一场，不用忍着', '给最信任的人发一句话'] },
+      tired:  { icon: '🥱', list: ['把手头的事暂停 10 分钟', '趴下来闭眼 3 分钟', '今晚提前 30 分钟上床'] },
+      lonely: { icon: '🕯', list: ['来和心语说说话，我一直在', '翻一个你信任的人的对话框', '出门走 5 分钟，看看路上的人'] }
+    };
+    const a = AID[key];
+    if (!a) return null; // 开心/平静不需要急救包
+    return { icon: a.icon, list: a.list };
+  },
+  closeAidPack() { this.setData({ aidPack: null }); },
+  goBreatheNow() { wx.navigateTo({ url: '/pages/breathe/breathe' }); },
+  goStationNow() { wx.navigateTo({ url: '/pages/station/station' }); },
 
   /* 快速记录后的一句暖心回应（本地词库，不落库） */
   randomWord(key) {

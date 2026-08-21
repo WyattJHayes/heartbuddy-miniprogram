@@ -25,6 +25,14 @@
         <text class="lp-dot">·</text><text class="lp-text">{{pt}}</text>
       </view>
       <view class="ls-do">💚 今天可以这样做：{{item.do}}</view>
+      <!-- 随堂小测：答对才能点亮「学完」 -->
+      <view class="ls-quiz" wx:if="{{item.quiz}}">
+        <view class="lq-q">📌 随堂一问：{{item.quiz.q}}</view>
+        <view class="lq-opt {{answered[item.key] === oidx ? (oidx === item.quiz.ans ? 'right' : 'wrong') : ''}}"
+              wx:for="{{item.quiz.opts}}" wx:for-item="opt" wx:for-index="oidx" wx:key="*this"
+              bindtap="answerQuiz" data-i="{{index}}" data-o="{{oidx}}" role="button" aria-label="{{opt}}">{{opt}}</view>
+        <view class="lq-why" wx:if="{{quizOk[item.key]}}">💡 {{item.quiz.why}}</view>
+      </view>
       <view class="ls-done-btn" bindtap="markDone" data-i="{{index}}" role="button" aria-label="标记学完这一节">
         {{doneMap[item.key] ? '✓ 已学完（再点保留）' : '我学完啦 ✓'}}
       </view>

@@ -212,3 +212,13 @@
 .dn-title { font-size:24rpx; color:#7a86a6; font-weight:600; }
 .dn-sub { font-size:20rpx; color:#a3adc4; font-weight:400; margin-left:8rpx; }
 .dn-text { font-size:26rpx; color:#3a465e; line-height:1.7; margin-top:8rpx; white-space:pre-wrap; }
+
+
+.aid-pack { margin: 16rpx 24rpx 0; background: #fff; border: 1rpx solid #f0e3d3; border-radius: 16rpx; padding: 18rpx 22rpx; }
+.ap-head { display: flex; align-items: center; }
+.ap-title { flex: 1; font-size: 26rpx; color: #8a5a2b; font-weight: 600; }
+.ap-close { font-size: 24rpx; color: #c0c7d6; padding: 4rpx 8rpx; }
+.ap-item { font-size: 25rpx; color: #4a5568; line-height: 1.7; margin-top: 10rpx; }
+.ap-actions { display: flex; margin-top: 16rpx; }
+.ap-btn { flex: 1; text-align: center; background: #ff9d5c; color: #fff; border-radius: 999rpx; padding: 12rpx 0; font-size: 24rpx; margin-right: 12rpx; }
+.ap-btn.ghost { background: #fff3e6; color: #b06a2c; border: 1rpx solid #f0dcc4; margin-right: 0; }

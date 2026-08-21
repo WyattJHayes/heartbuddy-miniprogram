@@ -15,7 +15,8 @@ const LESSONS = [
       '情绪不会永远停留——平均几分钟到几小时就会开始回落。',
       '不是「不能有负面情绪」，而是「有了之后怎么照顾它」。'
     ],
-    tiny: '今天：心里难受时，先对自己念一遍情绪的名字，再决定下一步。'
+    do: '今天：心里难受时，先对自己念一遍情绪的名字，再决定下一步。',
+    quiz: { q: '情绪来了，第一步最好做什么？', opts: ['把它压下去当没事', '先命名：我现在是什么情绪', '责怪自己太敏感'], ans: 1, why: '命名情绪本身就能让它「降温」，这是情绪科学里最简单有效的一步。' }
   },
   {
     key: 'exam',
@@ -30,7 +31,8 @@ const LESSONS = [
       '「复习不完」很正常——没有人的准备是绝对充分的，考个「够用」就行。',
       '考后别再复盘对错：那一页已经翻过去了。',
     ],
-    do: '考前 5 分钟：只做一件事——放慢呼吸 60 秒。'
+    do: '考前 5 分钟：只做一件事——放慢呼吸 60 秒。',
+    quiz: { q: '考前心跳加速、坐不住，大脑在做什么？', opts: ['它在攻击我', '它在过度报警「保护」我', '它坏了该修'], ans: 1, why: '报警系统帮不了你做题；先放慢呼吸，把专注力拿回来。' }
   },
   {
     key: 'sleep',
@@ -45,7 +47,8 @@ const LESSONS = [
       '睡前写下明天的 3 件事，交给明天，不许在脑子里加班。',
       '如果躺了 20 分钟还精神，就起来喝口水、翻几页纸书，困了再躺。',
     ],
-    do: '今晚把「必须早点睡」改成「我今晚会好好躺下」。'
+    do: '今晚把「必须早点睡」改成「我今晚会好好躺下」。',
+    quiz: { q: '躺下 20 分钟还睡不着，更好的做法是？', opts: ['逼自己闭眼努力睡', '起来喝口水、翻几页纸书，困了再躺', '刷手机等困意'], ans: 1, why: '「努力入睡」会让大脑更清醒；中断一下再躺，反而更容易睡着。' }
   },
   {
     key: 'low',
@@ -59,7 +62,8 @@ const LESSONS = [
       '去喝口水、拉开窗帘晒 10 秒太阳——身体先动，心情跟着动。',
       '如果连续多天提不起劲、睡不好或想伤害自己，请真的求助：父母、老师或热线。',
     ],
-    do: '现在做一件 60 秒的事：站起来伸个懒腰。'
+    do: '现在做一件 60 秒的事：站起来伸个懒腰。',
+    quiz: { q: '低落没力气时，今天的目标准应该定成？', opts: ['必须振作完成全部', '一件 5 分钟的小事', '什么都不做'], ans: 1, why: '「最小行动」帮你慢慢回血，5 分钟的事也算今天的成功。' }
   }
 ];
 
@@ -69,6 +73,8 @@ Page({
   data: {
     lessons: [],
     doneMap: {},   // key -> true
+    quizOk: {},    // key -> 随堂小测已答对
+    answered: {},  // key -> 已选的选项下标
     doneCount: 0,
     total: LESSONS.length,
     openIdx: -1
@@ -79,7 +85,7 @@ Page({
     try { done = wx.getStorageSync(DONE_KEY) || []; } catch (e) {}
     const doneMap = {};
     (done || []).forEach((k) => { doneMap[k] = true; });
-    this.setData({ lessons: LESSONS, doneMap, doneCount: Object.keys(doneMap).length });
+    this.setData({ lessons: LESSONS, doneMap, doneCount: Object.keys(doneMap).length, quizOk: {}, answered: {} });
   },
 
   toggle(e) {
@@ -91,6 +97,10 @@ Page({
     const i = Number(e.currentTarget.dataset.i);
     const l = this.data.lessons[i];
     if (!l) return;
+    if (l.quiz && !this.data.quizOk[l.key]) {
+      wx.showToast({ title: '先答一答随堂小测吧', icon: 'none' });
+      return;
+    }
     let done = wx.getStorageSync(DONE_KEY) || [];
     if (!done.includes(l.key)) {
       done.push(l.key);
@@ -100,6 +110,34 @@ Page({
     const doneMap = this.data.doneMap;
     doneMap[l.key] = true;
     this.setData({ doneMap, doneCount: Object.keys(doneMap).length });
+  },
+
+  // 随堂小测：答对自动点亮「学完」
+  answerQuiz(e) {
+    const i = Number(e.currentTarget.dataset.i);
+    const o = Number(e.currentTarget.dataset.o);
+    const l = this.data.lessons[i];
+    if (!l || !l.quiz) return;
+    const key = l.key;
+    const answered = this.data.answered;
+    answered[key] = o;
+    if (o === l.quiz.ans) {
+      const quizOk = this.data.quizOk;
+      quizOk[key] = true;
+      this.setData({ answered, quizOk });
+      let done = wx.getStorageSync(DONE_KEY) || [];
+      if (!done.includes(key)) {
+        done.push(key);
+        wx.setStorageSync(DONE_KEY, done);
+        const doneMap = this.data.doneMap;
+        doneMap[key] = true;
+        this.setData({ doneMap, doneCount: Object.keys(doneMap).length });
+      }
+      wx.showToast({ title: '答对了，已点亮 🎉', icon: 'success' });
+    } else {
+      this.setData({ answered });
+      wx.showToast({ title: '再想想，不着急', icon: 'none' });
+    }
   },
 
   resetAll() {
