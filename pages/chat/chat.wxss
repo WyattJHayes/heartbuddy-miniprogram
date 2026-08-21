@@ -153,3 +153,8 @@
   margin: 0 24rpx 12rpx; padding: 8rpx 22rpx; display: inline-block; align-self: flex-start; }
 .quick-panel-title.warm { color: #b06e2f; }
 .quick-panel-item.warm { background: #fff3e0; color: #8a5a1e; }
+
+.night-chip.hot { background:#ffe9d6; color:#a3541c; }
+
+.quick-panel-title.calm { color: #2f8f7f; }
+.quick-panel-item.calm { background: #e6f6f2; color: #1f6b5f; }

@@ -195,6 +195,15 @@ Page({
 
   // ---- 深夜工具箱：22:00–5:00 出现，给「深夜的你想做点什么」提供小入口 ----
   nightBreathe() { wx.navigateTo({ url: '/pages/breathe/breathe' }); },
+  // 大哭/慌张/失控时的「5 分钟急救」：马上能做，延时立刻缓解（固定文案，不耗 AI）
+  nightFirstAid() {
+    this.pushAI('好，我们只做 5 分钟，跟着我一步一步来：' +
+      '\n① 先坐稳或靠墙，双脚踩地（0:00–0:30）' +
+      '\n② 「4 秒吸气 → 4 秒屏住 → 6 秒呼气」× 5 轮（0:30–2:00）' +
+      '\n③ 慢慢喝一小口水，握紧拳头 5 秒再松开（2:00–3:00）' +
+      '\n④ 看着周围说出 3 个颜色、2 个声音、1 个身体能触碰的东西（3:00–4:00）' +
+      '\n⑤ 给我回一句「现在我好一点点了吗」，我会一直握着你的手（4:00–5:00）');
+  },
   nightWrite() { wx.switchTab({ url: '/pages/mood/mood' }); },
   nightLater() {
     wx.showToast({ title: '把烦心事留给明天的你吧，先去睡 🛌', icon: 'none' });
@@ -562,6 +571,18 @@ Page({
   },
 
   onQuick(e) { this.setData({ showQuick: false }); this.send(e.currentTarget.dataset.text); },
+
+  // 即时 3 次深呼吸引导（固定文案，不打 AI）
+  breatheNow() {
+    this.setData({ showQuick: false });
+    this.pushAI('好的，跟我做 3 次深呼吸：' +
+      '\n第一次：鼻子吸气 4 秒…吸满…屏住 1 秒…嘴巴缓慢呼气 6 秒' +
+      '\n第二次：吸气 4 秒…升高…呼气 6 秒，喉咙慢慢放松' +
+      '\n第三次：吸气 4 秒…呼气 6 秒，肩膀跟着往下沉' +
+      '\n\n呼吸变慢的那一刻，身体会记住：此刻你是安全的。' +
+      '\n等稳一点再决定要不要继续说；不说也没关系，我陪着你。');
+    setTimeout(() => { wx.vibrateShort && wx.vibrateShort({ type: 'medium' }); }, 600);
+  },
 
   // 夸夸我：点击即给一句温柔夸奖（本地词库，不打字也不耗 AI）
   onPraise() {

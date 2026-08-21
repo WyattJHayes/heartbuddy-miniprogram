@@ -32,6 +32,20 @@ Page({
     const ts = wx.getStorageSync('hb_scanDone');
     if (ts) this.setData({ lastDone: `上次完成：${this.fmtDate(ts)}` });
     this.setData({ scanCount: wx.getStorageSync('hb_scanCount') || 0 });
+    this.setData({ opening: this.dayOpening() });
+  },
+
+  // 引导语每日轮换：同一天内保持一致，换天换一句
+  dayOpening() {
+    const POOL = [
+      '今天的脑子可能很忙，但身体一直都在这儿等你。',
+      '不用做到「很专注」，能陪自己这几分钟就已经很好了。',
+      '把此刻当成一次「回到身体」的小旅行。',
+      '你不需要赶进度，这里的时间是留给你的。'
+    ];
+    const d = new Date();
+    const idx = (d.getFullYear() * 366 + d.getMonth() * 31 + d.getDate()) % POOL.length;
+    return POOL[idx];
   },
 
   onUnload() { this.stop(); },
