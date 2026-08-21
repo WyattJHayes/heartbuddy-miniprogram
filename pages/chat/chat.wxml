@@ -1,3 +1,26 @@
+<wxs module="fmt">
+var DAY = 86400000;
+function keyOf(d) { return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+function label(k, d) {
+  var now = getDate();
+  var y = getDate(now.getTime() - DAY);
+  if (k === keyOf(now)) return '今天';
+  if (k === keyOf(y)) return '昨天';
+  return (d.getMonth() + 1) + '月' + d.getDate() + '日';
+}
+function divider(ts, prevTs, idx, collapsed, visibleFrom) {
+  if (!ts) return '';
+  if (collapsed && idx < visibleFrom) return '';
+  var d = getDate(ts);
+  var k = keyOf(d);
+  if (idx === 0) return label(k, d);
+  if (!prevTs) return '';
+  var p = getDate(prevTs);
+  if (keyOf(p) === k) return '';
+  return label(k, d);
+}
+module.exports = { divider: divider };
+</wxs>
 <view class="chat-page {{isNight ? 'night' : ''}}">
   <!-- 连续低落情绪关怀条：最近 2 天连续偏低时出现，非打扰、当天一次 -->
   <view class="low-care" wx:if="{{lowCare}}" role="note" aria-label="连续低落情绪关怀">
@@ -51,6 +74,7 @@
       <view class="collapse-bar" wx:if="{{collapsed && messages.length > 22}}" bindtap="expandChat" role="button" aria-label="展开更早的对话">📁 已折叠 {{messages.length - 22}} 条更早的对话 · 点我展开 ▾</view>
       <view class="fold-bar" wx:if="{{!collapsed && messages.length > 22}}" bindtap="collapseChat" role="button" aria-label="折叠更早的对话">↑ 收起更早的 {{messages.length - 22}} 条对话</view>
       <block wx:for="{{messages}}" wx:key="index">
+        <view class="msg-divider" wx:if="{{!collapsed || index >= messages.length - 22}}">{{fmt.divider(item.ts, index > 0 ? messages[index - 1].ts : 0, index, collapsed, messages.length - 22)}}</view>
         <view class="row {{item.role === 'user' ? 'right' : 'left'}}" wx:if="{{!collapsed || index >= messages.length - 22}}">
           <view class="ai-avatar" wx:if="{{item.role === 'ai'}}" aria-hidden="true">{{aiFace || '🌱'}}</view>
           <view class="msg {{item.role === 'user' ? 'user-msg' : 'ai-msg'}}"

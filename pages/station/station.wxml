@@ -21,6 +21,7 @@
       </view>
       <view class="st-body" wx:if="{{open === index}}">
         <view class="st-line" wx:for="{{item.lines}}" wx:for-item="ln" wx:key="*this">{{ln}}</view>
+        <view class="st-copy" bindtap="copyCard" data-i="{{index}}" role="button" aria-label="复制这张卡">📄 复制这张卡</view>
       </view>
     </view>
   </view>

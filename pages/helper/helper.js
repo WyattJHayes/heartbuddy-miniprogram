@@ -135,6 +135,19 @@ Page({
     });
   },
 
+  copyFriendTips() {
+    const t = [
+      '【朋友很难受时，我可以这样做】',
+      '1. 先听，不急着讲道理：「我在，你说，我不打断。」',
+      '2. 别说「想开点」，换成「这确实很难，你难受是正常的」。',
+      '3. 可以直接问安全：「你有没有想过伤害自己？」——问不会造成伤害，不问才有风险。',
+      '4. 陪 TA 一起找大人：老师、家长或心理老师；你不必独自扛下朋友的生命。',
+      '5. 情况紧急立刻拨 12356（24 小时免费），并陪在 TA 身边。',
+      '—— 也请照顾好你自己，来自「心语伴」'
+    ].join('\n');
+    wx.setClipboardData({ data: t, success: () => wx.showToast({ title: '已复制，谢谢你愿意帮 TA', icon: 'success' }) });
+  },
+
   editScript() {
     const t = this.data.scriptText;
     if (!t) return;

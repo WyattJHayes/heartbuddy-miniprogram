@@ -129,3 +129,7 @@
 .sc-act { font-size: 22rpx; color: #5b8def; margin-left: 10rpx; }
 
 .af-parent { margin-top: 16rpx; background: #fdf6ec; border: 1rpx dashed #e4c9a1; border-radius: 12rpx; padding: 14rpx 18rpx; font-size: 23rpx; color: #8a6a2f; line-height: 1.7; }
+
+.friend-card { margin-top: 20rpx; background: #fbf8ff; border: 1rpx solid #e4dcf5; }
+.fr-item { font-size: 24rpx; color: #5b5480; line-height: 1.8; margin-top: 8rpx; }
+.fr-copy { margin-top: 16rpx; display: inline-block; background: #8a7bd0; color: #fff; border-radius: 999rpx; padding: 12rpx 30rpx; font-size: 24rpx; }

@@ -191,6 +191,14 @@ Page({
     wx.vibrateShort && wx.vibrateShort({ type: 'light' });
   },
 
+  copyCard(e) {
+    const i = Number(e.currentTarget.dataset.i);
+    const c = (this.data.cards || [])[i];
+    if (!c) return;
+    const body = ['【心语伴 · 充电站】' + c.emoji + ' ' + c.title, '', ...c.lines.map((l) => (l.startsWith('·') ? l : '· ' + l))].join('\n');
+    wx.setClipboardData({ data: body, success: () => wx.showToast({ title: '已复制这张卡', icon: 'success' }) });
+  },
+
   goEdu() {
     wx.navigateTo({ url: '/pages/edu/edu' });
   },

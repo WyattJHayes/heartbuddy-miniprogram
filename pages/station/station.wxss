@@ -27,3 +27,5 @@
 
 .daily-line { position: relative; padding-right: 120rpx; }
 .dl-shuffle { position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 20rpx; color: #5b8def; border: 1rpx solid #d9e4f8; border-radius: 999rpx; padding: 4rpx 14rpx; }
+
+.st-copy { display: inline-block; margin-top: 14rpx; font-size: 22rpx; color: #5b8def; border: 1rpx solid #cfe0fb; border-radius: 999rpx; padding: 8rpx 26rpx; }

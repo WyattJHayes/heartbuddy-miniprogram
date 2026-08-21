@@ -191,3 +191,6 @@
 .st-text { flex: 1; font-size: 23rpx; color: #4e7a58; }
 .st-go { font-size: 23rpx; color: #3f8a5a; font-weight: 600; margin: 0 16rpx; }
 .st-close { font-size: 22rpx; color: #b0b7c8; }
+
+.msg-divider { text-align: center; font-size: 20rpx; color: #a3adc4; margin: 18rpx 0 10rpx; }
+.msg-divider:empty { display: none; }

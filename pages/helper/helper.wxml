@@ -177,6 +177,17 @@
     <view class="sms-btn" bindtap="copyHelpSms" role="button" aria-label="复制一段求助文字发给信任的人">📋 复制一段文字，发给信任的人（长辈/老师）</view>
   </view>
 
+  <!-- 帮助朋友：身边的人很难受时，你怎么做（可复制给你自己看） -->
+  <view class="card friend-card">
+    <view class="section-title">🫂 是朋友很难受？你可以这样帮 TA</view>
+    <view class="fr-item">· 先听，不急着讲道理：「我在，你说，我不打断。」</view>
+    <view class="fr-item">· 别说「想开点」，换成「这确实很难，你难受是正常的」。</view>
+    <view class="fr-item">· 可以直接问安全：「你有没有想过伤害自己？」——问不会造成伤害，不问才会有风险。</view>
+    <view class="fr-item">· 陪 TA 一起找大人：老师、家长或心理老师；你不必独自扛下朋友的生命。</view>
+    <view class="fr-item">· 情况紧急立刻拨 12356，并陪在 TA 身边。</view>
+    <view class="fr-copy" bindtap="copyFriendTips" role="button" aria-label="复制帮助朋友的方法">📋 复制这份方法（给自己留着）</view>
+  </view>
+
   <view class="card">
     <view class="section-title">心理援助热线</view>
     <view class="line" wx:for="{{hotlines}}" wx:key="name">
