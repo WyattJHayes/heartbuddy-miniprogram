@@ -41,3 +41,4 @@
 .notice-sheet .btn-primary { margin-top: 20rpx; }
 .full { width: 100%; }
 .share-banner { width: 100%; box-sizing: border-box; margin: 0 auto 24rpx; max-width: 620rpx; background: #eaf3ff; color: #4568c8; border: 1rpx solid #cfe1ff; border-radius: 16rpx; padding: 18rpx 24rpx; font-size: 25rpx; line-height: 1.6; }
+.q-mood { background: linear-gradient(135deg, #eef9f0, #d9f0df); border-color: #b5dcbe; }

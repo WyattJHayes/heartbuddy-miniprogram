@@ -34,5 +34,7 @@ Page({
 
   goChat() { wx.switchTab({ url: '/pages/chat/chat' }); },
 
-  goTest() { wx.navigateTo({ url: '/pages/assessment/assessment' }); }
+  goTest() { wx.navigateTo({ url: '/pages/assessment/assessment' }); },
+
+  goMood() { wx.switchTab({ url: '/pages/mood/mood' }); }
 });

@@ -74,11 +74,13 @@ exports.main = async () => {
 
     // 高危 7 天分日趋势（含 0 天补齐）+ 高危用户 top（脱敏）
     const highByDay = {};
+    const highHandledByDay = {};
     const highUsers = {};
     (highWeek.data || []).forEach((c) => {
       const d = new Date(c.createdAt);
       const key = `${d.getMonth() + 1}-${String(d.getDate()).padStart(2, '0')}`;
       highByDay[key] = (highByDay[key] || 0) + 1;
+      if (c.status === 'handled') highHandledByDay[key] = (highHandledByDay[key] || 0) + 1;
       if (c.openid) highUsers[c.openid] = (highUsers[c.openid] || 0) + 1;
     });
     const highTrend7 = (function () {
@@ -88,6 +90,19 @@ exports.main = async () => {
         const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
         const key = `${d.getMonth() + 1}-${String(d.getDate()).padStart(2, '0')}`;
         out.push({ day: key, count: highByDay[key] || 0 });
+      }
+      return out;
+    })();
+    // 近 7 日高危处理率趋势（预警日 → 当日已处理比例，运营量化）
+    const highRate7 = (function () {
+      const out = [];
+      const today = new Date();
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
+        const key = `${d.getMonth() + 1}-${String(d.getDate()).padStart(2, '0')}`;
+        const total = highByDay[key] || 0;
+        const done = highHandledByDay[key] || 0;
+        out.push({ day: key, total, handled: done, rate: total ? Math.round((done / total) * 100) : null });
       }
       return out;
     })();
@@ -128,6 +143,7 @@ exports.main = async () => {
         moodTrend7,
         crisisBySource: Object.keys(bySource).map((k) => ({ source: k, count: bySource[k] })),
         highTrend7,
+        highRate7,
         highUserList,
         recentCrisis: (crisisWeek.data || []).slice(0, 10).map((c) => ({
           id: c._id,

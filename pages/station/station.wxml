@@ -1,0 +1,27 @@
+<view class="station-page">
+  <view class="st-hero">
+    <view class="st-hero-emoji">🔋</view>
+    <view class="st-hero-title">情绪充电站</view>
+    <view class="st-hero-sub">不是鸡汤，是能马上做的小事</view>
+  </view>
+
+  <view class="st-cards">
+    <view class="st-card" wx:for="{{cards}}" wx:key="title">
+      <view class="st-head" data-index="{{index}}" bindtap="toggleCard" role="button" aria-label="展开或收起{{item.title}}">
+        <text class="st-emoji">{{item.emoji}}</text>
+        <text class="st-title">{{item.title}}</text>
+        <text class="st-arrow {{open === index ? 'up' : ''}}">▾</text>
+      </view>
+      <view class="st-body" wx:if="{{open === index}}">
+        <view class="st-line" wx:for="{{item.lines}}" wx:for-item="ln" wx:key="*this">{{ln}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="st-actions">
+    <view class="st-btn primary" bindtap="goBreathe" role="button" aria-label="去做 3 分钟呼吸练习">🧘 现在做一次呼吸</view>
+    <view class="st-btn ghost" bindtap="goChat" role="button" aria-label="和心语聊聊此刻的感受">💬 和心语聊聊</view>
+  </view>
+
+  <view class="st-foot">* 内容为心理学科普与自助技巧，不替代专业诊断。若情况紧急，请去「求助」页拨打热线。</view>
+</view>

@@ -103,3 +103,6 @@
 .feed-row:last-child { border-bottom: none; }
 .feed-comment { font-size: 25rpx; color: #33425b; line-height: 1.6; }
 .feed-time { font-size: 21rpx; color: #a2abbe; margin-top: 4rpx; }
+
+.hday-bar.rate { background: #e9f0ff; }
+.hday-fill.rate { background: linear-gradient(90deg, #9db9f0, #4a7be0); }

@@ -1,0 +1,22 @@
+/* pages/station/station.wxss */
+.station-page { padding: 28rpx 24rpx 60rpx; }
+.st-hero { text-align: center; padding: 36rpx 0 30rpx; }
+.st-hero-emoji { font-size: 72rpx; }
+.st-hero-title { font-size: 38rpx; font-weight: 700; color: #3f3a52; margin-top: 10rpx; }
+.st-hero-sub { font-size: 25rpx; color: #9a93ab; margin-top: 8rpx; }
+
+.st-cards { display: flex; flex-direction: column; gap: 16rpx; }
+.st-card { background: #fff; border-radius: 16rpx; padding: 4rpx 24rpx; box-shadow: 0 2rpx 10rpx rgba(80, 66, 122, 0.06); }
+.st-head { display: flex; align-items: center; gap: 14rpx; padding: 26rpx 0; }
+.st-emoji { font-size: 40rpx; }
+.st-title { flex: 1; font-size: 28rpx; font-weight: 600; color: #403a4e; }
+.st-arrow { font-size: 26rpx; color: #b8b1c6; transition: transform 0.2s; }
+.st-arrow.up { transform: rotate(180deg); }
+.st-body { padding: 6rpx 0 24rpx 54rpx; border-top: 1rpx dashed #efeafa; }
+.st-line { font-size: 26rpx; color: #6b6480; line-height: 1.9; }
+
+.st-actions { display: flex; gap: 16rpx; margin-top: 36rpx; }
+.st-btn { flex: 1; text-align: center; padding: 20rpx 0; border-radius: 999rpx; font-size: 27rpx; }
+.st-btn.primary { background: #7c6ec1; color: #fff; }
+.st-btn.ghost { background: #fff; color: #7c6ec1; border: 1rpx solid #d6ceef; }
+.st-foot { margin-top: 40rpx; font-size: 22rpx; color: #b0a9c0; line-height: 1.7; text-align: center; }

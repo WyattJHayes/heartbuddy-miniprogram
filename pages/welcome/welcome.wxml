@@ -15,6 +15,11 @@
       <view class="qe-t">和心语聊聊</view>
       <view class="qe-d">AI 情绪陪伴对话</view>
     </view>
+    <view class="qentry q-mood" bindtap="goMood">
+      <view class="qe-emoji">🎨</view>
+      <view class="qe-t">记此刻心情</view>
+      <view class="qe-d">一笔一画 · 情绪可视化</view>
+    </view>
     <view class="qentry q-test" bindtap="goTest">
       <view class="qe-emoji">📋</view>
       <view class="qe-t">情绪自评</view>

@@ -45,6 +45,18 @@
         <view class="qt-sub">5 分钟 · 安静下来</view>
       </view>
     </view>
+    <view class="qt-row" style="margin-top: 12rpx;">
+      <view class="qt-card" role="button" bindtap="goStation" aria-label="去情绪充电站学一点舒缓方法">
+        <view class="qt-emoji">🔋</view>
+        <view class="qt-name">情绪充电站</view>
+        <view class="qt-sub">知识 · 急救 · 舒缓技巧</view>
+      </view>
+      <view class="qt-card" role="button" bindtap="goChat" aria-label="去和 AI 聊天">
+        <view class="qt-emoji">💬</view>
+        <view class="qt-name">和心语聊聊</view>
+        <view class="qt-sub">说给我听 · 我在</view>
+      </view>
+    </view>
   </view>
 
   <!-- 今日关怀：日轮换轻贴士 -->

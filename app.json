@@ -10,7 +10,8 @@
     "pages/breathe/breathe",
     "pages/scan/scan",
     "pages/profile/profile",
-    "pages/privacy/privacy"
+    "pages/privacy/privacy",
+    "pages/station/station"
   ],
   "window": {
     "backgroundTextStyle": "light",
