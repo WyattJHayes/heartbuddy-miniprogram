@@ -125,6 +125,7 @@ Page({
     quizOk: {},    // key -> 随堂小测已答对
     answered: {},  // key -> 已选的选项下标
     streak: 0,     // 连续学习天数
+    myNote: '',    // 学习心得：一句话写给自己（本地）
     doneCount: 0,
     total: LESSONS.length,
     openIdx: -1
@@ -135,6 +136,7 @@ Page({
     try { done = wx.getStorageSync(DONE_KEY) || []; } catch (e) {}
     const doneMap = {};
     (done || []).forEach((k) => { doneMap[k] = true; });
+    this.setData({ myNote: wx.getStorageSync('hb_eduNote') || '' });
     // 续学：自动展开第一节还没学完的课（全部学完则收起）
     let openIdx = -1;
     for (let i = 0; i < LESSONS.length; i++) { if (!doneMap[LESSONS[i].key]) { openIdx = i; break; } }
@@ -219,6 +221,14 @@ Page({
     wx.setStorageSync(DARK_KEY, []);
     this.onLoad();
     wx.showToast({ title: '已重开', icon: 'none' });
+  },
+
+  // 学习心得：一句话（本地保存，写在结业卡上方）
+  onNoteInput(e) { this.setData({ myNote: e.detail.value }); },
+  saveNote() {
+    const t = (this.data.myNote || '').trim();
+    wx.setStorageSync('hb_eduNote', t.slice(0, 60));
+    wx.showToast({ title: t ? '已记下 🌱' : '已清空', icon: 'none' });
   },
 
   // 结业卡：全部学完后可复制的一段「结业词」（本地，留念/分享）

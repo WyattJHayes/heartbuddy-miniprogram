@@ -130,8 +130,49 @@ Page({
     this.initSession();
     // 连续低落情绪关怀：读最近 7 天情绪，若最后 2 天连续偏低（<3.5）给一条非打扰提示
     this.maybeShowLowCare();
+    // 周一（或跨周首次打开）：轻声回顾上周一起走过的路（每周一次，非打扰）
+    this.maybeWeeklyRecap();
     // 今日倾诉次数（给「第 N 次来找我」的陪伴感）
     this.refreshTodayN();
+  },
+
+  // 上周陪伴小结：周一首次打开时，统计上周心情条数/覆盖天数/主要情绪（每周只发一次）
+  async maybeWeeklyRecap() {
+    try {
+      const now = new Date();
+      const wk = this.weekKey(now);
+      if (wx.getStorageSync('hb_weekRecap') === wk) return;
+      let openid = app.globalData.openid;
+      if (!openid) openid = await app.login();
+      if (!openid) return;
+      const DAY = 86400000;
+      // 本周周一 0 点
+      const mon = new Date(now); mon.setHours(0, 0, 0, 0);
+      mon.setDate(mon.getDate() - ((mon.getDay() + 6) % 7));
+      const lastMon = new Date(mon.getTime() - 7 * DAY);
+      const db = wx.cloud.database();
+      const r = await db.collection('moods')
+        .where({ openid, createdAt: db.command.and(db.command.gte(lastMon.getTime()), db.command.lt(mon.getTime())) })
+        .limit(100).get();
+      const list = r.data || [];
+      if (!list.length) return; // 上周没记录就不打扰
+      wx.setStorageSync('hb_weekRecap', wk);
+      const days = new Set(list.map((m) => new Date(m.createdAt).toDateString())).size;
+      const cnt = {};
+      list.forEach((m) => { cnt[m.mood] = (cnt[m.mood] || 0) + 1; });
+      const topKey = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0];
+      const meta = MOOD_SCORE[topKey] !== undefined && topKey ? topKey : 'peace';
+      const label = { happy: '开心', peace: '平静', expect: '期待', tired: '疲惫', angry: '生气', anxiety: '焦虑', lonely: '孤独', sad: '难过' }[meta] || '各种心情';
+      this.pushAI(
+        '🗓 上周，你在这里记下了 ' + list.length + ' 条心情，覆盖 ' + days + ' 天，出现最多的是「' + label + '」。',
+        false
+      );
+    } catch (e) { /* 静默：回顾失败不影响聊天 */ }
+  },
+  weekKey(d) {
+    const mon = new Date(d); mon.setHours(0, 0, 0, 0);
+    mon.setDate(mon.getDate() - ((mon.getDay() + 6) % 7));
+    return 'W' + mon.getFullYear() + (mon.getMonth() + 1) + mon.getDate();
   },
 
   // 数一数今天已经对 AI 说过几轮话

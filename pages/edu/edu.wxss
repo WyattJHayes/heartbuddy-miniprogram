@@ -39,3 +39,8 @@ page { background: #F7F8FB; }
 .gc-title { font-size: 30rpx; font-weight: 700; color: #a05a2c; margin-top: 10rpx; }
 .gc-text { font-size: 24rpx; color: #8a6a4f; line-height: 1.8; margin-top: 10rpx; }
 .gc-btn { margin-top: 16rpx; background: #e8935c; color: #fff; border-radius: 999rpx; padding: 14rpx 0; font-size: 25rpx; }
+
+.note-card { margin-top: 24rpx; background: #fff; border-radius: 16rpx; padding: 20rpx 24rpx; box-shadow: 0 4rpx 12rpx rgba(90,120,200,.06); }
+.nt-title { font-size: 26rpx; color: #2f3b54; font-weight: 600; }
+.nt-input { margin-top: 14rpx; width: auto; background: #f6f8fc; border-radius: 12rpx; padding: 14rpx 18rpx; font-size: 25rpx; color: #3a465e; min-height: 60rpx; }
+.nt-save { margin-top: 14rpx; display: inline-block; background: #5b8def; color: #fff; border-radius: 999rpx; padding: 10rpx 36rpx; font-size: 24rpx; }
