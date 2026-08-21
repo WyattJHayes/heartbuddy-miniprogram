@@ -5,6 +5,12 @@
     <view class="st-hero-sub">不是鸡汤，是能马上做的小事</view>
   </view>
 
+  <!-- 按此刻心情筛选卡片 -->
+  <view class="tag-filter" role="group" aria-label="按心情筛选卡片">
+    <view class="tf-chip {{showTag === item ? 'on' : ''}}" wx:for="{{cardTags}}" wx:key="*this"
+          data-t="{{item}}" bindtap="setCardTag" role="button" aria-label="筛选{{item}}">{{item}}</view>
+  </view>
+
   <view class="st-cards">
     <!-- 今天的一句（换日轮换，纯本地） -->
   <view class="daily-line" wx:if="{{todayLine}}" role="note" aria-label="今天的一句话">{{todayLine}}

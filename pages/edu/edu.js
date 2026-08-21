@@ -217,9 +217,13 @@ Page({
 
   // 温故一题：全部学完后，随机抽一题再答一次（不计进度，纯温习）
   rollReview() {
-    const pool = LESSONS.filter((l) => l.quiz);
-    if (!pool.length) return;
-    const l = pool[Math.floor(Math.random() * pool.length)];
+    const all = LESSONS.filter((l) => l.quiz);
+    if (!all.length) return;
+    // 温故优先：先抽答错过的课；没错题才随机
+    const wrong = wx.getStorageSync('hb_eduWrong') || [];
+    const pool = wrong.length ? all.filter((l) => wrong.includes(l.key)) : all;
+    const use = pool.length ? pool : all;
+    const l = use[Math.floor(Math.random() * use.length)];
     this.setData({ review: { key: l.key, icon: l.icon, title: l.title, quiz: l.quiz, picked: -1, ok: false } });
   },
   answerReview(e) {
@@ -227,6 +231,11 @@ Page({
     const rv = this.data.review;
     if (!rv || rv.picked >= 0) return;
     const ok = o === rv.quiz.ans;
+    // 错题本：答错记下、答对移出（温故时优先抽）
+    const wrong = wx.getStorageSync('hb_eduWrong') || [];
+    const i = wrong.indexOf(rv.key);
+    if (ok) { if (i > -1) { wrong.splice(i, 1); wx.setStorageSync('hb_eduWrong', wrong); } }
+    else if (i === -1) { wrong.push(rv.key); wx.setStorageSync('hb_eduWrong', wrong); }
     this.setData({ review: Object.assign({}, rv, { picked: o, ok }) });
     if (ok) wx.showToast({ title: '还记得，真棒 🎉', icon: 'success' });
     else wx.showToast({ title: '忘了一点，很正常', icon: 'none' });

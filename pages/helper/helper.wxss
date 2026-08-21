@@ -133,3 +133,7 @@
 .friend-card { margin-top: 20rpx; background: #fbf8ff; border: 1rpx solid #e4dcf5; }
 .fr-item { font-size: 24rpx; color: #5b5480; line-height: 1.8; margin-top: 8rpx; }
 .fr-copy { margin-top: 16rpx; display: inline-block; background: #8a7bd0; color: #fff; border-radius: 999rpx; padding: 12rpx 30rpx; font-size: 24rpx; }
+
+.af-hist { margin-top: 16rpx; }
+.af-hist-t { font-size: 22rpx; color: #9aa3b8; }
+.af-hist-item { margin-top: 10rpx; font-size: 23rpx; color: #5b6b8c; background: #f6f8fc; border-radius: 10rpx; padding: 10rpx 16rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

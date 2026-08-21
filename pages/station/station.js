@@ -4,10 +4,13 @@ Page({
   data: {
     todayLine: '',
     favTitles: [],      // 收藏的卡片标题（最多 3 张，置顶+★）
+    cardTags: ['全部', '焦虑', '难过', '生气', '睡前', '学习', '平静'],
+    showTag: '全部',    // 按心情筛选当前展示哪些卡
     cards: [
       {
         emoji: '🌀',
         title: '情绪上来时，先做这 4 件事',
+        tags: ['焦虑', '难过', '生气'],
         lines: [
           '① 停 5 秒，只观察呼吸的进出',
           '② 给情绪命名：「我现在是…」（焦虑/难过/愤怒…）',
@@ -18,6 +21,7 @@ Page({
       {
         emoji: '🧠',
         title: '焦虑时的大脑骗局',
+        tags: ['焦虑', '学习'],
         lines: [
           '· 「绝对化」：总觉得“一定会坏”，其实只是担心不是事实',
           '· 「灾难化」：把一次不舒服放大成整个世界',
@@ -28,6 +32,7 @@ Page({
       {
         emoji: '🌙',
         title: '睡前安神 5 分钟',
+        tags: ['睡前', '平静'],
         lines: [
           '· 深呼 4 秒 → 憋 4 秒 → 缓吐 6 秒，重复 5 轮',
           '· 把明天的事写在一张纸上（卸下来，明天再看）',
@@ -38,6 +43,7 @@ Page({
       {
         emoji: '💌',
         title: '给低落的自己写一封信',
+        tags: ['难过'],
         lines: [
           '· “我知道这几天很难，但我还在…”',
           '· “我最不愿意放弃的东西是…”',
@@ -48,6 +54,7 @@ Page({
       {
         emoji: '🐢',
         title: '总在拖延？来个「2 分钟启动式」',
+        tags: ['学习'],
         lines: [
           '· 别想“做完”，只想“今天做第一步”',
           '· 把任务拆到小到迈不开：打开书、摆好纸笔',
@@ -59,6 +66,7 @@ Page({
       {
         emoji: '📝',
         title: '睡前 2 清单 · 安心收尾',
+        tags: ['睡前'],
         lines: [
           '· 今天做到的 3 件小事（哪怕只有“喝了一杯水”）',
           '· 明天只做 1 件事（写下来，明天只还这一件）',
@@ -69,6 +77,7 @@ Page({
       {
         emoji: '🔥',
         title: '气得发抖时 · 60 秒降火',
+        tags: ['生气'],
         lines: [
           '· 先说一句定住自己：「我现在很气，但我不会立刻炸开」',
           '· 吸气 4 秒 → 停 2 秒 → 呼气 6 秒，做 5 轮',
@@ -80,6 +89,7 @@ Page({
       {
         emoji: '🪐',
         title: '脑子太满？发呆 2 分钟',
+        tags: ['平静'],
         lines: [
           '· 发呆不是浪费时间：大脑放松时，会自动整理碎片',
           '· 坐直、眼睛放空、什么都不用想',
@@ -91,6 +101,7 @@ Page({
       {
         emoji: '🆘',
         title: '什么样的情况，不只是情绪？',
+        tags: ['难过', '焦虑'],
         lines: [
           '· 持续 2 周以上几乎每天低落 / 失眠 / 食欲大变',
           '· 有“我消失了更好”或伤害自己的念头',
@@ -101,6 +112,7 @@ Page({
       {
         emoji: '👀',
         title: '5-4-3-2-1：随时能用的接地术',
+        tags: ['焦虑', '生气'],
         lines: [
           '焦虑像潮水漫上来时，用五个感官把自己“钉回地面”：',
           '· 看 5 样东西：说出你看到的 5 样东西（水杯、窗帘…）',
@@ -114,6 +126,7 @@ Page({
       {
         emoji: '🌒',
         title: '考前一夜 · 就做这 3 件事',
+        tags: ['学习', '睡前'],
         lines: [
           '① 收尾不刷新：不再做新题，只翻一遍错题本的标题（10 分钟封顶）。',
           '② 准备明早：准考证、笔、水杯放门口，减少明早的慌乱。',
@@ -124,6 +137,7 @@ Page({
       {
         emoji: '🔤',
         title: '情绪词库 · 先准确叫出它的名字',
+        tags: ['难过', '生气', '焦虑'],
         lines: [
           '生气一族：烦躁 / 恼火 / 憋屈 / 愤懑 / 暴怒',
           '难过一族：低落 / 委屈 / 失落 / 空落落 / 心碎',
@@ -140,7 +154,9 @@ Page({
   // 收藏置顶：长按卡片头 ★ 收藏/取消（本地，最多 3 张）
   applyFavs() {
     const favs = wx.getStorageSync('hb_stFavs') || [];
-    const cards = (this.data.cards || []).slice();
+    const tag = this.data.showTag || '全部';
+    const src = (this._allCards || this.data.cards || []).slice();
+    const cards = tag === '全部' ? src : src.filter((c) => (c.tags || []).includes(tag));
     cards.sort((a, b) => {
       const fa = favs.indexOf(a.title), fb = favs.indexOf(b.title);
       if (fa === -1 && fb === -1) return 0;
@@ -169,7 +185,14 @@ Page({
   },
 
   onShow() {
+    if (!this._allCards) this._allCards = this.data.cards.slice();
     this.setData({ todayLine: this.getDailyLine() });
+    this.applyFavs();
+  },
+
+  setCardTag(e) {
+    const t = e.currentTarget.dataset.t;
+    this.setData({ showTag: t, open: -1 });
     this.applyFavs();
   },
 

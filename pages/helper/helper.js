@@ -38,6 +38,7 @@ Page({
     ],
     scriptSituation: '',
     scriptText: '',
+    scriptHist: [],     // 最近复制过的话术（本地 ≤3 条，可再复制）
     careGrad: false,            // 四段陪伴计划走完后的「毕业卡」（一次性）
     safeContacts: [],           // 安全包（升级版）：[{n:'妈妈', p:'138…'}]，支持一键拨打
     hotlines,
@@ -148,6 +149,18 @@ Page({
     wx.setClipboardData({ data: t, success: () => wx.showToast({ title: '已复制，谢谢你愿意帮 TA', icon: 'success' }) });
   },
 
+  pushHist(t) {
+    const h = (wx.getStorageSync('hb_scriptHist') || []).filter((x) => x.t !== t);
+    h.unshift({ t, time: new Date().toLocaleDateString() });
+    wx.setStorageSync('hb_scriptHist', h.slice(0, 3));
+    this.setData({ scriptHist: h.slice(0, 3) });
+  },
+  reCopyHist(e) {
+    const t = e.currentTarget.dataset.t;
+    if (!t) return;
+    wx.setClipboardData({ data: t, success: () => wx.showToast({ title: '已再次复制', icon: 'success' }) });
+  },
+
   editScript() {
     const t = this.data.scriptText;
     if (!t) return;
@@ -173,6 +186,7 @@ Page({
       data: this.data.scriptText,
       success: () => {
         if (!wx.getStorageSync('ach_askOut')) wx.setStorageSync('ach_askOut', true); // 成就：开口一次
+        this.pushHist(this.data.scriptText);
         wx.showToast({ title: '已复制，发给信任的人', icon: 'success' });
       }
     });
@@ -211,6 +225,7 @@ Page({
     this.setData({ careGrad: !!(grad && !wx.getStorageSync('hbCareGradSeen')) });
     // 安全包（升级版）：兼容旧的纯称呼格式
     this.setData({ safeContacts: this.loadSafeContacts() });
+    this.setData({ scriptHist: wx.getStorageSync('hb_scriptHist') || [] });
   },
 
   // 毕业卡关闭：记住已看，不再打扰

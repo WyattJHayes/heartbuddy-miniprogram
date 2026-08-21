@@ -29,3 +29,7 @@
 .dl-shuffle { position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 20rpx; color: #5b8def; border: 1rpx solid #d9e4f8; border-radius: 999rpx; padding: 4rpx 14rpx; }
 
 .st-copy { display: inline-block; margin-top: 14rpx; font-size: 22rpx; color: #5b8def; border: 1rpx solid #cfe0fb; border-radius: 999rpx; padding: 8rpx 26rpx; }
+
+.tag-filter { display: flex; flex-wrap: wrap; margin: 16rpx 24rpx 0; }
+.tf-chip { font-size: 23rpx; color: #5b6b8c; background: #fff; border: 1rpx solid #e2e7f2; border-radius: 999rpx; padding: 8rpx 24rpx; margin: 0 12rpx 12rpx 0; }
+.tf-chip.on { background: #5b8def; color: #fff; border-color: #5b8def; }
