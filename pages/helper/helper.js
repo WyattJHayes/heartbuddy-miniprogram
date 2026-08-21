@@ -25,6 +25,7 @@ const SELF_STEPS = [
 
 Page({
   data: {
+    triageDone: false, // 当天的“现在最需要什么”是否已用过（当日一次）
     hotlines,
     safety: false, // 是否已设置 24 小时回访
     safetyHint: '',
@@ -42,6 +43,20 @@ Page({
   },
 
   // ---- 要一句安慰的话：随机温和短句，可记住 / 可复制给自己 ----
+  // 现在最需要什么：三选一快速分流（先给出口，不给判断）
+  onNeedNav() {
+    wx.setStorageSync('hb_triageDone', new Date().toDateString());
+    wx.showActionSheet({
+      itemList: ['心很乱·停不下来 → 呼吸练习', '闷得慌·想说出来 → 找心语聊聊', '发空·不知道自己要什么 → 随手整理心情'],
+      success: (r) => {
+        const go = ['/pages/breathe/breathe', '/pages/chat/chat', '/pages/mood/mood'];
+        const url = go[r.tapIndex];
+        if (url === '/pages/chat/chat' || url === '/pages/mood/mood') wx.switchTab({ url });
+        else wx.navigateTo({ url });
+      }
+    });
+  },
+
   onComfort() {
     const P = [
       '抱撑到现在已经很好了，今天也辛苦啦。',
@@ -65,6 +80,8 @@ Page({
     this.loadFollowUp();
     this.loadHushCare();
     this.loadSmartTip();
+    // 当天已用过“方向选择”→ 隐藏（次日恢复）
+    this.setData({ triageDone: wx.getStorageSync('hb_triageDone') === new Date().toDateString() });
   },
 
   // 智能分流：按时段 + 最近连续低情绪天数，给一条最相关的此刻建议（轻提示条，不打扰）

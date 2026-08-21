@@ -35,6 +35,7 @@ Page({
         });
       });
       this.setData({ 'd.followOpen': followOpen });
+      this.setData({ 'd.handleAvg': this.computeHandleAvg(dd) });
       const dd = res.data || {};
       const weekRate = dd.weekCrisis ? Math.round(((dd.weekHandled || 0) / dd.weekCrisis) * 100) : 0;
       // 月度对比：本月 vs 上月（预警数 + 已处理 + 处理率）
@@ -123,6 +124,17 @@ Page({
 
   // 一键转「督办单」：给高危用户生成带时限+备注的回访督办（12/24/48h 可选）
   // 复制待跟进督办清单（含完整 openid，供真人跟进）
+  // 平均危机处理时长：从「创建→标记处理」的差求平均（小时），帮运营看效率
+  computeHandleAvg(dd) {
+    const list = (dd.recentHandled || []).filter((h) => h.c && h.a > h.c);
+    if (!list.length) return null;
+    const hours = list.map((h) => (h.a - h.c) / 3600000).sort((a, b) => a - b);
+    const sum = hours.reduce((a, b) => a + b, 0);
+    const avg = sum / hours.length;
+    const med = hours[Math.floor(hours.length / 2)];
+    return { n: list.length, avgH: +avg.toFixed(1), medH: +med.toFixed(1) };
+  },
+
   copyRevisitList() {
     const d = this.data.d || {};
     const list = d.followOpen || [];

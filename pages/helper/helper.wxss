@@ -88,3 +88,9 @@
   background: #eef3ff; border-radius: 999rpx; padding: 16rpx 20rpx; }
 
 .qt-card.comfort { background: linear-gradient(160deg,#fff6ec,#ffe9d6); }
+
+.now-tg { background:linear-gradient(180deg,#fff,#f7f9ff); }
+.now-tg .section-title { font-size:26rpx; color:#33415c; }
+.tg-grid { display:flex; gap:14rpx; margin-top:14rpx; }
+.tg-item { flex:1; text-align:center; font-size:24rpx; color:#33415c; background:#eef2fb; border:1rpx solid #e1e7f4; border-radius:14rpx; padding:18rpx 6rpx; }
+.tgmore { text-align:center; font-size:22rpx; color:#8a95b3; margin-top:12rpx; }

@@ -126,3 +126,7 @@
 .dued-note { color:#8a94a8; max-width:40%; }
 .dued-due { color:#d8482a; white-space:nowrap; }
 .dued-tip { margin-top:8rpx; font-size:22rpx; color:#b0a48d; }
+
+.avg-line { font-size:26rpx; color:#33415c; margin:6rpx 0; }
+
+.avg-line { font-size:32rpx; color:#33415c; margin:4rpx 2rpx; }

@@ -291,9 +291,9 @@ Page({
         counts: { moods: moods.length, assessments: assessments.length, crisisAlerts: crisis.length, feedbacks: feedbacks.length },
         data: {
           moods: this.mask(moods),
-          assessments: assessments.length,
-          crisisAlerts: crisis.length,
-          feedbacks: feedbacks.length
+          assessments: this.mask(assessments),
+          crisisAlerts: this.mask(crisis),
+          feedbacks: this.mask(feedbacks)
         }
       };
       const text = JSON.stringify(payload, null, 2);

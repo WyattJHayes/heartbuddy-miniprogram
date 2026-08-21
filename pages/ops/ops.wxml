@@ -132,6 +132,13 @@
         <view class="text-muted trend-note">把 24 小时压成一排看高峰，便于安排巡查与人工回访时段。</view>
       </view>
 
+      <!-- 危机平均处理时长：预警发出到标记已处理（看“响应速度”） -->
+      <view class="card" wx:if="{{d.handleAvg}}">
+        <view class="section-title">⏱ 危机平均处理时长 <text class="plan-sub">本月已处理 {{d.handleAvg.count}} 条</text></view>
+        <view class="avg-line">平均 <text class="hl">{{d.handleAvg.avgH}}</text> 小时 · 中位数 {{d.handleAvg.medH}} 小时</view>
+        <view class="text-muted trend-note">看中位数更稳（个别“雷雨天”会拉高平均）。</view>
+      </view>
+
       <!-- 近 7 日高危处理率：当日已处理占比（无预警=空） -->
       <view class="card" wx:if="{{d.highRate7 && d.highRate7.length}}">
         <view class="section-title">🛡️ 高危危机·近 7 日处理率</view>

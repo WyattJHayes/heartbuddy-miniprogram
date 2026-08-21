@@ -25,7 +25,7 @@ exports.main = async () => {
   const dayStart = new Date(y, mo, now.getDate()).getTime();
 
   try {
-    const [users, todayNewUsers, moods, assessments, crisisTotal, crisisWeek, moodWeek, activeUsers, openHigh, openCrisis, handledCrisis, weekHandled, highWeek, monthCrisis, monthHandled, lastCrisis, lastHandled, todayCrisis, todayLatest, recentFeeds, followOpen] =
+    const [users, todayNewUsers, moods, assessments, crisisTotal, crisisWeek, moodWeek, activeUsers, openHigh, openCrisis, handledCrisis, weekHandled, highWeek, monthCrisis, monthHandled, lastCrisis, lastHandled, todayCrisis, todayLatest, recentFeeds, followOpen, recentHandled] =
       await Promise.all([
         db.collection('users').count(),
         db.collection('users').where({ createdAt: _.gte(dayStart) }).count().catch(() => ({ total: 0 })),
@@ -49,7 +49,8 @@ exports.main = async () => {
         db.collection('crisisAlerts').where({ createdAt: _.gte(dayStart) }).orderBy('createdAt', 'desc').limit(1).get(),
         // 用户反馈流：最新 5 条（运营闭环）
         db.collection('feedbacks').orderBy('createdAt', 'desc').limit(5).get(),
-        db.collection('followUps').where({ status: 'open' }).limit(50).get().catch(() => ({ data: [] }))
+        db.collection('followUps').where({ status: 'open' }).limit(50).get().catch(() => ({ data: [] })),
+        db.collection('crisisAlerts').where({ status: 'handled', handledAt: _.gte(monthStart) }).limit(200).get()
       ]);
 
     const byLevel = { high: 0, mid: 0, low: 0 };
@@ -193,7 +194,9 @@ exports.main = async () => {
           note: (c.note || '').slice(0, 60),
           dueAt: c.dueAt || 0
         })),
-        followOpenCount: (followOpen && followOpen.data) ? followOpen.data.length : 0
+        followOpenCount: (followOpen && followOpen.data) ? followOpen.data.length : 0,
+        // 本月已处理预警的原始时间（处理时长在前端算）
+        recentHandled: (recentHandled.data || []).map((h) => ({ c: h.createdAt || 0, a: h.handledAt || 0 }))
       }
     };
   } catch (e) {
