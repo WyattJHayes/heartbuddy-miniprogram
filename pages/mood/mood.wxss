@@ -195,3 +195,10 @@
 
 
 .box-chip { margin-top:16rpx; font-size:22rpx; color:#7a86a6; background:#f6f8fc; border:1rpx dashed #d8e0f0; border-radius:12rpx; padding:12rpx 18rpx; }
+
+
+.thought-card { margin-top:18rpx; }
+.thought-area { width:100%; box-sizing:border-box; min-height:130rpx; font-size:26rpx; padding:18rpx; border:1rpx solid #e3e9f5; border-radius:14rpx; background:#fbfcff; }
+.thought-save { margin-top:14rpx; width:100%; }
+.thought-due { font-size:25rpx; color:#5a6a8b; line-height:1.7; padding:8rpx 0 14rpx; }
+.thought-num { color:#4f7ee0; font-weight:600; }

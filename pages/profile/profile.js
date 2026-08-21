@@ -270,7 +270,17 @@ Page({
     return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
   },
 
-  // 一键导出本人数据（数据可携带权）：读自己全部集合 → 复制 JSON 文本
+  // 数据透明说明：告诉用户每一类数据存放在哪里、用来做什么（安全与知情同意）
+  viewDataMap() {
+    wx.showModal({
+      title: '你的数据放在哪',
+      content: '本机（不联网、只有你能看）：心情/想法/时光信/三件小事/呼吸记录。\n云端（你的微信身份，仅作备份与安全守护）：\n· 情绪记录与测评分数 —— 用来回看与 AI 记忆\n· 危机提醒/回访 —— 在关键时刻联系可信任的人\n· 反馈 —— 帮我们改进\n随时可以「导出」带走，或一键清空云端。',
+      showCancel: false,
+      confirmText: '知道了'
+    });
+  },
+
+  // 一键导出心情数据（数据可携带权）：读自己全部通讯 → 复制 JSON 文本
   async exportData() {
     let openid = app.globalData.openid;
     if (!openid) openid = await app.login();

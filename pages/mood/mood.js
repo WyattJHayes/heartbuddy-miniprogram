@@ -32,6 +32,10 @@ Page({
     letterReady: false,  // 已到期可拆开
     letterText: '',
     boxCount: 0,           // 已拆开过的时光信数量
+    thought: null,         // {{ content, at }} 为 7 天后的回看存下的念头
+    thoughtDue: 0,         // 已过去的天数
+    thoughtReady: false,   // 7 天到了
+    thoughtText: '',
     // 每日心情提醒（本地弱提醒，无模板订阅）
     remindOn: false,
     remindTime: '20:00',
@@ -57,6 +61,7 @@ Page({
     this.fetchMoods();
     this.refreshPlan();
     this.refreshLetter();
+    this.refreshThought();
     this.refreshRemind();
     this.refreshSmall();
   },
@@ -255,6 +260,44 @@ Page({
         } finally {
           this.setData({ demoBusy: false });
         }
+      }
+    });
+  },
+
+  // ---- 想法小剧场：把一个念头存 7 天，回看时看它小了没（认知解离）----
+  refreshThought() {
+    const raw = wx.getStorageSync('hbThought');
+    if (!raw || !raw.content) { this.setData({ thought: null, thoughtReady: false, thoughtDue: 1 }); return; }
+    const due = Math.floor((Date.now() - raw.time) / 86400000);
+    this.setData({ thought: raw, thoughtDue: due, thoughtReady: due >= 7 });
+  },
+  onThoughtInput(e) { this.setData({ thoughtText: e.detail.value }); },
+  saveThought() {
+    const content = (this.data.thoughtText || '').trim();
+    if (!content) { wx.showToast({ title: '先写下那个念头吧', icon: 'none' }); return; }
+    wx.setStorageSync('hbThought', { content, time: Date.now() });
+    this.setData({ thoughtText: '', thought: { content, time: Date.now() }, thoughtDue: 0, thoughtReady: false });
+    wx.showToast({ title: '已存下，7 天后回看', icon: 'success' });
+  },
+  // 7 天后回看：展示原念头 → 确认回看 → 归档进「想法回看盒」（留最近 10 条）
+  thoughtRecall() {
+    const t = this.data.thought;
+    if (!t) return;
+    wx.showModal({
+      title: '7 天前你的那个念头',
+      content: `当时你写下：「${t.content}」\n\n现在回头看，它还是那么大吗？很多时候，念头只是路过，不是事实。`,
+      confirmText: '我回看完了',
+      showCancel: true,
+      cancelText: '再等等',
+      success: (res) => {
+        if (!res.confirm) return;
+        const box = wx.getStorageSync('hbThoughtBox') || [];
+        box.push({ content: t.content, inAt: t.time || 0, seenAt: Date.now() });
+        while (box.length > 10) box.shift();
+        wx.setStorageSync('hbThoughtBox', box);
+        wx.removeStorageSync('hbThought');
+        this.setData({ thought: null, thoughtReady: false });
+        wx.showToast({ title: '已收入想法盒', icon: 'success' });
       }
     });
   },

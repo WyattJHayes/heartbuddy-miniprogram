@@ -43,3 +43,8 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .dg-bar { height:14rpx; background:#e3eaf8; border-radius:999rpx; margin:12rpx 0 8rpx; overflow:hidden; }
 .dg-fill { height:100%; width:0; background:linear-gradient(90deg,#7fb0ff,#4f8ef7); border-radius:999rpx; transition:width .4s; }
 .dg-sub { font-size:22rpx; color:#8a95b3; }
+
+
+.dg-log { margin-top:14rpx; }
+.dg-log-title { font-size:21rpx; color:#9aa7c3; }
+.dg-log-chip { display:inline-block; background:#eef2fb; color:#5a6a8b; font-size:20rpx; border-radius:8rpx; padding:4rpx 12rpx; margin:6rpx 8rpx 0 0; }

@@ -96,6 +96,9 @@
       <view class="stat"><text class="stat-num">{{chatTotal}}</text><text class="stat-label">情绪记录</text></view>
     </view>
     <view class="text-muted stat-tip">以上仅本地展示·对话正文不入库，详阅「隐私政策（全文）」。</view>
+    <view class="row" bindtap="viewDataMap">
+      <text>数据都放在哪 · 一看就懂</text><text class="arrow">›</text>
+    </view>
     <button class="export-btn" bindtap="exportData">导出本人数据（JSON）</button>
   </view>
 

@@ -145,7 +145,23 @@
     </view>
   </view>
 
-  <!-- 今日陪伴任务（评测页生成的 3 天计划在此打卡） -->
+  <!-- 想法小剧场：把最响的念头存 7 天，回看时看它远没（认知解离练习） -->
+  <view class="card thought-card">
+    <view class="section-title">✍️ 想法小剧场<text class="plan-sub">把心里最响的念头先「放一放」</text></view>
+    <block wx:if="{{!thought}}">
+      <textarea class="thought-area" placeholder="此刻心里最响的念头是？比如：我肯定又搞砸了…" value="{{thoughtText}}" bindinput="onThoughtInput" maxlength="80" />
+      <button class="btn-primary thought-save" bindtap="saveThought">存下它 · 7 天后回来看看</button>
+    </block>
+    <block wx:elif="{{!thoughtReady}}">
+      <view class="thought-due">已存下。还有 <text class="thought-num">{{7 - thoughtDue}}</text> 天就能回看 —— 到时看看它还是不是那么大。</view>
+    </block>
+    <block wx:else>
+      <view class="thought-due">⏰ 7 天到了 —— 那个念头还在吗？</view>
+      <button class="letter-primary" bindtap="thoughtRecall">回看它</button>
+    </block>
+  </view>
+
+  <!-- 今日陪伴计划（评测页生成的 3 天计划在此打卡） -->
   <view wx:if="{{plan}}" class="card plan-card">
     <view class="section-title">今日陪伴任务<text class="plan-sub">{{plan.label}}</text></view>
     <block wx:if="{{planIdx >= 0 && planIdx < plan.days.length}}">

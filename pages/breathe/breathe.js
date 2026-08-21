@@ -85,7 +85,18 @@ Page({
     this.refreshDayGoal();
   },
 
-  // 本周已练（本地周计数，周一重置）
+  // 最近 7 次放松记录（breatheWeek 时间戳 → 日期+时刻，纯本地回看）
+  buildRecentLog() {
+    const ts = wx.getStorageSync('breatheWeek') || [];
+    const arr = Array.isArray(ts) ? ts.slice(-7).reverse() : [];
+    return arr.map((t) => {
+      const d = new Date(t);
+      const p = (n) => (n < 10 ? '0' + n : '' + n);
+      return { day: `${d.getMonth() + 1}月${d.getDate()}日`, time: `${p(d.getHours())}:${p(d.getMinutes())}` };
+    });
+  },
+
+  // 本周已展示（本地周计数，周一重置）
   weekCount() {
     const now = new Date();
     const wStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - ((now.getDay() + 6) % 7));
@@ -102,6 +113,7 @@ Page({
 
   onShow() {
     this.refreshDayGoal();
+    this.setData({ recentLog: this.buildRecentLog() });
     // 累计练习次数展示条（本地计数）
     const count = wx.getStorageSync('breatheCount') || 0;
     const mins = (wx.getStorageSync('hb_breatheMins') || 0);

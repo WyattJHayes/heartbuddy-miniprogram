@@ -20,6 +20,10 @@
     <view class="dg-bar"><view class="dg-fill" style="width: {{dayPct}}%"></view></view>
     <text class="dg-sub" wx:if="{{dayDone}}">连续 {{dayStreak}} 天达标，你越来越会照顾自己</text>
     <text class="dg-sub" wx:else>一天两次呼吸，就是给自己护好 10 分钟</text>
+    <view class="dg-log" wx:if="{{recentLog.length}}">
+      <text class="dg-log-title">最近 {{recentLog.length}} 次放松</text>
+      <view class="dg-log-chip" wx:for="{{recentLog}}" wx:key="index">{{item.day}} {{item.time}}</view>
+    </view>
   </view>
 
   <!-- 呼吸节奏切换 -->
