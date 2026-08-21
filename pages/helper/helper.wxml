@@ -145,6 +145,9 @@
         <view class="af-btn ghost" bindtap="regenScript" role="button" aria-label="换一种说法">换一种说法</view>
       </view>
       <view class="af-hint">发给谁由你决定：父母、班主任、心理老师，或任何一个你信任的大人。</view>
+      <view class="af-parent" bindtap="copyParentTips" role="button" aria-label="复制考试季家长贴士转发给大人">
+        👨‍👩‍👧 还可以复制一段「考试季家长贴士」发给大人 —— 帮他们学会怎么支持你
+      </view>
     </view>
   </view>
 

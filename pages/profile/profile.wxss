@@ -83,3 +83,9 @@
 
 .share-btn { display:flex; align-items:center; justify-content:center; margin:16rpx 24rpx 0; background:linear-gradient(135deg,#ffe9d6,#fff3e3); color:#8f6b1f; border:1rpx solid #f4dfc6; border-radius:16rpx; padding:20rpx 0; font-size:26rpx; font-weight:600; }
 .share-slot { position:absolute; left:-999px; top:0; width:300px; height:220px; pointer-events:none; }
+
+.edu-mini { display: flex; align-items: center; margin-top: 16rpx; background: #f6f9fd; border-radius: 12rpx; padding: 14rpx 18rpx; }
+.em-t { font-size: 24rpx; color: #47597c; width: 210rpx; }
+.em-bar { flex: 1; height: 12rpx; background: #e6ebf4; border-radius: 99rpx; overflow: hidden; }
+.em-fill { height: 100%; background: linear-gradient(90deg, #7fb2ff, #5b8def); border-radius: 99rpx; }
+.em-go { margin-left: 16rpx; font-size: 22rpx; color: #5b8def; }

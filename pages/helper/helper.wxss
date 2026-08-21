@@ -127,3 +127,5 @@
 .sc-chip { display: flex; align-items: center; background: #f2f7ff; border: 1rpx solid #d9e6fb; border-radius: 999rpx; padding: 8rpx 20rpx; margin: 0 12rpx 12rpx 0; }
 .sc-name { font-size: 26rpx; color: #3f5c95; font-weight: 600; }
 .sc-act { font-size: 22rpx; color: #5b8def; margin-left: 10rpx; }
+
+.af-parent { margin-top: 16rpx; background: #fdf6ec; border: 1rpx dashed #e4c9a1; border-radius: 12rpx; padding: 14rpx 18rpx; font-size: 23rpx; color: #8a6a2f; line-height: 1.7; }

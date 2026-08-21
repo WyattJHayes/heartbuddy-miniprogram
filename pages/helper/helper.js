@@ -107,6 +107,24 @@ Page({
     const pick = arr[Math.floor(Math.random() * arr.length)];
     this.setData({ scriptText: pick });
   },
+  // 考试季家长贴士：给家长/老师的一段可转发文字（本地静态，帮助沟通）
+  copyParentTips() {
+    const t = [
+      '【考试季，孩子最需要的三句话】',
+      '1. 「考成什么样，你都是我们的孩子。」——先把安全感给足，成绩再谈。',
+      '2. 「你最近累不累？」——先关心人，再关心分数。',
+      '3. 「需要我们怎么帮你？」——把选择权交回给孩子。',
+      '',
+      '三个「尽量」：尽量保证睡眠 7 小时以上；尽量每天有一顿不谈学习的饭；尽量发现一个与成绩无关的优点并说出口。',
+      '如果孩子连续一周以上情绪低落、失眠或说「撑不下去」，请认真对待：联系学校心理老师，或拨打全国心理援助热线 12356（24 小时免费）。',
+      '—— 转发自「心语伴」'
+    ].join('\n');
+    wx.setClipboardData({
+      data: t,
+      success: () => wx.showToast({ title: '已复制，可发给家长', icon: 'success' })
+    });
+  },
+
   copyScript() {
     if (!this.data.scriptText) return;
     wx.setClipboardData({

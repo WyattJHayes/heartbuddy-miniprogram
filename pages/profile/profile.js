@@ -23,6 +23,8 @@ Page({
     footprintSum: 0,
     // 我的珍藏（聊天长按珍藏，本地保存）
     favs: [],
+    eduDone: 0,          // 心理小课已学节数
+    eduTotal: 7,
     showFavs: false,
     favCount: 0,
     // 日签问候
@@ -35,6 +37,7 @@ Page({
     this.loadPlanInfo();
     this.loadStats();
     this.refreshBadges();
+    this.setData({ eduDone: (wx.getStorageSync('hb_eduDone') || []).length });
     this.refreshFavs();
   },
 
@@ -155,10 +158,10 @@ Page({
       { key: 'ach_scan3',       emoji: '🌌', title: '内在旅行者', desc: '身体扫描累计 3 次' },
       { key: 'ach_small3',      emoji: '💫', title: '微小而确定', desc: '一天之内做完 3 件小事' },
       { key: 'ach_share',       emoji: '🤝', title: '陪伴他人', desc: '把心语伴分享出去' },
-      { key: 'ach_edu',        emoji: '🎓', title: '小学霸', desc: '学完心理小课全部 6 节' }
+      { key: 'ach_edu',        emoji: '🎓', title: '小学霸', desc: '学完心理小课全部 7 节' }
     ];
     const scanCount = wx.getStorageSync('hb_scanCount') || 0;
-    const eduDone = (wx.getStorageSync('hb_eduDone') || []).length >= 6;
+    const eduDone = (wx.getStorageSync('hb_eduDone') || []).length >= 7;
     if (eduDone) wx.setStorageSync('ach_edu', true);
     const badges = defs.map((b) => {
       let got = !!wx.getStorageSync(b.key);
@@ -332,6 +335,8 @@ Page({
       fail: () => wx.showModal({ title: '保存到相册', content: '需要你允许保存图片到相册，就能把这张卡发给别人。', confirmText: '去设置', success: (r) => r.confirm && wx.openSetting() })
     });
   },
+
+  goEdu() { wx.navigateTo({ url: '/pages/edu/edu' }); },
 
   viewDataMap() {
     wx.showModal({
