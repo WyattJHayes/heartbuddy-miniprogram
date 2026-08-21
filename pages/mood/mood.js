@@ -45,6 +45,7 @@ Page({
     calTitle: '',
     calDay: null,          // 点选某天后的当日小结
     smalls: [],            // 今日三件小事 [{i,text,done}]
+    smallCelebrate: false, // 三件全完成时的庆祝条
     band: [],              // 近 14 天情绪色带 [{d,e,has}]
     todayTip: false        // 今日未记录心情时的轻提醒（当天一次可关）
   },
@@ -70,7 +71,8 @@ Page({
     if (raw && raw.date === today && Array.isArray(raw.items) && raw.items.length === 3) {
       items = raw.items;
     }
-    this.setData({ smalls: items.map((x, i) => Object.assign({ i }, x)) });
+    const all = items.filter((x) => x.done).length === 3 && items.some((x) => x.text);
+    this.setData({ smalls: items.map((x, i) => Object.assign({ i }, x)), smallCelebrate: all });
   },
 
   onSmallInput(e) {
@@ -91,6 +93,7 @@ Page({
       wx.setStorageSync('ach_small_three', true);
       wx.showToast({ title: '三件小事都完成 ✨', icon: 'success' });
     }
+    this.setData({ smallCelebrate: all });
     this.saveSmall();
   },
 

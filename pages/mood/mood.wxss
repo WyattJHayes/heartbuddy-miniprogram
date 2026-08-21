@@ -164,3 +164,6 @@
 .tt-close { flex-shrink: 0; font-size: 26rpx; color: #c9a25f; padding: 4rpx 8rpx; }
 
 .health-help { font-size: 22rpx; color: #9aa3b5; margin-left: 10rpx; }
+
+.small-yay { margin-top: 12rpx; font-size: 24rpx; color: #8a6d3b; background: #fdf3dd;
+  border-radius: 10rpx; padding: 12rpx 14rpx; line-height: 1.6; }

@@ -337,6 +337,7 @@ Page({
       ['【心语伴 · 本周情绪小报】',
        `主要情绪：${d.topLabel} ${d.topEmoji}`,
        `倾诉 ${d.chatCount} 次 · ${d.dayCount} 天有记录`,
+       ...(d.practiceText ? [`${d.practiceText}`] : []),
        `给这周的你：${d.suggestion}`,
        ...(d.weekNote ? [`对自己说：${d.weekNote}`] : []),
        '—— 用 AI 心理陪伴，记录你的情绪地图 🌱'].join('\n');

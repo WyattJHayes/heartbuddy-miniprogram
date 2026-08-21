@@ -60,6 +60,7 @@
       <input class="sm-input {{item.done ? 'done' : ''}}" value="{{item.text}}" data-i="{{index}}" bindinput="onSmallInput" placeholder="例：晚饭后散步 10 分钟" maxlength="40" />
     </view>
     <view class="text-muted sm-hint">每天一换，做满 3 件会有小惊喜 ✨</view>
+    <view class="small-yay" wx:if="{{smallCelebrate}}" role="note" aria-label="三件小事都完成">🌟 今天你照顾了自己 3 次，做得好，记得谢谢自己。</view>
   </view>
 
   <!-- 情绪健康指数：近 7 天均值 → 0-100，规则解读 -->
