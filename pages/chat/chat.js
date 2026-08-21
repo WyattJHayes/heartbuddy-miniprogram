@@ -238,7 +238,13 @@ Page({
             }
           });
           wx.hideLoading();
-          wx.showToast({ title: '已存下，晚安 🌙', icon: 'success' });
+          // 睡前托付：给明天的自己留一句话，跨天后自动在聊天里读回给你
+          const d = new Date(), pad = (n) => (n < 10 ? '0' + n : n);
+          wx.setStorageSync('hb_night_msg', {
+            text,
+            date: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+          });
+          wx.showToast({ title: '已存下，明天读给你 🌙', icon: 'success' });
         } catch (err) {
           wx.hideLoading();
           console.error('[chat] 深夜暗语写入失败', err);
@@ -397,6 +403,16 @@ Page({
     this.setData({ sessionId });
     this.setAI(5); // 初始会话 ID 就绪后可向云函数获取历史；MVP 简化为固定 ID
     this.pushAI(greeting, false);
+    // 昨晚留给今天自己的话：跨天后第一次打开自动读给你听（读过即清除）
+    const tonight = wx.getStorageSync('hb_night_msg');
+    if (tonight && tonight.text && tonight.date && tonight.date !== todayKey) {
+      wx.removeStorageSync('hb_night_msg');
+      setTimeout(() => {
+        this.pushAI('🌙 昨晚你给自己留了一句话，现在读给你听：' +
+          '“' + String(tonight.text).slice(0, 80) + '”' +
+          '\n\n那句话是真实的，向今天的你伸出手。', true);
+      }, 1500);
+    }
     this.maybeCheckIn();
   },
 
