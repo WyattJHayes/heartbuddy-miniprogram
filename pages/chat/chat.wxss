@@ -181,3 +181,8 @@
 .chat-page.night .input { background: #1a1f2b; color: #d7dce8; }
 .chat-page.night .ai-avatar { background: #2a3142; border-color: #39415a; }
 .chat-page.night .chat-stats { color: #7c86a0; }
+
+.quick-panel-title.mine { color: #b07a2a; }
+.quick-panel-item.mine { background: #fdf6ea; color: #8a5a2b; border-color: #f0dcbc; }
+.mp-add { float: right; font-size: 22rpx; color: #c08a3e; border: 1rpx solid #ecd3ab; border-radius: 999rpx; padding: 2rpx 14rpx; }
+.mp-empty { font-size: 22rpx; color: #b6bdcc; padding: 10rpx 0 6rpx; }

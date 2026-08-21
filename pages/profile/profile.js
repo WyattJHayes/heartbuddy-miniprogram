@@ -24,6 +24,7 @@ Page({
     // 我的珍藏（聊天长按珍藏，本地保存）
     favs: [],
     eduDone: 0,          // 心理小课已学节数
+    nextBadge: null,     // 下一枚待解锁徽章
     eduTotal: 7,
     showFavs: false,
     favCount: 0,
@@ -170,7 +171,9 @@ Page({
       return { ...b, got };
     });
     const gotCount = badges.filter((b) => b.got).length;
-    this.setData({ badges, gotCount, badgeTotal: badges.length });
+    // 下一枚徽章提示（最靠前的未解锁项，答辩/日常都更有目标感）
+    const next = badges.find((b) => !b.got) || null;
+    this.setData({ badges, gotCount, badgeTotal: badges.length, nextBadge: next });
   },
 
   async loadStats() {

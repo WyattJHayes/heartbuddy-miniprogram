@@ -89,3 +89,5 @@
 .em-bar { flex: 1; height: 12rpx; background: #e6ebf4; border-radius: 99rpx; overflow: hidden; }
 .em-fill { height: 100%; background: linear-gradient(90deg, #7fb2ff, #5b8def); border-radius: 99rpx; }
 .em-go { margin-left: 16rpx; font-size: 22rpx; color: #5b8def; }
+
+.badge-next { margin-top: 12rpx; font-size: 22rpx; color: #8a93a8; background: #f6f8fc; border-radius: 10rpx; padding: 10rpx 16rpx; line-height: 1.6; }

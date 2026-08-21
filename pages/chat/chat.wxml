@@ -149,6 +149,15 @@
         <view class="quick-panel-item" wx:for="{{quickReplies}}" wx:key="*this"
               data-text="{{item}}" bindtap="onQuick">{{item}}</view>
       </view>
+      <view class="quick-panel-title mine">⭐ 我的常用语 · 一键说出口
+        <text class="mp-add" bindtap="addMyPhrase" role="button" aria-label="添加常用语">＋ 添加</text>
+      </view>
+      <view class="quick-panel-list" wx:if="{{myPhrases.length}}">
+        <view class="quick-panel-item mine" wx:for="{{myPhrases}}" wx:key="*this"
+              data-t="{{item}}" bindtap="useMyPhrase" bindlongpress="delMyPhrase"
+              role="button" aria-label="点按填入，长按删除">{{item}}</view>
+      </view>
+      <view class="mp-empty" wx:else>还没有常用语 —— 存一句常想说的话，下次点一下就能发。</view>
       <view class="quick-panel-title sooth">💙 自我安抚 · 情绪上来先说一句</view>
       <view class="quick-panel-list">
         <view class="quick-panel-item sooth" wx:for="{{quickSoothe}}" wx:key="*this"

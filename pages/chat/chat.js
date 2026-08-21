@@ -65,6 +65,7 @@ Page({
     _draft: '',          // AI 打字被新消息打断时的半句草稿（下一条接续）
     feelingTags: ['开心', '平静', '难过', '焦虑', '生气', '孤独'],
     showQuick: false,    // 输入栏「⚡快捷」面板
+    myPhrases: [],       // 我的常用语（本地最多 5 条，长按删除）
     quickReplies,
     quickEnglish: [
       "I've been so anxious lately…",
@@ -100,7 +101,7 @@ Page({
     // 夜间柔和模式：22:00-6:00 自动切换深色氛围（仅陪伴页，减少刺眼）
     const _h = new Date().getHours();
     this.setData({ isNight: _h >= 22 || _h < 6 });
-    this.setData({ persona: wx.getStorageSync('hb_persona') || '' });
+    this.setData({ persona: wx.getStorageSync('hb_persona') || '', myPhrases: wx.getStorageSync('hb_myPhrases') || [] });
     // 首次进入且未同意隐私 -> 去欢迎页
     if (!wx.getStorageSync('privacyAgreed')) {
       wx.redirectTo({ url: '/pages/welcome/welcome' });
@@ -692,6 +693,41 @@ Page({
   onQuickEn(e) { this.setData({ showQuick: false }); this.send(e.currentTarget.dataset.text); },
 
   toggleQuick() { this.setData({ showQuick: !this.data.showQuick }); },
+
+  // 我的常用语：添加/点用/长按删（本地 ≤5 条，重复的不重复存）
+  addMyPhrase() {
+    wx.showModal({
+      title: '添加常用语',
+      content: '写一句你常想说的话，之后一键就能发给我（最多存 5 条）。',
+      editable: true,
+      placeholderText: '例如：我今天有点撑不住了',
+      confirmText: '保存',
+      success: (r) => {
+        if (!r.confirm) return;
+        const t = (r.content || '').trim().slice(0, 30);
+        if (!t) return;
+        const list = this.data.myPhrases.slice();
+        if (list.includes(t)) { wx.showToast({ title: '已经存过啦', icon: 'none' }); return; }
+        if (list.length >= 5) list.shift();
+        list.push(t);
+        wx.setStorageSync('hb_myPhrases', list);
+        this.setData({ myPhrases: list });
+        wx.showToast({ title: '已添加 ✅', icon: 'success' });
+      }
+    });
+  },
+  useMyPhrase(e) {
+    const t = e.currentTarget.dataset.t;
+    if (!t) return;
+    this.setData({ showQuick: false, input: t });
+  },
+  delMyPhrase(e) {
+    const t = e.currentTarget.dataset.t;
+    const list = this.data.myPhrases.filter((x) => x !== t);
+    wx.setStorageSync('hb_myPhrases', list);
+    this.setData({ myPhrases: list });
+    wx.showToast({ title: '已删除', icon: 'none' });
+  },
 
   onSend() {
     const text = this.data.input.trim();
