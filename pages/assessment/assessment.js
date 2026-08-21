@@ -74,6 +74,11 @@ Page({
     });
   },
 
+  // 结果页轻引导：去情绪充电站缓一缓
+  goStation() {
+    wx.navigateTo({ url: '/pages/station/station' });
+  },
+
   // 自评历史：取本人最近 6 次（高分=焦虑高）→ 看变化趋势
   async loadHistory() {
     try {

@@ -45,7 +45,8 @@ Page({
     calTitle: '',
     calDay: null,          // 点选某天后的当日小结
     smalls: [],            // 今日三件小事 [{i,text,done}]
-    band: []               // 近 14 天情绪色带 [{d,e,has}]
+    band: [],              // 近 14 天情绪色带 [{d,e,has}]
+    todayTip: false        // 今日未记录心情时的轻提醒（当天一次可关）
   },
 
   onShow() {
@@ -394,7 +395,8 @@ Page({
         weekSum: this.buildWeekSum(list),
         streak: streakNow,
         empty: list.length === 0,
-        loaded: true
+        loaded: true,
+        todayTip: this.shouldShowTodayTip(raw)
       });
       this._raw = raw;
       this.buildCal(raw);
@@ -402,6 +404,22 @@ Page({
       console.error('[mood] 读取失败', e);
       this.setData({ loaded: true });
     }
+  },
+
+  // 今日是否显示「还未记录」轻提醒：当天一次、可关、随记录自动消失
+  shouldShowTodayTip(raw) {
+    if (wx.getStorageSync('hb_moodTipDismiss') === new Date().toDateString()) return false;
+    const now = new Date();
+    const sameDay = (t) => {
+      const d = new Date(t);
+      return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() && d.getDate() === now.getDate();
+    };
+    return !(raw || []).some((m) => m.createdAt && sameDay(m.createdAt));
+  },
+
+  dismissTodayTip() {
+    wx.setStorageSync('hb_moodTipDismiss', new Date().toDateString());
+    this.setData({ todayTip: false });
   },
 
   // ---- 心情日历（月视图签到：按月看每天记了什么）----

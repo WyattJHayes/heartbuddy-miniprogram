@@ -1,4 +1,10 @@
 <view class="container">
+  <!-- 今日还未记录：轻提醒一行，可关，记录后自动消失 -->
+  <view class="today-tip" wx:if="{{todayTip}}" role="note" aria-label="今日还未记录心情">
+    <text class="tt-text">今天还没记下此刻的心情 🌤 点上面的心情格子，10 秒就好。</text>
+    <text class="tt-close" role="button" aria-label="今天先不提醒" bindtap="dismissTodayTip">✕</text>
+  </view>
+
   <!-- 自评入口 -->
   <view class="card assess-entry" role="button" aria-label="进入考前焦虑自评" bindtap="goAssessment">
     <view class="ae-emoji">📋</view>

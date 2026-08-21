@@ -262,14 +262,18 @@ Page({
     return '⛈';
   },
 
-  // ---- 消息长按：复制 / 珍藏 / 引用 ----
+  // ---- 消息长按：复制 / 珍藏 / 引用 / 我的消息可撤回 ----
   onMsgLongPress(e) {
     const idx = Number(e.currentTarget.dataset.index);
     const item = this.data.messages[idx];
     if (!item) return;
     const content = item.content || '';
+    const isUser = item.role === 'user';
+    const itemList = isUser
+      ? ['复制这条消息', '引用这条', '珍藏（存到我的珍藏）', '撤回我的这条']
+      : ['复制之前的话', '引用这句话', '珍藏（存到我的珍藏）'];
     wx.showActionSheet({
-      itemList: ['复制这条消息', '引用这条', '珍藏（存到我的珍藏）'],
+      itemList,
       success: (r) => {
         if (r.tapIndex === 0) {
           wx.setClipboardData({ data: content, success: () => wx.showToast({ title: '已复制', icon: 'none' }) });
@@ -290,6 +294,13 @@ Page({
           wx.setStorageSync('hb_favs', favs);
           wx.showToast({ title: '已珍藏 💛', icon: 'none' });
           if (!wx.getStorageSync('ach_fav')) wx.setStorageSync('ach_fav', true);
+        } else if (isUser && r.tapIndex === 3) {
+          // 撤回我的这条：删掉该消息及紧随其后的 AI 回复，本地即时生效
+          const messages = this.data.messages.slice();
+          const drop = messages[idx + 1] && messages[idx + 1].role === 'ai' ? 2 : 1;
+          messages.splice(idx, drop);
+          this.setData({ messages });
+          wx.showToast({ title: '已撤回这条', icon: 'none' });
         }
       }
     });
