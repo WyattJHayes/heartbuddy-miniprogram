@@ -42,6 +42,7 @@ Page({
     topWeakText: '',  // 历史最常困扰的 1-2 题
     improveText: '',  // 正在变好的 1-2 题
     lastDays: null,   // 距上次测评天数（≥3 天显示「复测」提示）
+    retestRemind: false, // 3 天复查提醒：已设置 or 到期
   },
 
   onLoad() {
@@ -49,6 +50,13 @@ Page({
     this.refreshPlan();
     this.loadHistory();
     this.checkLastGap();
+    this._checkRetestDue();
+  },
+
+  // 复查到期检查：预约时间到了，首页横幅提示并允许立即重测
+  _checkRetestDue() {
+    const at = wx.getStorageSync('hb_retest_at') || 0;
+    if (at && Date.now() >= at) this.setData({ retestRemind: true });
   },
 
   // 距上次测评 ≥3 天 → 顶部轻提示条（可一键开始新一次）
@@ -195,9 +203,24 @@ Page({
       });
       wx.setStorageSync('lastAssessment', { total, label: lv.label, ts: Date.now() });
       wx.setStorageSync('ach_assess', true); // 成就：认识自己
+      // 复查到期：预约时间已到 → 显示「复查时间到了」横幅
+      const dueAt = wx.getStorageSync('hb_retest_at') || 0;
+      if (dueAt && Date.now() >= dueAt) {
+        this.setData({ retestRemind: true });
+        wx.setStorageSync('hb_retest_done', true);
+      }
     } catch (e) { console.error('[assessment] 落库失败', e); }
 
     this.setData({ submitting: false });
+  },
+
+  // 复查提醒：本地存一个 3 天后的时间，重开自评页时检查
+  setRetestRemind() {
+    const at = Date.now() + 3 * 24 * 3600 * 1000;
+    wx.setStorageSync('hb_retest_at', at);
+    wx.setStorageSync('hb_retest_done', false);
+    this.setData({ retestRemind: true });
+    wx.showToast({ title: '已设 3 天后复查提醒', icon: 'success' });
   },
 
   restart() {

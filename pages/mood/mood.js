@@ -422,6 +422,7 @@ Page({
       });
       this._raw = raw;
       this.buildCal(raw);
+      this.setData({ monthDays: this.buildMonthDays(raw) });
     } catch (e) {
       console.error('[mood] 读取失败', e);
       this.setData({ loaded: true });
@@ -638,6 +639,18 @@ Page({
       date: best.g.key,
       note: best.g.notes[best.g.notes.length - 1] || ''
     };
+  },
+
+  // 本月已记录的天数（去重）
+  buildMonthDays(raw) {
+    const now = new Date();
+    const y = now.getFullYear(), mo = now.getMonth();
+    const set = new Set();
+    (raw || []).forEach((m) => {
+      const d = new Date(m.createdAt);
+      if (d.getFullYear() === y && d.getMonth() === mo) set.add(d.getDate());
+    });
+    return set.size;
   },
 
   buildBand(raw) {

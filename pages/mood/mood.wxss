@@ -180,3 +180,6 @@
 .like-emoji { font-size: 44rpx; }
 .like-main { }
 .like-desc { margin-top: 8rpx; font-size: 24rpx; color: #8a8a8a; line-height: 1.6; }
+
+.health-foot { display: flex; gap: 14rpx; margin-top: 14rpx; flex-wrap: wrap; }
+.hf-chip { font-size: 22rpx; color: #7c6a4f; background: #f6efe2; border-radius: 999rpx; padding: 6rpx 16rpx; }
