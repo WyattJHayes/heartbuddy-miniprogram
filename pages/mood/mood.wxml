@@ -86,6 +86,9 @@
       <text class="hf-chip" wx:if="{{monthDays}}">📅 本月已记录 {{monthDays}} 天</text>
       <text class="hf-chip" wx:if="{{streak.n >= 3}}">🔥 已连续打卡 {{streak.n}} 天</text>
     </view>
+    <view class="cliff-tip" wx:if="{{cliffTip}}" role="note" aria-label="情绪比昨天明显下滑的提醒">⚠️ {{cliffTip}}
+      <text class="cliff-btn" bindtap="goChatFromCliff" role="button" aria-label="去找人聊一聊">去聊聊 ›</text>
+    </view>
     <!-- 近 14 天情绪色带：一眼看清这段时间的起起伏伏，点某天看小结 -->
     <view class="band-wrap" wx:if="{{band.length}}">
       <view class="band-title">近 14 天情绪色带<text class="band-tip">点某天看小结 / 写一句</text>
@@ -199,6 +202,7 @@
       <view class="cal-nav" bindtap="calNav" data-d="-1">‹</view>
       <text>{{calTitle}}</text>
       <view class="cal-nav" bindtap="calNav" data-d="1">›</view>
+      <view class="cal-go" wx:if="{{calNotMonth}}" bindtap="calNow">回本月</view>
     </view>
     <view class="cal-week">
       <view class="cal-wd" wx:for="{{calWeekday}}" wx:key="*this">{{item}}</view>

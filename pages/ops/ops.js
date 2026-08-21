@@ -26,6 +26,15 @@ Page({
         return;
       }
       this.setData({ loading: false, admin: true, d: res.data || {} });
+      // 督办单到期时间格式化为可读文本（供 wxml 展示）
+      const pad2 = (n) => (n < 10 ? '0' + n : n);
+      const followOpen = ((res.data && res.data.followOpen) || []).map((c) => {
+        const t = c.dueAt ? new Date(c.dueAt) : null;
+        return Object.assign({}, c, {
+          dueText: t ? `${pad2(t.getMonth() + 1)}-${pad2(t.getDate())} ${pad2(t.getHours())}:${pad2(t.getMinutes())}` : '尽快'
+        });
+      });
+      this.setData({ 'd.followOpen': followOpen });
       const dd = res.data || {};
       const weekRate = dd.weekCrisis ? Math.round(((dd.weekHandled || 0) / dd.weekCrisis) * 100) : 0;
       // 月度对比：本月 vs 上月（预警数 + 已处理 + 处理率）
@@ -113,6 +122,21 @@ Page({
   },
 
   // 一键转「督办单」：给高危用户生成带时限+备注的回访督办（12/24/48h 可选）
+  // 复制待跟进督办清单（含完整 openid，供真人跟进）
+  copyRevisitList() {
+    const d = this.data.d || {};
+    const list = d.followOpen || [];
+    if (!list.length) { wx.showToast({ title: '暂无待回访督办单', icon: 'none' }); return; }
+    const pad = (x) => (x < 10 ? '0' + x : x);
+    const lines = ['【心语伴 · 待回访督办单（' + list.length + ' 张）】'];
+    list.forEach((c) => {
+      const due = c.dueAt ? new Date(c.dueAt) : null;
+      const dueTxt = due ? `${pad(due.getMonth() + 1)}-${pad(due.getDate())} ${pad(due.getHours())}:${pad(due.getMinutes())}` : '尽快';
+      lines.push(`· ${c.openid} | ${c.note || '危机跟进'} | 截止 ${dueTxt}`);
+    });
+    wx.setClipboardData({ data: lines.join('\n') });
+  },
+
   taskit(e) {
     const openid = e.currentTarget.dataset.full;
     if (!openid) return;

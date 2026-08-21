@@ -160,6 +160,18 @@
       </view>
     </block>
 
+    <!-- 待回访督办单：挂出的 followUps 一览 + 一键复制完整跟进清单 -->
+    <view class="card" wx:if="{{d.followOpenCount > 0}}">
+      <view class="section-title">待回访督办单 <text class="plan-sub">{{d.followOpenCount}} 张</text>
+        <text class="copy-hl" bindtap="copyRevisitList" role="button" aria-label="复制待回访督办清单">📋 复制待跟进清单</text></view>
+      <view class="dued-row" wx:for="{{d.followOpen}}" wx:key="openid">
+        <text class="dued-id">{{item.openid}}</text>
+        <text class="dued-note">{{item.note}}</text>
+        <text class="dued-due" wx:if="{{item.dueText}}">截止 {{item.dueText}}</text>
+      </view>
+      <view class="dued-tip">督办单到期后，用户下次开口时 AI 会自然地关心一次（机制不明说）。</view>
+    </view>
+
     <!-- 用户反馈流：最近 5 条（数据 → 运营闭环） -->
     <view class="card" wx:if="{{d.recentFeeds && d.recentFeeds.length}}">
       <view class="section-title">用户反馈 <text class="plan-sub">最近 {{d.recentFeeds.length}} 条</text>

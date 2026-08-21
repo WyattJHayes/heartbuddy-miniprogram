@@ -183,3 +183,8 @@
 
 .health-foot { display: flex; gap: 14rpx; margin-top: 14rpx; flex-wrap: wrap; }
 .hf-chip { font-size: 22rpx; color: #7c6a4f; background: #f6efe2; border-radius: 999rpx; padding: 6rpx 16rpx; }
+
+.cal-go { font-size: 22rpx; color: #fff; background: #5b8def; border-radius: 999rpx; padding: 4rpx 14rpx; margin-left: auto; }
+
+.cliff-tip { margin: 14rpx 2rpx 2rpx; font-size: 24rpx; color: #b06f2c; background: #fff3e2; border-radius: 12rpx; padding: 12rpx 16rpx; display: flex; align-items: center; gap: 10rpx; }
+.cliff-btn { color: #fff; background: #d8482a; border-radius: 999rpx; padding: 4rpx 18rpx; font-size: 22rpx; }

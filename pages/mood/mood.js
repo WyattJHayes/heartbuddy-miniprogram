@@ -400,6 +400,12 @@ Page({
       this.renderStats(list);
       const moodLine = this.buildLine(raw);
       const streakNow = this.computeStreak(raw);
+      // 情绪断崖预警：今日 vs 昨日均分明显下滑 → 温柔提示（不打扰）
+      const lv = moodLine[moodLine.length - 1], pv = moodLine[moodLine.length - 2];
+      let cliffTip = '';
+      if (lv && lv.value != null && pv && pv.value != null && pv.value - lv.value >= 1.2) {
+        cliffTip = `比昨天下滑 ${(pv.value - lv.value).toFixed(1)} 分 · 允许自己慢一点，需要的话我陪你说说`;
+      }
       if (streakNow.n >= 3 && !wx.getStorageSync('ach_streak3')) {
         wx.setStorageSync('ach_streak3', true); // 成就：坚持 3 天
       }
@@ -416,6 +422,7 @@ Page({
         chartFooter: this.buildChartFooter(moodLine),
         weekSum: this.buildWeekSum(list),
         streak: streakNow,
+        cliffTip,
         empty: list.length === 0,
         loaded: true,
         todayTip: this.shouldShowTodayTip(raw)
@@ -506,12 +513,24 @@ Page({
       cells.push({ num: trailingDay, inMonth: false, emoji: '', count: 0, isToday: false, key: `${nm}-${trailingDay}` });
       trailingDay += 1;
     }
+    const nowY = now.getFullYear(), nowM = now.getMonth() + 1;
     this.setData({
       calYear: y,
       calMonth: m,
       calCells: cells,
-      calTitle: `${y} 年 ${m} 月`
+      calTitle: `${y} 年 ${m} 月`,
+      calNotMonth: !(y === nowY && m === nowM)
     });
+  },
+
+  goChatFromCliff() {
+    wx.switchTab({ url: '/pages/chat/chat' });
+  },
+
+  calNow() {
+    const now = new Date();
+    this.setData({ calYear: now.getFullYear(), calMonth: now.getMonth() + 1, calDay: null });
+    this.buildCal();
   },
 
   calNav(e) {

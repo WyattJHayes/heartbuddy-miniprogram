@@ -120,3 +120,9 @@
 .h-hour-bar { flex: 1; width: 100%; display: flex; align-items: flex-end; }
 .h-hour-fill { width: 60%; background: #c05b4d; border-radius: 4rpx 4rpx 0 0; min-height: 4rpx; }
 .h-hour-n { font-size: 18rpx; color: #9aa2ad; margin-top: 6rpx; }
+
+.dued-row { display:flex; align-items:center; gap:12rpx; margin:10rpx 0; font-size:23rpx; }
+.dued-id { font-family:monospace; flex:1; color:#3a4a63; word-break:break-all; }
+.dued-note { color:#8a94a8; max-width:40%; }
+.dued-due { color:#d8482a; white-space:nowrap; }
+.dued-tip { margin-top:8rpx; font-size:22rpx; color:#b0a48d; }

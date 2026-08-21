@@ -25,7 +25,7 @@ exports.main = async () => {
   const dayStart = new Date(y, mo, now.getDate()).getTime();
 
   try {
-    const [users, todayNewUsers, moods, assessments, crisisTotal, crisisWeek, moodWeek, activeUsers, openHigh, openCrisis, handledCrisis, weekHandled, highWeek, monthCrisis, monthHandled, lastCrisis, lastHandled, todayCrisis, todayLatest, recentFeeds] =
+    const [users, todayNewUsers, moods, assessments, crisisTotal, crisisWeek, moodWeek, activeUsers, openHigh, openCrisis, handledCrisis, weekHandled, highWeek, monthCrisis, monthHandled, lastCrisis, lastHandled, todayCrisis, todayLatest, recentFeeds, followOpen] =
       await Promise.all([
         db.collection('users').count(),
         db.collection('users').where({ createdAt: _.gte(dayStart) }).count().catch(() => ({ total: 0 })),
@@ -48,7 +48,8 @@ exports.main = async () => {
         db.collection('crisisAlerts').where({ createdAt: _.gte(dayStart) }).count(),
         db.collection('crisisAlerts').where({ createdAt: _.gte(dayStart) }).orderBy('createdAt', 'desc').limit(1).get(),
         // 用户反馈流：最新 5 条（运营闭环）
-        db.collection('feedbacks').orderBy('createdAt', 'desc').limit(5).get()
+        db.collection('feedbacks').orderBy('createdAt', 'desc').limit(5).get(),
+        db.collection('followUps').where({ status: 'open' }).limit(50).get().catch(() => ({ data: [] }))
       ]);
 
     const byLevel = { high: 0, mid: 0, low: 0 };
@@ -185,7 +186,14 @@ exports.main = async () => {
           full: f.comment || '',
           time: new Date(f.createdAt).toLocaleString('zh-CN', { hour12: false }),
           status: f.status || 'open'
-        }))
+        })),
+        // 待回访督办单：运营挂出的 followUps 待办（open）
+        followOpen: (followOpen.data || []).slice(0, 50).map((c) => ({
+          openid: c.openid || '',
+          note: (c.note || '').slice(0, 60),
+          dueAt: c.dueAt || 0
+        })),
+        followOpenCount: (followOpen && followOpen.data) ? followOpen.data.length : 0
       }
     };
   } catch (e) {
