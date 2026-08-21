@@ -142,6 +142,21 @@ Page({
         bestDayText = `🌟 本周相对最好的一天是周${wd}（${bd.getMonth() + 1}月${bd.getDate()}日）——那天你更多处在「${moodName}」的状态里。记住它，它会提醒你『我可以好起来』。`;
       }
 
+      // 本周「练习足迹」：把自照顾的来源数一数（呼吸/身体扫描/其他正念）
+      let practiceText = '';
+      const breathN = list.filter((m) => (m.trigger || '').indexOf('呼吸') >= 0).length;
+      const scanN = list.filter((m) => (m.trigger || '').indexOf('身体扫描') >= 0).length;
+      const otherN = list.length - breathN - scanN;
+      const parts = [];
+      if (breathN) parts.push('呼吸练习 ×' + breathN);
+      if (scanN) parts.push('身体扫描 ×' + scanN);
+      if (parts.length) {
+        const rest = otherN > 0 ? '，还有 ' + otherN + ' 次「和自己待一会儿」' : '';
+        practiceText = '🌿 本周你练习了：' + parts.join(' · ') + rest;
+      } else {
+        practiceText = '本周想和你一起试试：睡前 3 分钟呼吸，让自己慢下来。';
+      }
+
       const suggestions = {
         anxiety: '这周焦虑出现较多，试着每天睡前做 3 分钟深呼吸，把担心的事写下来。',
         sad: '这周难过占比较多，允许自己低落，也别忘了和信任的人分享一点。',
@@ -166,6 +181,7 @@ Page({
         highStreakTip: this.buildHighStreakTip(avg7),
         lowStreakTip: this.buildLowStreakTip(avg7),
         bestDayText,
+        practiceText,
         cardData: {
           topEmoji: MOOD_EMOJI[top] || '😌',
           topLabel: MOOD_LABEL[top] || '平稳',

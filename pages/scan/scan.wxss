@@ -18,3 +18,10 @@
   background: #f0f1fa; border-radius: 999rpx; margin-bottom: 14rpx; }
 .ss-dot { font-size: 26rpx; }
 .ss-text { font-size: 24rpx; color: #4a5a8a; }
+
+.calm-pick { margin-top: 10rpx; }
+.cp-label { font-size: 22rpx; color: #8a8f9a; margin-bottom: 8rpx; line-height: 1.5; }
+.cp-row { display: flex; gap: 12rpx; }
+.cp-chip { flex: 1; text-align: center; padding: 10rpx 0; border-radius: 999rpx;
+  background: #eef1f6; color: #6b7280; font-size: 24rpx; }
+.cp-chip.on { background: #4c7a52; color: #fff; }

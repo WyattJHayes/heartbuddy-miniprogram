@@ -406,6 +406,16 @@ Page({
     }
   },
 
+  // 情绪健康指数：❓ 说明（规则透明度，避免用户以为是指标病）
+  showHealthHelp() {
+    wx.showModal({
+      title: '情绪健康指数是什么',
+      content: '它基于你最近 7 天的情绪记录算出一个 0-100 的参考值：越平静、越接近开心的日子越多，分数越高。它只是帮助你回看自己的趋势，不代表任何诊断，分数低也不等于「有问题」。',
+      showCancel: false,
+      confirmText: '明白啦'
+    });
+  },
+
   // 今日是否显示「还未记录」轻提醒：当天一次、可关、随记录自动消失
   shouldShowTodayTip(raw) {
     if (wx.getStorageSync('hb_moodTipDismiss') === new Date().toDateString()) return false;

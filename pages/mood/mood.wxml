@@ -64,7 +64,8 @@
 
   <!-- 情绪健康指数：近 7 天均值 → 0-100，规则解读 -->
   <view class="card health-card" wx:if="{{healthIdx}}">
-    <view class="section-title">情绪健康指数<text class="section-sub">近 7 天</text></view>
+    <view class="section-title">情绪健康指数<text class="section-sub">近 7 天</text>
+      <text class="health-help" bindtap="showHealthHelp" role="button" aria-label="查看健康指数含义">❓</text></view>
     <view class="health-row">
       <view class="health-num">{{healthIdx.score}}</view>
       <view class="health-meta">

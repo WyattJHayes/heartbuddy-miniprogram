@@ -22,7 +22,8 @@ Page({
     idx: 0,
     left: 30,
     pct: 0,
-    lastDone: ''
+    lastDone: '',
+    calmInt: 3        // 完成后「此刻平静程度」（1-5，默认 3，随记录入库）
   },
 
   onLoad() {
@@ -80,7 +81,7 @@ Page({
       if (!openid) openid = await app.login();
       if (!openid) return;
       await wx.cloud.database().collection('moods').add({
-        data: { openid, mood: 'peace', trigger: '身体扫描', note: '5分钟身体扫描完成', createdAt: Date.now() }
+        data: { openid, mood: 'peace', intensity: this.data.calmInt || 3, trigger: '身体扫描', note: '5分钟身体扫描完成', createdAt: Date.now() }
       });
       wx.setStorageSync('ach_body_scan', true);
       wx.setStorageSync('ach_scan', true);
@@ -102,6 +103,12 @@ Page({
     } else {
       wx.navigateBack();
     }
+  },
+
+  // 完成后可选平静程度（1-5，随自动记录入库）
+  setCalmInt(e) {
+    const v = Number(e.currentTarget.dataset.v);
+    if (v >= 1 && v <= 5) this.setData({ calmInt: v });
   },
 
   again() {

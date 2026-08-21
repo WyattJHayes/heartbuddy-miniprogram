@@ -37,6 +37,14 @@
     <view class="scan-title">这次扫描，你做到了</view>
     <view class="scan-sub">给自己一点安静，本身就是一种照顾。</view>
     <view class="scan-last" wx:if="{{lastDone}}">{{lastDone}}</view>
+    <!-- 完成时告知：已自动记一笔「平静」，可选此刻程度（1-5） -->
+    <view class="calm-pick" role="note" aria-label="此刻的平静程度">
+      <view class="cp-label">刚才的扫描已自动记成「平静」，此刻有多平静？</view>
+      <view class="cp-row">
+        <view class="cp-chip {{calmInt === item ? 'on' : ''}}" wx:for="{{[1,2,3,4,5]}}" wx:key="*this"
+              data-v="{{item}}" bindtap="setCalmInt" role="button" aria-label="程度 {{item}}">{{item}}</view>
+      </view>
+    </view>
     <button class="btn-primary full" bindtap="again">再来一次</button>
     <button class="btn-ghost full mt" bindtap="exit">返回</button>
   </view>
