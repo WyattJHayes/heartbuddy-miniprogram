@@ -135,6 +135,25 @@ Page({
     });
   },
 
+  editScript() {
+    const t = this.data.scriptText;
+    if (!t) return;
+    wx.showModal({
+      title: '改一改再复制',
+      content: t,
+      editable: true,
+      placeholderText: t,
+      confirmText: '复制',
+      cancelText: '不改了',
+      success: (r) => {
+        if (!r.confirm) return;
+        const out = ((r.content || '').trim()) || t;
+        if (!wx.getStorageSync('ach_askOut')) wx.setStorageSync('ach_askOut', true);
+        wx.setClipboardData({ data: out, success: () => wx.showToast({ title: '已复制改好的话', icon: 'success' }) });
+      }
+    });
+  },
+
   copyScript() {
     if (!this.data.scriptText) return;
     wx.setClipboardData({

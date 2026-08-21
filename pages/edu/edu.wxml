@@ -33,6 +33,9 @@
               bindtap="answerQuiz" data-i="{{index}}" data-o="{{oidx}}" role="button" aria-label="{{opt}}">{{opt}}</view>
         <view class="lq-why" wx:if="{{quizOk[item.key]}}">💡 {{item.quiz.why}}</view>
       </view>
+      <view class="ls-btn-row">
+        <view class="ls-copy" bindtap="copyLesson" data-i="{{index}}" role="button" aria-label="复制这一课分享给朋友">📄 复制分享</view>
+      </view>
       <view class="ls-done-btn" bindtap="markDone" data-i="{{index}}" role="button" aria-label="标记学完这一节">
         {{doneMap[item.key] ? '✓ 已学完（再点保留）' : '我学完啦 ✓'}}
       </view>

@@ -53,3 +53,6 @@ page { background: #F7F8FB; }
 .rv-opt.wrong { background: #fdeeee; border-color: #f2c9c9; color: #b05252; }
 .rv-why { margin-top: 14rpx; font-size: 22rpx; color: #7a86a6; line-height: 1.7; }
 .rv-again { margin-top: 14rpx; display: inline-block; font-size: 22rpx; color: #5b8def; border: 1rpx solid #cfe0fb; border-radius: 999rpx; padding: 8rpx 26rpx; }
+
+.ls-btn-row { margin-top: 14rpx; }
+.ls-copy { display: inline-block; font-size: 23rpx; color: #5b8def; border: 1rpx solid #cfe0fb; border-radius: 999rpx; padding: 8rpx 26rpx; }

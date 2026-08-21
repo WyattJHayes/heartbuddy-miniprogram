@@ -143,6 +143,13 @@
       <button class="send" bindtap="onSend" loading="{{loading}}">发送</button>
     </view>
 
+    <!-- 小结后引导：把此刻心情也记一笔 -->
+    <view class="sum-tip" wx:if="{{sumTip}}" role="note" aria-label="去心情页记录引导">
+      <text class="st-text">聊完心里松一点了吗？把此刻的心情也记一笔吧 🌈</text>
+      <text class="st-go" bindtap="goMoodFromSum" role="button" aria-label="去心情页记录">去记一笔 ›</text>
+      <text class="st-close" bindtap="closeSumTip" role="button" aria-label="关闭引导">✕</text>
+    </view>
+
     <!-- 快捷面板（随时可展开） -->
     <view class="quick-panel" wx:if="{{showQuick}}">
       <view class="quick-panel-title">试试这样说 · Try: "I've been feeling down…"</view>

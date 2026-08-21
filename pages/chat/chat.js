@@ -66,6 +66,7 @@ Page({
     feelingTags: ['开心', '平静', '难过', '焦虑', '生气', '孤独'],
     showQuick: false,    // 输入栏「⚡快捷」面板
     myPhrases: [],       // 我的常用语（本地最多 5 条，长按删除）
+    sumTip: false,       // 对话小结后：顺手去心情页记一笔的引导条
     quickReplies,
     quickEnglish: [
       "I've been so anxious lately…",
@@ -576,9 +577,15 @@ Page({
       cancelText: '收好了',
       success: (r) => {
         if (r.confirm) wx.setClipboardData({ data: text });
+        this.setData({ sumTip: true }); // 顺手引导去心情页落一笔
       }
     });
   },
+  goMoodFromSum() {
+    this.setData({ sumTip: false });
+    wx.switchTab({ url: '/pages/mood/mood' });
+  },
+  closeSumTip() { this.setData({ sumTip: false }); },
 
   pushAI(content, type = true) {
     this.setData({ messages: this.data.messages.concat([{ role: 'ai', content }]), typing: true });

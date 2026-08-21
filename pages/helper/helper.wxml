@@ -142,6 +142,7 @@
       <view class="af-out-text" user-select>{{scriptText}}</view>
       <view class="af-actions">
         <view class="af-btn" bindtap="copyScript" role="button" aria-label="复制这段话">复制这段话</view>
+        <view class="af-btn ghost" bindtap="editScript" role="button" aria-label="编辑后复制">✏️ 改一改</view>
         <view class="af-btn ghost" bindtap="regenScript" role="button" aria-label="换一种说法">换一种说法</view>
       </view>
       <view class="af-hint">发给谁由你决定：父母、班主任、心理老师，或任何一个你信任的大人。</view>

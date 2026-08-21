@@ -255,6 +255,22 @@ Page({
   },
 
   // 结业卡：全部学完后可复制的一段「结业词」（本地，留念/分享）
+  // 复制这一课：分享给朋友 / 转发到班群都方便（纯文本）
+  copyLesson(e) {
+    const i = Number(e.currentTarget.dataset.i);
+    const l = this.data.lessons[i];
+    if (!l) return;
+    const body = [
+      '【心语伴 · 心理小课】' + l.icon + ' ' + l.title,
+      l.intro,
+      '',
+      ...l.points.map((p) => '· ' + p),
+      '',
+      '💚 今天可以这样做：' + l.do
+    ].join('\n');
+    wx.setClipboardData({ data: body, success: () => wx.showToast({ title: '已复制这一课', icon: 'success' }) });
+  },
+
   copyGradText() {
     const d = new Date();
     const t = [
