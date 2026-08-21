@@ -6,6 +6,16 @@
     <text class="dg-days" wx:if="{{accompanyDays}}" role="img" aria-label="累计陪伴天数"> · 已陪伴 {{accompanyDays}} 天</text>
   </view>
 
+  <!-- 好久不见：>3 天没记记录，温柔接你回来 -->
+  <view class="miss-card" wx:if="{{missDays >= 3}}" bindtap="goMoodBack" role="button" aria-label="好久没记录心情了，回心情页看看">
+    <text class="mc-emoji">🍵</text>
+    <view class="mc-main">
+      <view class="mc-title">好久不见 · 已经 {{missDays}} 天没记心情了</view>
+      <view class="mc-sub">不着急，回来看看现在的自己就好</view>
+    </view>
+    <text class="mc-btn">去记录 ›</text>
+  </view>
+
   <!-- 用户信息 -->
   <view class="card user">
     <view class="avatar">🌱</view>

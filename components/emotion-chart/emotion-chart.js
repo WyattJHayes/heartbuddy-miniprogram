@@ -16,11 +16,12 @@ Component({
     maxY: { type: Number, value: 5 },
     color: { type: String, value: '#5b8def' },
     unit: { type: String, value: '' },
-    footer: { type: String, value: '' }
+    footer: { type: String, value: '' },
+    today: { type: Boolean, value: false } // 最后一点是否为「今天」→ 画今日锚点外圈
   },
   data: { ready: false },
   observers: {
-    'points, minY, maxY, color, footer': function () {
+    'points, minY, maxY, color, footer, today': function () {
       if (this.data.ready) this.draw();
     }
   },
@@ -127,6 +128,22 @@ Component({
         ctx.textAlign = 'center';
         ctx.fillText(p.label || '', px, H - padB + 12);
       });
+
+      // 今日锚点：最后一点 = 今天 → 加醒目的外圆 + 「今日」小标
+      if (this.data.today && n && pts[n - 1] && pts[n - 1].value != null) {
+        const px = X(n - 1), py = Y(pts[n - 1].value);
+        ctx.beginPath();
+        ctx.arc(px, py, 8, 0, Math.PI * 2);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([3, 3]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = color;
+        ctx.font = 'bold 8px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('今日', px, py - 14);
+      }
 
       // 单位说明（左上）
       if (this.data.unit) {

@@ -186,7 +186,7 @@
       <view class="section-title">最近 7 天心情曲线</view>
       <view wx:if="{{insight}}" class="insight">💡 {{insight}}</view>
       <view wx:if="{{weekSum}}" class="week-sum">📅 {{weekSum}}</view>
-      <emotion-chart id="moodChart" points="{{moodLine}}" maxY="{{5}}" minY="{{1}}" color="#5b8def" unit="分值" footer="{{chartFooter}}"></emotion-chart>
+      <emotion-chart id="moodChart" points="{{moodLine}}" maxY="{{5}}" minY="{{1}}" color="#5b8def" unit="分值" footer="{{chartFooter}}" today></emotion-chart>
       <view class="chart-actions">
         <button class="btn-ghost" bindtap="saveMoodSummary">保存小结图片</button>
         <view class="chart-legend">纵轴情绪分值 1–5（低→高愉悦），每天取该日最后一次倾诉记录</view>

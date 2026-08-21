@@ -69,3 +69,10 @@
   background: #eef3ff; border-radius: 10rpx; padding: 12rpx 16rpx; }
 
 .dg-days { margin-left: 8rpx; color: #b98a4d; font-size: 24rpx; }
+
+.miss-card { display:flex; align-items:center; gap:16rpx; margin:18rpx 0; background:#fdf3e3; border:1rpx solid #f0dfc0; border-radius:16rpx; padding:20rpx; }
+.mc-emoji{font-size:40rpx;}
+.mc-main{flex:1;}
+.mc-title{font-size:28rpx;color:#7a5a2e;font-weight:600;}
+.mc-sub{font-size:24rpx;color:#a08a5c;margin-top:4rpx;}
+.mc-btn{color:#b06f2c;font-size:24rpx;}

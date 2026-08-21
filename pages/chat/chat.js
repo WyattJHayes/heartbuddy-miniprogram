@@ -40,6 +40,7 @@ Page({
     loading: false,
     sessionId: '',
     messages: [],        // [{ role: 'user'|'ai', content, ts? }]
+    chatStat: '',          // 底栏陪伴计数
     todayN: 0,           // 今天已经倾诉过几次（陪伴感小徽章）
     intensity: 3,        // 此刻强度 1–5（滑条，随情绪记录落库）
     input: '',
@@ -466,6 +467,15 @@ Page({
     const ts = Date.now();
     this.setData({ messages: this.data.messages.concat([{ role: 'user', content, ts }]) });
     this.setData({ todayN: this.data.todayN + 1 });
+    this.refreshChatStats();
+  },
+
+  // 底栏陪伴计数：这轮聊了几句（我方）+ 你写了多少字
+  refreshChatStats() {
+    const msgs = this.data.messages || [];
+    const u = msgs.filter((m) => m.role === 'user' && m.content);
+    const chars = u.reduce((a, m) => a + String(m.content || '').length, 0);
+    this.setData({ chatStat: `已聊 ${u.length} 句 · 你写了 ${chars} 字` });
   },
 
   /* 打字机效果 */

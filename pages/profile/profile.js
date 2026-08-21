@@ -168,6 +168,13 @@ Page({
       const daySet = new Set((recent.data || []).map((m) => new Date(m.createdAt).toDateString()));
       const DAY = 24 * 3600 * 1000;
       const today = new Date(); today.setHours(0, 0, 0, 0);
+      // 距离上次有记录的天数（用于「好久不见」温柔回卡）
+      const lastR = recent.data && recent.data[0];
+      let missDays = 0;
+      if (lastR) {
+        const d0 = new Date(lastR.createdAt); d0.setHours(0, 0, 0, 0);
+        missDays = Math.floor((today.getTime() - d0.getTime()) / DAY);
+      }
       if (!daySet.has(today.toDateString())) {
         const y = new Date(today.getTime() - DAY);
         if (!daySet.has(y.toDateString())) { /* streak 0 */ }
@@ -224,11 +231,16 @@ Page({
         mood7Days: mood7,
         monthAvgInt,
         topTrig,
-        footprintSum: (moods.total || 0) + (assessments.total || 0) + (crisis.total || 0)
+        footprintSum: (moods.total || 0) + (assessments.total || 0) + (crisis.total || 0),
+        missDays
       });
     } catch (e) {
       console.error('[profile] 统计失败', e);
     }
+  },
+
+  goMoodBack() {
+    wx.switchTab({ url: '/pages/mood/mood' });
   },
 
   goAssess() {
