@@ -25,7 +25,7 @@ exports.main = async () => {
   const dayStart = new Date(y, mo, now.getDate()).getTime();
 
   try {
-    const [users, moods, assessments, crisisTotal, crisisWeek, moodWeek, activeUsers, openHigh, openCrisis, handledCrisis, weekHandled, highWeek, monthCrisis, monthHandled, lastCrisis, lastHandled, todayCrisis, todayLatest] =
+    const [users, moods, assessments, crisisTotal, crisisWeek, moodWeek, activeUsers, openHigh, openCrisis, handledCrisis, weekHandled, highWeek, monthCrisis, monthHandled, lastCrisis, lastHandled, todayCrisis, todayLatest, recentFeeds] =
       await Promise.all([
         db.collection('users').count(),
         db.collection('moods').count(),
@@ -45,7 +45,9 @@ exports.main = async () => {
         db.collection('crisisAlerts').where({ createdAt: _.gte(lastMonthStart), createdAt: _.lt(monthStart), status: 'handled' }).count(),
         // 今日新增危机计数 + 今日最新一条（危机快报）
         db.collection('crisisAlerts').where({ createdAt: _.gte(dayStart) }).count(),
-        db.collection('crisisAlerts').where({ createdAt: _.gte(dayStart) }).orderBy('createdAt', 'desc').limit(1).get()
+        db.collection('crisisAlerts').where({ createdAt: _.gte(dayStart) }).orderBy('createdAt', 'desc').limit(1).get(),
+        // 用户反馈流：最新 5 条（运营闭环）
+        db.collection('feedbacks').orderBy('createdAt', 'desc').limit(5).get()
       ]);
 
     const byLevel = { high: 0, mid: 0, low: 0 };
@@ -133,6 +135,12 @@ exports.main = async () => {
           keywords: c.keywords || '',
           status: c.status || 'open',
           time: new Date(c.createdAt).toLocaleString('zh-CN', { hour12: false })
+        })),
+        // 用户反馈流（脱敏，就近展示最近 5 条）
+        recentFeeds: (recentFeeds.data || []).map((f) => ({
+          id: f._id,
+          comment: (f.comment || '').slice(0, 60),
+          time: new Date(f.createdAt).toLocaleString('zh-CN', { hour12: false })
         }))
       }
     };

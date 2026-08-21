@@ -1,4 +1,12 @@
 <view class="container">
+  <!-- 距上次测评 ≥3 天 → 轻提示条（可一键开始新测） -->
+  <view class="retest-card" wx:if="{{lastDays}}" role="note" aria-label="距离上次自评较久">
+    <view class="rt-main">
+      <view class="rt-text">距离上次自评已过 {{lastDays}} 天，状态也许有变化，花 3 分钟再看看自己？</view>
+      <view class="rt-btn" bindtap="restartTest" role="button" aria-label="一键开始新自评">再测一次</view>
+    </view>
+  </view>
+
   <!-- 答题态 -->
   <block wx:if="{{!done}}">
     <view class="progress">

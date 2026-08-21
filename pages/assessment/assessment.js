@@ -41,12 +41,37 @@ Page({
     histDelta: '',     // 与最近一次对比文案
     topWeakText: '',  // 历史最常困扰的 1-2 题
     improveText: '',  // 正在变好的 1-2 题
+    lastDays: null,   // 距上次测评天数（≥3 天显示「复测」提示）
   },
 
   onLoad() {
     this.setData({ answers: QUESTIONS.map(() => null) });
     this.refreshPlan();
     this.loadHistory();
+    this.checkLastGap();
+  },
+
+  // 距上次测评 ≥3 天 → 顶部轻提示条（可一键开始新一次）
+  checkLastGap() {
+    try {
+      const last = wx.getStorageSync('lastAssessment');
+      if (!last || !last.ts) return;
+      const days = Math.floor((Date.now() - last.ts) / 86400000);
+      if (days >= 3) this.setData({ lastDays: days });
+    } catch (e) { /* 不影响 */ }
+  },
+
+  // 一键复测：回到第一题重新作答（保留历史）
+  restartTest() {
+    wx.showModal({
+      title: '开始新一轮自评？',
+      content: '会重新回答 7 题（约 3 分钟），历史上的测评会保留，方便对比趋势。',
+      confirmText: '开始',
+      success: (r) => {
+        if (!r.confirm) return;
+        this.setData({ cur: 0, answers: QUESTIONS.map(() => null), done: false, total: 0, lastDays: null });
+      }
+    });
   },
 
   // 自评历史：取本人最近 6 次（高分=焦虑高）→ 看变化趋势

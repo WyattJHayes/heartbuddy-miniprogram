@@ -27,8 +27,10 @@ Page({
 
   onLoad() {
     this._timer = null;
+    this._busy = false;
     const ts = wx.getStorageSync('hb_scanDone');
     if (ts) this.setData({ lastDone: `上次完成：${this.fmtDate(ts)}` });
+    this.setData({ scanCount: wx.getStorageSync('hb_scanCount') || 0 });
   },
 
   onUnload() { this.stop(); },

@@ -97,3 +97,9 @@
 .cf-tag.high { background: #e74c3c; }
 .cf-tag.mid { background: #f39c12; }
 .cf-tag.low { background: #95a5a6; }
+
+/* 用户反馈流 */
+.feed-row { padding: 12rpx 0; border-bottom: 1rpx dashed #eef1f6; }
+.feed-row:last-child { border-bottom: none; }
+.feed-comment { font-size: 25rpx; color: #33425b; line-height: 1.6; }
+.feed-time { font-size: 21rpx; color: #a2abbe; margin-top: 4rpx; }

@@ -1,4 +1,9 @@
 <view class="scan-page">
+  <!-- 累计完成次数（本地计数，与呼吸页一致） -->
+  <view class="scan-stats" wx:if="{{scanCount > 0}}" role="note" aria-label="身体扫描累计统计">
+    <text class="ss-dot">🌌</text>
+    <text class="ss-text">已累计完成 {{scanCount}} 次身体扫描</text>
+  </view>
   <!-- 准备态 -->
   <view class="scan-card" wx:if="{{phase === 'ready'}}">
     <view class="scan-hero">🧘</view>
