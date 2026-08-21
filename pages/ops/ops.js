@@ -171,6 +171,24 @@ Page({
     });
   },
 
+  // 复制「高危用户脱敏清单」：用于拉群/交接，不含完整 openid
+  copyHighList() {
+    const list = (this.data.d && this.data.d.highUserList) || [];
+    if (!list.length) {
+      wx.showToast({ title: '暂无高危用户', icon: 'none' });
+      return;
+    }
+    const lines = ['【心语伴 · 高危待跟进清单（近 7 天）】'];
+    list.forEach((u, i) => {
+      lines.push(`${i + 1}. 用户${u.short} · 高危 ${u.count} 次${u.lastAt ? ' · 最近 ' + u.lastAt : ''}`);
+    });
+    lines.push('（列表为脱敏 ID，仅供运营判断，请勿外传完整身份信息）');
+    wx.setClipboardData({
+      data: lines.join('\n'),
+      success: () => wx.showToast({ title: '已复制高危清单', icon: 'success' })
+    });
+  },
+
   // 复制危机统计 CSV（答辩/归档友好）
   copyCrisisCsv() {
     const d = this.data.d || {};

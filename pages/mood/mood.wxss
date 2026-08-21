@@ -167,3 +167,6 @@
 
 .small-yay { margin-top: 12rpx; font-size: 24rpx; color: #8a6d3b; background: #fdf3dd;
   border-radius: 10rpx; padding: 12rpx 14rpx; line-height: 1.6; }
+
+.streak-go { flex-shrink: 0; font-size: 24rpx; color: #3f6fe0; margin-left: 16rpx;
+  background: #eef3ff; border-radius: 999rpx; padding: 8rpx 18rpx; }

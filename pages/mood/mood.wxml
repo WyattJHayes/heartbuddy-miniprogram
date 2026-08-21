@@ -147,6 +147,7 @@
         <view class="streak-desc">{{streak.today ? '坚持此刻的觉察，就是对自己的照顾' : '今天还没记录，来一条就能续上'}}</view>
       </view>
       <text class="streak-tag">{{streak.today ? '今日已打卡' : '今日待打卡'}}</text>
+      <view wx:if="{{!streak.today}}" class="streak-go" bindtap="goRecordToday" role="button" aria-label="去记录今天的心情">去记一条 →</view>
     </view>
 
     <!-- 情绪占比 -->

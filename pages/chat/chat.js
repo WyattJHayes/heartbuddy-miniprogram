@@ -277,7 +277,7 @@ Page({
     const isUser = item.role === 'user';
     const itemList = isUser
       ? ['复制这条消息', '引用这条', '珍藏（存到我的珍藏）', '撤回我的这条']
-      : ['复制之前的话', '引用这句话', '珍藏（存到我的珍藏）'];
+      : ['复制一句话', '引用这句话', '珍藏（存到我的珍藏）', '换个说法（重新生成）'];
     wx.showActionSheet({
       itemList,
       success: (r) => {
@@ -307,6 +307,9 @@ Page({
           messages.splice(idx, drop);
           this.setData({ messages });
           wx.showToast({ title: '已撤回这条', icon: 'none' });
+        } else if (!isUser && r.tapIndex === 3) {
+          // 换个说法：把这条 AI 回复重生成（用同样的上文重新问一次）
+          this.reask(idx);
         }
       }
     });
@@ -543,6 +546,47 @@ Page({
       this.pushAI(joined);
 
       // 危机分级响应（high 弹窗推送求助页 / mid 温和引导 / low 不打扰）
+      this.handleCrisis(r.crisis);
+    } catch (err) {
+      this.setData({ loading: false });
+      this.pushAI('😔 线上有点忙，请再试一次，我一直在。');
+    }
+  },
+
+  // 长按 AI 消息「换个说法」：删掉这条回复，用同样的上文重新生成一次
+  async reask(idx) {
+    if (this.data.loading) return;
+    const messages = this.data.messages.slice();
+    // 找到该条 AI 回复前面最近的一条用户消息（作为重问的输入）
+    let userText = '';
+    for (let i = idx - 1; i >= 0; i--) {
+      if (messages[i] && messages[i].role === 'user') { userText = messages[i].content; break; }
+    }
+    if (!userText) {
+      wx.showToast({ title: '找不到对应的开头，请直接重发', icon: 'none' });
+      return;
+    }
+    // 删除该条 AI 回复及其后连续的 AI 回复（保留更早的用户消息）
+    let end = idx;
+    while (end < messages.length && messages[end].role !== 'user') end++;
+    messages.splice(idx, end - idx);
+    this.setData({ messages });
+    const history = messages.slice(-10).map((m) => ({
+      role: m.role === 'user' ? 'user' : 'assistant',
+      content: m.content
+    }));
+    this.setData({ loading: true });
+    try {
+      const res = await api.call('aiChat', {
+        sessionId: this.data.sessionId,
+        userInput: userText,
+        history,
+        intensity: this.data.intensity || 3,
+        assessment: this.getLastAssessment()
+      });
+      const r = res.result || {};
+      this.setData({ loading: false });
+      this.pushAI(r.content || '我在，慢慢说。');
       this.handleCrisis(r.crisis);
     } catch (err) {
       this.setData({ loading: false });

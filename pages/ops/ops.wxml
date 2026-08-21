@@ -136,7 +136,8 @@
 
     <block wx:if="{{d.highUserList && d.highUserList.length}}">
       <view class="card">
-        <view class="section-title">高危用户（近 7 天）<text class="plan-sub">top {{d.highUserList.length}}</text></view>
+        <view class="section-title">高危用户（近 7 天）<text class="plan-sub">top {{d.highUserList.length}}</text>
+          <text class="copy-hl" bindtap="copyHighList" role="button" aria-label="复制高危脱敏清单">📋 复制清单</text></view>
         <view class="huser" wx:for="{{d.highUserList}}" wx:key="openid">
           <text class="huser-id">{{item.short}}</text>
           <text class="huser-cnt">{{item.count}} 次高危<text wx:if="{{item.lastAt}}" class="huser-last">{{item.lastAt}}</text></text>

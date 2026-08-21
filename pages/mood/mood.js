@@ -419,6 +419,14 @@ Page({
     });
   },
 
+  // 连续卡「去记一条今日」：回到顶部一键快速记录区
+  goRecordToday() {
+    if (wx.pageScrollTo) {
+      wx.pageScrollTo({ scrollTop: 0, duration: 300 });
+      wx.showToast({ title: '在上面选一个心情就好啦', icon: 'none' });
+    }
+  },
+
   // 今日是否显示「还未记录」轻提醒：当天一次、可关、随记录自动消失
   shouldShowTodayTip(raw) {
     if (wx.getStorageSync('hb_moodTipDismiss') === new Date().toDateString()) return false;
