@@ -92,11 +92,11 @@ Page({
     if (!text) { wx.showToast({ title: '写点什么再收尾吧', icon: 'none' }); return; }
     const d = new Date();
     const key = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-    const map = wx.getStorageSync('qingDayNote') || {};
+    const map = wx.getStorageSync('hbDayNote') || {};
     map[key] = text;
     const keys = Object.keys(map);
     while (keys.length > 40) { delete map[keys.shift()]; }
-    wx.setStorageSync('qingDayNote', map);
+    wx.setStorageSync('hbDayNote', map);
     this.setData({ todayNote: text, dayNoteBanner: false, dayNoteInput: '' });
     wx.showToast({ title: '今日已收尾 🌙', icon: 'success' });
   },
@@ -120,11 +120,11 @@ Page({
         if (!text) return;
         const d = new Date();
         const key = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-        const map = wx.getStorageSync('qingDayNote') || {};
+        const map = wx.getStorageSync('hbDayNote') || {};
         map[key] = text;
         const keys2 = Object.keys(map);
         while (keys2.length > 40) { delete map[keys2.shift()]; }
-        wx.setStorageSync('qingDayNote', map);
+        wx.setStorageSync('hbDayNote', map);
         this.setData({ todayNote: text, dayNoteBanner: false });
         wx.showToast({ title: '晚安，明天见 🌙', icon: 'success' });
       }
@@ -627,7 +627,7 @@ Page({
         moodLine,
         insight: this.buildInsight(raw),
         likeToday: this.buildLikeToday(raw),
-        healthIdx: this.buildHealth(moodLine),
+        healthIdx: this.buildHealth(moodLine, raw),
         band: this.buildBand(raw, this.data.bandDays || 14),
         chartFooter: this.buildChartFooter(moodLine),
         weekSum: this.buildWeekSum(list),
@@ -1052,6 +1052,23 @@ Page({
   },
 
   // 情绪健康指数（规则推导）：近 7 天分值均值 → 0-100，附解读与昨日对比
+  // 本周 vs 上周均值变化（只对比有记录的天）
+  buildWeekDelta(raw) {
+    const DAY = 86400000;
+    const now = Date.now();
+    const avg = (arr) => {
+      const v = arr.map((m) => MOOD_SCORE[m.mood]).filter((x) => typeof x === 'number');
+      return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null;
+    };
+    const cur = avg((raw || []).filter((m) => m.createdAt > now - 7 * DAY));
+    const prev = avg((raw || []).filter((m) => m.createdAt > now - 14 * DAY && m.createdAt <= now - 7 * DAY));
+    if (cur == null || prev == null) return '';
+    const d = +(cur - prev).toFixed(1);
+    if (d > 0.05) return '较上周 ↑' + d;
+    if (d < -0.05) return '较上周 ↓' + Math.abs(d);
+    return '与上周持平';
+  },
+
   buildHealth(moodLine) {
     const vals = (moodLine || []).map((p) => p.value).filter((v) => typeof v === 'number');
     if (!vals.length) return null;
@@ -1071,7 +1088,7 @@ Page({
       const d = today.value - yesterday.value;
       deltaText = d > 0.01 ? `  较昨日 +${d.toFixed(1)}` : d < -0.01 ? `  较昨日 ${d.toFixed(1)}` : '  与昨日持平';
     }
-    return { score, emoji: meta.emoji, label: meta.label, note: meta.text, deltaText };
+    return { score, emoji: meta.emoji, label: meta.label, note: meta.note, deltaText, weekDelta: raw ? this.buildWeekDelta(raw) : '' };
   },
 
   // 近 7 天：每天取最后一次记录的分值（无记录为 null）

@@ -233,3 +233,5 @@
 .sm-idea { display: inline-block; margin-top: 12rpx; font-size: 22rpx; color: #8a5a2b; background: #fdf3e3; border: 1rpx dashed #e4c9a1; border-radius: 999rpx; padding: 8rpx 22rpx; }
 
 .dn-copy { float: right; font-size: 20rpx; color: #5b8def; font-weight: 400; }
+
+.health-week { font-size: 20rpx; color: #7a86a6; margin-left: 14rpx; }

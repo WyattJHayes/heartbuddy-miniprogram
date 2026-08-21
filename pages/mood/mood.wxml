@@ -117,6 +117,7 @@
           <text class="health-emoji">{{healthIdx.emoji}}</text>
           <text class="health-label">{{healthIdx.label}}</text>
           <text class="health-delta" wx:if="{{healthIdx.deltaText}}">{{healthIdx.deltaText}}</text>
+          <text class="health-week" wx:if="{{healthIdx.weekDelta}}">{{healthIdx.weekDelta}}</text>
         </view>
         <view class="health-note">{{healthIdx.note}}</view>
       </view>

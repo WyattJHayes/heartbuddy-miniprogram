@@ -361,16 +361,21 @@ Page({
       const [moods, assessments, crisis, feedbacks] = await Promise.all([
         grab('moods'), grab('assessments'), grab('crisisAlerts'), grab('feedbacks')
       ]);
+      // 本地数据（数据主权：一并打包，随时带走）
+      const local = {};
+      const localKeys = ['qingDayNote', 'hb_eduDone', 'hb_eduDays', 'hbSafeContacts', 'hbSafePeople', 'hb_stFavs', 'hb_small', 'hb_scanFeel', 'hbThoughtBox', 'hbLetterBox', 'breatheWeek'];
+      localKeys.forEach((k) => { const v = wx.getStorageSync(k); if (v) local[k] = v; });
       const payload = {
         app: 'heartbuddy-miniprogram',
         exportedAt: new Date().toISOString(),
         note: '以下数据仅为你在本小程序中的记录（对话内容不入库），openid 已脱敏。',
-        counts: { moods: moods.length, assessments: assessments.length, crisisAlerts: crisis.length, feedbacks: feedbacks.length },
+        counts: { moods: moods.length, assessments: assessments.length, crisisAlerts: crisis.length, feedbacks: feedbacks.length, localKeys: Object.keys(local).length },
         data: {
           moods: this.mask(moods),
           assessments: this.mask(assessments),
           crisisAlerts: this.mask(crisis),
-          feedbacks: this.mask(feedbacks)
+          feedbacks: this.mask(feedbacks),
+          localRecords: local
         }
       };
       const text = JSON.stringify(payload, null, 2);

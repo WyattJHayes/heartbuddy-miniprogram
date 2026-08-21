@@ -135,7 +135,10 @@ Page({
     try { done = wx.getStorageSync(DONE_KEY) || []; } catch (e) {}
     const doneMap = {};
     (done || []).forEach((k) => { doneMap[k] = true; });
-    this.setData({ lessons: LESSONS, doneMap, doneCount: Object.keys(doneMap).length, quizOk: {}, answered: {}, streak: this.calcStreak() });
+    // 续学：自动展开第一节还没学完的课（全部学完则收起）
+    let openIdx = -1;
+    for (let i = 0; i < LESSONS.length; i++) { if (!doneMap[LESSONS[i].key]) { openIdx = i; break; } }
+    this.setData({ lessons: LESSONS, doneMap, doneCount: Object.keys(doneMap).length, quizOk: {}, answered: {}, streak: this.calcStreak(), openIdx });
   },
 
   toggle(e) {
