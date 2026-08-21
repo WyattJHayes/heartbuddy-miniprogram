@@ -27,6 +27,11 @@
         <text class="stat-label">查看周报</text>
       </view>
     </view>
+    <view class="practice-line" wx:if="{{pBreath || pScan || pWrite}}" role="note" aria-label="本月练习统计">
+      🌿 本月练习：<text wx:if="{{pBreath}}">呼吸 ×{{pBreath}}</text>
+      <text wx:if="{{pScan}}"> · 身体扫描 ×{{pScan}}</text>
+      <text wx:if="{{pWrite}}"> · 写给自己 ×{{pWrite}}</text>
+    </view>
   </view>
 
   <!-- 成就徽章 -->

@@ -203,12 +203,17 @@ Page({
         if (t) trig[t] = (trig[t] || 0) + 1;
       });
       const topTrig = Object.keys(trig).sort((a, b) => trig[b] - trig[a])[0] || '';
+      // 本月练习痕迹：呼吸 / 身体扫描 / 写给自己
+      const pBreath = mList.filter((m) => (m.trigger || '').indexOf('呼吸') >= 0).length;
+      const pScan = mList.filter((m) => (m.trigger || '').indexOf('扫描') >= 0).length;
+      const pWrite = mList.filter((m) => (m.trigger || '').indexOf('写给自己') >= 0 || (m.trigger || '').indexOf('慢') >= 0).length;
       const first = firstRec.data && firstRec.data[0];
       this.setData({
         chatTotal: moods.total || 0,
         assessTotal: assessments.total || 0,
         crisisTotal: crisis.total || 0,
         firstDate: first ? this.fmtDate(first.createdAt) : '—',
+        pBreath, pScan, pWrite,
         streakDays,
         mood7Days: mood7,
         monthAvgInt,

@@ -62,3 +62,5 @@
 .dg-text { font-size: 25rpx; color: #4a5f8f; line-height: 1.5; }
 
 .fav-ops { display: flex; gap: 24rpx; }
+
+.practice-line { margin-top: 14rpx; font-size: 24rpx; color: #6d7a5a; line-height:1.7; }

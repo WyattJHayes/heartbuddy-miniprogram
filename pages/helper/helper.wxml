@@ -106,6 +106,7 @@
       </view>
       <button class="dial dial-big" data-number="12356" bindtap="call">拨打</button>
     </view>
+    <view class="sms-btn" bindtap="copyHelpSms" role="button" aria-label="复制一段求助文字发给信任的人">📋 复制一段文字，发给信任的人（长辈/老师）</view>
   </view>
 
   <view class="card">

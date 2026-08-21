@@ -73,6 +73,10 @@ Page({
     wx.switchTab({ url: '/pages/chat/chat' });
   },
 
+  goMood() {
+    wx.switchTab({ url: '/pages/mood/mood' });
+  },
+
   onShareAppMessage() {
     return { title: '心语伴 · 情绪充电站', path: '/pages/station/station' };
   }
