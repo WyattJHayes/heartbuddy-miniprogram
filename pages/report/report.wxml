@@ -48,6 +48,19 @@
       <button class="btn-ghost small mt" bindtap="saveNote">保存备注</button>
     </view>
 
+    <!-- 近 4 周记录节奏：每周条数小柱 + 一句趋势 -->
+    <view class="card mt" wx:if="{{weekBars && weekBars.length}}">
+      <view class="section-title">近 4 周记录节奏<text class="section-sub">看变化，不评判</text></view>
+      <view class="week-row">
+        <view class="week-col" wx:for="{{weekBars}}" wx:key="index">
+          <view class="week-bar-bg"><view class="week-bar {{index === 3 ? 'cur' : ''}}" style="height:{{item.c ? item.c / 6 * 100 : 4}}%"></view></view>
+          <text class="week-num">{{item.c}}</text>
+          <text class="week-label">{{item.label}}</text>
+        </view>
+      </view>
+      <view class="best-tip" wx:if="{{weekTrend}}" role="note" aria-label="近四周趋势一句话">{{weekTrend}}</view>
+    </view>
+
     <!-- 月度小结：本月构成 + 与上月对比 -->
     <view class="card mt" wx:if="{{monthInfo}}">
       <view class="section-title">📅 {{monthInfo.label}} 心情小结</view>

@@ -54,6 +54,37 @@ Page({
     this.setData({ weekNote: e.detail.value });
   },
 
+  // 近 4 周记录节奏：每周条数 + 一句趋势（不评判，只是观察）
+  async fetchWeeks() {
+    try {
+      let openid = app.globalData.openid;
+      if (!openid) openid = await app.login();
+      if (!openid) return;
+      const db = wx.cloud.database();
+      const _ = db.command;
+      const nowTs = Date.now();
+      const res = await db.collection('moods')
+        .where({ openid, createdAt: _.gte(nowTs - 28 * 86400000) })
+        .limit(400).get();
+      const bk = [0, 0, 0, 0];
+      (res.data || []).forEach((m) => {
+        const w = Math.floor((nowTs - m.createdAt) / (7 * 86400000));
+        if (w >= 0 && w <= 3) bk[w] += 1;
+      });
+      const labels = ['4 周前', '3 周前', '2 周前', '上周'];
+      const weekBars = [0, 1, 2, 3].map((i) => ({ label: labels[i], c: bk[i] }));
+      const thisW = bk[3], lastW = bk[2];
+      let weekTrend = '';
+      const total4 = bk.reduce((a, b) => a + b, 0);
+      if (total4 > 0) {
+        if (thisW > lastW) weekTrend = '上周比前一周多了 ' + (thisW - lastW) + ' 次记录，你在更靠近自己 🌱';
+        else if (thisW < lastW) weekTrend = '上周记录比前一周少了 ' + (lastW - thisW) + ' 次——忙的时候，1 分钟点一下心情也可以';
+        else weekTrend = '上周和前一周差不多，保持得不错';
+      }
+      this.setData({ weekBars, weekTrend });
+    } catch (e) { console.error('[report] 近4周失败', e); }
+  },
+
   saveNote() {
     wx.setStorageSync('hb_weekNote', { key: this._weekKey(), text: this.data.weekNote });
     wx.showToast({ title: '备注已保存', icon: 'success' });
@@ -66,7 +97,7 @@ Page({
     this.setData({ history: wx.getStorageSync('weekReportHistory') || [] });
   },
 
-  onShow() { this.fetchWeek(); this.fetchMonth(); this.refreshNote(); },
+  onShow() { this.fetchWeek(); this.fetchMonth(); this.fetchWeeks(); this.refreshNote(); },
 
   async fetchWeek() {
     let openid = app.globalData.openid;

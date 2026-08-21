@@ -339,6 +339,10 @@ Page({
       if (!wx.getStorageSync('ach_firstRecord')) wx.setStorageSync('ach_firstRecord', true); // 成就：走出第一步
       wx.setStorageSync('hb_lastMoodDate', new Date().toDateString()); // 供 chat 晨间提醒判断
       wx.showToast({ title: meta.label + ' / 已记下', icon: 'success' });
+      const _hh = new Date().getHours();
+      if (_hh >= 23 || _hh < 6) {
+        setTimeout(() => wx.showToast({ title: '夜深了，记完早点休息 🌙', icon: 'none' }), 600);
+      }
       this.fetchMoods();
       // 一句随心情的暖心回应（本地文案，保持陪伴感）
       this.setData({ quickWord: this.randomWord(key) });

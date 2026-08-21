@@ -27,7 +27,7 @@
 
   <view class="actions">
     <button class="primary" wx:if="{{phase === 'ready' || phase === 'done'}}" bindtap="start">
-      {{phase === 'done' ? '再练一次' : '开始呼吸'}}
+      {{phase === 'done' ? '再练一次' : (presetKey === 'stare' ? '开始发呆' : '开始呼吸')}}
     </button>
     <button wx:elif="{{phase !== 'done'}}" bindtap="reset">结束</button>
   </view>

@@ -67,3 +67,11 @@
 .best-tip { margin-top: 10rpx; padding: 12rpx 16rpx; background: #fffaf0;
   border: 1rpx solid #f5e6c4; border-radius: 10rpx; font-size: 24rpx;
   color: #966a2b; line-height: 1.65; }
+
+.week-row { display:flex; gap:18rpx; align-items:flex-end; justify-content:space-around; margin:14rpx 0; }
+.week-col { display:flex; flex-direction:column; align-items:center; gap:6rpx; width: 22%; }
+.week-bar-bg { height:120rpx; width:44rpx; background:#f0f2f7; border-radius:8rpx; display:flex; align-items:flex-end; overflow:hidden; }
+.week-bar { width:100%; background:#a9bff5; border-radius:8rpx; }
+.week-bar.cur { background:#4f7ef0; }
+.week-num { font-size:24rpx; color:#33415c; font-weight:600; }
+.week-label { font-size:20rpx; color:#98a2b6; }

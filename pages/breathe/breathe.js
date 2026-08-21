@@ -6,12 +6,14 @@ const app = getApp();
 const PRESETS = [
   { key: 'calm', label: '放松 · 4-4-6', rounds: [['in', 3800, 460, 3.9], ['hold', 3200, 460, 0.6], ['out', 5600, 150, 5.6]] },
   { key: 'box', label: '盒式 · 4-4-4-4', rounds: [['in', 4000, 520, 4.1], ['hold', 4000, 520, 0.6], ['out', 4000, 150, 4.1], ['hold', 4000, 150, 0.6]] },
-  { key: 'long', label: '长呼 · 6-2-6-2', rounds: [['in', 6000, 520, 6.1], ['hold', 2000, 520, 0.6], ['out', 6000, 150, 6.1], ['hold', 2000, 150, 0.6]] }
+  { key: 'long', label: '长呼 · 6-2-6-2', rounds: [['in', 6000, 520, 6.1], ['hold', 2000, 520, 0.6], ['out', 6000, 150, 6.1], ['hold', 2000, 150, 0.6]] },
+  { key: 'stare', label: '发呆 · 2 分钟', rounds: [['stare', 120000, 150, 2]] }
 ];
 const PH_TEXT = {
   in: '吸气……把空气慢慢填满',
   hold: '屏住呼吸',
   out: '呼气……放松肩膀',
+  stare: '安静地待 2 分钟，什么都不用做……',
   done: '完成，做得很好'
 };
 
@@ -79,25 +81,38 @@ Page({
     }
     this._rounds = p.rounds;
     this.setData({ presetKey: key, phase: 'ready', round: 0, ball: 150, trans: 0.5,
-      text: '已选「' + p.label + '」，点击开始跟着节奏呼吸', calm: false });
+      text: '已选「' + p.label + '」，点击开始' + (key === 'stare' ? '安安静静待着' : '跟着节奏呼吸'), calm: false });
+  },
+
+  startStare() {
+    if (this._running) return;
+    this._timers.forEach((t) => clearTimeout(t));
+    this._timers = [];
+    this._running = true;
+    this._stop = false;
+    this.setData({ round: 1, stare: true, text: '安静地让 2 分钟过去，什么都不用做' });
+    this._rounds = [['stare', 120000, 150, 0]];
+    this.runRound(1, 0, 1);
   },
 
   start() {
+    if (this.data.presetKey === 'stare') { this.startStare(); return; }
     if (this._running) return;
     this._timers.forEach((t) => clearTimeout(t));
     this._timers = [];
     this._running = true;
     this._stop = false;
     this.setData({ round: 1 });
-    this.runRound(1, 0);
+    this.runRound(1, 0, this.data.total);
   },
 
-  runRound(r, step) {
+  runRound(r, step, total) {
     if (this._stop) return;
     const rounds = this._rounds || PRESETS[0].rounds;
+    const tot = total || this.data.total;
     if (step >= rounds.length) {
-      if (r < this.data.total) {
-        this.runRound(r + 1, 0);
+      if (r < tot) {
+        this.runRound(r + 1, 0, tot);
       } else {
         this._running = false;
         this.setData({ phase: 'done', text: PH_TEXT.done });
