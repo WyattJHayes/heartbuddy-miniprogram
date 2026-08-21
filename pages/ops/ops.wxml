@@ -13,6 +13,7 @@
     <!-- 顶部指标 -->
     <view class="kpis">
       <view class="kpi"><text class="v">{{d.totalUsers}}</text><text class="t">累计用户</text></view>
+      <view class="kpi"><text class="v">{{d.todayNewUsers}}</text><text class="t">今日新增</text></view>
       <view class="kpi"><text class="v">{{d.totalChats}}</text><text class="t">倾诉次数</text></view>
       <view class="kpi"><text class="v">{{d.activeUsers7d}}</text><text class="t">7日活跃</text></view>
       <view class="kpi"><text class="v warn">{{d.totalCrisis}}</text><text class="t">危机总数</text></view>

@@ -110,6 +110,7 @@
     </view>
     <view class="input-row">
       <view class="quick-toggle {{showQuick ? 'on' : ''}}" bindtap="toggleQuick">⚡快捷</view>
+      <view class="reset-chat" bindtap="summarize" role="button" aria-label="总结这轮对话">✨</view>
       <view class="reset-chat" bindtap="resetChat" role="button" aria-label="重新开始这轮对话">↻</view>
       <input
         class="input"

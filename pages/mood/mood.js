@@ -410,6 +410,7 @@ Page({
         recentList: list.slice(0, 7),
         moodLine,
         insight: this.buildInsight(raw),
+        likeToday: this.buildLikeToday(raw),
         healthIdx: this.buildHealth(moodLine),
         band: this.buildBand(raw),
         chartFooter: this.buildChartFooter(moodLine),
@@ -597,6 +598,48 @@ Page({
   },
 
   // 近 14 天情绪色带：每天取当天最新一条的 emoji，无记录则留空
+  // 最像此刻的一天：近 30 天内，与今天最近一次记录心情最像的那天（按情绪分值最接近 + 次数加权）
+  buildLikeToday(raw) {
+    if (!raw || !raw.length) return null;
+    const SC = MOOD_SCORE || { happy: 5, peace: 4, angry: 3, anxiety: 2, lonely: 1.5, sad: 1 };
+    const sorted = raw.slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    const latest = sorted[0];
+    if (!latest || !latest.mood) return null;
+    const cur = MOOD_META[latest.mood];
+    const curScore = SC[latest.mood] || 3;
+    // 按天聚合：主导心情
+    const byDay = {};
+    sorted.forEach((m) => {
+      const d = new Date(m.createdAt);
+      const key = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+      const md = d.getMonth() + 1 + '月' + d.getDate() + '日';
+      if (!byDay[key]) byDay[key] = { date: md, moods: {}, notes: [] };
+      const g = byDay[key];
+      g.moods[m.mood] = (g.moods[m.mood] || 0) + 1;
+      if ((m.trigger || '').indexOf('补记') >= 0 && m.remark) g.notes.push(m.remark);
+    });
+    let best = null, bestDiff = Infinity;
+    Object.keys(byDay).forEach((k) => {
+      const g = byDay[k];
+      let dom = null, max = 0;
+      Object.keys(g.moods).forEach((mk) => {
+        if (g.moods[mk] > max) { max = g.moods[mk]; dom = mk; }
+      });
+      if (!dom) return;
+      // 与今天的分数差异 + 若心情相同给一点惩罚，避免贴“同一天”粘着今天
+      const diff = Math.abs((SC[dom] || 3) - curScore) + (dom === latest.mood ? 0.4 : 0);
+      if (diff < bestDiff) { bestDiff = diff; best = { k, g, dom }; }
+    });
+    if (!best || bestDiff === Infinity) return null;
+    const meta = MOOD_SCORE[best.dom] && MOOD_META[best.dom] ? MOOD_META[best.dom] : null;
+    return {
+      label: meta ? meta.label : best.dom,
+      emoji: meta ? meta.emoji : '🌱',
+      date: best.g.key,
+      note: best.g.notes[best.g.notes.length - 1] || ''
+    };
+  },
+
   buildBand(raw) {
     const dayMap = {};
     (raw || []).forEach((m) => {

@@ -425,6 +425,38 @@ Page({
     // 预留：从云端恢复历史会话可在此实现
   },
 
+  // 总结这轮对话：不读最近心事全文，只给一段温柔的「回望」+ 一句鼓励
+  summarize() {
+    const msgs = this.data.messages || [];
+    const users = msgs.filter((m) => m.role === 'user' && m.content);
+    const ais = msgs.filter((m) => m.role === 'ai' && m.content);
+    if (!users.length) {
+      wx.showToast({ title: '还没开始聊呢，先和我说句心里话吧', icon: 'none' });
+      return;
+    }
+    const cut = (t, n) => (t.length > n ? t.slice(0, n) + '…' : t);
+    const firstS = cut(users[0].content, 14);
+    const lastS = cut(users[users.length - 1].content, 14);
+    const lastMood = this.data.moodTag;
+    const lines = [
+      `这轮我们聊了 ${users.length} 条心事，我也陪你说了 ${ais.length} 次。`,
+      `你从「${firstS}」聊起`,
+      `说到「${lastS}」`,
+      lastMood ? `此刻的感觉像「${lastMood}」。` : '',
+      '愿意把情绪交出来，本身就是一件勇敢的事。慢慢来，我在。'
+    ].filter(Boolean);
+    const text = lines.join(' ');
+    wx.showModal({
+      title: '✨ 这轮对话的小结',
+      content: text,
+      confirmText: '复制一份',
+      cancelText: '收好了',
+      success: (r) => {
+        if (r.confirm) wx.setClipboardData({ data: text });
+      }
+    });
+  },
+
   pushAI(content, type = true) {
     this.setData({ messages: this.data.messages.concat([{ role: 'ai', content }]), typing: true });
     this.typewriter(content);

@@ -25,9 +25,10 @@ exports.main = async () => {
   const dayStart = new Date(y, mo, now.getDate()).getTime();
 
   try {
-    const [users, moods, assessments, crisisTotal, crisisWeek, moodWeek, activeUsers, openHigh, openCrisis, handledCrisis, weekHandled, highWeek, monthCrisis, monthHandled, lastCrisis, lastHandled, todayCrisis, todayLatest, recentFeeds] =
+    const [users, todayNewUsers, moods, assessments, crisisTotal, crisisWeek, moodWeek, activeUsers, openHigh, openCrisis, handledCrisis, weekHandled, highWeek, monthCrisis, monthHandled, lastCrisis, lastHandled, todayCrisis, todayLatest, recentFeeds] =
       await Promise.all([
         db.collection('users').count(),
+        db.collection('users').where({ createdAt: _.gte(dayStart) }).count().catch(() => ({ total: 0 })),
         db.collection('moods').count(),
         db.collection('assessments').count(),
         db.collection('crisisAlerts').count(),
@@ -139,6 +140,7 @@ exports.main = async () => {
       admin: true,
       data: {
         totalUsers: users.total,
+        todayNewUsers: (todayNewUsers && todayNewUsers.total) || 0,
         totalChats: moods.total,
         totalAssessment: assessments.total,
         totalCrisis: crisisTotal.total,

@@ -96,6 +96,17 @@
         </view>
       </view>
     </view>
+
+    <!-- 最像此刻的一天：近 30 天里与今天心情最像的那天回看 -->
+    <view class="card like-card" wx:if="{{likeToday}}" role="note" aria-label="最像此刻的一天">
+      <view class="section-title">🪞 最像此刻的一天</view>
+      <view class="like-line">
+        <text class="like-emoji">{{likeToday.emoji}}</text>
+        <text class="like-main">{{likeToday.label}} · {{likeToday.date}}</text>
+      </view>
+      <view class="like-desc" wx:if="{{likeToday.note}}">那天你写下：{{likeToday.note}}</view>
+      <view class="like-desc">如果那天能走过来，今天也可以慢慢来。</view>
+    </view>
   </view>
 
   <!-- 时光信：写给 7 天后的自己 -->

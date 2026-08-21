@@ -174,3 +174,9 @@
 .quick-word { margin-top: 14rpx; font-size: 24rpx; color: #7b6b52; background: #faf3e6;
   border-radius: 10rpx; padding: 10rpx 16rpx; line-height: 1.6; }
 .stat-tip { margin-top: 10rpx; font-size: 24rpx; color: #8b7a60; line-height: 1.6; background:#faf7f0; border-radius:10rpx; padding:10rpx 16rpx; }
+
+.like-card { margin-top: 18rpx; }
+.like-line { display: flex; align-items: center; gap: 12rpx; font-size: 30rpx; font-weight: 600; color: #4a4a4a; }
+.like-emoji { font-size: 44rpx; }
+.like-main { }
+.like-desc { margin-top: 8rpx; font-size: 24rpx; color: #8a8a8a; line-height: 1.6; }
