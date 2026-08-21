@@ -2,7 +2,7 @@
 const app = getApp();
 
 Page({
-  data: { loading: true, openid: '', showNotice: false, shared: false },
+  data: { loading: true, openid: '', showNotice: false, shared: false, welcomed: true },
 
   openNotice() { this.setData({ showNotice: true }); },
   closeNotice() { this.setData({ showNotice: false }); },
@@ -10,12 +10,18 @@ Page({
 
   onLoad(options) {
     if (options && options.src === 'share') this.setData({ shared: true });
+    this.setData({ welcomed: wx.getStorageSync('hb_welcomed') === true }); // 首次引导卡只出现一次
     if (!wx.getStorageSync('privacyAgreed')) {
       this.setData({ loading: false });
       return;
     }
     // 已同意过，直接进主页
     wx.switchTab({ url: '/pages/chat/chat' });
+  },
+
+  hideGuide() {
+    wx.setStorageSync('hb_welcomed', true);
+    this.setData({ welcomed: true });
   },
 
   ensureLogin: async function () {

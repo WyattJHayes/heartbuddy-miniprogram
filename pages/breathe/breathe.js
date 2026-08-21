@@ -246,6 +246,8 @@ Page({
     this.setData(patch);
   },
 
+  goEdu() { wx.navigateTo({ url: '/pages/edu/edu' }); },
+
   goScan() {
     wx.navigateTo({ url: '/pages/scan/scan' });
   },

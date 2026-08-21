@@ -19,6 +19,8 @@ Page({
   data: {
     stages: STAGES,
     phase: 'ready',   // ready | run | done
+    feelPicked: '',   // 完成后的身体感受一词
+    feelLog: [],     // 最近几次身体感受回看
     idx: 0,
     left: 30,
     pct: 0,
@@ -33,6 +35,7 @@ Page({
     if (ts) this.setData({ lastDone: `上次完成：${this.fmtDate(ts)}` });
     this.setData({ scanCount: wx.getStorageSync('hb_scanCount') || 0 });
     this.setData({ opening: this.dayOpening() });
+    this.setData({ feelLog: (wx.getStorageSync('hb_scanFeel') || []).slice(-5).reverse() });
   },
 
   // 引导语每日轮换：同一天内保持一致，换天换一句
@@ -81,11 +84,21 @@ Page({
     if (this._timer) { clearInterval(this._timer); this._timer = null; }
   },
 
-  finish() { this.onFinish(); },
+  // 身体感受一词：扫完身体，给现在的自己一个描述（本地留最近 5 次）
+  pickFeel(e) {
+    const w = e.currentTarget.dataset.w;
+    this.setData({ feelPicked: w });
+    const log = wx.getStorageSync('hb_scanFeel') || [];
+    log.push({ w, t: Date.now() });
+    wx.setStorageSync('hb_scanFeel', log.slice(-20));
+    this.setData({ feelLog: log.slice(-5).reverse() });
+  },
+
+  finish() { this.onFinish() },
 
   async onFinish() {
     this.stop();
-    this.setData({ phase: 'done' });
+    this.setData({ phase: 'done', feelPicked: '' });
     const ts = Date.now();
     wx.setStorageSync('hb_scanDone', ts);
     this.setData({ lastDone: `上次完成：${this.fmtDate(ts)}` });

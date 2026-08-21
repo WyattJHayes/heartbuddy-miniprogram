@@ -42,3 +42,8 @@
 .full { width: 100%; }
 .share-banner { width: 100%; box-sizing: border-box; margin: 0 auto 24rpx; max-width: 620rpx; background: #eaf3ff; color: #4568c8; border: 1rpx solid #cfe1ff; border-radius: 16rpx; padding: 18rpx 24rpx; font-size: 25rpx; line-height: 1.6; }
 .q-mood { background: linear-gradient(135deg, #eef9f0, #d9f0df); border-color: #b5dcbe; }
+
+.first-guide { border: 1rpx solid #dbe9d5; background: #f7fbf5; }
+.fg-item { display: flex; align-items: flex-start; font-size: 25rpx; color: #4a5a4e; line-height: 1.7; margin-top: 12rpx; }
+.fg-num { flex-shrink: 0; width: 36rpx; height: 36rpx; line-height: 36rpx; text-align: center; border-radius: 50%; background: #6fae7f; color: #fff; font-size: 22rpx; margin-right: 14rpx; margin-top: 6rpx; }
+.fg-ok { margin-top: 18rpx; background: #6fae7f; color: #fff; text-align: center; border-radius: 999rpx; padding: 14rpx 0; font-size: 26rpx; }
