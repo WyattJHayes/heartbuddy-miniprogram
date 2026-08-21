@@ -71,6 +71,7 @@
 .huser-id { font-family: monospace; flex: 1; font-size: 25rpx; color: #3a4a63; }
 .huser-cnt { font-size: 23rpx; color: #d8482a; }
 .huser-btn { margin: 0; padding: 6rpx 20rpx; background: #fff3ee; color: #d8482a; font-size: 23rpx; border-radius: 999rpx; line-height: 1.9; }
+.huser-btn.secondary { background: #eef2fa; color: #4a6fd8; }
 
 /* 月度对比行 */
 .month-comp { margin-top: 18rpx; border-top: 1rpx dashed #e7ebf3; padding-top: 16rpx; }

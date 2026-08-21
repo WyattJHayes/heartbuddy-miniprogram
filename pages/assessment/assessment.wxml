@@ -50,7 +50,11 @@
       <view class="r-link" wx:if="{{!retestRemind}}" bindtap="setRetestRemind" role="button" aria-label="设置3天后复查提醒">
         ⏰ 给自己设个复查提醒：3 天后回来看看有没有变化 →
       </view>
-      <view class="retest-done" wx:if="{{retestRemind}}" role="note" aria-label="复查提醒已设置">已预约 3 天后复查，到时记得回来看看自己 🌱</view>
+      <view class="retest-due" wx:if="{{retestRemind && retestDue}}" role="note" aria-label="复查时间到了，去立即重测吧">
+        复查时间到啦 ⏰ 花 3 分钟看看现在的自己
+        <view class="rd-btn" bindtap="restartTest" role="button" aria-label="立即开始复查测评">立即重测 ›</view>
+      </view>
+      <view class="retest-done" wx:elif="{{retestRemind}}" role="note" aria-label="复查提醒已设置">已预约 3 天后复查，到时记得回来看看自己 🌱</view>
       <!-- 历史波动提醒：≥2 次测评后，对比最近两次总分给温和趋势 -->
       <view class="trend-pill" wx:if="{{trendText}}" role="note" aria-label="历史测评趋势提醒">{{trendText}}</view>
     </view>

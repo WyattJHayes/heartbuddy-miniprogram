@@ -41,6 +41,7 @@ Page({
     sessionId: '',
     messages: [],        // [{ role: 'user'|'ai', content, ts? }]
     chatStat: '',          // 底栏陪伴计数
+    collapsed: false,      // 长对话折叠：>22 条时点「折叠」收起较早部分
     todayN: 0,           // 今天已经倾诉过几次（陪伴感小徽章）
     intensity: 3,        // 此刻强度 1–5（滑条，随情绪记录落库）
     input: '',
@@ -495,7 +496,11 @@ Page({
     this.refreshChatStats();
   },
 
-  // 底栏陪伴计数：这轮聊了几句（我方）+ 你写了多少字
+  // 折叠/展开：长对话只保留最近 22 条（本地展示优化）
+  collapseChat() { this.setData({ collapsed: true }); },
+  expandChat() { this.setData({ collapsed: false }); },
+
+  // 底栏陪伴计数：这轮聊了几句（我回应）+ 你写了多少字
   refreshChatStats() {
     const msgs = this.data.messages || [];
     const u = msgs.filter((m) => m.role === 'user' && m.content);

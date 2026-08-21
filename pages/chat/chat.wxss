@@ -158,3 +158,6 @@
 
 .quick-panel-title.calm { color: #2f8f7f; }
 .quick-panel-item.calm { background: #e6f6f2; color: #1f6b5f; }
+
+.collapse-bar { text-align:center; font-size: 23rpx; color:#4a6fd8; background:#eef2fb; border-radius:999rpx; margin: 8rpx 40rpx; padding: 8rpx 0; }
+.fold-bar { text-align:center; font-size: 22rpx; color:#b0a48d; padding: 6rpx 0; }

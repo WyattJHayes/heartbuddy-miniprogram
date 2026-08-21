@@ -112,6 +112,43 @@ Page({
     });
   },
 
+  // 一键转「督办单」：给高危用户生成带时限+备注的回访督办（12/24/48h 可选）
+  taskit(e) {
+    const openid = e.currentTarget.dataset.full;
+    if (!openid) return;
+    wx.showActionSheet({
+      itemList: ['12 小时内回访督办', '24 小时内回访督办', '48 小时内回访督办'],
+      success: (r) => {
+        const hours = [12, 24, 48][r.tapIndex] || 24;
+        wx.showModal({
+          title: '转督办单',
+          content: hours + ' 小时内的回访督办。给跟进人留句备注（可选）：',
+          editable: true,
+          placeholderText: '如：需电话确认是否安全',
+          confirmText: '生成督办',
+          success: async (m) => {
+            if (!m.confirm) return;
+            try {
+              await wx.cloud.database().collection('followUps').add({
+                data: {
+                  openid,
+                  note: (m.content || '').trim() || '危机跟进督办',
+                  status: 'open',
+                  dueAt: Date.now() + hours * 3600 * 1000,
+                  createdAt: Date.now()
+                }
+              });
+              wx.showToast({ title: '已生成 ' + hours + 'h 督办单', icon: 'success' });
+            } catch (err) {
+              console.error('[ops] 生成督办失败', err);
+              wx.showToast({ title: '生成失败，请重试', icon: 'none' });
+            }
+          }
+        });
+      }
+    });
+  },
+
   // 批量：把所有未回应反馈一次标记为「已回应」
   handleAllFeed() {
     const feeds = (this.data.d && this.data.d.recentFeeds) || [];
