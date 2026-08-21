@@ -507,7 +507,49 @@ Page({
   onCalDay(e) {
     const k = e.currentTarget.dataset.k;
     const cell = this.data.calCells.find((c) => c.key === k);
-    if (!cell || !cell.count) { wx.showToast({ title: '这天还没有记录', icon: 'none' }); return; }
+    if (!cell || !cell.count) {
+      // 无记录的那天：允许补记一条心情（回填到当天中午，明确标注「日历补记」）
+      wx.showModal({
+        title: '这天还没有记录',
+        content: '可以补记一条当天的心情（会算进那天的曲线）。也可以留空只补时间点。',
+        editable: true,
+        placeholderText: '那天发生了什么？（可不填）',
+        confirmText: '补记',
+        cancelText: '算了',
+        success: async (r) => {
+          if (!r.confirm) return;
+          const note = (r.content || '').trim();
+          const parts = String(k).split('-').map((x) => Number(x));
+          if (parts.length !== 3 || !parts[2]) { wx.showToast({ title: '日期不对，请重试', icon: 'none' }); return; }
+          wx.showLoading({ title: '补记中…' });
+          try {
+            let openid = app.globalData.openid;
+            if (!openid) openid = await app.login();
+            if (!openid) return;
+            const t = new Date(parts[0], parts[1] - 1, parts[2], 12, 0, 0).getTime();
+            await wx.cloud.database().collection('moods').add({
+              data: {
+                openid,
+                sessionId: 'cal-back-' + k + '-' + Date.now(),
+                mood: 'peace',
+                intensity: 3,
+                trigger: '日历补记',
+                note: note || '（补记当天）',
+                createdAt: t
+              }
+            });
+            wx.hideLoading();
+            wx.showToast({ title: '已补记，曲线已更新', icon: 'success' });
+            this.fetchMoods();
+          } catch (err) {
+            wx.hideLoading();
+            console.error('[mood] 补记失败', err);
+            wx.showToast({ title: '补记失败，请重试', icon: 'none' });
+          }
+        }
+      });
+      return;
+    }
     // 汇总当日各情绪
     const raw = this._raw || [];
     const names = {};

@@ -112,6 +112,38 @@ Page({
     });
   },
 
+  // 批量：把所有未回应反馈一次标记为「已回应」
+  handleAllFeed() {
+    const feeds = (this.data.d && this.data.d.recentFeeds) || [];
+    const left = feeds.filter((f) => f.status !== 'replied');
+    if (!left.length) { wx.showToast({ title: '都已回应啦', icon: 'none' }); return; }
+    wx.showModal({
+      title: '全部标为已回应？',
+      content: '会把 ' + left.length + ' 条未回应反馈一次性标记为已回应。',
+      confirmText: '全部已回应',
+      success: async (r) => {
+        if (!r.confirm) return;
+        wx.showLoading({ title: '处理中…' });
+        try {
+          const res = await api.call('opsHandleFeedback', { all: true });
+          wx.hideLoading();
+          if (res && res.ok) {
+            const feeds = (this.data.d.recentFeeds || []).map((f) =>
+              f.status === 'replied' ? f : Object.assign({}, f, { status: 'replied' })
+            );
+            this.setData({ 'd.recentFeeds': feeds });
+            wx.showToast({ title: '已全部标记 ✓', icon: 'success' });
+          } else {
+            wx.showToast({ title: '操作失败', icon: 'none' });
+          }
+        } catch (err) {
+          wx.hideLoading();
+          wx.showToast({ title: '操作失败', icon: 'none' });
+        }
+      }
+    });
+  },
+
   // 一键把反馈标记为「已回应」（写回 feedbacks，运营闭环）
   handleFeed(e) {
     const id = e.currentTarget.dataset.id;

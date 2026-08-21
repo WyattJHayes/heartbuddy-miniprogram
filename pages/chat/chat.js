@@ -39,7 +39,8 @@ Page({
   data: {
     loading: false,
     sessionId: '',
-    messages: [],        // [{ role: 'user'|'ai', content }]
+    messages: [],        // [{ role: 'user'|'ai', content, ts? }]
+    todayN: 0,           // 今天已经倾诉过几次（陪伴感小徽章）
     intensity: 3,        // 此刻强度 1–5（滑条，随情绪记录落库）
     input: '',
     moodTag: '',         // 当前可选的情绪标签
@@ -104,6 +105,21 @@ Page({
     this.initSession();
     // 连续低落情绪关怀：读最近 7 天情绪，若最后 2 天连续偏低（<3.5）给一条非打扰提示
     this.maybeShowLowCare();
+    // 今日倾诉次数（给「第 N 次来找我」的陪伴感）
+    this.refreshTodayN();
+  },
+
+  // 数一数今天已经对 AI 说过几轮话
+  refreshTodayN() {
+    const now = new Date();
+    const k = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+    let n = 0;
+    (this.data.messages || []).forEach((m) => {
+      if (m.role !== 'user' || !m.ts) return;
+      const d = new Date(m.ts);
+      if (`${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}` === k) n += 1;
+    });
+    this.setData({ todayN: n });
   },
 
   // 连续低落情绪关怀条：不弹窗、不打断，当天只出现一次（可关闭）
@@ -408,7 +424,9 @@ Page({
   },
 
   pushUser(content) {
-    this.setData({ messages: this.data.messages.concat([{ role: 'user', content }]) });
+    const ts = Date.now();
+    this.setData({ messages: this.data.messages.concat([{ role: 'user', content, ts }]) });
+    this.setData({ todayN: this.data.todayN + 1 });
   },
 
   /* 打字机效果 */

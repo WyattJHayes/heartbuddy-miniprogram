@@ -11,10 +11,21 @@ exports.main = async (event) => {
   if (!ADMIN_OPENIDS.includes(OPENID)) {
     return { ok: false, admin: false, error: '无权限' };
   }
-  const { id } = event || {};
-  if (!id) return { ok: false, admin: true, error: '缺少反馈 id' };
+  const { id, all } = event || {};
 
   try {
+    // 批量：把所有「未回应」的反馈一次标为已回应
+    if (all) {
+      const _ = db.command;
+      const res = await db.collection('feedbacks')
+        .where(_.or([{ status: _.neq('replied') }, { status: _.exists(false) }]))
+        .update({
+          data: { status: 'replied', repliedAt: db.serverDate(), repliedBy: OPENID }
+        });
+      return { ok: true, admin: true, updated: (res.stats && res.stats.updated) || 0 };
+    }
+    if (!id) return { ok: false, admin: true, error: '缺少反馈 id' };
+
     const res = await db.collection('feedbacks').doc(id).update({
       data: {
         status: 'replied',

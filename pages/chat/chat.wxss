@@ -146,3 +146,6 @@
 .quick-panel-item.sooth { background: #f4effa; color: #6d4d97; }
 
 .lc-say { font-size: 22rpx; color: #b36b98; text-decoration: underline; margin-right: 20rpx; }
+
+.today-n { font-size: 22rpx; color: #9a7b54; background: #fbf6ec; border-radius: 999rpx;
+  margin: 0 24rpx 12rpx; padding: 8rpx 22rpx; display: inline-block; align-self: flex-start; }

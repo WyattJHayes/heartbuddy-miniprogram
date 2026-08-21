@@ -149,7 +149,8 @@
 
     <!-- 用户反馈流：最近 5 条（数据 → 运营闭环） -->
     <view class="card" wx:if="{{d.recentFeeds && d.recentFeeds.length}}">
-      <view class="section-title">用户反馈 <text class="plan-sub">最近 {{d.recentFeeds.length}} 条</text></view>
+      <view class="section-title">用户反馈 <text class="plan-sub">最近 {{d.recentFeeds.length}} 条</text>
+        <text class="copy-hl" bindtap="handleAllFeed" role="button" aria-label="全部标记为已回应">全部标为已回应</text></view>
       <view class="feed-row" wx:for="{{d.recentFeeds}}" wx:key="id" data-full="{{item.full}}" data-time="{{item.time}}" bindtap="openFeed" role="button" aria-label="查看该条反馈完整内容">
         <view class="feed-comment">
           <text wx:if="{{item.status === 'replied'}}" class="feed-tag">已回应</text>{{item.comment}}

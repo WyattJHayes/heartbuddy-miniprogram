@@ -21,6 +21,10 @@
     <text class="q-text">{{dailyQuote}}</text>
     <text class="q-copy">复制</text>
   </view>
+  <!-- 今日陪伴徽章：今天第几次来找我 -->
+  <view class="today-n" wx:if="{{todayN > 0}}" role="note" aria-label="今天已倾诉次数">
+    ☁️ 今天第 {{todayN}} 次来找我，谢谢你愿意和我说话
+  </view>
   <!-- 深夜工具箱（22:00–5:00）：失眠/烦躁时的三个小出口 -->
   <view class="night-bar" wx:if="{{nightShow}}">
     <text class="night-title">🌙 这么晚还醒着？给你几个出口</text>
