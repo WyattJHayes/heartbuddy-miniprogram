@@ -142,6 +142,22 @@ Page({
     this.setData({ smalls: items.map((x, i) => Object.assign({ i }, x)), smallCelebrate: all });
   },
 
+  // 灵感库：不知道写什么时，一键填入一件可做的小事（只填第一个空格）
+  fillSmallIdea() {
+    const ideas = [
+      '晚饭后散步 10 分钟', '睡前把手机放到桌上充电', '喝够 3 杯水', '给窗台的植物浇浇水',
+      '课间趴 3 分钟闭眼休息', '和同桌说一句玩笑话', '吃一顿好好咀嚼的午饭', '放学路上听一首喜欢的歌',
+      '晚上 10 点半前躺下', '把书桌收拾干净再睡'
+    ];
+    const items = this.data.smalls.slice();
+    const empty = items.findIndex((x) => !x.text);
+    if (empty === -1) { wx.showToast({ title: '三件都写好啦', icon: 'none' }); return; }
+    const used = new Set(items.map((x) => x.text).filter(Boolean));
+    const pool = ideas.filter((i) => !used.has(i));
+    items[empty].text = pool[Math.floor(Math.random() * pool.length)] || ideas[0];
+    this.setData({ smalls: items });
+  },
+
   onSmallInput(e) {
     const items = this.data.smalls.slice();
     const i = Number(e.currentTarget.dataset.i);

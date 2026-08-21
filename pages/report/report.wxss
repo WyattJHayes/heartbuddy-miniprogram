@@ -87,3 +87,5 @@
 .mix-item { display: flex; align-items: center; margin: 6rpx 22rpx 6rpx 0; }
 .mix-dot { width: 16rpx; height: 16rpx; border-radius: 50%; margin-right: 8rpx; }
 .mix-name { font-size: 22rpx; color: #6b7690; }
+
+.month-copy { display: inline-block; margin-top: 12rpx; font-size: 22rpx; color: #5b8def; background: #eef3ff; border-radius: 999rpx; padding: 8rpx 22rpx; }

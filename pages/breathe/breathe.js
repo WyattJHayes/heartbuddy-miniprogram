@@ -49,6 +49,7 @@ Page({
     dayGoal: DAILY_GOAL_MIN, // 面向 WXML 展示
     echoText: '',          // 完成一次呼吸后的「呼吸回响」
     heat: [],              // 近 4 周放松热力图 [{d, n, lv}]（周一列×7 行）
+    timeHint: '',          // 按时段推荐节奏的一句话
     presets: PRESETS.concat([{ key: 'custom', label: '自定义 · 4-4-6', rounds: [] }]),
     presetKey: 'calm',
     customCfg: { in: 4, hold: 4, out: 6 }
@@ -123,6 +124,15 @@ Page({
   },
 
   // 本周已展示（本地周计数，周一重置）
+  // 按时段推荐：早上唤醒用盒式，午间放松 4-4-6，晚上长呼助眠
+  timeHint() {
+    const h = new Date().getHours();
+    if (h >= 5 && h < 11) return '☀️ 早上刚醒？试试「盒式 4-4-4-4」，把注意力叫醒';
+    if (h >= 22 || h < 5) return '🌙 睡前推荐「长呼 6-2-6-2」，呼气拉长更容易困';
+    if (h >= 13 && h < 15) return '😴 午间犯困？「放松 4-4-6」两轮就够';
+    return '';
+  },
+
   // 近 4 周放松热力图：28 格，颜色随当天次数加深（周一为第一列）
   buildHeat(wk) {
     const dayCnt = {};
@@ -179,6 +189,7 @@ Page({
     const wk = this.weekCount();
     const td = this.todayCount();
     this.setData({ heat: this.buildHeat(wk) });
+    this.setData({ timeHint: this.timeHint() });
     this.setData({ breatheCount: count, breatheMins: mins, breatheWeek: wk, breatheToday: td,
       lastDone: count ? `已累计练习 ${count} 次 · ${mins} 分钟 🌿` : '还没有练习记录，来一次吗？' });
   },

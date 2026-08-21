@@ -395,6 +395,21 @@ Page({
     this.setData({ history: kept });
   },
 
+  // 复制月度小结文字版（给老师/家长看整体状态，不泄露对话内容）
+  copyMonthText() {
+    const m = this.data.monthInfo;
+    if (!m) { wx.showToast({ title: '本月还没有记录', icon: 'none' }); return; }
+    const top = (m.top3 || []).map((t) => t.label + ' ' + t.count + ' 次').join('、');
+    const delta = m.delta ? '（较上月 ' + m.delta + '）' : '';
+    const txt = [
+      '【' + m.label + ' 心情小结 · 来自心语伴】',
+      '这个月记录了 ' + m.total + ' 条心情，覆盖 ' + m.days + ' 天' + delta,
+      '出现最多：' + (top || '暂无'),
+      '情绪有起伏很正常，记录本身就是一种照顾。'
+    ].join('\n');
+    wx.setClipboardData({ data: txt, success: () => wx.showToast({ title: '已复制月度小结', icon: 'success' }) });
+  },
+
   // 复制文字版周报（答辩/聊天分享友好）
   copyWeekText() {
     const d = this.data;

@@ -229,3 +229,5 @@
 .qint-chip.on { background: #5b8def; color: #fff; border-color: #5b8def; font-weight: 700; }
 
 .band-switch { font-size: 22rpx; color: #5b8def; margin-left: 16rpx; padding: 2rpx 12rpx; border: 1rpx solid #d9e4f8; border-radius: 999rpx; }
+
+.sm-idea { display: inline-block; margin-top: 12rpx; font-size: 22rpx; color: #8a5a2b; background: #fdf3e3; border: 1rpx dashed #e4c9a1; border-radius: 999rpx; padding: 8rpx 22rpx; }

@@ -35,6 +35,8 @@
   </view>
 
   <!-- 呼吸节奏切换 -->
+  <!-- 按时段推荐：一句话告诉你此刻更适合哪种节奏 -->
+  <view class="time-hint" wx:if="{{timeHint}}" role="note" aria-label="此刻推荐节奏">{{timeHint}}</view>
   <view class="presets">
     <view class="preset-chip {{presetKey === item.key ? 'on' : ''}}" wx:for="{{presets}}"
           wx:key="key" data-key="{{item.key}}" bindtap="setPreset" role="button"

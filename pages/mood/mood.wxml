@@ -101,6 +101,7 @@
       <view class="sm-check {{item.done ? 'on' : ''}}" data-i="{{index}}" bindtap="onSmallDone" role="checkbox" aria-checked="{{item.done}}" aria-label="今天第{{index + 1}}件小事已完成">{{item.done ? '✓' : ''}}</view>
       <input class="sm-input {{item.done ? 'done' : ''}}" value="{{item.text}}" data-i="{{index}}" bindinput="onSmallInput" placeholder="例：晚饭后散步 10 分钟" maxlength="40" />
     </view>
+    <view class="sm-idea" bindtap="fillSmallIdea" role="button" aria-label="随机填入一件小事灵感">💡 没想法？给我一件灵感</view>
     <view class="text-muted sm-hint">每天一换，做满 3 件会有小惊喜 ✨</view>
     <view class="small-yay" wx:if="{{smallCelebrate}}" role="note" aria-label="三件小事都完成">🌟 今天你照顾了自己 3 次，做得好，记得谢谢自己。</view>
   </view>

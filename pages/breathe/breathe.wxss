@@ -72,3 +72,5 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .heat-cell.lv3 { background: #4f9e6b; }
 .heat-cell.future { opacity: .25; }
 .heat-sub { margin-top: 10rpx; font-size: 20rpx; color: #9aa3b8; }
+
+.time-hint { margin: 14rpx 24rpx 0; background: #f3f6fd; border-radius: 12rpx; padding: 12rpx 18rpx; font-size: 23rpx; color: #5b6b8c; }
