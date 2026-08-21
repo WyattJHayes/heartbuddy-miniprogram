@@ -130,3 +130,13 @@
 .reply-text { flex: 1; font-size: 23rpx; color: #4a5568; line-height: 1.6;
   display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 .reply-close { flex-shrink: 0; color: #98a2b5; font-size: 28rpx; padding: 0 4rpx; }
+
+/* 连续低落情绪关怀条 */
+.low-care { display: flex; align-items: flex-start; gap: 12rpx; padding: 16rpx 18rpx;
+  background: linear-gradient(135deg, #fdf5f3, #fef9f7); border: 1rpx solid #f2dcd6;
+  border-radius: 14rpx; margin: 12rpx 16rpx 0; }
+.lc-body { flex: 1; }
+.lc-text { font-size: 26rpx; color: #a05c4e; line-height: 1.7; }
+.lc-actions { margin-top: 8rpx; }
+.lc-later { display: inline-block; font-size: 22rpx; color: #c0806f; padding: 4rpx 0; }
+.lc-close { flex-shrink: 0; font-size: 28rpx; color: #d9a99c; padding: 4rpx 6rpx; }

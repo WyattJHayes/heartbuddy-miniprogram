@@ -20,3 +20,9 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .preset-chip { font-size: 23rpx; color: #7a8698; background: #f2f5fb; border: 1rpx solid #e3e9f4;
   border-radius: 999rpx; padding: 10rpx 22rpx; }
 .preset-chip.on { color: #fff; background: #5b8def; border-color: #5b8def; font-weight: 600; }
+
+/* 累计练习次数 */
+.breathe-stats { display: inline-flex; align-items: center; gap: 10rpx; margin-top: 16rpx;
+  padding: 10rpx 20rpx; background: #eef5ec; border-radius: 999rpx; }
+.bs-dot { font-size: 26rpx; }
+.bs-text { font-size: 24rpx; color: #4c7a52; }

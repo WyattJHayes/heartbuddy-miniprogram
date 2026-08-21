@@ -487,6 +487,16 @@ Page({
     this.setData({ calDay: null });
   },
 
+  // 日历长按某天 → 复用色带的管理菜单（查看/编辑补记、删除当天最新一条）
+  onCalLongPress(e) {
+    const k = e.currentTarget.dataset.k;
+    this.setData({ calDay: null });
+    // 把「Y-M-D」转成颜色带用的「M/D」标签
+    const parts = String(k).split('-').map((x) => Number(x));
+    const d = parts.length === 3 ? `${parts[1]}/${parts[2]}` : k;
+    this.longpressBand({ currentTarget: { dataset: { k, d } } });
+  },
+
   // 近 14 天情绪色带：每天取当天最新一条的 emoji，无记录则留空
   buildBand(raw) {
     const dayMap = {};

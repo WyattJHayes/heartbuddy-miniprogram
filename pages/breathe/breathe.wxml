@@ -2,6 +2,12 @@
   <view class="title">🧘 呼吸放松练习</view>
   <view class="sub">跟着圆圈一起呼吸，共 {{total}} 轮。全程在本机进行，不联网。</view>
 
+  <!-- 累计练习次数（本地计数） -->
+  <view class="breathe-stats" wx:if="{{breatheCount > 0}}" role="note" aria-label="累计练习统计">
+    <text class="bs-dot">🌿</text>
+    <text class="bs-text">{{lastDone}}</text>
+  </view>
+
   <!-- 呼吸节奏切换 -->
   <view class="presets">
     <view class="preset-chip {{presetKey === item.key ? 'on' : ''}}" wx:for="{{presets}}"

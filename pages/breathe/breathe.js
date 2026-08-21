@@ -35,6 +35,12 @@ Page({
     this._rounds = PRESETS[0].rounds;
   },
 
+  onShow() {
+    // 累计练习次数展示条（本地计数）
+    const count = wx.getStorageSync('breatheCount') || 0;
+    this.setData({ breatheCount: count, lastDone: count ? `已累计练习 ${count} 次 🌿` : '还没有练习记录，来一次吗？' });
+  },
+
   onUnload() {
     this._stop = true;
     (this._timers || []).forEach((t) => clearTimeout(t));

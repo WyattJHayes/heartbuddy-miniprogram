@@ -2,7 +2,7 @@
 const app = getApp();
 const api = require('../../utils/api');
 const { quickReplies } = require('../../config/index');
-const { MOOD_META } = require('../../utils/moodscore');
+const { MOOD_META, MOOD_SCORE } = require('../../utils/moodscore');
 const planlib = require('../../utils/plan');
 
 // 中文情绪标签 → 落库 key（与心情页保持一致）
@@ -71,6 +71,8 @@ Page({
     dailyQuote: '',    // 今日心语（日轮换，可点复制）
     nightShow: false,  // 深夜（22:00–5:00）显示深夜工具箱
     replyToMsg: null,  // 引用条：{ role, text } 长按「引用这条」后带入输入框
+    lowCare: false,    // 连续低落情绪关怀条（最近 2 天连续偏低的非打扰提示）
+    lowCareText: '',
   },
 
   async onLoad() {
@@ -93,6 +95,56 @@ Page({
     // 耐心等登录完成（拿到 isNewUser 才能定制首次欢迎语；失败也不阻塞，用常规欢迎语兜底）
     await app.login().catch(() => {});
     this.initSession();
+    // 连续低落情绪关怀：读最近 7 天情绪，若最后 2 天连续偏低（<3.5）给一条非打扰提示
+    this.maybeShowLowCare();
+  },
+
+  // 连续低落情绪关怀条：不弹窗、不打断，当天只出现一次（可关闭）
+  async maybeShowLowCare() {
+    try {
+      const today = new Date().toDateString();
+      if (wx.getStorageSync('chatLowCareSeen') === today) return;
+      let openid = app.globalData.openid;
+      if (!openid) openid = await app.login();
+      if (!openid) return;
+      const db = wx.cloud.database();
+      const r = await db.collection('moods').where({ openid }).orderBy('createdAt', 'desc').limit(30).get();
+      // 最近 7 天逐日取「当天最低分」，从今天往前数连续偏低天数
+      const DAY = 86400000;
+      const end = new Date(); end.setHours(23, 59, 59, 999);
+      const start = new Date(end.getTime() - 6 * DAY); start.setHours(0, 0, 0, 0);
+      const dayLow = new Map();
+      (r.data || []).forEach((m) => {
+        const t = m.createdAt || 0;
+        if (t < start.getTime() || t > end.getTime()) return;
+        const d = new Date(t); d.setHours(0, 0, 0, 0);
+        const k = d.getTime();
+        const sc = MOOD_SCORE[m.mood];
+        if (sc === undefined) return;
+        dayLow.set(k, Math.min(dayLow.has(k) ? dayLow.get(k) : 5, sc));
+      });
+      // 从今天开始往前，允许中间有一天缺失，数连续偏低天数
+      let streak = 0;
+      for (let i = 0; i < 7; i++) {
+        const k = end.getTime() - i * DAY;
+        const d0 = new Date(k); d0.setHours(0, 0, 0, 0);
+        const v = dayLow.get(d0.getTime());
+        if (v === undefined) { if (streak > 0) break; continue; } // 当天没记录不算偏高，也不打断
+        if (v < 3.5) streak += 1;
+        else break;
+      }
+      if (streak < 2) return;
+      wx.setStorageSync('chatLowCareSeen', today);
+      const text = streak >= 3
+        ? `看记录，最近 ${streak} 天你的心有点沉。不用硬撑，想把这些交给 AI 的「身体扫描」或聊聊，我都在。`
+        : '这两天你的状态有点低。先慢下来做 3 分钟呼吸，或把此刻的念头说给我听 🌿';
+      this.setData({ lowCare: true, lowCareText: text });
+    } catch (e) { /* 静默失败，不影响聊天 */ }
+  },
+
+  closeLowCare() {
+    try { wx.setStorageSync('chatLowCareSeen', new Date().toDateString()); } catch (e) {}
+    this.setData({ lowCare: false });
   },
 
   // ---- 天气角：open-meteo（免费、无需 key）----

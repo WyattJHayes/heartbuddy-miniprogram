@@ -1,4 +1,14 @@
 <view class="chat-page">
+  <!-- 连续低落情绪关怀条：最近 2 天连续偏低时出现，非打扰、当天一次 -->
+  <view class="low-care" wx:if="{{lowCare}}" role="note" aria-label="连续低落情绪关怀">
+    <view class="lc-body">
+      <view class="lc-text">{{lowCareText}}</view>
+      <view class="lc-actions">
+        <view class="lc-later" bindtap="closeLowCare" role="button" aria-label="今天先不提醒">今天先不提醒</view>
+      </view>
+    </view>
+    <view class="lc-close" bindtap="closeLowCare" role="button" aria-label="关闭关怀提醒">✕</view>
+  </view>
   <!-- 天气角（定位 → open-meteo；失败自动隐藏） -->
   <view class="weather-bar" wx:if="{{weatherText}}">
     <text class="w-ico">{{weatherIco}}</text>

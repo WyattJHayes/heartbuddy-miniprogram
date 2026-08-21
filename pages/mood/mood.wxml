@@ -183,8 +183,9 @@
         wx:for="{{calCells}}"
         wx:key="key"
         bindtap="onCalDay"
+        bindlongpress="onCalLongPress"
         data-k="{{item.key}}"
-        aria-label="{{item.inMonth ? item.num + '日' + (item.emoji || '无记录') : ''}}"
+        aria-label="{{item.inMonth ? item.num + '日' + (item.emoji || '无记录') + '，长按可管理' : ''}}"
       >
         <text class="cc-num">{{item.num}}</text>
         <text class="cc-emoji">{{item.count ? item.emoji : ''}}</text>
