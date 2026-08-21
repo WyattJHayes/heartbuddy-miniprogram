@@ -6,10 +6,10 @@ const { MOOD_META, MOOD_SCORE } = require('../../utils/moodscore');
 const planlib = require('../../utils/plan');
 
 // 中文情绪标签 → 落库 key（与心情页保持一致）
-const MOOD_KEY = { '开心': 'happy', '平静': 'peace', '焦虑': 'anxiety', '难过': 'sad', '孤独': 'lonely', '生气': 'angry' };
+const MOOD_KEY = { '开心': 'happy', '平静': 'peace', '焦虑': 'anxiety', '难过': 'sad', '孤独': 'lonely', '生气': 'angry', '期待': 'expect' };
 
 // AI 头像情绪态：随当前情绪标签切换的小表情（''=默认🌱）
-const AI_FACE = { '开心': '😄', '平静': '😌', '焦虑': '😟', '难过': '😢', '孤独': '🥺', '生气': '😠' };
+const AI_FACE = { '开心': '😄', '平静': '😌', '焦虑': '😟', '难过': '😢', '孤独': '🥺', '生气': '😠', '期待': '🤩' };
 
 const GREETINGS = {
   morning: '早上好呀 ☀️ 今天想聊点什么？',

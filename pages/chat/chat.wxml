@@ -109,6 +109,7 @@
       <view class="tag {{moodTag==='难过'?'on':''}}" data-m="难过" bindtap="onMood">😢 难过</view>
       <view class="tag {{moodTag==='孤独'?'on':''}}" data-m="孤独" bindtap="onMood">🌫 孤独</view>
       <view class="tag {{moodTag==='生气'?'on':''}}" data-m="生气" bindtap="onMood">😡 生气</view>
+      <view class="tag {{moodTag==='期待'?'on':''}}" data-m="期待" bindtap="onMood">🌟 期待</view>
     </view>
     <!-- 此刻强度滑条：1–5，随情绪标签落库，月度小结会算平均值 -->
     <view class="intensity-row">

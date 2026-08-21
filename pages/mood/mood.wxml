@@ -5,6 +5,9 @@
     <text class="tt-close" role="button" aria-label="今天先不提醒" bindtap="dismissTodayTip">✕</text>
   </view>
 
+  <!-- 晚间温柔提醒（21 点后一次性） -->
+  <view class="night-greet" wx:if="{{nightGreet}}" role="note" aria-label="晚间提醒">{{nightGreet}}</view>
+
   <!-- 21 点后的收尾提示 + 昨天的小结回看 -->
   <view class="daynote-banner" wx:if="{{dayNoteBanner}}" role="note" aria-label="给今天收个尾" bindtap="openDayNote">
     <text class="dn-t">🌙 快 21 点了 —— 今天辛苦了。要不要给今天收个尾？</text>
@@ -101,7 +104,13 @@
       <view class="sm-check {{item.done ? 'on' : ''}}" data-i="{{index}}" bindtap="onSmallDone" role="checkbox" aria-checked="{{item.done}}" aria-label="今天第{{index + 1}}件小事已完成">{{item.done ? '✓' : ''}}</view>
       <input class="sm-input {{item.done ? 'done' : ''}}" value="{{item.text}}" data-i="{{index}}" bindinput="onSmallInput" placeholder="例：晚饭后散步 10 分钟" maxlength="40" />
     </view>
-    <view class="sm-idea" bindtap="fillSmallIdea" role="button" aria-label="随机填入一件小事灵感">💡 没想法？给我一件灵感</view>
+    <view class="sm-scenes">
+      <view class="sm-scene {{smallScene === 'study' ? 'on' : ''}}" data-s="study" bindtap="setSmallScene" role="button" aria-label="学习恢复灵感">📚 学习恢复</view>
+      <view class="sm-scene {{smallScene === 'body' ? 'on' : ''}}" data-s="body" bindtap="setSmallScene" role="button" aria-label="身体照顾灵感">🫁 身体照顾</view>
+      <view class="sm-scene {{smallScene === 'social' ? 'on' : ''}}" data-s="social" bindtap="setSmallScene" role="button" aria-label="与人连接灵感">🤝 与人连接</view>
+      <view class="sm-scene {{smallScene === 'me' ? 'on' : ''}}" data-s="me" bindtap="setSmallScene" role="button" aria-label="独处时光灵感">🛁 独处时光</view>
+    </view>
+    <view class="sm-idea" bindtap="fillSmallIdea" role="button" aria-label="随机填入一件小事灵感">💡 没想法？给我一件{{smallScene === 'study' ? '学习恢复' : smallScene === 'social' ? '与人连接' : smallScene === 'me' ? '独处' : '身体照顾'}}灵感</view>
     <view class="text-muted sm-hint">每天一换，做满 3 件会有小惊喜 ✨</view>
     <view class="small-yay" wx:if="{{smallCelebrate}}" role="note" aria-label="三件小事都完成">🌟 今天你照顾了自己 3 次，做得好，记得谢谢自己。</view>
   </view>

@@ -59,8 +59,10 @@ Page({
     aidPack: null,         // 情绪急救包（记录负性情绪后给即时可做的小事）
     quickInt: 3,           // 快速记录可选强度 1-5（默认 3）
     bandDays: 14,          // 情绪色带天数：14 / 30 可切换
+    smallScene: 'body',    // 三件小事灵感场景：study/body/social/me
     dayNoteBanner: false,  // 21 点后还没写小结 → 温柔提示
-    yesterdayNote: ''      // 昨天的小结（次日回看）
+    yesterdayNote: '',     // 昨天的小结（次日回看）
+    nightGreet: ''         // 晚间温柔提醒（21 点后一次性）
   },
 
   onShow() {
@@ -71,9 +73,21 @@ Page({
     this.refreshRemind();
     this.refreshSmall();
     this.refreshDayNote();
+    this.refreshNightGreeting();
   },
 
   // ---- 今日小结：21 点后温柔收个尾，第二天早上能回看昨天 ---
+  // 晚安条：21 点后进入心情页，顶部一句「今晚早点休息」的温柔提醒（与收尾小结互不打扰）
+  refreshNightGreeting() {
+    const h = new Date().getHours();
+    const night = h >= 21 || h < 5;
+    if (!night) return;
+    const key = 'hb_nightGreet_' + new Date().toDateString();
+    if (wx.getStorageSync(key)) return; // 当天只出现一次
+    wx.setStorageSync(key, true);
+    this.setData({ nightGreet: h >= 21 ? '🌙 今晚就到这里吧——记录也好，休息也好，你都在好好照顾自己。' : '🌃 这么晚了还醒着，别硬撑，把烦事先交给我。' });
+  },
+
   refreshDayNote() {
     const d = new Date();
     const key = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
@@ -148,13 +162,15 @@ Page({
     this.setData({ smalls: items.map((x, i) => Object.assign({ i }, x)), smallCelebrate: all });
   },
 
-  // 灵感库：不知道写什么时，一键填入一件可做的小事（只填第一个空格）
+  // 灵感库：不知道写什么时，一键填入一件可做的小事（按场景分组，只填第一个空格）
   fillSmallIdea() {
-    const ideas = [
-      '晚饭后散步 10 分钟', '睡前把手机放到桌上充电', '喝够 3 杯水', '给窗台的植物浇浇水',
-      '课间趴 3 分钟闭眼休息', '和同桌说一句玩笑话', '吃一顿好好咀嚼的午饭', '放学路上听一首喜欢的歌',
-      '晚上 10 点半前躺下', '把书桌收拾干净再睡'
-    ];
+    const SCENES = {
+      study: ['课间趴 3 分钟闭眼休息', '整理错题只做 3 道', '番茄钟 25 分钟后必休息', '把明天要交的作业先列出来'],
+      body:  ['晚饭后散步 10 分钟', '睡前把手机放到桌上充电', '喝够 3 杯水', '吃一顿好好咀嚼的午饭', '晚上 10 点半前躺下', '把书桌收拾干净再睡'],
+      social:['和同桌说一句玩笑话', '给老朋友发一句「最近好吗」', '放学路上听一首喜欢的歌', '对家人说一句今天的小事'],
+      me:    ['给窗台的植物浇浇水', '写 3 行日记再睡', '洗一个长长的热水澡', '对着镜子说一句辛苦了']
+    };
+    const ideas = SCENES[this.data.smallScene || 'body'] || SCENES.body;
     const items = this.data.smalls.slice();
     const empty = items.findIndex((x) => !x.text);
     if (empty === -1) { wx.showToast({ title: '三件都写好啦', icon: 'none' }); return; }
@@ -162,6 +178,9 @@ Page({
     const pool = ideas.filter((i) => !used.has(i));
     items[empty].text = pool[Math.floor(Math.random() * pool.length)] || ideas[0];
     this.setData({ smalls: items });
+  },
+  setSmallScene(e) {
+    this.setData({ smallScene: e.currentTarget.dataset.s });
   },
 
   onSmallInput(e) {

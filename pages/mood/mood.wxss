@@ -235,3 +235,9 @@
 .dn-copy { float: right; font-size: 20rpx; color: #5b8def; font-weight: 400; }
 
 .health-week { font-size: 20rpx; color: #7a86a6; margin-left: 14rpx; }
+
+.night-greet { margin: 16rpx 24rpx 0; background: linear-gradient(135deg, #eef0fb, #f7f3fd); border: 1rpx solid #e0e2f2; border-radius: 16rpx; padding: 18rpx 22rpx; font-size: 25rpx; color: #5a5f86; line-height: 1.7; }
+
+.sm-scenes { display: flex; flex-wrap: wrap; margin-top: 14rpx; }
+.sm-scene { font-size: 22rpx; color: #5b6b8c; background: #f1f3f8; border: 1rpx solid #e2e7f2; border-radius: 999rpx; padding: 6rpx 20rpx; margin: 0 12rpx 12rpx 0; }
+.sm-scene.on { background: #5b8def; color: #fff; border-color: #5b8def; }
