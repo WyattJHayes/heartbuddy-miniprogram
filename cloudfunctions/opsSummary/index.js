@@ -140,6 +140,7 @@ exports.main = async () => {
         recentFeeds: (recentFeeds.data || []).map((f) => ({
           id: f._id,
           comment: (f.comment || '').slice(0, 60),
+          full: f.comment || '',
           time: new Date(f.createdAt).toLocaleString('zh-CN', { hour12: false })
         }))
       }

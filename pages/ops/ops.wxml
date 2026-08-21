@@ -136,9 +136,9 @@
     <!-- 用户反馈流：最近 5 条（数据 → 运营闭环） -->
     <view class="card" wx:if="{{d.recentFeeds && d.recentFeeds.length}}">
       <view class="section-title">用户反馈 <text class="plan-sub">最近 {{d.recentFeeds.length}} 条</text></view>
-      <view class="feed-row" wx:for="{{d.recentFeeds}}" wx:key="id">
+      <view class="feed-row" wx:for="{{d.recentFeeds}}" wx:key="id" data-full="{{item.full}}" data-time="{{item.time}}" bindtap="openFeed" role="button" aria-label="查看该条反馈完整内容">
         <view class="feed-comment">{{item.comment}}</view>
-        <view class="feed-time">{{item.time}}</view>
+        <view class="feed-time">{{item.time}} · 点开看全文</view>
       </view>
       <view class="text-muted trend-note">用户从「我的」页提交的反馈，注意及时回应用户诉求。</view>
     </view>

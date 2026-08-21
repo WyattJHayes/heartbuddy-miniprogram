@@ -102,6 +102,16 @@ Page({
     }
   },
 
+  // 查看反馈全文（点击弹层，运营同理心）
+  openFeed(e) {
+    wx.showModal({
+      title: '用户反馈全文',
+      content: e.currentTarget.dataset.full || '（空）',
+      showCancel: false,
+      confirmText: '知道了'
+    });
+  },
+
   // 一键把危机标记为已处理（写回 crisisAlerts，形成现场可点的闭环）
   handleCrisis(e) {
     const id = e.currentTarget.dataset.id;

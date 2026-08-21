@@ -32,7 +32,8 @@ Page({
     deltaText: '',        // 与上周对比文案（↗/↘/→ +0.4 等）
     monthInfo: null,       // 月度小结 {label,total,days,top3,curAvg,delta}
     weekNote: '',        // 本周「对自己说」备注（本地周键缓存）
-    weekNoteHint: ''
+    weekNoteHint: '',
+    bestDayText: '',     // 本周「相对最好的一天」（正向叙事）
   },
 
   _weekKey() {
@@ -130,6 +131,17 @@ Page({
         avg7.push(arr && arr.length ? +(arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1) : null);
       }
 
+      // 本周「相对最好的一天」：近 7 天里记录均值最高且 ≥3 的那天（正向叙事，不追求绝对开心）
+      let bestDayText = '';
+      let bestAvg = -1, bestIdx = -1;
+      avg7.forEach((v, i) => { if (v !== null && v >= 3 && v > bestAvg) { bestAvg = v; bestIdx = i; } });
+      if (bestIdx >= 0) {
+        const bd = new Date(_td.getFullYear(), _td.getMonth(), _td.getDate() - (6 - bestIdx));
+        const wd = ['日', '一', '二', '三', '四', '五', '六'][bd.getDay()];
+        const moodName = MOOD_LABEL[top];
+        bestDayText = `🌟 本周相对最好的一天是周${wd}（${bd.getMonth() + 1}月${bd.getDate()}日）——那天你更多处在「${moodName}」的状态里。记住它，它会提醒你『我可以好起来』。`;
+      }
+
       const suggestions = {
         anxiety: '这周焦虑出现较多，试着每天睡前做 3 分钟深呼吸，把担心的事写下来。',
         sad: '这周难过占比较多，允许自己低落，也别忘了和信任的人分享一点。',
@@ -153,6 +165,7 @@ Page({
         // 连续低日提醒 + 正向鼓励条（高分接连）二选一，都不触发则都不显示
         highStreakTip: this.buildHighStreakTip(avg7),
         lowStreakTip: this.buildLowStreakTip(avg7),
+        bestDayText,
         cardData: {
           topEmoji: MOOD_EMOJI[top] || '😌',
           topLabel: MOOD_LABEL[top] || '平稳',

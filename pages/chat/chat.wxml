@@ -124,6 +124,11 @@
         <view class="quick-panel-item" wx:for="{{quickReplies}}" wx:key="*this"
               data-text="{{item}}" bindtap="onQuick">{{item}}</view>
       </view>
+      <view class="quick-panel-title sooth">💙 自我安抚 · 情绪上来先说一句</view>
+      <view class="quick-panel-list">
+        <view class="quick-panel-item sooth" wx:for="{{quickSoothe}}" wx:key="*this"
+              data-text="{{item}}" bindtap="onQuick">{{item}}</view>
+      </view>
       <view class="quick-panel-title en">EN 英语角 · one tap to send</view>
       <view class="quick-panel-list">
         <view class="quick-panel-item en" wx:for="{{quickEnglish}}" wx:key="*this"

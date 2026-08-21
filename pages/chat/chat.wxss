@@ -140,3 +140,7 @@
 .lc-actions { margin-top: 8rpx; }
 .lc-later { display: inline-block; font-size: 22rpx; color: #c0806f; padding: 4rpx 0; }
 .lc-close { flex-shrink: 0; font-size: 28rpx; color: #d9a99c; padding: 4rpx 6rpx; }
+
+/* 自我安抚短句（快捷面板） */
+.quick-panel-title.sooth { color: #7a5aa0; }
+.quick-panel-item.sooth { background: #f4effa; color: #6d4d97; }

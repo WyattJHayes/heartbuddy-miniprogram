@@ -63,6 +63,13 @@ Page({
       "I'm afraid I might hurt myself",
       "Please help me reach a real person"
     ],
+    // 自我安抚短句：情绪上来时一键发送，让 AI 顺着安抚（陪伴闭环）
+    quickSoothe: [
+      '我现在很难受，但决定先待在这里，不评判自己',
+      '我承认这一刻很难，也承认我已经撑了很久',
+      '情绪是一阵浪，会来也会走；我先做三次深呼吸',
+      '此刻我不需要立刻好起来，我只需要被自己接住'
+    ],
     // 新手引导（一次性）
     onboarding: false,
     onboardingStep: 0,

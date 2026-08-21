@@ -34,6 +34,8 @@
       <!-- 连续低日提醒（低日优先）与正向鼓励条（互斥，不同时出现） -->
       <view class="low-tip" wx:if="{{lowStreakTip}}" role="note" aria-label="连续低情绪提醒">{{lowStreakTip}}</view>
       <view class="high-tip" wx:elif="{{highStreakTip}}" role="note" aria-label="连续好状态鼓励">{{highStreakTip}}</view>
+      <!-- 本周「相对最好的一天」正向叙事 -->
+      <view class="best-tip" wx:if="{{bestDayText}}" role="note" aria-label="本周最好一天肯定">{{bestDayText}}</view>
     </view>
 
     <!-- 本周对自己说（可写进文字版周报） -->
