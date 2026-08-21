@@ -159,7 +159,8 @@ Page({
       { key: 'ach_scan3',       emoji: '🌌', title: '内在旅行者', desc: '身体扫描累计 3 次' },
       { key: 'ach_small3',      emoji: '💫', title: '微小而确定', desc: '一天之内做完 3 件小事' },
       { key: 'ach_share',       emoji: '🤝', title: '陪伴他人', desc: '把心语伴分享出去' },
-      { key: 'ach_edu',        emoji: '🎓', title: '小学霸', desc: '学完心理小课全部 7 节' }
+      { key: 'ach_edu',        emoji: '🎓', title: '小学霸', desc: '学完心理小课全部 7 节' },
+      { key: 'ach_askOut',     emoji: '📣', title: '开口一次', desc: '复制求助话术发给信任的人' }
     ];
     const scanCount = wx.getStorageSync('hb_scanCount') || 0;
     const eduDone = (wx.getStorageSync('hb_eduDone') || []).length >= 7;

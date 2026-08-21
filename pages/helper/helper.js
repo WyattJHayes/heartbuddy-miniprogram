@@ -139,7 +139,10 @@ Page({
     if (!this.data.scriptText) return;
     wx.setClipboardData({
       data: this.data.scriptText,
-      success: () => wx.showToast({ title: '已复制，发给信任的人', icon: 'success' })
+      success: () => {
+        if (!wx.getStorageSync('ach_askOut')) wx.setStorageSync('ach_askOut', true); // 成就：开口一次
+        wx.showToast({ title: '已复制，发给信任的人', icon: 'success' });
+      }
     });
   },
 

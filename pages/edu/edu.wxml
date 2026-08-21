@@ -39,6 +39,17 @@
     </view>
   </view>
 
+  <!-- 温故一题：全部学完后每天一道复习题 -->
+  <view class="review-card" wx:if="{{review}}" role="group" aria-label="温故一题">
+    <view class="rv-title">{{review.icon}} 温故一问 · 来自「{{review.title}}」</view>
+    <view class="rv-q">{{review.quiz.q}}</view>
+    <view class="rv-opt {{review.picked === ri ? (ri === review.quiz.ans ? 'right' : 'wrong') : ''}}"
+          wx:for="{{review.quiz.opts}}" wx:for-item="opt" wx:for-index="ri" wx:key="*this"
+          bindtap="answerReview" data-o="{{ri}}" role="button" aria-label="{{opt}}">{{opt}}</view>
+    <view class="rv-why" wx:if="{{review.picked >= 0}}">{{review.ok ? '✅ ' : '💡 '}}{{review.quiz.why}}</view>
+    <view class="rv-again" bindtap="rollReview" role="button" aria-label="再来一道">再来一道</view>
+  </view>
+
   <!-- 学习心得：一句话写给自己（本地保存） -->
   <view class="note-card" wx:if="{{doneCount >= 1}}">
     <view class="nt-title">✏️ 学到这里，写一句给自己的话</view>

@@ -36,3 +36,5 @@
 .fp-log { margin-top: 6rpx; font-size: 22rpx; color: #9aa3b8; }
 .fp-log-t { margin-right: 8rpx; }
 .fp-log-i { margin-right: 14rpx; }
+
+.scan-time-tip { margin: 14rpx auto 0; max-width: 600rpx; font-size: 23rpx; color: #6b7690; background: #f3f6fd; border-radius: 12rpx; padding: 12rpx 18rpx; }

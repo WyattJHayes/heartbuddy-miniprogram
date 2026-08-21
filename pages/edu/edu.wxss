@@ -44,3 +44,12 @@ page { background: #F7F8FB; }
 .nt-title { font-size: 26rpx; color: #2f3b54; font-weight: 600; }
 .nt-input { margin-top: 14rpx; width: auto; background: #f6f8fc; border-radius: 12rpx; padding: 14rpx 18rpx; font-size: 25rpx; color: #3a465e; min-height: 60rpx; }
 .nt-save { margin-top: 14rpx; display: inline-block; background: #5b8def; color: #fff; border-radius: 999rpx; padding: 10rpx 36rpx; font-size: 24rpx; }
+
+.review-card { margin-top: 24rpx; background: #f4f8ff; border: 1rpx solid #dbe7fb; border-radius: 16rpx; padding: 20rpx 24rpx; }
+.rv-title { font-size: 24rpx; color: #47597c; font-weight: 600; }
+.rv-q { font-size: 26rpx; color: #2f3b54; margin-top: 10rpx; line-height: 1.6; }
+.rv-opt { margin-top: 12rpx; font-size: 24rpx; color: #5b6b8c; background: #fff; border: 1rpx solid #dbe4f4; border-radius: 10rpx; padding: 12rpx 16rpx; }
+.rv-opt.right { background: #e8f7ec; border-color: #b7e2c3; color: #2f7a4d; }
+.rv-opt.wrong { background: #fdeeee; border-color: #f2c9c9; color: #b05252; }
+.rv-why { margin-top: 14rpx; font-size: 22rpx; color: #7a86a6; line-height: 1.7; }
+.rv-again { margin-top: 14rpx; display: inline-block; font-size: 22rpx; color: #5b8def; border: 1rpx solid #cfe0fb; border-radius: 999rpx; padding: 8rpx 26rpx; }

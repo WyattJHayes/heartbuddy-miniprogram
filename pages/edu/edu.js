@@ -126,6 +126,7 @@ Page({
     answered: {},  // key -> 已选的选项下标
     streak: 0,     // 连续学习天数
     myNote: '',    // 学习心得：一句话写给自己（本地）
+    review: null,  // 温故一题：全部学完后随机复习
     doneCount: 0,
     total: LESSONS.length,
     openIdx: -1
@@ -137,6 +138,11 @@ Page({
     const doneMap = {};
     (done || []).forEach((k) => { doneMap[k] = true; });
     this.setData({ myNote: wx.getStorageSync('hb_eduNote') || '' });
+    // 全部学完：每天打开自动出一道温故题
+    if (LESSONS.every((l) => doneMap[l.key])) {
+      const rk = 'hb_eduReview_' + new Date().toDateString();
+      if (!wx.getStorageSync(rk)) { wx.setStorageSync(rk, true); this.rollReview(); }
+    }
     // 续学：自动展开第一节还没学完的课（全部学完则收起）
     let openIdx = -1;
     for (let i = 0; i < LESSONS.length; i++) { if (!doneMap[LESSONS[i].key]) { openIdx = i; break; } }
@@ -221,6 +227,23 @@ Page({
     wx.setStorageSync(DARK_KEY, []);
     this.onLoad();
     wx.showToast({ title: '已重开', icon: 'none' });
+  },
+
+  // 温故一题：全部学完后，随机抽一题再答一次（不计进度，纯温习）
+  rollReview() {
+    const pool = LESSONS.filter((l) => l.quiz);
+    if (!pool.length) return;
+    const l = pool[Math.floor(Math.random() * pool.length)];
+    this.setData({ review: { key: l.key, icon: l.icon, title: l.title, quiz: l.quiz, picked: -1, ok: false } });
+  },
+  answerReview(e) {
+    const o = Number(e.currentTarget.dataset.o);
+    const rv = this.data.review;
+    if (!rv || rv.picked >= 0) return;
+    const ok = o === rv.quiz.ans;
+    this.setData({ review: Object.assign({}, rv, { picked: o, ok }) });
+    if (ok) wx.showToast({ title: '还记得，真棒 🎉', icon: 'success' });
+    else wx.showToast({ title: '忘了一点，很正常', icon: 'none' });
   },
 
   // 学习心得：一句话（本地保存，写在结业卡上方）
