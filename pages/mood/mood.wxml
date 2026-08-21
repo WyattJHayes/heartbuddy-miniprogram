@@ -5,6 +5,9 @@
     <text class="tt-close" role="button" aria-label="今天先不提醒" bindtap="dismissTodayTip">✕</text>
   </view>
 
+  <!-- 连续空白提醒（≥3 天未记录，温柔语气） -->
+  <view class="empty-tip" wx:if="{{emptyTip}}" role="note" aria-label="一段时间没记录的提醒">{{emptyTip}}</view>
+
   <!-- 晚间温柔提醒（21 点后一次性） -->
   <view class="night-greet" wx:if="{{nightGreet}}" role="note" aria-label="晚间提醒">{{nightGreet}}</view>
 
@@ -259,7 +262,9 @@
     <view class="card">
       <view class="section-title">最近 7 天心情曲线</view>
       <view wx:if="{{insight}}" class="insight">💡 {{insight}}</view>
-      <view wx:if="{{weekSum}}" class="week-sum">📅 {{weekSum}}</view>
+      <view wx:if="{{weekSum}}" class="week-sum">📅 {{weekSum}}
+        <text class="ws-copy" bindtap="copyWeekSum" role="button" aria-label="复制本周小结">复制</text>
+      </view>
       <emotion-chart id="moodChart" points="{{moodLine}}" maxY="{{5}}" minY="{{1}}" color="#5b8def" unit="分值" footer="{{chartFooter}}" today></emotion-chart>
       <view class="chart-actions">
         <button class="btn-ghost" bindtap="saveMoodSummary">保存小结图片</button>

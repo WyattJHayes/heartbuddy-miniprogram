@@ -513,9 +513,18 @@ Page({
   copyTalk() {
     const msgs = this.data.messages || [];
     if (!msgs.length) { wx.showToast({ title: '还没有对话内容', icon: 'none' }); return; }
-    const lines = msgs.map((m) => (m.role === 'user' ? '我：' : '心语：') + (m.text || m.content || ''));
+    const fmt = (ts) => {
+      if (!ts) return '';
+      const d = new Date(ts);
+      const hh = String(d.getHours()).padStart(2, '0');
+      const mm = String(d.getMinutes()).padStart(2, '0');
+      return '[' + hh + ':' + mm + '] ';
+    };
+    const lines = msgs.map((m) => fmt(m.ts) + (m.role === 'user' ? '我：' : '心语：') + (m.text || m.content || ''));
+    const first = msgs.find((m) => m.role === 'user');
+    const topic = first ? String(first.text || first.content || '').slice(0, 12) : '这段对话';
     wx.setClipboardData({
-      data: '—— 我和心语伴的一段对话（' + new Date().toLocaleDateString() + '）——\n' + lines.join('\n'),
+      data: '—— 我和心语伴的对话 · ' + new Date().toLocaleDateString() + ' · 关于「' + topic + '」——\n\n' + lines.join('\n'),
       success: () => wx.showToast({ title: '已复制整段对话', icon: 'success' })
     });
   },

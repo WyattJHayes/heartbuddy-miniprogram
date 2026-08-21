@@ -62,7 +62,8 @@ Page({
     smallScene: 'body',    // 三件小事灵感场景：study/body/social/me
     dayNoteBanner: false,  // 21 点后还没写小结 → 温柔提示
     yesterdayNote: '',     // 昨天的小结（次日回看）
-    nightGreet: ''         // 晚间温柔提醒（21 点后一次性）
+    nightGreet: '',        // 晚间温柔提醒（21 点后一次性）
+    emptyTip: ''           // 连续空白天数提醒（≥3 天，温柔语气）
   },
 
   onShow() {
@@ -648,6 +649,7 @@ Page({
         likeToday: this.buildLikeToday(raw),
         healthIdx: this.buildHealth(moodLine, raw),
         band: this.buildBand(raw, this.data.bandDays || 14),
+        emptyTip: this.buildEmptyTip(raw),
         chartFooter: this.buildChartFooter(moodLine),
         weekSum: this.buildWeekSum(list),
         streak: streakNow,
@@ -919,6 +921,25 @@ Page({
       if (d.getFullYear() === y && d.getMonth() === mo) set.add(d.getDate());
     });
     return set.size;
+  },
+
+  // 连续空白提醒：最近 3 天及以上没有记录时，温柔提示（不评判，只是提醒）
+  copyWeekSum() {
+    const t = this.data.weekSum;
+    if (!t) return;
+    wx.setClipboardData({ data: '【本周小结 · 心语伴】\n' + t, success: () => wx.showToast({ title: '已复制', icon: 'success' }) });
+  },
+
+  buildEmptyTip(raw) {
+    const DAY = 86400000;
+    const set = new Set((raw || []).map((m) => new Date(m.createdAt).toDateString()));
+    let gap = 0;
+    for (let i = 1; i <= 7; i++) { // 从昨天往前数（今天没记不算 gap）
+      if (set.has(new Date(Date.now() - i * DAY).toDateString())) break;
+      gap++;
+    }
+    if (gap < 3) return '';
+    return '🌱 有 ' + gap + ' 天没见到你了。不是催你——想说话的时候，我随时在。';
   },
 
   buildBand(raw, days) {
