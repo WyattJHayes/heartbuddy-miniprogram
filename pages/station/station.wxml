@@ -25,7 +25,8 @@
     <view class="st-btn primary" bindtap="goBreathe" role="button" aria-label="去做 3 分钟呼吸练习">🧘 现在做一次呼吸</view>
     <view class="st-btn ghost" bindtap="goChat" role="button" aria-label="和心语聊聊此刻的感受">💬 和心语聊聊</view>
     <view class="st-btn ghost" bindtap="goMood" role="button" aria-label="记下此刻心情并看情绪曲线">🌈 记下此刻心情</view>
-    <view class="st-btn ghost" bindtap="goEdu" role="button" aria-label="打开心理小课学点知识">📚 心理小课（4 节）</view>
+    <view class="st-btn ghost" bindtap="goEdu" role="button" aria-label="打开心理小课学点知识">📚 心理小课（6 节）</view>
+    <view class="st-btn ghost" bindtap="randomCard" role="button" aria-label="随机抽一张充电卡">🎴 不知道做哪张？抽一张</view>
   </view>
 
   <view class="st-foot">* 内容为心理学科普与自助技巧，不替代专业诊断。若情况紧急，请去「求助」页拨打热线。</view>

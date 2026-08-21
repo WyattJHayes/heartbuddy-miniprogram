@@ -119,6 +119,17 @@
     </block>
   </view>
 
+  <!-- 毕业卡：四段陪伴计划走完，郑重地谢谢你的坚持（一次性） -->
+  <view class="card grad" wx:if="{{careGrad}}" role="note" aria-label="陪伴计划毕业卡">
+    <view class="grad-emoji">🌤</view>
+    <view class="grad-title">这一段路，你走完了</view>
+    <view class="grad-text">从最难的那一刻，到 7 天后的现在——你没有放开自己。那四次问候你都收到了，往后的日子，也请像这样一遍遍接住自己。</view>
+    <view class="grad-actions">
+      <view class="grad-btn" bindtap="goEduFromGrad" role="button" aria-label="去心理小课学一点照顾自己">📚 再学一点照顾自己</view>
+      <view class="grad-close" bindtap="closeGrad" role="button" aria-label="收起毕业卡">谢谢你，收下</view>
+    </view>
+  </view>
+
   <!-- 开口求助话术：最难的一步往往是「说出来」，帮你生成第一句 -->
   <view class="card askfor">
     <view class="section-title">💬 不知道怎么开口？让心语帮你写第一句</view>

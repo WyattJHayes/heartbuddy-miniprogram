@@ -127,6 +127,15 @@ Page({
     wx.switchTab({ url: '/pages/helper/helper' });
   },
 
+  // 随机抽一张：不知道做什么时，让今天「抽」到你（展开随机卡片）
+  randomCard() {
+    const cards = this.data.cards || [];
+    if (!cards.length) return;
+    const i = Math.floor(Math.random() * cards.length);
+    this.setData({ open: i });
+    wx.vibrateShort && wx.vibrateShort({ type: 'light' });
+  },
+
   goEdu() {
     wx.navigateTo({ url: '/pages/edu/edu' });
   },

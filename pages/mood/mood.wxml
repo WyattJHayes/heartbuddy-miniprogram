@@ -32,6 +32,12 @@
   <!-- 一键快速记录 -->
   <view class="card quick-card">
     <view class="section-title">此刻心情？<text class="quick-sub">一键记下，曲线实时更新</text></view>
+    <!-- 快速记录强度：1-5，默认 3（让曲线与周报平均强度更真实） -->
+    <view class="qint-row" role="radiogroup" aria-label="此刻情绪强度">
+      <text class="qint-label">强度</text>
+      <view class="qint-chip {{quickInt === n ? 'on' : ''}}" wx:for="{{[1,2,3,4,5]}}" wx:for-item="n" wx:key="*this"
+            data-v="{{n}}" bindtap="setQuickInt" role="radio" aria-checked="{{quickInt === n}}" aria-label="强度 {{n}}">{{n}}</view>
+    </view>
     <view class="quick-row">
       <button
         class="quick-btn {{quicking === item.key ? 'on' : ''}}"

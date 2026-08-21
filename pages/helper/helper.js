@@ -36,6 +36,7 @@ Page({
     ],
     scriptSituation: '',
     scriptText: '',
+    careGrad: false,            // 四段陪伴计划走完后的「毕业卡」（一次性）
     hotlines,
     safety: false, // 是否已设置 24 小时回访
     safetyHint: '',
@@ -141,6 +142,19 @@ Page({
     // 安全包：预先填写的「可信赖的人」称呼（本地）
     const ppl = wx.getStorageSync('hbSafePeople') || '';
     if (ppl !== this.data.safePeople) this.setData({ safePeople: ppl });
+    // 毕业卡：四段陪伴走完且未看过 → 显示一次
+    const grad = wx.getStorageSync('hbCareGrad');
+    this.setData({ careGrad: !!(grad && !wx.getStorageSync('hbCareGradSeen')) });
+  },
+
+  // 毕业卡关闭：记住已看，不再打扰
+  closeGrad() {
+    wx.setStorageSync('hbCareGradSeen', true);
+    this.setData({ careGrad: false });
+  },
+  goEduFromGrad() {
+    this.closeGrad();
+    wx.navigateTo({ url: '/pages/edu/edu' });
   },
 
   // 安全包：唤起填写/修改「我想让谁记得我」（本地保存 3 人以内）

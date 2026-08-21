@@ -114,3 +114,11 @@
 .af-btn { flex: 1; text-align: center; background: #5b8def; color: #fff; border-radius: 999rpx; padding: 12rpx 0; font-size: 24rpx; margin-right: 12rpx; }
 .af-btn.ghost { background: #fff; color: #5b8def; border: 1rpx solid #cfe0fb; margin-right: 0; }
 .af-hint { margin-top: 14rpx; font-size: 22rpx; color: #9aa3b8; line-height: 1.6; }
+
+.card.grad { margin-top: 20rpx; background: linear-gradient(160deg, #f4faf6, #fdfff9); border: 1rpx solid #dcefdf; }
+.grad-emoji { font-size: 52rpx; text-align: center; margin-top: 8rpx; }
+.grad-title { text-align: center; font-size: 30rpx; font-weight: 700; color: #2f7a4d; margin-top: 10rpx; }
+.grad-text { font-size: 24rpx; color: #5a6f60; line-height: 1.8; margin-top: 12rpx; }
+.grad-actions { margin-top: 16rpx; }
+.grad-btn { background: #4f9e6b; color: #fff; text-align: center; border-radius: 999rpx; padding: 14rpx 0; font-size: 26rpx; }
+.grad-close { margin-top: 12rpx; text-align: center; font-size: 24rpx; color: #9aa3b8; }

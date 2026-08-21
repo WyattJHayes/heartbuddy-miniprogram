@@ -462,6 +462,8 @@ Page({
       '几天过去了 —— 有没有哪一个时刻，你觉得其实没那么糟？',
       '7 天啦，这一周你一直在学习照顾自己。要是愿意，去「心情」记一笔现在的感受吧。'];
     due.forEach((p) => this.pushAI(stage[(p.s || 0) % stage.length], false));
+    // 四段陪伴计划走完 → 求助页亮出「毕业卡」（一次性，可关闭）
+    if (due.some((p) => (p.s || 0) >= 3)) wx.setStorageSync('hbCareGrad', Date.now());
   },
 
   // 重新开始这轮对话：清空当前消息流、换新会话；情绪记录与成就不受影响

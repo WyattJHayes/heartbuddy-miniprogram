@@ -57,6 +57,7 @@ Page({
     todayTip: false,       // 今日未记录心情时的轻提醒（当天一次可关）
     dayNote: '',           // 今日小结（21 点后的收尾）
     aidPack: null,         // 情绪急救包（记录负性情绪后给即时可做的小事）
+    quickInt: 3,           // 快速记录可选强度 1-5（默认 3）
     dayNoteBanner: false,  // 21 点后还没写小结 → 温柔提示
     yesterdayNote: ''      // 昨天的小结（次日回看）
   },
@@ -453,6 +454,11 @@ Page({
     this.setData({ trig: arr });
   },
 
+  setQuickInt(e) {
+    const v = Number(e.currentTarget.dataset.v);
+    if (v >= 1 && v <= 5) this.setData({ quickInt: v });
+  },
+
   async tapQuick(e) {
     const key = e.currentTarget.dataset.key;
     const meta = MOOD_META[key];
@@ -468,7 +474,7 @@ Page({
           openid,
           sessionId: 'quick-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
           mood: key,
-          intensity: 3,
+          intensity: this.data.quickInt || 3,
           trigger: this.data.trig && this.data.trig.length ? '快速记录·' + this.data.trig.join('、') : '快速记录',
           createdAt: Date.now()
         }
