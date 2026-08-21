@@ -155,10 +155,10 @@ Page({
       { key: 'ach_scan3',       emoji: '🌌', title: '内在旅行者', desc: '身体扫描累计 3 次' },
       { key: 'ach_small3',      emoji: '💫', title: '微小而确定', desc: '一天之内做完 3 件小事' },
       { key: 'ach_share',       emoji: '🤝', title: '陪伴他人', desc: '把心语伴分享出去' },
-      { key: 'ach_edu',        emoji: '🎓', title: '小学霸', desc: '学完心理小课全部 4 节' }
+      { key: 'ach_edu',        emoji: '🎓', title: '小学霸', desc: '学完心理小课全部 6 节' }
     ];
     const scanCount = wx.getStorageSync('hb_scanCount') || 0;
-    const eduDone = (wx.getStorageSync('hb_eduDone') || []).length >= 4;
+    const eduDone = (wx.getStorageSync('hb_eduDone') || []).length >= 6;
     if (eduDone) wx.setStorageSync('ach_edu', true);
     const badges = defs.map((b) => {
       let got = !!wx.getStorageSync(b.key);

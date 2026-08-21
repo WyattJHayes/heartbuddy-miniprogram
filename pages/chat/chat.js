@@ -465,6 +465,17 @@ Page({
   },
 
   // 重新开始这轮对话：清空当前消息流、换新会话；情绪记录与成就不受影响
+  // 复制这段对话（数据主权：你的倾诉随时可以带走留档）
+  copyTalk() {
+    const msgs = this.data.messages || [];
+    if (!msgs.length) { wx.showToast({ title: '还没有对话内容', icon: 'none' }); return; }
+    const lines = msgs.map((m) => (m.role === 'user' ? '我：' : '心语：') + (m.text || m.content || ''));
+    wx.setClipboardData({
+      data: '—— 我和心语伴的一段对话（' + new Date().toLocaleDateString() + '）——\n' + lines.join('\n'),
+      success: () => wx.showToast({ title: '已复制整段对话', icon: 'success' })
+    });
+  },
+
   resetChat() {
     wx.showModal({
       title: '重新开始这轮对话？',

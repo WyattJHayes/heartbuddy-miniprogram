@@ -21,6 +21,18 @@
         <view class="hero-item"><text class="num">{{chatCount}}</text><text class="unit">次倾诉</text></view>
         <view class="hero-item"><text class="num">{{dayCount}}</text><text class="unit">天有记录</text></view>
       </view>
+      <!-- 本周情绪构成：一条彩带看全周（观察，不评判） -->
+      <view class="mix-wrap" wx:if="{{mixBar.length > 1}}" role="img" aria-label="本周情绪构成彩带">
+        <view class="mix-bar">
+          <view class="mix-seg" wx:for="{{mixBar}}" wx:key="mood" style="width: {{item.w}}%; background: {{item.color}};"></view>
+        </view>
+        <view class="mix-legend">
+          <view class="mix-item" wx:for="{{mixBar}}" wx:key="mood">
+            <view class="mix-dot" style="background: {{item.color}};"></view>
+            <text class="mix-name">{{item.emoji}} {{item.label}} {{item.pct}}%</text>
+          </view>
+        </view>
+      </view>
       <view wx:if="{{weekAvg}}" class="avg-line">
         <text class="avg-num">本周均值 {{weekAvg}}</text>
         <text wx:if="{{prevAvg}}" class="avg-cmp">上周 {{prevAvg}}</text>

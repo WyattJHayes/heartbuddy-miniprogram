@@ -2,6 +2,10 @@
 const app = getApp();
 const { MOOD_SCORE } = require('../../utils/moodscore');
 
+const MOOD_COLOR = { // 情绪构成条配色（自包含，不依赖外部）
+  happy: '#FFB337', expect: '#FFD666', peace: '#7BC47F', tired: '#F2A65A',
+  angry: '#F26D6D', anxiety: '#6FA8FF', lonely: '#9B8CCF', sad: '#7E9CD8'
+};
 const MOOD_EMOJI = {
   happy: '😊', peace: '😌', expect: '🌟', anxiety: '😰', sad: '😢', lonely: '🌫', tired: '😴', angry: '😡'
 };
@@ -48,6 +52,21 @@ Page({
     const raw = wx.getStorageSync('hb_weekNote') || {};
     if (raw.key === key) this.setData({ weekNote: raw.text || '' });
     else this.setData({ weekNote: '' });
+  },
+
+  // 本周情绪构成：堆叠条 + 图例（观察而不是评判）
+  buildMixBar(counts, total) {
+    const keys = Object.keys(counts).sort((a, b) => counts[b] - counts[a]).slice(0, 6);
+    const sum = keys.reduce((a, k) => a + counts[k], 0) || 1;
+    return keys.map((k) => ({
+      mood: k,
+      label: MOOD_LABEL[k] || k,
+      emoji: MOOD_EMOJI[k] || '·',
+      n: counts[k],
+      pct: Math.round(counts[k] / sum * 100),
+      color: MOOD_COLOR[k] || '#C6CBD9',
+      w: Math.max(6, Math.round(counts[k] / total * 100)) // 最小 6% 保证可见
+    }));
   },
 
   onNoteInput(e) {
@@ -220,6 +239,7 @@ Page({
         topLabel: MOOD_LABEL[top] || '平稳',
         chatCount: list.length,
         dayCount: days.size,
+        mixBar: this.buildMixBar(counts, list.length),
         suggestion: suggestions[top] || '继续保持觉察，记录本身就是一种照顾。',
         weekAvg: weekAvg != null ? weekAvg.toFixed(1) : null,
         weekInt: weekInt,
