@@ -112,6 +112,9 @@
       <view class="stat"><text class="stat-num">{{chatTotal}}</text><text class="stat-label">情绪记录</text></view>
     </view>
     <view class="text-muted stat-tip">以上仅本地展示·对话正文不入库，详阅「隐私政策（全文）」。</view>
+    <view class="row" bindtap="copyMySummary">
+      <text>复制文字版「我的概览」</text><text class="arrow">›</text>
+    </view>
     <view class="row" bindtap="clearLocalData">
       <text>清除本机记录<text class="muted">（云端心情与徽章保留）</text></text><text class="arrow">›</text>
     </view>

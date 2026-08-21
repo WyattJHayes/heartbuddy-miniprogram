@@ -36,6 +36,20 @@
     <view class="fg-ok" bindtap="hideGuide" role="button" aria-label="收起新手引导">知道了，开始吧</view>
   </view>
 
+  <!-- 更新日志：最新版本做了什么（可折叠） -->
+  <view class="card changelog-card">
+    <view class="cl-head" bindtap="toggleLog" role="button" aria-label="展开或收起更新日志">
+      <text class="cl-title">🆕 最近更新了什么</text>
+      <text class="cl-arrow {{showLog ? 'up' : ''}}">▾</text>
+    </view>
+    <view class="cl-list" wx:if="{{showLog}}">
+      <view class="cl-item" wx:for="{{changelog}}" wx:key="v">
+        <text class="cl-v">v{{item.v}}</text>
+        <text class="cl-t">{{item.t}}</text>
+      </view>
+    </view>
+  </view>
+
   <view class="card notice">
     <view class="section-title">在开始前，请了解</view>
     <view class="item">· 我是 AI 心理陪伴助手，<text class="hl">不替代专业诊疗</text>。</view>

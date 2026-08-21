@@ -117,6 +117,7 @@ const LESSONS = [
 ];
 
 const DONE_KEY = 'hb_eduDone';
+const { calcStreak } = require('../../utils/streak');
 
 Page({
   data: {
@@ -173,21 +174,6 @@ Page({
     this.setData({ doneMap, doneCount: Object.keys(doneMap).length });
   },
 
-  // 连续学习天数：hb_eduDays 存学习日队列（答对即算当天学过）
-  calcStreak() {
-    const set = new Set(wx.getStorageSync('hb_eduDays') || []);
-    if (!set.size) return 0;
-    const today = new Date().toDateString();
-    const yest = new Date(Date.now() - 86400000).toDateString();
-    if (!set.has(today) && !set.has(yest)) return 0;
-    let n = 0;
-    let cur = set.has(today) ? new Date() : new Date(Date.now() - 86400000);
-    for (let i = 0; i < 365; i++) {
-      if (set.has(cur.toDateString())) { n++; cur = new Date(cur.getTime() - 86400000); }
-      else break;
-    }
-    return n;
-  },
   markStudyToday() {
     const days = wx.getStorageSync('hb_eduDays') || [];
     const t = new Date().toDateString();

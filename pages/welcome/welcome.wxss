@@ -47,3 +47,13 @@
 .fg-item { display: flex; align-items: flex-start; font-size: 25rpx; color: #4a5a4e; line-height: 1.7; margin-top: 12rpx; }
 .fg-num { flex-shrink: 0; width: 36rpx; height: 36rpx; line-height: 36rpx; text-align: center; border-radius: 50%; background: #6fae7f; color: #fff; font-size: 22rpx; margin-right: 14rpx; margin-top: 6rpx; }
 .fg-ok { margin-top: 18rpx; background: #6fae7f; color: #fff; text-align: center; border-radius: 999rpx; padding: 14rpx 0; font-size: 26rpx; }
+
+.changelog-card { border: 1rpx solid #dbe7fb; background: #f7faff; }
+.cl-head { display: flex; align-items: center; justify-content: space-between; }
+.cl-title { font-size: 26rpx; font-weight: 600; color: #3f5c95; }
+.cl-arrow { color: #b0b7c8; transition: transform .2s; }
+.cl-arrow.up { transform: rotate(180deg); }
+.cl-list { margin-top: 12rpx; }
+.cl-item { display: flex; margin-top: 10rpx; }
+.cl-v { flex-shrink: 0; width: 90rpx; font-size: 22rpx; color: #5b8def; font-weight: 700; }
+.cl-t { flex: 1; font-size: 22rpx; color: #5b6b8c; line-height: 1.7; }

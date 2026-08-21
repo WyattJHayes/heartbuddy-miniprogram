@@ -3,6 +3,7 @@ const app = getApp();
 const api = require('../../utils/api');
 const planlib = require('../../utils/plan');
 const { dailyQuotes } = require('../../config/index');
+const { calcStreak } = require('../../utils/streak');
 
 Page({
   data: {
@@ -160,11 +161,13 @@ Page({
       { key: 'ach_small3',      emoji: '💫', title: '微小而确定', desc: '一天之内做完 3 件小事' },
       { key: 'ach_share',       emoji: '🤝', title: '陪伴他人', desc: '把心语伴分享出去' },
       { key: 'ach_edu',        emoji: '🎓', title: '小学霸', desc: '学完心理小课全部 7 节' },
-      { key: 'ach_askOut',     emoji: '📣', title: '开口一次', desc: '复制求助话术发给信任的人' }
+      { key: 'ach_askOut',     emoji: '📣', title: '开口一次', desc: '复制求助话术发给信任的人' },
+      { key: 'ach_edu7',       emoji: '🔥', title: '连学 7 天', desc: '心理小课连续学习一周' }
     ];
     const scanCount = wx.getStorageSync('hb_scanCount') || 0;
     const eduDone = (wx.getStorageSync('hb_eduDone') || []).length >= 7;
     if (eduDone) wx.setStorageSync('ach_edu', true);
+    if (calcStreak(wx.getStorageSync('hb_eduDays') || []) >= 7) wx.setStorageSync('ach_edu7', true);
     const badges = defs.map((b) => {
       let got = !!wx.getStorageSync(b.key);
       if (b.key === 'ach_scan' && got) got = true;
@@ -341,6 +344,25 @@ Page({
   },
 
   goEdu() { wx.navigateTo({ url: '/pages/edu/edu' }); },
+
+  // 文字版「我的概览」：不用翻页，一段话讲清我用得怎么样（可复制留档）
+  copyMySummary() {
+    const edu = (wx.getStorageSync('hb_eduDone') || []).length;
+    const br = wx.getStorageSync('breatheCount') || 0;
+    const sc = wx.getStorageSync('hb_scanCount') || 0;
+    const d = new Date();
+    const txt = [
+      '【我的概览 · 心语伴】' + d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月 ' + d.getDate() + ' 日',
+      '· 已陪伴我 ' + (this.data.accompanyDays || 0) + ' 天，连续打卡 ' + (this.data.streakDays || 0) + ' 天',
+      '· 累计心情记录 ' + (this.data.footprintSum || 0) + ' 条',
+      '· 呼吸练习 ' + br + ' 次 · 身体扫描 ' + sc + ' 次',
+      '· 心理小课已学 ' + edu + '/7 节',
+      '· 聊天倾诉 ' + (this.data.chatTotal || 0) + ' 次 · 自评 ' + (this.data.assessTotal || 0) + ' 次',
+      '',
+      '记录本身就是一种照顾，我会继续好好对自己。'
+    ].join('\n');
+    wx.setClipboardData({ data: txt, success: () => wx.showToast({ title: '已复制我的概览', icon: 'success' }) });
+  },
 
   // 清除本地记录：只清本机的小结/小课/安全包等，云端心情与成就徽章都保留
   clearLocalData() {
