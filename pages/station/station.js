@@ -127,6 +127,10 @@ Page({
     wx.switchTab({ url: '/pages/helper/helper' });
   },
 
+  goEdu() {
+    wx.navigateTo({ url: '/pages/edu/edu' });
+  },
+
   goBreathe() {
     wx.navigateTo({ url: '/pages/breathe/breathe' });
   },

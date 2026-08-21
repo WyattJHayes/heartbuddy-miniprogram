@@ -1,0 +1,26 @@
+page { background: #F7F8FB; }
+.container { padding: 24rpx 24rpx 60rpx; }
+.edu-head { background: linear-gradient(135deg, #FFEACB, #FFF6E9); border-radius: 20rpx; padding: 28rpx 30rpx; }
+.eh-title { font-size: 34rpx; font-weight: 700; color: #7A5A17; display: block; }
+.eh-sub { font-size: 24rpx; color: #9a7b45; margin-top: 8rpx; display: block; }
+.edu-progress { margin: 20rpx 4rpx 8rpx; }
+.ep-num { font-size: 24rpx; color: #8a93a8; margin-bottom: 10rpx; }
+.ep-bar { height: 14rpx; background: #e9ecf3; border-radius: 99rpx; overflow: hidden; }
+.ep-fill { height: 100%; background: linear-gradient(90deg, #ffb347, #ff8a5c); border-radius: 99rpx; transition: width .3s; }
+.lesson { margin-top: 18rpx; background: #fff; border-radius: 18rpx; overflow: hidden; box-shadow: 0 4rpx 12rpx rgba(90, 120, 200, .06); }
+.ls-head { display: flex; align-items: center; padding: 22rpx 24rpx; }
+.ls-icon { font-size: 40rpx; margin-right: 18rpx; }
+.ls-main { flex: 1; min-width: 0; }
+.ls-title { font-size: 28rpx; color: #2f3b54; font-weight: 600; }
+.ls-meta { font-size: 22rpx; color: #9aa3b8; margin-top: 6rpx; }
+.ls-flag { font-size: 24rpx; color: #c0c7d6; }
+.ls-flag.on { color: #4caf50; }
+.ls-body { padding: 6rpx 26rpx 26rpx; border-top: 1rpx solid #f0f2f7; }
+.ls-point { display: flex; margin-top: 16rpx; }
+.lp-dot { color: #ffb347; margin-right: 12rpx; }
+.lp-text { flex: 1; font-size: 24rpx; color: #4a5568; line-height: 1.7; }
+.ls-do { margin-top: 18rpx; background: #FDF6E9; border-radius: 12rpx; padding: 14rpx 18rpx; font-size: 24rpx; color: #8a6a2f; line-height: 1.6; }
+.ls-done-btn { margin-top: 18rpx; background: #5B8DEF; color: #fff; text-align: center; border-radius: 999rpx; padding: 14rpx 0; font-size: 26rpx; }
+.edu-foot { margin-top: 24rpx; font-size: 22rpx; color: #9aa3b8; line-height: 1.7; }
+.ef-link { color: #5B8DEF; text-decoration: underline; }
+.edu-reset { margin-top: 28rpx; font-size: 24rpx; color: #b0b7c8; text-align: center; }

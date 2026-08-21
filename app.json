@@ -11,7 +11,8 @@
     "pages/scan/scan",
     "pages/profile/profile",
     "pages/privacy/privacy",
-    "pages/station/station"
+    "pages/station/station",
+    "pages/edu/edu"
   ],
   "window": {
     "backgroundTextStyle": "light",

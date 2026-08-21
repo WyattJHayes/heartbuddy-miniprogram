@@ -1,0 +1,43 @@
+<view class="container">
+  <view class="edu-head" role="note" aria-label="心理小课说明">
+    <text class="eh-title">📚 心理小课</text>
+    <text class="eh-sub">几分钟就能读完，随手学一点照顾自己的办法</text>
+  </view>
+
+  <!-- 完成度进度条 -->
+  <view class="edu-progress" role="progressbar" aria-label="课程完成度 {{doneCount}}/{{total}}">
+    <view class="ep-num">已学完 {{doneCount}} / {{total}} 节</view>
+    <view class="ep-bar"><view class="ep-fill" style="width: {{doneCount / total * 100}}%"></view></view>
+  </view>
+
+  <!-- 课程列表 -->
+  <view class="lesson" wx:for="{{lessons}}" wx:key="key" role="button" aria-label="展开{{item.title}}">
+    <view class="ls-head" bindtap="toggle" data-i="{{index}}">
+      <text class="ls-icon">{{item.icon}}</text>
+      <view class="ls-main">
+        <view class="ls-title">{{item.title}}</view>
+        <view class="ls-meta">{{item.mins}} · {{item.intro}}</view>
+      </view>
+      <text class="ls-flag {{doneMap[item.key] ? 'on' : ''}}">{{doneMap[item.key] ? '已学完' : '▸'}}</text>
+    </view>
+    <view class="ls-body" wx:if="{{openIdx === index}}">
+      <view class="ls-point" wx:for="{{item.points}}" wx:for-item="pt" wx:key="*this">
+        <text class="lp-dot">·</text><text class="lp-text">{{pt}}</text>
+      </view>
+      <view class="ls-do">💚 今天可以这样做：{{item.do}}</view>
+      <view class="ls-done-btn" bindtap="markDone" data-i="{{index}}" role="button" aria-label="标记学完这一节">
+        {{doneMap[item.key] ? '✓ 已学完（再点保留）' : '我学完啦 ✓'}}
+      </view>
+    </view>
+  </view>
+
+  <view class="edu-foot" role="note" aria-label="免责说明">
+    课程来自公开的心理健康科普，不替代专业诊断。如果情绪长时间很重，
+    <text class="ef-link" role="button" aria-label="拨打心理援助热线" bindtap="callHotline">可拨打 12356 心理援助热线</text>
+    或告诉信任的成年人。
+  </view>
+
+  <view class="edu-reset" bindtap="resetAll" role="button" aria-label="清空课程进度重学">
+    重新学一遍（清空进度）
+  </view>
+</view>
