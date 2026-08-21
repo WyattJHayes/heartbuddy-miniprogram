@@ -48,3 +48,8 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .dg-log { margin-top:14rpx; }
 .dg-log-title { font-size:21rpx; color:#9aa7c3; }
 .dg-log-chip { display:inline-block; background:#eef2fb; color:#5a6a8b; font-size:20rpx; border-radius:8rpx; padding:4rpx 12rpx; margin:6rpx 8rpx 0 0; }
+
+
+.echo-card { display:flex; align-items:center; margin:20rpx 24rpx; background:#eef8f0; border:1rpx solid #d4ecd9; border-radius:16rpx; padding:22rpx 24rpx; }
+.echo-emoji { font-size:34rpx; margin-right:14rpx; }
+.echo-text { flex:1; font-size:26rpx; color:#3f7a58; line-height:1.6; }

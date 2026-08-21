@@ -2,6 +2,7 @@
 const app = getApp();
 const api = require('../../utils/api');
 const planlib = require('../../utils/plan');
+const { dailyQuotes } = require('../../config/index');
 
 Page({
   data: {
@@ -271,6 +272,64 @@ Page({
   },
 
   // 数据透明说明：告诉用户每一类数据存放在哪里、用来做什么（安全与知情同意）
+  // 今日心情卡：Canvas 绘制 → 保存成图（可发朋友圈/分享给家长老师）
+  async drawShareCard() {
+    if (this._cardBusy) return;
+    this._cardBusy = true;
+    try {
+      const q = this.createSelectorQuery();
+      const res = await new Promise((resolve) => {
+        q.select('#shareCard').fields({ node: true, size: true }).exec((r) => resolve(r && r[0] && r[0].node ? r[0] : null));
+      });
+      if (!res) { wx.showToast({ title: '卡片就绪中，再试一次', icon: 'none' }); return; }
+      const canvas = res.node;
+      const ctx = canvas.getContext('2d');
+      canvas.width = 300 * 2; canvas.height = 220 * 2;
+      ctx.scale(2, 2);
+      // 背景
+      ctx.fillStyle = '#fffaf2'; ctx.fillRect(0, 0, 300, 220);
+      ctx.fillStyle = '#f3e9d8'; ctx.fillRect(0, 0, 300, 8);
+      // 标题
+      ctx.fillStyle = '#8f6b1f'; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('心语伴 · 今日一句', 150, 32);
+      // 日期
+      const d = new Date();
+      ctx.fillStyle = '#a3adc4'; ctx.font = '11px sans-serif';
+      ctx.fillText(`${d.getFullYear()} 年 ${d.getMonth() + 1} 月 ${d.getDate()} 日`, 150, 52);
+      // 中间的话（长句自动两行）
+      ctx.fillStyle = '#4a5568'; ctx.font = '16px sans-serif';
+      const quote = dailyQuotes[(d.getDate() + d.getMonth()) % dailyQuotes.length];
+      let words = quote, lines = [];
+      const maxW = 260;
+      while (words.length) {
+        let i = words.length;
+        while (i > 0 && ctx.measureText(words.slice(0, i)).width > maxW) i--;
+        if (i <= 0) i = 1;
+        lines.push(words.slice(0, i)); words = words.slice(i);
+      }
+      lines.slice(0, 3).forEach((ln, idx) => ctx.fillText(ln, 150, 92 + idx * 24));
+      // 数据行
+      ctx.fillStyle = '#8b9ac0'; ctx.font = '11px sans-serif';
+      ctx.fillText(`已陪你 ${this.data.streakDays || 0} 天 · 写过 ${this.data.footprintSum || 0} 次心情`, 150, 168);
+      ctx.fillStyle = '#b8c2da';
+      ctx.fillText('—— 心语伴：你的情绪守护小伙伴', 150, 196);
+      // 存图
+      const tmp = await new Promise((resolve) => {
+        wx.canvasToTempFilePath({ canvas, success: resolve, fail: () => resolve(null) }, this);
+      });
+      this._cardBusy = false;
+      if (!tmp || !tmp.tempFilePath) { wx.showToast({ title: '生成失败，请重试', icon: 'none' }); return; }
+      await this.saveToAlbum(tmp.tempFilePath);
+    } catch (e) { console.error('[profile] 分享卡失败', e); this._cardBusy = false; }
+  },
+  saveToAlbum(path) {
+    wx.saveImageToPhotosAlbum({
+      filePath: path,
+      success: () => wx.showToast({ title: '已保存 · 可以分享啦', icon: 'success' }),
+      fail: () => wx.showModal({ title: '保存到相册', content: '需要你允许保存图片到相册，就能把这张卡发给别人。', confirmText: '去设置', success: (r) => r.confirm && wx.openSetting() })
+    });
+  },
+
   viewDataMap() {
     wx.showModal({
       title: '你的数据放在哪',

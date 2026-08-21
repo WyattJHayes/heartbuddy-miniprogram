@@ -5,6 +5,20 @@
     <text class="tt-close" role="button" aria-label="今天先不提醒" bindtap="dismissTodayTip">✕</text>
   </view>
 
+  <!-- 21 点后的收尾提示 + 昨天的小结回看 -->
+  <view class="daynote-banner" wx:if="{{dayNoteBanner}}" role="note" aria-label="给今天收个尾" bindtap="openDayNote">
+    <text class="dn-t">🌙 快 21 点了 —— 今天辛苦了。要不要给今天收个尾？</text>
+    <text class="dn-go">写小结 ›</text>
+  </view>
+  <view class="daynote-card" wx:if="{{todayNote}}">
+    <view class="dn-title">📝 今日小结<text class="dn-sub">写于 21 点后</text></view>
+    <view class="dn-text">{{todayNote}}</view>
+  </view>
+  <view class="daynote-card yest" wx:if="{{yesterdayNote && !todayNote}}">
+    <view class="dn-title">🌅 昨天的你</view>
+    <view class="dn-text">{{yesterdayNote}}</view>
+  </view>
+
   <!-- 自评入口 -->
   <view class="card assess-entry" role="button" aria-label="进入考前焦虑自评" bindtap="goAssessment">
     <view class="ae-emoji">📋</view>

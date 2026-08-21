@@ -202,3 +202,13 @@
 .thought-save { margin-top:14rpx; width:100%; }
 .thought-due { font-size:25rpx; color:#5a6a8b; line-height:1.7; padding:8rpx 0 14rpx; }
 .thought-num { color:#4f7ee0; font-weight:600; }
+
+
+.daynote-banner { display:flex; align-items:center; background:linear-gradient(135deg,#eef3ff,#fdf1e3); border:1rpx solid #e2e9f8; border-radius:16rpx; padding:18rpx 22rpx; margin:16rpx 24rpx; }
+.dn-t { flex:1; font-size:24rpx; color:#5a6a8b; line-height:1.6; }
+.dn-go { font-size:24rpx; color:#8f6b1f; font-weight:600; margin-left:14rpx; }
+.daynote-card { margin:16rpx 24rpx 0; background:#fff; border:1rpx solid #eceef5; border-radius:14rpx; padding:16rpx 20rpx; }
+.daynote-card.yest { background:#fbfff9; border-color:#e4f0e4; }
+.dn-title { font-size:24rpx; color:#7a86a6; font-weight:600; }
+.dn-sub { font-size:20rpx; color:#a3adc4; font-weight:400; margin-left:8rpx; }
+.dn-text { font-size:26rpx; color:#3a465e; line-height:1.7; margin-top:8rpx; white-space:pre-wrap; }

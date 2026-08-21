@@ -30,6 +30,7 @@ Page({
     calm: false,
     calmInt: 3,          // 记录「平静」时的强度（1-5，默认 3）
     dayGoal: DAILY_GOAL_MIN, // 面向 WXML 展示
+    echoText: '',          // 完成一次呼吸后的「呼吸回响」
     presets: PRESETS,
     presetKey: 'calm'
   },
@@ -97,6 +98,20 @@ Page({
   },
 
   // 本周已展示（本地周计数，周一重置）
+  // 呼吸回响：完成一次后温柔的一句（按完成次数轮换）
+  nextEcho() {
+    const pool = [
+      '山有风，你慢慢吹；心已定，你慢慢来。',
+      '吸——呼——这一口气，你赢回来了。',
+      '你刚刚做了一件重要的小事：照顾自己。',
+      '身体记得「此刻是安全的」，谢谢你的练习。',
+      '回到自己身边的感觉，很好。',
+      '不用一次做到最好，一次次来就够了。'
+    ];
+    const n = wx.getStorageSync('breatheCount') || 0;
+    return pool[Math.max(0, n - 1) % pool.length];
+  },
+
   weekCount() {
     const now = new Date();
     const wStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - ((now.getDay() + 6) % 7));
@@ -225,6 +240,7 @@ Page({
         if (bc >= 5 && !wx.getStorageSync('ach_breathe5')) wx.setStorageSync('ach_breathe5', true);
         wx.vibrateShort && wx.vibrateShort({ type: 'light' });
         wx.showToast({ title: '已记下此刻的平静', icon: 'success' });
+        this.setData({ echoText: this.nextEcho() });
       } catch (e) {
         console.error('[breathe] 记录失败', e);
         wx.showToast({ title: '记录失败（可稍后在心情页补记）', icon: 'none' });

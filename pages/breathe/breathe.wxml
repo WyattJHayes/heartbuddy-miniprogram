@@ -60,5 +60,10 @@
     </view>
   </view>
   <view wx:if="{{phase === 'done'}}" class="tip">点上面的按钮会把这一刻记成「平静」，同步到心情曲线。</view>
+  <!-- 呼吸回响：完成练习后定格一句温柔的话 -->
+  <view class="echo-card" wx:if="{{phase === 'done' && echoText}}" role="note" aria-label="呼吸回响">
+    <text class="echo-emoji">🫧</text>
+    <text class="echo-text">{{echoText}}</text>
+  </view>
   <view wx:if="{{phase === 'done'}}" class="tip scan-link" role="button" bindtap="goScan">还想更放松？试试 5 分钟身体扫描 →</view>
 </view>

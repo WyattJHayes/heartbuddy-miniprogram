@@ -54,7 +54,10 @@ Page({
     smalls: [],            // 今日三件小事 [{i,text,done}]
     smallCelebrate: false, // 三件全完成时的庆祝条
     band: [],              // 近 14 天情绪色带 [{d,e,has}]
-    todayTip: false        // 今日未记录心情时的轻提醒（当天一次可关）
+    todayTip: false,       // 今日未记录心情时的轻提醒（当天一次可关）
+    dayNote: '',           // 今日小结（21 点后的收尾）
+    dayNoteBanner: false,  // 21 点后还没写小结 → 温柔提示
+    yesterdayNote: ''      // 昨天的小结（次日回看）
   },
 
   onShow() {
@@ -64,9 +67,62 @@ Page({
     this.refreshThought();
     this.refreshRemind();
     this.refreshSmall();
+    this.refreshDayNote();
   },
 
-  // ---- 今日三件小事：每天 3 条「为自己做的小事」，可勾选打卡（本地）----
+  // ---- 今日小结：21 点后温柔收个尾，第二天早上能回看昨天 ---
+  refreshDayNote() {
+    const d = new Date();
+    const key = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    const y = new Date(Date.now() - 86400000);
+    const ykey = `${y.getFullYear()}-${y.getMonth() + 1}-${y.getDate()}`;
+    const map = wx.getStorageSync('hbDayNote') || {};
+    const mine = map[key] || '';
+    const ynote = map[ykey] || '';
+    // 21 点后、今天还没写小结、且今天记录过心情时才提示（避免打扰）
+    const want = !mine && d.getHours() >= 21;
+    this.setData({ todayNote: mine, yesterdayNote: ynote, dayNoteBanner: want });
+  },
+  onDayNoteInput(e) { this.setData({ dayNoteInput: e.detail.value }); },
+  saveDayNote() {
+    const text = (this.data.dayNoteInput || '').trim();
+    if (!text) { wx.showToast({ title: '写点什么再收尾吧', icon: 'none' }); return; }
+    const d = new Date();
+    const key = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    const map = wx.getStorageSync('qingDayNote') || {};
+    map[key] = text;
+    const keys = Object.keys(map);
+    while (keys.length > 40) { delete map[keys.shift()]; }
+    wx.setStorageSync('qingDayNote', map);
+    this.setData({ todayNote: text, dayNoteBanner: false, dayNoteInput: '' });
+    wx.showToast({ title: '今日已收尾 🌙', icon: 'success' });
+  },
+  // 21 点后的轻提醒：点一下 → 弹出书写
+  openDayNote() {
+    wx.showModal({
+      title: '给今天收个尾',
+      content: '不需要完整，一句话就好：今天你辛苦了，有什么想对自己说的？',
+      editable: true,
+      placeholderText: '今天……',
+      confirmText: '收尾',
+      success: (r) => {
+        if (!r.confirm) return;
+        const text = (r.content || '').trim();
+        if (!text) return;
+        const d = new Date();
+        const key = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+        const map = wx.getStorageSync('qingDayNote') || {};
+        map[key] = text;
+        const keys2 = Object.keys(map);
+        while (keys2.length > 40) { delete map[keys2.shift()]; }
+        wx.setStorageSync('qingDayNote', map);
+        this.setData({ todayNote: text, dayNoteBanner: false });
+        wx.showToast({ title: '晚安，明天见 🌙', icon: 'success' });
+      }
+    });
+  },
+
+  // ---- 今日三件小事：每天 3 件「为自己做的」，可勾选打卡（本地）----
   _toKey() {
     const d = new Date();
     return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;

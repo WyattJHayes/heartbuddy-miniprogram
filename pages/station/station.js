@@ -1,14 +1,5 @@
 // pages/station/station.js —— 情绪充电站（轻知识 · 一组能马上做的事）
-const DAILY_LINES = [
-  '先停 5 秒，再决定下一步。',
-  '你已经撑过了很多个「当时觉得过不去」的一天。',
-  '允许自己今天只是「停着」，不用立刻好起来。',
-  '慢慢来，比较快。',
-  '累就休息，这不是退出。',
-  '你不需要急着把自己修好。',
-  '今天能走到这里，已经很不容易了。',
-  '给情绪留一点位置，它值得被你听见。'
-];
+const { dailyQuotes: DAILY_LINES } = require('../../config/index');
 Page({
   data: {
     todayLine: '',
