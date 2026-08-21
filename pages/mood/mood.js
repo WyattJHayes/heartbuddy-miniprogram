@@ -543,14 +543,19 @@ Page({
     });
   },
 
-  // 当日情绪补记：把一句话写进当天最新一条 moods 的 note 字段（增强洞察）
+  // 当日情绪补记：把一句话写进当天最新一条 moods 的 note 字段，并标记 trigger（保留原触发词）
   async saveDayNote(latest, text, d) {
     if (!latest || !latest._id) return;
     wx.showLoading({ title: '保存中…' });
     try {
       const db = wx.cloud.database();
       await db.collection('moods').doc(latest._id).update({
-        data: { note: text, noteAt: Date.now() }
+        data: {
+          note: text,
+          noteAt: Date.now(),
+          trigger: latest.trigger && latest.trigger !== '日记补记' ? latest.trigger : '日记补记',
+          prevTrigger: latest.trigger && latest.trigger !== '日记补记' ? latest.trigger : ''
+        }
       });
       if (!latest.note) latest.note = text;
       wx.hideLoading();
