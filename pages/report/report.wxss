@@ -89,3 +89,5 @@
 .mix-name { font-size: 22rpx; color: #6b7690; }
 
 .month-copy { display: inline-block; margin-top: 12rpx; font-size: 22rpx; color: #5b8def; background: #eef3ff; border-radius: 999rpx; padding: 8rpx 22rpx; }
+
+.mix-read { margin-top: 12rpx; font-size: 22rpx; color: #8a93a8; line-height: 1.7; }

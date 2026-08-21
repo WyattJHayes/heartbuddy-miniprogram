@@ -163,6 +163,14 @@ Page({
       '不用一次做到最好，一次次来就够了。'
     ];
     const n = wx.getStorageSync('breatheCount') || 0;
+    if (this.data.presetKey === 'stare') {
+      const sp = [
+        '这两分钟什么都没做——这正是它的意义。',
+        '发呆不是浪费，是大脑在悄悄整理自己。',
+        '刚才那段安静，是你的。谁也拿不走。'
+      ];
+      return sp[n % sp.length];
+    }
     return pool[Math.max(0, n - 1) % pool.length];
   },
 
@@ -250,6 +258,10 @@ Page({
       } else {
         this._running = false;
         this.setData({ phase: 'done', text: PH_TEXT.done });
+        // 发呆结束：直接给一句专属回响（也算一次放松）
+        if (this.data.presetKey === 'stare') {
+          this.setData({ echoText: this.nextEcho() });
+        }
       }
       return;
     }

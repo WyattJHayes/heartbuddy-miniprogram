@@ -54,6 +54,16 @@ Page({
     else this.setData({ weekNote: '' });
   },
 
+  // 构成一句话解读（读屏/快速理解）
+  buildMixRead(counts, total) {
+    const keys = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+    if (!keys.length) return '';
+    const label = (k) => MOOD_LABEL[k] || k;
+    if (keys.length === 1) return '这一周几乎都是「' + label(keys[0]) + '」——单色的一周，也可以很稳。';
+    const top2 = keys.slice(0, 2).map((k) => label(k)).join(' + ');
+    return '本周主要由「' + top2 + '」组成，共 ' + total + ' 条记录；多种情绪并存，才是真实的一周。';
+  },
+
   // 本周情绪构成：堆叠条 + 图例（观察而不是评判）
   buildMixBar(counts, total) {
     const keys = Object.keys(counts).sort((a, b) => counts[b] - counts[a]).slice(0, 6);
@@ -240,6 +250,7 @@ Page({
         chatCount: list.length,
         dayCount: days.size,
         mixBar: this.buildMixBar(counts, list.length),
+        mixRead: this.buildMixRead(counts, list.length),
         suggestion: suggestions[top] || '继续保持觉察，记录本身就是一种照顾。',
         weekAvg: weekAvg != null ? weekAvg.toFixed(1) : null,
         weekInt: weekInt,

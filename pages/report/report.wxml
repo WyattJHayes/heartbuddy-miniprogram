@@ -29,9 +29,10 @@
         <view class="mix-legend">
           <view class="mix-item" wx:for="{{mixBar}}" wx:key="mood">
             <view class="mix-dot" style="background: {{item.color}};"></view>
-            <text class="mix-name">{{item.emoji}} {{item.label}} {{item.pct}}%</text>
+            <text class="mix-name">{{item.emoji}} {{item.label}} {{item.pct}}%（{{item.n}} 次）</text>
           </view>
         </view>
+        <view class="mix-read" role="note" aria-label="构成说明">{{mixRead}}</view>
       </view>
       <view wx:if="{{weekAvg}}" class="avg-line">
         <text class="avg-num">本周均值 {{weekAvg}}</text>
