@@ -54,3 +54,9 @@
 /* 数据足迹扩展行 */
 .foot-extra { margin-top: 14rpx; font-size: 24rpx; color: #7a8698; }
 .foot-hl { color: #3f6fe0; font-weight: 700; }
+
+/* 日签问候 */
+.daily-greet { display: flex; align-items: center; gap: 10rpx; padding: 14rpx 18rpx;
+  background: #eef4ff; border-radius: 14rpx; margin-bottom: 14rpx; }
+.dg-emoji { font-size: 30rpx; }
+.dg-text { font-size: 25rpx; color: #4a5f8f; line-height: 1.5; }

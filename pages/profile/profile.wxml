@@ -1,4 +1,10 @@
 <view class="container">
+  <!-- 日签问候（按时段轮换，轻仪式感） -->
+  <view class="daily-greet" role="note" aria-label="今日问候">
+    <text class="dg-emoji">{{greetEmoji}}</text>
+    <text class="dg-text">{{greetText}}</text>
+  </view>
+
   <!-- 用户信息 -->
   <view class="card user">
     <view class="avatar">🌱</view>

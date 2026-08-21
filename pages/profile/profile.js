@@ -22,13 +22,31 @@ Page({
     // 我的珍藏（聊天长按珍藏，本地保存）
     favs: [],
     showFavs: false,
-    favCount: 0
+    favCount: 0,
+    // 日签问候
+    greetEmoji: '🌤',
+    greetText: ''
   },
 
   onShow() {
+    this.setGreet();
     this.loadStats();
     this.refreshBadges();
     this.refreshFavs();
+  },
+
+  // 按时段的轻问候（每 2 小时换一次文案）
+  setGreet() {
+    const h = new Date().getHours();
+    const sale = [
+      ['🌤', '早上好。今天也从照顾自己开始。'],
+      ['☀️', '午安，记得留一点时间给自己。'],
+      ['🌇', '傍晚了，把今天放下一点点。'],
+      ['🌙', '晚上好，慢慢来，睡觉也是照顾自己。']
+    ];
+    const p = h < 6 ? 3 : h < 11 ? 0 : h < 14 ? 1 : h < 18 ? 2 : 3;
+    const cur = sale[p];
+    if (this.data.greetText !== cur[1]) this.setData({ greetEmoji: cur[0], greetText: cur[1] });
   },
 
   // ---- 我的珍藏（聊天页长按消息珍藏，本地）----

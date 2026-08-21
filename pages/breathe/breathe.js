@@ -24,6 +24,7 @@ Page({
     trans: 0.5,
     text: '准备好了就开始',
     calm: false,
+    calmInt: 3,          // 记录「平静」时的强度（1-5，默认 3）
     presets: PRESETS,
     presetKey: 'calm'
   },
@@ -108,7 +109,7 @@ Page({
             openid,
             sessionId: 'breath-' + Date.now(),
             mood: 'peace',
-            intensity: 3,
+            intensity: this.data.calmInt || 3,
             trigger: '呼吸练习',
             createdAt: Date.now()
           }
@@ -137,5 +138,11 @@ Page({
       phase: 'ready', round: 0, ball: 150, trans: 0.5,
       text: '点击「开始」跟着节奏呼吸', calm: false
     });
+  },
+
+  // 记录「平静」前可选强度（1-5）
+  setCalmInt(e) {
+    const v = Number(e.currentTarget.dataset.v);
+    if (v >= 1 && v <= 5) this.setData({ calmInt: v });
   }
 });

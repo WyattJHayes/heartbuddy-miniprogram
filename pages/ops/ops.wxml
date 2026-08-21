@@ -150,10 +150,14 @@
     <view class="card" wx:if="{{d.recentFeeds && d.recentFeeds.length}}">
       <view class="section-title">用户反馈 <text class="plan-sub">最近 {{d.recentFeeds.length}} 条</text></view>
       <view class="feed-row" wx:for="{{d.recentFeeds}}" wx:key="id" data-full="{{item.full}}" data-time="{{item.time}}" bindtap="openFeed" role="button" aria-label="查看该条反馈完整内容">
-        <view class="feed-comment">{{item.comment}}</view>
+        <view class="feed-comment">
+          <text wx:if="{{item.status === 'replied'}}" class="feed-tag">已回应</text>{{item.comment}}
+        </view>
         <view class="feed-time">{{item.time}} · 点开看全文</view>
+        <button wx:if="{{item.status !== 'replied'}}" class="handle-btn" data-id="{{item.id}}" catchtap="handleFeed" loading="{{handlingFeed === item.id}}">标记已回应</button>
+        <text wx:else class="ctag">✓</text>
       </view>
-      <view class="text-muted trend-note">用户从「我的」页提交的反馈，注意及时回应用户诉求。</view>
+      <view class="text-muted trend-note">用户从「我的」页提交的反馈；回应后该条会带「已回应」标记。</view>
     </view>
 
     <!-- 最近危机记录 -->

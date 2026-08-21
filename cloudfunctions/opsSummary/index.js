@@ -157,7 +157,8 @@ exports.main = async () => {
           id: f._id,
           comment: (f.comment || '').slice(0, 60),
           full: f.comment || '',
-          time: new Date(f.createdAt).toLocaleString('zh-CN', { hour12: false })
+          time: new Date(f.createdAt).toLocaleString('zh-CN', { hour12: false }),
+          status: f.status || 'open'
         }))
       }
     };

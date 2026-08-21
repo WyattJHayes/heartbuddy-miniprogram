@@ -33,6 +33,14 @@
   <button wx:if="{{phase === 'done'}}" class="ghost" bindtap="recordCalm" loading="{{calm && false}}">
     {{calm ? '已记下此刻' : '记下此刻的平静心情'}}
   </button>
+  <!-- 记录前可选平静强度（1-5） -->
+  <view class="calm-pick" wx:if="{{phase === 'done' && !calm}}">
+    <view class="cp-label">此刻的平静程度？</view>
+    <view class="cp-row">
+      <view class="cp-chip {{calmInt === item ? 'on' : ''}}" wx:for="{{[1,2,3,4,5]}}" wx:key="*this"
+            data-v="{{item}}" bindtap="setCalmInt" role="button" aria-label="强度 {{item}} 分">{{item}}</view>
+    </view>
+  </view>
   <view wx:if="{{phase === 'done'}}" class="tip">点上面的按钮会把这一刻记成「平静」，同步到心情曲线。</view>
   <view wx:if="{{phase === 'done'}}" class="tip scan-link" role="button" bindtap="goScan">还想更放松？试试 5 分钟身体扫描 →</view>
 </view>

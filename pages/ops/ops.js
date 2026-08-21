@@ -112,6 +112,37 @@ Page({
     });
   },
 
+  // 一键把反馈标记为「已回应」（写回 feedbacks，运营闭环）
+  handleFeed(e) {
+    const id = e.currentTarget.dataset.id;
+    if (!id) return;
+    wx.showModal({
+      title: '标记为已回应？',
+      content: '表示运营已看到并跟进这条用户反馈。',
+      confirmText: '已回应',
+      success: async (r) => {
+        if (!r.confirm) return;
+        this.setData({ handlingFeed: id });
+        try {
+          const res = await api.call('opsHandleFeedback', { id });
+          if (res && res.ok) {
+            const feeds = (this.data.d.recentFeeds || []).map((f) =>
+              f.id === id ? Object.assign({}, f, { status: 'replied' }) : f
+            );
+            this.setData({ 'd.recentFeeds': feeds, handlingFeed: '' });
+            wx.showToast({ title: '已回应 ✓', icon: 'success' });
+          } else {
+            this.setData({ handlingFeed: '' });
+            wx.showToast({ title: '操作失败', icon: 'none' });
+          }
+        } catch (err) {
+          this.setData({ handlingFeed: '' });
+          wx.showToast({ title: '操作失败', icon: 'none' });
+        }
+      }
+    });
+  },
+
   // 一键把危机标记为已处理（写回 crisisAlerts，形成现场可点的闭环）
   handleCrisis(e) {
     const id = e.currentTarget.dataset.id;

@@ -106,3 +106,6 @@
 
 .hday-bar.rate { background: #e9f0ff; }
 .hday-fill.rate { background: linear-gradient(90deg, #9db9f0, #4a7be0); }
+
+.feed-tag { display: inline-block; font-size: 20rpx; color: #4c8a5c; background: #e8f4ec;
+  border-radius: 6rpx; padding: 2rpx 8rpx; margin-right: 8rpx; }
