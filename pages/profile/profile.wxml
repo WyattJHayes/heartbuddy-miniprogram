@@ -3,6 +3,7 @@
   <view class="daily-greet" role="note" aria-label="今日问候">
     <text class="dg-emoji">{{greetEmoji}}</text>
     <text class="dg-text">{{greetText}}</text>
+    <text class="dg-days" wx:if="{{accompanyDays}}" role="img" aria-label="累计陪伴天数"> · 已陪伴 {{accompanyDays}} 天</text>
   </view>
 
   <!-- 用户信息 -->
@@ -31,6 +32,9 @@
       🌿 本月练习：<text wx:if="{{pBreath}}">呼吸 ×{{pBreath}}</text>
       <text wx:if="{{pScan}}"> · 身体扫描 ×{{pScan}}</text>
       <text wx:if="{{pWrite}}"> · 写给自己 ×{{pWrite}}</text>
+    </view>
+    <view class="assess-line" wx:if="{{lastAssess}}" bindtap="goAssess" role="button" aria-label="查看最近一次自评并可重测">
+      📋 最近一次自评：{{lastAssess.label}}（总分 {{lastAssess.total}}）· {{lastAssessDate}} ›
     </view>
   </view>
 

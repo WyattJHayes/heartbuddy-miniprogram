@@ -553,6 +553,20 @@ Page({
 
   onQuick(e) { this.setData({ showQuick: false }); this.send(e.currentTarget.dataset.text); },
 
+  // 夸夸我：点击即给一句温柔夸奖（本地词库，不打字也不耗 AI）
+  onPraise() {
+    this.setData({ showQuick: false });
+    const pool = [
+      '今天你愿意打开小程序，愿意和自己说说话，这件事本身就值得一个大大的赞 🌟',
+      '你应该被夸：应对生活的同时，还记得照顾自己的情绪，这不是谁都做得到的。',
+      '我想认真地夸夸你：你比你以为的更坚韧，也更有温度。',
+      '夸你三件事：你还在这里、你愿意求助、你不放弃自己。就凭这三件，你已经很棒了。',
+      '你知道我最欣赏你哪一点吗？不太完美，却一直在往前走。这已经足够耀眼。',
+      '抱抱你。你不需要完美才配被爱，你出现在努力的路上，本身就闪闪发光。'
+    ];
+    this.pushAI(pool[Math.floor(Math.random() * pool.length)]);
+  },
+
   // 英语角：点一下直接发送（等同 onQuick，英文输入会自动触发英文回复）
   onQuickEn(e) { this.setData({ showQuick: false }); this.send(e.currentTarget.dataset.text); },
 

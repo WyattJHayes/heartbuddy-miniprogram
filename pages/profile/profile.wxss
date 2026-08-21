@@ -64,3 +64,8 @@
 .fav-ops { display: flex; gap: 24rpx; }
 
 .practice-line { margin-top: 14rpx; font-size: 24rpx; color: #6d7a5a; line-height:1.7; }
+
+.assess-line { margin-top: 14rpx; font-size: 26rpx; color: #3f6fe0; line-height:1.6;
+  background: #eef3ff; border-radius: 10rpx; padding: 12rpx 16rpx; }
+
+.dg-days { margin-left: 8rpx; color: #b98a4d; font-size: 24rpx; }

@@ -208,11 +208,17 @@ Page({
       const pScan = mList.filter((m) => (m.trigger || '').indexOf('扫描') >= 0).length;
       const pWrite = mList.filter((m) => (m.trigger || '').indexOf('写给自己') >= 0 || (m.trigger || '').indexOf('慢') >= 0).length;
       const first = firstRec.data && firstRec.data[0];
+      let accompanyDays = 0;
+      if (first) accompanyDays = Math.max(1, Math.floor((Date.now() - first.createdAt) / 86400000) + 1);
       this.setData({
         chatTotal: moods.total || 0,
         assessTotal: assessments.total || 0,
         crisisTotal: crisis.total || 0,
         firstDate: first ? this.fmtDate(first.createdAt) : '—',
+        accompanyDays,
+        // 最近一次自评（本地缓存：完成即写，这里直接读）
+        lastAssess: wx.getStorageSync('lastAssessment') || null,
+        lastAssessDate: wx.getStorageSync('lastAssessment') ? this.fmtDate(wx.getStorageSync('lastAssessment').ts || Date.now()) : '',
         pBreath, pScan, pWrite,
         streakDays,
         mood7Days: mood7,
@@ -223,6 +229,10 @@ Page({
     } catch (e) {
       console.error('[profile] 统计失败', e);
     }
+  },
+
+  goAssess() {
+    wx.navigateTo({ url: '/pages/assessment/assessment' });
   },
 
   fmtDate(ts) {
