@@ -31,6 +31,7 @@ Page({
     letterDue: -1,       // 已过天数（-1 表示还未写信）
     letterReady: false,  // 已到期可拆开
     letterText: '',
+    boxCount: 0,           // 已拆开过的时光信数量
     // 每日心情提醒（本地弱提醒，无模板订阅）
     remindOn: false,
     remindTime: '20:00',
@@ -260,6 +261,8 @@ Page({
 
   // ---- 时光信：写给 7 天后的自己 ----
   refreshLetter() {
+    const box = wx.getStorageSync('hbLetterBox') || [];
+    this.setData({ boxCount: Array.isArray(box) ? box.length : 0 });
     const raw = wx.getStorageSync('timeLetter');
     if (!raw || !raw.content) { this.setData({ letter: null, letterReady: false, letterDue: -1 }); return; }
     const due = Math.floor((Date.now() - raw.createdAt) / 86400000);
@@ -292,7 +295,30 @@ Page({
       title: `第 ${this.data.letterDue} 天 · 来自 7 天前的你`,
       content: l.content,
       showCancel: false,
-      confirmText: '收到'
+      confirmText: '收到',
+      success: () => {
+        // 已拆开 → 收进「我的信匣」，随时可回看（保留最近 20 封）
+        const box = wx.getStorageSync('hbLetterBox') || [];
+        box.push({ content: l.content, at: Date.now() });
+        while (box.length > 20) box.shift();
+        wx.setStorageSync('hbLetterBox', box);
+        this.setData({ boxCount: box.length });
+      }
+    });
+  },
+
+  // 信匣：回看以前拆过的信（最近 3 封，略选其实都在）
+  openBox() {
+    const box = wx.getStorageSync('hbLetterBox') || [];
+    if (!Array.isArray(box) || !box.length) return;
+    const recent = box.slice(-3).reverse();
+    const lines = recent.map((b) => {
+      const d = new Date(b.at);
+      return `${d.getMonth() + 1}月${d.getDate()}日 · ${String(b.content || '').slice(0, 24)}…`;
+    });
+    wx.showActionSheet({
+      itemList: lines,
+      fail: () => {}
     });
   },
 

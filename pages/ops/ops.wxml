@@ -76,6 +76,7 @@
         <view class="text-muted mc-tip">月度对比：<text class="{{monthStat.crisis > lastStat.crisis ? 'up' : (monthStat.crisis < lastStat.crisis ? 'down' : '')}}">{{monthStat.crisis > lastStat.crisis ? '预警数较上月上升' : (monthStat.crisis < lastStat.crisis ? '预警数较上月下降' : '预警数与上月持平')}}</text></view>
       </view>
       <button class="btn-ghost trend-copy" bindtap="copyCrisisCsv">复制危机统计 CSV</button>
+      <button class="btn-ghost trend-copy" bindtap="copySummary">📋 复制运营摘要</button>
     </view>
 
     <!-- 近 14 日情绪均值趋势 -->

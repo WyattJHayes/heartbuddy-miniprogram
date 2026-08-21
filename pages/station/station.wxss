@@ -20,3 +20,5 @@
 .st-btn.primary { background: #7c6ec1; color: #fff; }
 .st-btn.ghost { background: #fff; color: #7c6ec1; border: 1rpx solid #d6ceef; }
 .st-foot { margin-top: 40rpx; font-size: 22rpx; color: #b0a9c0; line-height: 1.7; text-align: center; }
+
+.daily-line { margin:18rpx 24rpx 6rpx; font-size:26rpx; color:#5a6a8b; background:linear-gradient(90deg,#fdf6ec,#fff); border:1rpx solid #f0e2cc; border-radius:14rpx; padding:16rpx 20rpx; line-height:1.6; }

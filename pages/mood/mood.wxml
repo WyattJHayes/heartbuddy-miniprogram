@@ -140,6 +140,9 @@
       <view class="letter-due">✨ 7 天到了，来自 7 天前的你有一封信。</view>
       <button class="letter-primary" bindtap="openLetter">拆开看看</button>
     </block>
+    <view class="box-chip" wx:if="{{boxCount > 0}}" bindtap="openBox" role="button" aria-label="查看已拆开的时光信">
+      💌 我的信匣 · 已拆开 {{boxCount}} 封（可回看旧信）
+    </view>
   </view>
 
   <!-- 今日陪伴任务（评测页生成的 3 天计划在此打卡） -->

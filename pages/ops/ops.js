@@ -294,7 +294,27 @@ Page({
     });
   },
 
-  // 复制危机统计 CSV（答辩/归档友好）
+  // 一键复制「月度运营摘要」：答辩/汇报时贴给团队的一段文字
+  copySummary() {
+    const d = this.data.d || {};
+    const lines = [];
+    lines.push('【心语 · 运营月报】（' + new Date().toLocaleDateString('zh-CN') + '）');
+    lines.push(`用户：累计 ${d.totalUsers || 0} 人 · 今增 ${d.todayNewUsers || 0} · 7 日活跃 ${d.activeUsers7d || 0}`);
+    lines.push(`记录与自评：倾诉/情绪 ${d.totalChats || 0} 条 · 测评 ${d.totalAssessment || 0} 份`);
+    lines.push(`危机：累计 ${d.totalCrisis || 0} 条 · 本月 ${d.monthCrisis || 0} · 本周 ${d.weekCrisis || 0}（已处理 ${d.weekHandled || 0}）`);
+    if (d.handleAvg && d.handleAvg.count) lines.push(`处理时效：本月已处理 ${d.handleAvg.count} 条，平均 ${d.handleAvg.avgH} 小时 · 中位 ${d.handleAvg.medH} 小时`);
+    lines.push(`回访：待跟进督办单 ${d.followOpenCount || 0} 张 · 用户反馈 ${(d.recentFeeds || []).length} 条`);
+    const bars = (d.crisisHours && d.crisisHours.bars) || [];
+    if (bars.length) {
+      const top = bars.slice().sort((a, b) => b.w - a.w)[0];
+      if (top) lines.push(`高危高峰：多集中在 ${top.hour} 时前后`);
+    }
+    wx.setClipboardData({
+      data: lines.join('\n'),
+      success: () => wx.showToast({ title: '已复制运营摘要', icon: 'success' })
+    });
+  },
+
   copyCrisisCsv() {
     const d = this.data.d || {};
     const esc = (v) => `"${String(v == null ? '' : v).replace(/"/g, '""')}"`;

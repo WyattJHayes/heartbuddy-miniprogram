@@ -6,7 +6,10 @@
   </view>
 
   <view class="st-cards">
-    <view class="st-card" wx:for="{{cards}}" wx:key="title">
+    <!-- 今天的一句（换日轮换，纯本地） -->
+  <view class="daily-line" wx:if="{{todayLine}}" role="note" aria-label="今天的一句话">{{todayLine}}</view>
+
+  <view class="st-card" wx:for="{{cards}}" wx:key="title">
       <view class="st-head" data-index="{{index}}" bindtap="toggleCard" role="button" aria-label="展开或收起{{item.title}}">
         <text class="st-emoji">{{item.emoji}}</text>
         <text class="st-title">{{item.title}}</text>
