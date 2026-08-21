@@ -24,6 +24,7 @@
     <view class="msg-list">
       <block wx:for="{{messages}}" wx:key="index">
         <view class="row {{item.role === 'user' ? 'right' : 'left'}}">
+          <view class="ai-avatar" wx:if="{{item.role === 'ai'}}" aria-hidden="true">{{aiFace || '🌱'}}</view>
           <view class="msg {{item.role === 'user' ? 'user-msg' : 'ai-msg'}}"
                 bindlongpress="onMsgLongPress" data-index="{{index}}">{{item.content}}</view>
         </view>
@@ -31,6 +32,7 @@
 
       <!-- AI 正在输入 -->
       <view class="row left" wx:if="{{typing}}">
+        <view class="ai-avatar" aria-hidden="true">{{aiFace || '🌱'}}</view>
         <view class="msg ai-msg">{{typedText}}<text class="cursor">▍</text></view>
       </view>
       <view id="aiEnd"></view>

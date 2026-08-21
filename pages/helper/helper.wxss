@@ -50,3 +50,13 @@
 .self-actions { display: flex; align-items: center; justify-content: flex-end; gap: 24rpx; margin-top: 16rpx; }
 .self-skip { font-size: 25rpx; color: #a3aec4; }
 .self-next { margin: 0; }
+
+/* 回访关怀卡 */
+.follow-care { background: linear-gradient(135deg, #fff5f1, #fff); border: 1rpx solid #ffd9cc; }
+.fc-head { display: flex; gap: 18rpx; }
+.fc-emoji { font-size: 44rpx; line-height: 1.2; }
+.fc-body { flex: 1; }
+.fc-title { font-size: 28rpx; font-weight: 700; color: #7a4a3a; }
+.fc-text { margin-top: 10rpx; font-size: 25rpx; color: #5a3a2a; line-height: 1.7; }
+.fc-due { margin-top: 8rpx; font-size: 23rpx; color: #c98a6b; }
+.fc-btn { margin-top: 20rpx; }

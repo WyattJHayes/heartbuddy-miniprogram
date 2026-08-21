@@ -3,13 +3,17 @@
 .msg-list { padding: 24rpx; }
 
 .row { display: flex; margin-bottom: 20rpx; }
-.row.left { justify-content: flex-start; }
+.row.left { justify-content: flex-start; align-items: flex-end; }
 .row.right { justify-content: flex-end; }
 
 .msg { max-width: 76%; padding: 20rpx 24rpx; border-radius: 20rpx; font-size: 30rpx; line-height: 1.6; }
 .user-msg { background: #5b8def; color: #fff; border-bottom-right-radius: 6rpx; }
 .ai-msg { background: #f2f4f8; color: #1f2937; border-bottom-left-radius: 6rpx; }
 .cursor { color: #5b8def; }
+
+/* AI 头像情绪态 */
+.ai-avatar { width: 64rpx; height: 64rpx; border-radius: 50%; background: #eaf0ff; border: 1rpx solid #dbe4fa;
+  display: flex; align-items: center; justify-content: center; font-size: 36rpx; margin-right: 12rpx; flex-shrink: 0; }
 
 .quick { padding: 24rpx; }
 .quick-title { color: #9ca3af; font-size: 26rpx; margin-bottom: 16rpx; }

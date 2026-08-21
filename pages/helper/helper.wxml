@@ -1,4 +1,17 @@
 <view class="container">
+  <!-- 回访关怀卡：管理员安排的回访，用户端可见（有回访才显示） -->
+  <view class="card follow-care" wx:if="{{followCare}}">
+    <view class="fc-head">
+      <view class="fc-emoji">💌</view>
+      <view class="fc-body">
+        <view class="fc-title">我在意你 · 回访关怀</view>
+        <view class="fc-text">{{followCare.note}}</view>
+        <view class="fc-due">⏳ 回访时限：{{followCare.dueText}}</view>
+      </view>
+    </view>
+    <button class="btn-primary fc-btn" bindtap="goChat">去和心语聊聊</button>
+  </view>
+
   <!-- 今日关怀：日轮换轻贴士 -->
   <view class="card care" wx:if="{{care}}">
     <view class="care-head">

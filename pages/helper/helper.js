@@ -33,7 +33,40 @@ Page({
     selfStep: -1,       // -1=未开始；0-4=进行中
     selfInput: '',
     selfLast: null,     // { date, done } 上次收尾
-    selfResumeStep: 0   // >0 表示有未走完的存档（第几步），可一键接着走
+    selfResumeStep: 0,   // >0 表示有未走完的存档（第几步），可一键接着走
+    followCare: null     // 回访关怀卡 { note, dueAt, dueText }
+  },
+
+  onShow() { this.loadFollowUp(); },
+
+  // 回访关怀卡：读取 followUps 最近一条「待回访」记录（到期未超 3 天），展示给用户
+  async loadFollowUp() {
+    try {
+      let openid = this._app ? this._app.globalData.openid : '';
+      if (!openid) {
+        this._app = getApp();
+        openid = this._app && this._app.globalData.openid;
+      }
+      if (!openid) return;
+      const db = wx.cloud.database();
+      const _ = db.command;
+      const res = await db.collection('followUps')
+        .where({ openid, status: 'open', dueAt: _.gte(Date.now() - 3 * 86400000) })
+        .orderBy('dueAt', 'asc')
+        .limit(1)
+        .get()
+        .catch(() => ({ data: [] }));
+      const f = (res.data || [])[0];
+      if (!f) { this.setData({ followCare: null }); return; }
+      const remain = f.dueAt - Date.now();
+      const dueText = remain > 0
+        ? (remain > 86400000 ? `${Math.ceil(remain / 86400000)} 天内` : `${Math.max(1, Math.ceil(remain / 3600000))} 小时内`)
+        : '正在进行中';
+      this.setData({ followCare: { note: f.note || '我想回来看看你', dueAt: f.dueAt, dueText } });
+    } catch (e) {
+      // 无权限/网络异常时静默隐藏，不影响求助页
+      this.setData({ followCare: null });
+    }
   },
 
   onLoad() {

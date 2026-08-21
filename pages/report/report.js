@@ -150,6 +150,8 @@ Page({
         weekAvg: weekAvg != null ? weekAvg.toFixed(1) : null,
         prevAvg: prevAvg != null ? prevAvg.toFixed(1) : null,
         deltaText,
+        // 连续低日提醒：从最近一天往前数连续 <2.5 的天数，≥2 天时给温和建议
+        lowStreakTip: this.buildLowStreakTip(avg7),
         cardData: {
           topEmoji: MOOD_EMOJI[top] || '😌',
           topLabel: MOOD_LABEL[top] || '平稳',
@@ -173,6 +175,20 @@ Page({
       console.error('[report] 失败', e);
       this.setData({ loaded: true });
     }
+  },
+
+  // 连续低日提醒：最近连续 <2.5 的记录天数 ≥2 时，给一句温和建议
+  buildLowStreakTip(avg7) {
+    let streak = 0;
+    for (let i = avg7.length - 1; i >= 0; i--) {
+      const v = avg7[i];
+      if (v == null) break;      // 无记录的一天会截断连续
+      if (v < 2.5) streak += 1;
+      else break;
+    }
+    if (streak < 2) return '';
+    if (streak >= 3) return `最近连续 ${streak} 天情绪都在低处，辛苦了。要不要试试 3 分钟呼吸，或来和我聊聊 🌿`;
+    return '最近两天情绪偏低，别硬扛。可以到「呼吸」做 3 分钟放松，或找我聊聊 🌿';
   },
 
   // 月度小结：本月记录/覆盖天数/构成 Top3/与上月均值对比（与周报并行加载）

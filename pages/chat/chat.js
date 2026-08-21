@@ -8,6 +8,9 @@ const planlib = require('../../utils/plan');
 // 中文情绪标签 → 落库 key（与心情页保持一致）
 const MOOD_KEY = { '开心': 'happy', '平静': 'peace', '焦虑': 'anxiety', '难过': 'sad', '孤独': 'lonely', '生气': 'angry' };
 
+// AI 头像情绪态：随当前情绪标签切换的小表情（''=默认🌱）
+const AI_FACE = { '开心': '😄', '平静': '😌', '焦虑': '😟', '难过': '😢', '孤独': '🥺', '生气': '😠' };
+
 const GREETINGS = {
   morning: '早上好呀 ☀️ 今天想聊点什么？',
   afternoon: '下午好 🌤 我在这儿陪着你。',
@@ -40,6 +43,7 @@ Page({
     intensity: 3,        // 此刻强度 1–5（滑条，随情绪记录落库）
     input: '',
     moodTag: '',         // 当前可选的情绪标签
+    aiFace: '',          // AI 头像情绪态：随当前情绪标签切换（''=默认🌱）
     typing: false,       // AI 打字中
     typedText: '',
     showFeeling: false,  // 倾诉后小结算：AI 回复打字完成后的一次性感受标签条
@@ -256,7 +260,7 @@ Page({
       cancelText: '先不了',
       success: (r) => {
         if (!r.confirm) return;
-        this.setData({ messages: [], input: '', typing: false, loading: false, showFeeling: false, feelingDone: false });
+        this.setData({ messages: [], input: '', typing: false, loading: false, showFeeling: false, feelingDone: false, moodTag: '', aiFace: '' });
         this.initSession();
         wx.showToast({ title: '已重新开始', icon: 'none' });
       }
@@ -302,7 +306,7 @@ Page({
 
   onFeelingTap(e) {
     const label = e.currentTarget.dataset.m;
-    this.setData({ showFeeling: false });
+    this.setData({ showFeeling: false, moodTag: label, aiFace: AI_FACE[label] || '' });
     this.recordMood(label); // recordMood 自带 toast 与落库
   },
 
@@ -326,7 +330,7 @@ Page({
 
   onMood(e) {
     const label = e.currentTarget.dataset.m;
-    this.setData({ moodTag: label });
+    this.setData({ moodTag: label, aiFace: AI_FACE[label] || '' });
     this.pushUser('我今天想倾诉情绪：' + label); // 直接发送情绪标签
     this.recordMood(label); // 同步落库，形成「倾诉+记录」双闭环
   },

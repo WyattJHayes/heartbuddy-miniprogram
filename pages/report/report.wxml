@@ -31,6 +31,8 @@
     <view class="card">
       <view class="section-title">给这周的你</view>
       <view class="advice">{{suggestion}}</view>
+      <!-- 连续低日提醒：最近连续 ≥2 天偏低才显示 -->
+      <view class="low-tip" wx:if="{{lowStreakTip}}" role="note" aria-label="连续低情绪提醒">{{lowStreakTip}}</view>
     </view>
 
     <!-- 本周对自己说（可写进文字版周报） -->
