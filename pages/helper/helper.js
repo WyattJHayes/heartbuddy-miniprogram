@@ -46,6 +46,7 @@ Page({
     callLog: [],        // 最近拨打过的热线（本地 ≤5 条）
     packStale: false,   // 安全包超过 30 天未更新
     packStat: null,     // 安全包完整度 {n, tel}
+    cheerLine: '',      // 拨打记录上方的鼓励语（轮换）
     careGrad: false,            // 四段陪伴计划走完后的「毕业卡」（一次性）
     safeContacts: [],           // 安全包（升级版）：[{n:'妈妈', p:'138…'}]，支持一键拨打
     hotlines,
@@ -265,7 +266,13 @@ Page({
     this.setData({ packStat: { n: sc.length, tel: withPhone } });
     this.setData({ scriptHist: wx.getStorageSync('hb_scriptHist') || [] });
     const cl = (wx.getStorageSync('hb_callLog') || []).map((x) => Object.assign({}, x, { rel: this.fmtCallTime(x.time) }));
-    this.setData({ callLog: cl });
+    const CHEERS = [
+      '每一次拨出，都是你把自己当回事的证明。',
+      '求助不是软弱，是你最清醒的时刻之一。',
+      '你做了很多人不敢做的事——为自己开口。',
+      '拨出去的那一刻，你就不是一个人在扛了。'
+    ];
+    this.setData({ callLog: cl, cheerLine: CHEERS[(cl.length - 1 + CHEERS.length) % CHEERS.length] || CHEERS[0] });
     if (!this.data.askViews.length) this.setData({ askViews: this.data.askSituations.slice(0, 4) });
   },
 

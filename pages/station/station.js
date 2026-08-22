@@ -8,6 +8,7 @@ Page({
     showTag: '全部',    // 按心情筛选当前展示哪些卡
     topRead: null,      // 最常翻的一张卡（≥3 次才显示）
     drawMsg: '',        // 抽一张后的缘分提示
+    readTotal: 0,       // 卡片阅读总数
     cards: [
       {
         emoji: '🌀',
@@ -195,6 +196,9 @@ Page({
     const keys = Object.keys(reads).sort((a, b) => reads[b] - reads[a]);
     const top = keys[0];
     this.setData({ topRead: (top && reads[top] >= 3) ? { title: top, n: reads[top] } : null });
+    // 阅读总数：所有卡片的展开次数之和
+    const totalReads = keys.reduce((a, k) => a + reads[k], 0);
+    this.setData({ readTotal: totalReads });
   },
 
   setCardTag(e) {

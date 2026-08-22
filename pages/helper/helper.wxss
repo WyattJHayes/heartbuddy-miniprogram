@@ -156,3 +156,5 @@
 .af-more { font-size: 22rpx; color: #5b8def; margin-top: 4rpx; }
 
 .ps-stat { font-size: 20rpx; color: #7a8db0; font-weight: 400; margin-left: 8rpx; }
+
+.cl2-cheer { font-size: 21rpx; color: #6f9a7d; margin-top: 6rpx; font-style: italic; }

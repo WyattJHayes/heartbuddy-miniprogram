@@ -206,7 +206,8 @@ Page({
     const gotCount = badges.filter((b) => b.got).length;
     // 下一枚徽章提示（最靠前的未解锁项，答辩/日常都更有目标感）
     const next = badges.find((b) => !b.got) || null;
-    this.setData({ badges, gotCount, badgeTotal: badges.length, nextBadge: next });
+    const badgePct = Math.round(gotCount / badges.length * 100);
+    this.setData({ badges, gotCount, badgeTotal: badges.length, nextBadge: next, badgePct });
   },
 
   async loadStats() {

@@ -108,3 +108,5 @@
 .mp-t { font-size: 23rpx; color: #5b6b8c; }
 .mp-bar { margin-top: 8rpx; height: 12rpx; background: #e9edf5; border-radius: 99rpx; overflow: hidden; }
 .mp-fill { height: 100%; background: linear-gradient(90deg, #9dc2ff, #5b8def); border-radius: 99rpx; }
+
+.badge-pct { margin-top: 12rpx; text-align: center; font-size: 24rpx; color: #b07a2a; font-weight: 700; }

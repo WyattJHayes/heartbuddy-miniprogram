@@ -71,6 +71,7 @@
   <view class="card">
     <view class="section-title">成就徽章<text class="plan-sub">{{gotCount}}/{{badgeTotal}} 已点亮</text></view>
     <view class="badge-progress"><view class="badge-progress-fill" style="width: {{badgeTotal ? gotCount / badgeTotal * 100 : 0}}%"></view></view>
+    <view class="badge-pct" wx:if="{{badgeTotal}}" role="note" aria-label="徽章完成度">点亮率 {{gotCount}}/{{badgeTotal}}（{{badgePct}}%）</view>
     <view class="badge-next" wx:if="{{nextBadge}}" role="note" aria-label="下一枚徽章提示">
       🔒 下一枚：{{nextBadge.emoji}} {{nextBadge.title}} —— {{nextBadge.desc}}
     </view>
