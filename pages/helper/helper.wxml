@@ -198,6 +198,20 @@
     <view class="sms-btn" bindtap="copyHelpSms" role="button" aria-label="复制一段求助文字发给信任的人">📋 复制一段文字，发给信任的人（长辈/老师）</view>
   </view>
 
+  <!-- 安全自检 3 问：此刻我需要多紧急的帮助 -->
+  <view class="card selfcheck">
+    <view class="section-title">🧭 此刻安全自检 · 3 个问题</view>
+    <view class="sc-q">① 这几天，有没有出现过「想伤害自己」的念头？</view>
+    <view class="sc-q">② 身边（家里/宿舍）现在有没有可以找到的人？</view>
+    <view class="sc-q">③ 这个状态，是不是已经持续两周以上？</view>
+    <view class="sc-guide" role="note" aria-label="自检结果指引">
+      <view class="scg-line">· 只有 ① 是 → 先做一次呼吸，然后拨 12356，或告诉一个真实的人。</view>
+      <view class="scg-line">· ①+③ 都是 → 建议尽快联系心理老师或医院心理科，这不是小题大做。</view>
+      <view class="scg-line">· 都不是 → 你现在安全，允许自己只是「有点难受」。</view>
+    </view>
+    <view class="sc-act" bindtap="call" data-number="12356" role="button" aria-label="拨打心理援助热线 12356">📞 无论如何，12356 都能拨</view>
+  </view>
+
   <!-- 帮助朋友：身边的人很难受时，你怎么做（可复制给你自己看） -->
   <view class="card friend-card">
     <view class="section-title">🫂 是朋友很难受？你可以这样帮 TA</view>

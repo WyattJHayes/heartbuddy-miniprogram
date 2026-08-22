@@ -10,6 +10,8 @@
   </block>
 
   <block wx:elif="{{admin}}">
+    <!-- 离线兜底标注：正在展示本地缓存的上次摘要 -->
+    <view class="cache-note" wx:if="{{cacheNote}}" role="note" aria-label="数据来源标注">📥 {{cacheNote}}</view>
     <!-- 顶部指标 -->
     <view class="kpis">
       <view class="kpi"><text class="v">{{d.totalUsers}}</text><text class="t">累计用户</text></view>

@@ -160,3 +160,9 @@
 .cl2-cheer { font-size: 21rpx; color: #6f9a7d; margin-top: 6rpx; font-style: italic; }
 
 .sc-note { font-size: 20rpx; color: #8aa692; font-weight: 400; }
+
+.selfcheck { margin-top: 20rpx; background: #fffaf5; border: 1rpx solid #f0e0cc; }
+.sc-q { font-size: 25rpx; color: #4a4032; line-height: 1.8; margin-top: 10rpx; }
+.sc-guide { margin-top: 16rpx; background: #fdf6ec; border-radius: 12rpx; padding: 14rpx 18rpx; }
+.scg-line { font-size: 23rpx; color: #7a6440; line-height: 1.8; }
+.sc-act { margin-top: 14rpx; display: inline-block; background: #e05656; color: #fff; border-radius: 999rpx; padding: 12rpx 32rpx; font-size: 25rpx; }

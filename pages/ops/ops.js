@@ -5,6 +5,7 @@ const { MOOD_SCORE } = require('../../utils/moodscore');
 Page({
   data: {
     loading: true,
+    cacheNote: '',     // 离线兜底：展示的是本地缓存时的标注
     admin: false,
     noRight: false,
     d: null,
@@ -22,10 +23,26 @@ Page({
     try {
       const res = await api.call('opsSummary');
       if (!res || !res.ok) {
+        // 无网/失败：回看本地缓存的上次摘要（答辩演示兜底）
+        let cached = null;
+        try { cached = wx.getStorageSync('hb_opsCache'); } catch (e) {}
+        if (cached && cached.d) {
+          const mins = Math.round((Date.now() - cached.t) / 60000);
+          this.setData({
+            loading: false, admin: true, d: cached.d,
+            cacheNote: mins < 1 ? '实时' : '缓存于 ' + (mins < 60 ? mins + ' 分钟前' : Math.round(mins / 60) + ' 小时前') + '（当前离线，仅展示上次数据）'
+          });
+          return;
+        }
         this.setData({ loading: false, noRight: !res || res.admin === false });
         return;
       }
+      this.setData({ cacheNote: '' });
       this.setData({ loading: false, admin: true, d: res.data || {} });
+      // 本地缓存：成功拉到的摘要存一份，无网/演示时也能看（标注缓存时间）
+      try {
+        wx.setStorageSync('hb_opsCache', { d: res.data || {}, t: Date.now() });
+      } catch (e) {}
       // 督办单到期时间格式化为可读文本（供 wxml 展示）
       const pad2 = (n) => (n < 10 ? '0' + n : n);
       const followOpen = ((res.data && res.data.followOpen) || []).map((c) => {
