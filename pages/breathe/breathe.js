@@ -50,6 +50,7 @@ Page({
     echoText: '',          // 完成一次呼吸后的「呼吸回响」
     resumeTip: '',         // 上次练习中断的温柔提示
     weekVs: '',           // 本周 vs 上周练习次数对比
+    stareCount: 0,       // 发呆模式累计次数
     heat: [],              // 近 4 周放松热力图
     dayPart: { m: 0, n: 0, e: 0, late: 0 }, // 完成时段分布：早/中/晚/深夜
     timeHint: '',          // 按时段推荐节奏的一句话
@@ -235,6 +236,7 @@ Page({
     const td = this.todayCount();
     this.setData({ heat: this.buildHeat(wk), dayPart: this.buildDayPart(wk), weekVs: this.buildWeekVs(wk) });
     this.setData({ timeHint: this.timeHint() });
+    this.setData({ stareCount: wx.getStorageSync('hb_stareCount') || 0 });
     this.setData({ breatheCount: count, breatheMins: mins, breatheWeek: wk, breatheToday: td,
       lastDone: count ? `已累计练习 ${count} 次 · ${mins} 分钟 🌿` : '还没有练习记录，来一次吗？' });
   },
@@ -300,6 +302,9 @@ Page({
         // 发呆结束：直接给一句专属回响（也算一次放松）
         if (this.data.presetKey === 'stare') {
           this.setData({ echoText: this.nextEcho() });
+          const sn = (wx.getStorageSync('hb_stareCount') || 0) + 1;
+          wx.setStorageSync('hb_stareCount', sn);
+          this.setData({ stareCount: sn });
         }
       }
       return;

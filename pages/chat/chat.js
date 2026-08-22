@@ -825,7 +825,12 @@ Page({
 
   onSend() {
     const text = this.data.input.trim();
-    if (!text) return;
+    if (!text) {
+      // 空输入轻托底：不打 AI，本地给一句温柔的「也没关系」
+      const E = ['不知道说什么也没关系——发个「。」我也能懂你在。', '空着也可以。想说话的时候，我随时在 🌱', '深呼吸一下，再想想最想说的是哪一句？'];
+      this.setData({ inputPh: E[Math.floor(Math.random() * E.length)] });
+      return;
+    }
     wx.removeStorageSync('hb_inputDraft');
     this.setData({ input: '' });
     this.send(text);

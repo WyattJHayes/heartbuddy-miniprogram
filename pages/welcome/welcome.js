@@ -31,6 +31,13 @@ Page({
 
   toggleLog() { this.setData({ showLog: !this.data.showLog }); },
 
+  goFromGuide(e) {
+    const u = e.currentTarget.dataset.u;
+    wx.setStorageSync('hb_welcomed', true);
+    if (u && wx.getStorageSync('privacyAgreed')) wx.switchTab({ url: u });
+    else this.setData({ welcomed: true });
+  },
+
   hideGuide() {
     wx.setStorageSync('hb_welcomed', true);
     this.setData({ welcomed: true });

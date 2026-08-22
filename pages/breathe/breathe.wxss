@@ -84,3 +84,5 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .resume-tip { margin: 14rpx 24rpx 0; background: #fdf6ea; border: 1rpx solid #f0dcbc; border-radius: 12rpx; padding: 12rpx 18rpx; font-size: 23rpx; color: #8a6a2f; line-height: 1.7; }
 
 .week-vs { margin-top: 10rpx; font-size: 22rpx; color: #4e7a58; background: #f6fbf6; border-radius: 10rpx; padding: 10rpx 16rpx; line-height: 1.6; }
+
+.stare-n { display: block; width: 100%; text-align: center; font-size: 21rpx; color: #7a82a0; margin-top: 10rpx; }

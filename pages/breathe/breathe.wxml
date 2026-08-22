@@ -51,6 +51,7 @@
     <view class="preset-chip {{presetKey === item.key ? 'on' : ''}}" wx:for="{{presets}}"
           wx:key="key" data-key="{{item.key}}" bindtap="setPreset" role="button"
           aria-label="切换到{{item.label}}节奏">{{item.label}}</view>
+    <text class="stare-n" wx:if="{{presetKey === 'stare' && stareCount}}">已陪你发呆 {{stareCount}} 次 🌑</text>
   </view>
 
   <!-- 自定义节奏调节：选中「自定义」后出现 -->
