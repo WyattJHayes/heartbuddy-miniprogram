@@ -65,6 +65,7 @@ Page({
     nightGreet: '',        // 晚间温柔提醒（21 点后一次性）
     emptyTip: '',          // 连续空白天数提醒（≥3 天，温柔语气）
     moodShift: '',         // 本月最常见情绪转变链
+    bestStreak: 0,         // 历史最长连续记录天数
     noteList: [],          // 小结日记本（全部历史小结，倒序）
     noteBookOpen: false    // 日记本展开状态
   },
@@ -668,6 +669,7 @@ Page({
         healthIdx: this.buildHealth(moodLine, raw),
         band: this.buildBand(raw, this.data.bandDays || 14),
         emptyTip: this.buildEmptyTip(raw),
+        bestStreak: this.buildBestStreak(raw),
         chartFooter: this.buildChartFooter(moodLine),
         weekSum: this.buildWeekSum(list),
         streak: streakNow,
@@ -990,6 +992,20 @@ Page({
       if (d.getFullYear() === y && d.getMonth() === mo) set.add(d.getDate());
     });
     return set.size;
+  },
+
+  // 最长连续记录：历史最高连击天数（🏆 展示在色带标题旁）
+  buildBestStreak(raw) {
+    const set = new Set((raw || []).map((m) => new Date(m.createdAt).toDateString()));
+    if (!set.size) return 0;
+    const days = Array.from(set).map((k) => new Date(k + ' 00:00:00').getTime()).sort((a, b) => a - b);
+    let best = 1, cur = 1;
+    const DAY = 86400000;
+    for (let i = 1; i < days.length; i++) {
+      if (days[i] - days[i - 1] === DAY) { cur++; if (cur > best) best = cur; }
+      else cur = 1;
+    }
+    return best;
   },
 
   // 连续空白提醒：最近 3 天及以上没有记录时，温柔提示（不评判，只是提醒）

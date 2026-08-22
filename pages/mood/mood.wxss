@@ -261,3 +261,5 @@
 .shift-card { margin: 16rpx 24rpx 0; background: #fbf8ff; border: 1rpx solid #e6def5; border-radius: 16rpx; padding: 18rpx 22rpx; font-size: 24rpx; color: #5f5484; line-height: 1.7; }
 
 .cal-month-copy { display: inline-block; margin-top: 10rpx; font-size: 22rpx; color: #5b8def; background: #eef3ff; border-radius: 999rpx; padding: 8rpx 22rpx; }
+
+.band-best { font-size: 20rpx; color: #b07a2a; margin-left: 14rpx; background: #fdf6ea; border-radius: 999rpx; padding: 2rpx 12rpx; }

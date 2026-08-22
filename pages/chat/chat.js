@@ -66,6 +66,7 @@ Page({
     feelingTags: ['开心', '平静', '难过', '焦虑', '生气', '孤独'],
     showQuick: false,    // 输入栏「⚡快捷」面板
     myPhrases: [],       // 我的常用语（本地最多 5 条，长按删除）
+    phraseUses: {},      // 常用语使用次数（显示 · N 次）
     sumTip: false,       // 对话小结后：顺手去心情页记一笔的引导条
     quickReplies,
     quickEnglish: [
@@ -105,6 +106,7 @@ Page({
     this.setData({ persona: wx.getStorageSync('hb_persona') || '', myPhrases: wx.getStorageSync('hb_myPhrases') || [] });
     const savedDraft = wx.getStorageSync('hb_inputDraft');
     if (savedDraft && !this.data.input) this.setData({ input: savedDraft });
+    this.setData({ phraseUses: wx.getStorageSync('hb_phraseUses') || {} });
     // 首次进入且未同意隐私 -> 去欢迎页
     if (!wx.getStorageSync('privacyAgreed')) {
       wx.redirectTo({ url: '/pages/welcome/welcome' });
@@ -785,13 +787,21 @@ Page({
   useMyPhrase(e) {
     const t = e.currentTarget.dataset.t;
     if (!t) return;
+    // 记使用次数（本地）
+    const uses = wx.getStorageSync('hb_phraseUses') || {};
+    uses[t] = (uses[t] || 0) + 1;
+    wx.setStorageSync('hb_phraseUses', uses);
+    this.setData({ phraseUses: uses });
     this.setData({ showQuick: false, input: t });
   },
   delMyPhrase(e) {
     const t = e.currentTarget.dataset.t;
     const list = this.data.myPhrases.filter((x) => x !== t);
     wx.setStorageSync('hb_myPhrases', list);
-    this.setData({ myPhrases: list });
+    const uses = wx.getStorageSync('hb_phraseUses') || {};
+    delete uses[t];
+    wx.setStorageSync('hb_phraseUses', uses);
+    this.setData({ myPhrases: list, phraseUses: uses });
     wx.showToast({ title: '已删除', icon: 'none' });
   },
 

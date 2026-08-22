@@ -197,8 +197,18 @@ Page({
   },
 
   toggleCard(e) {
-    const i = e.currentTarget.dataset.index;
-    this.setData({ open: this.data.open === i ? -1 : i });
+    const i = Number(e.currentTarget.dataset.index);
+    const willOpen = this.data.open !== i;
+    if (willOpen) {
+      // 阅读计数：展开即读（本地，用于了解自己最常翻哪张）
+      const c = (this.data.cards || [])[i];
+      if (c) {
+        const reads = wx.getStorageSync('hb_stReads') || {};
+        reads[c.title] = (reads[c.title] || 0) + 1;
+        wx.setStorageSync('hb_stReads', reads);
+      }
+    }
+    this.setData({ open: willOpen ? i : -1 });
   },
 
   goHelper() {

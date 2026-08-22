@@ -187,7 +187,7 @@ module.exports = { divider: divider };
       <view class="quick-panel-list" wx:if="{{myPhrases.length}}">
         <view class="quick-panel-item mine" wx:for="{{myPhrases}}" wx:key="*this"
               data-t="{{item}}" bindtap="useMyPhrase" bindlongpress="delMyPhrase"
-              role="button" aria-label="点按填入，长按删除">{{item}}</view>
+              role="button" aria-label="点按填入，长按删除">{{item}}<text class="mp-use" wx:if="{{phraseUses[item]}}"> · {{phraseUses[item]}} 次</text></view>
       </view>
       <view class="mp-empty" wx:else>还没有常用语 —— 存一句常想说的话，下次点一下就能发。</view>
       <view class="quick-panel-title sooth">💙 自我安抚 · 情绪上来先说一句</view>
