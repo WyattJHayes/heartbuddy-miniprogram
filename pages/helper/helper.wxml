@@ -167,7 +167,9 @@
       🫁 手在抖/心很乱？先做 60 秒呼吸，再开口会更容易 →
     </view>
     <view class="urgent-safe" wx:if="{{safeContacts.length}}">
-      <text class="urgent-safe-t">🔒 你提前放好的安全包（点名字直接拨）：</text>
+      <text class="urgent-safe-t">🔒 你提前放好的安全包（点名字直接拨）：
+        <text class="ps-stat" wx:if="{{packStat}}">{{packStat.n}} 人 · {{packStat.tel}} 个电话{{packStat.n > packStat.tel ? ' · 还有 ' + (packStat.n - packStat.tel) + ' 位没存号码' : ''}}</text>
+      </text>
       <view class="safe-contacts">
         <view class="sc-chip" wx:for="{{safeContacts}}" wx:key="n" bindtap="callSafe" data-p="{{item.p}}" data-n="{{item.n}}"
               bindlongpress="clearSafePhone" role="button" aria-label="拨打{{item.n}}{{item.p ? '的电话，长按清除号码' : '，未存电话，去补充'}}">

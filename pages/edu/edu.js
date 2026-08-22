@@ -130,6 +130,7 @@ Page({
     review: null,  // 温故一题：全部学完后随机复习
     reviewOk: 0,   // 温故累计答对题数
     gradDate: '',  // 结业日期（首次全部学完那天）
+    studyCal: [],  // 近 14 天学习日历（最右=今天）
     doneCount: 0,
     total: LESSONS.length,
     openIdx: -1,
@@ -153,6 +154,14 @@ Page({
     let openIdx = -1;
     for (let i = 0; i < LESSONS.length; i++) { if (!doneMap[LESSONS[i].key]) { openIdx = i; break; } }
     this.setData({ lessons: this.filterLessons(this.data.kw), doneMap, doneCount: Object.keys(doneMap).length, quizOk: {}, answered: {}, streak: calcStreak(wx.getStorageSync('hb_eduDays') || []), openIdx });
+    // 近 14 天学习日历：学过的天点亮（最右是今天）
+    const set = new Set(wx.getStorageSync('hb_eduDays') || []);
+    const cal = [];
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(Date.now() - i * 86400000);
+      cal.push({ on: set.has(d.toDateString()), today: i === 0 });
+    }
+    this.setData({ studyCal: cal });
   },
 
   filterLessons(kw) {

@@ -71,6 +71,7 @@ Page({
     peakDay: '',           // 当月记录最多的一天
     bandLegend: Object.keys(MOOD_META).map((k) => ({ k, e: MOOD_META[k].emoji, l: MOOD_META[k].label })),
     trigShift: '',         // 触发来源环比洞察
+    dayPref: '',           // 记录时段偏好洞察
     today: (new Date().getMonth() + 1) + '/' + new Date().getDate(), // 色带今天描边用
     noteList: [],          // 小结日记本（筛选后展示）
     noteFilter: 'all',    // 日记本筛选：all | week | month
@@ -732,6 +733,7 @@ Page({
       this.setData({ peakDay: this.buildPeakDay(raw) });
       this.setData({ trigMonth: this.buildTrigMonth(raw) });
       this.setData({ trigShift: this.buildTrigShift(raw) });
+      this.setData({ dayPref: this.buildDayPref(raw) });
       this.setData({ moodShift: this.buildMoodShift(raw) });
     } catch (e) {
       console.error('[mood] 读取失败', e);
@@ -994,6 +996,23 @@ Page({
   },
 
   // 本月触发来源排行（trigger 频率 Top4，读懂「最近一个月情绪从哪里来」）
+  // 记录时段偏好：你习惯在什么时段记录心情（观察习惯，不评判）
+  buildDayPref(raw) {
+    const cnt = { morning: 0, noon: 0, evening: 0, night: 0 };
+    (raw || []).forEach((m) => {
+      const h = new Date(m.createdAt).getHours();
+      if (h < 6) cnt.night++;
+      else if (h < 12) cnt.morning++;
+      else if (h < 18) cnt.noon++;
+      else cnt.evening++;
+    });
+    const total = cnt.morning + cnt.noon + cnt.evening + cnt.night;
+    if (total < 5) return '';
+    const name = { morning: '早晨', noon: '白天', evening: '晚上', night: '深夜' };
+    const top = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0];
+    return '你最常在' + name[top] + '记录心情（' + cnt[top] + '/' + total + ' 条）——那是你最愿意面对自己的时段。';
+  },
+
   // 触发来源环比：本月 Top1 与上月 Top1 是否同一个（变化也是信号）
   buildTrigShift(raw) {
     const now = new Date();

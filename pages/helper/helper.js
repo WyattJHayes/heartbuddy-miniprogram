@@ -45,6 +45,7 @@ Page({
     askViews: [],       // 当前展示的情境（收起时前 4 个）
     callLog: [],        // 最近拨打过的热线（本地 ≤5 条）
     packStale: false,   // 安全包超过 30 天未更新
+    packStat: null,     // 安全包完整度 {n, tel}
     careGrad: false,            // 四段陪伴计划走完后的「毕业卡」（一次性）
     safeContacts: [],           // 安全包（升级版）：[{n:'妈妈', p:'138…'}]，支持一键拨打
     hotlines,
@@ -258,6 +259,10 @@ Page({
     // 安全包保鲜提醒：超过 30 天没更新，提示确认一遍（电话可能变了）
     const packTs = wx.getStorageSync('hbSafePackTs') || 0;
     this.setData({ packStale: packTs && (Date.now() - packTs > 30 * 86400000) });
+    // 完整度：有几位联系人、几位存了电话
+    const sc = this.loadSafeContacts();
+    const withPhone = sc.filter((c) => c.p).length;
+    this.setData({ packStat: { n: sc.length, tel: withPhone } });
     this.setData({ scriptHist: wx.getStorageSync('hb_scriptHist') || [] });
     const cl = (wx.getStorageSync('hb_callLog') || []).map((x) => Object.assign({}, x, { rel: this.fmtCallTime(x.time) }));
     this.setData({ callLog: cl });

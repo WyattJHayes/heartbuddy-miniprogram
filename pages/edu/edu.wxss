@@ -72,3 +72,10 @@ page { background: #F7F8FB; }
 .gc-review { margin-top: 10rpx; font-size: 22rpx; color: #a05a2c; }
 
 .gc-date { margin-top: 6rpx; font-size: 20rpx; color: #c9a98a; }
+
+.study-cal { display: flex; margin-top: 12rpx; }
+.sc-cell { flex: 1; height: 26rpx; border-radius: 6rpx; background: #edf0f5; margin-right: 4rpx; }
+.sc-cell:last-child { margin-right: 0; }
+.sc-cell.on { background: #7fb2ff; }
+.sc-cell.today { border: 2rpx solid #5b8def; }
+.sc-sub { margin-top: 8rpx; font-size: 20rpx; color: #9aa3b8; }

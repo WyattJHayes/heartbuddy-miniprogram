@@ -7,6 +7,10 @@
   <!-- 完成度进度条 -->
   <view class="edu-progress" role="progressbar" aria-label="课程完成度 {{doneCount}}/{{total}}">
     <view class="ep-num">已学完 {{doneCount}} / {{total}} 节<text wx:if="{{streak >= 2}}" class="ep-streak">🔥 连续学习 {{streak}} 天</text></view>
+    <view class="study-cal" wx:if="{{studyCal.length}}" role="img" aria-label="近14天学习日历">
+      <view class="sc-cell {{item.on ? 'on' : ''}} {{item.today ? 'today' : ''}}" wx:for="{{studyCal}}" wx:key="index"></view>
+    </view>
+    <view class="sc-sub">近 14 天学习日历 · 点亮的是学过的天</view>
     <view class="ep-bar"><view class="ep-fill" style="width: {{doneCount / total * 100}}%"></view></view>
   </view>
 
