@@ -439,7 +439,11 @@ Page({
             const keys = ['hbDayNote', 'hb_eduDone', 'hb_eduDays', 'hb_eduNote', 'hbSafeContacts', 'hbSafePeople',
               'hb_stFavs', 'hb_small', 'hb_scanFeel', 'hbThoughtBox', 'hbThought', 'timeLetter', 'hbLetterBox',
               'hb_myPhrases', 'hb_favs', 'breatheWeek', 'hb_breatheStreak', 'hb_breatheDay', 'hb_breatheMins',
-              'breatheCount', 'hb_milestone', 'hb_night_msg', 'hb_weekRecap', 'hb_triageDone', 'chatLowCareSeen'];
+              'breatheCount', 'hb_milestone', 'hb_night_msg', 'hb_weekRecap', 'hb_triageDone', 'chatLowCareSeen',
+              'hb_eduWrong', 'hb_eduReview_', 'hb_reviewOk', 'hb_eduGradDate', 'hb_badgeDates', 'hb_phraseUses',
+              'hb_scriptHist', 'hb_callLog', 'hb_stReads', 'hb_stDraws', 'hb_inputDraft', 'hb_nightManual',
+              'hbCareGrad', 'hbCareGradSeen', 'hbCarePlan', 'crisisCheck', 'hbSafePackTs', 'hb_breathBroke',
+              'hb_eduNote'];
             keys.forEach((k) => wx.removeStorageSync(k));
             this.setData({ safePeople: '', favCount: 0, eduDone: 0 });
             wx.showToast({ title: '本机记录已清空', icon: 'success' });

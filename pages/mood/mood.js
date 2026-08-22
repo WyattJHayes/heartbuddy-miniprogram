@@ -69,6 +69,7 @@ Page({
     peakDay: '',           // 当月记录最多的一天
     bandLegend: Object.keys(MOOD_META).map((k) => ({ k, e: MOOD_META[k].emoji, l: MOOD_META[k].label })),
     trigShift: '',         // 触发来源环比洞察
+    today: (new Date().getMonth() + 1) + '/' + new Date().getDate(), // 色带今天描边用
     noteList: [],          // 小结日记本（筛选后展示）
     noteFilter: 'all',    // 日记本筛选：all | week | month
     noteBookOpen: false    // 日记本展开状态

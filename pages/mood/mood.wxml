@@ -179,7 +179,7 @@
         <text class="bl-item" wx:for="{{bandLegend}}" wx:key="k">{{item.e}} {{item.l}}</text>
       </view>
       <view class="band-row">
-        <view class="band-cell {{item.has ? '' : 'empty'}}" wx:for="{{band}}" wx:key="d"
+        <view class="band-cell {{item.has ? '' : 'empty'}} {{item.d === today ? 'today' : ''}}" wx:for="{{band}}" wx:key="d"
               data-k="{{item.k}}" data-d="{{item.d}}" bindtap="tapBand" bindlongpress="longpressBand"
               role="button" aria-label="{{item.d}}{{item.has ? '，当日情绪 ' + item.e + '，点看小结' : '，无记录'}}">
           <text class="band-e">{{item.e}}</text>

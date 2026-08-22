@@ -52,7 +52,7 @@
     <view class="feel-pick" role="group" aria-label="选择身体感受">
       <view class="fp-label">现在身体是什么感觉？挑一个词</view>
       <view class="fp-row">
-        <view class="fp-chip {{feelPicked === item ? 'on' : ''}}" wx:for="{{['松了','暖了','还有点紧','没什么感觉','困了']}}" wx:key="*this"
+        <view class="fp-chip {{feelPicked === item ? 'on' : ''}}" wx:for="{{['松了','暖了','还有点紧','没什么感觉','困了','轻了','稳了']}}" wx:key="*this"
               data-w="{{item}}" bindtap="pickFeel" role="button" aria-label="{{item}}">{{item}}</view>
       </view>
       <view class="fp-log" wx:if="{{feelLog.length}}" role="note" aria-label="最近几次身体感受">
