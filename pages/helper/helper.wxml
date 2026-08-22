@@ -136,9 +136,11 @@
     <view class="section-title">💬 不知道怎么开口？让心语帮你写第一句</view>
     <view class="af-text">很多时候不是不想求助，是不知道怎么开始。选一个最接近你处境的选项，我帮你生成一段可以复制发送的话。</view>
     <view class="af-chips">
-      <view class="af-chip {{scriptSituation === item.k ? 'on' : ''}}" wx:for="{{askSituations}}" wx:key="k"
+      <view class="af-chip {{scriptSituation === item.k ? 'on' : ''}}" wx:for="{{askViews}}" wx:key="k"
             bindtap="pickSituation" data-k="{{item.k}}" role="button" aria-label="{{item.label}}">{{item.label}}</view>
     </view>
+    <view class="af-more" wx:if="{{!askAll}}" bindtap="toggleAskAll" role="button" aria-label="展开全部情境">展开全部 ▾</view>
+    <view class="af-more" wx:else bindtap="toggleAskAll" role="button" aria-label="收起情境">收起 ▴</view>
     <view class="af-out" wx:if="{{scriptText}}">
       <view class="af-out-text" user-select>{{scriptText}}</view>
       <view class="af-actions">

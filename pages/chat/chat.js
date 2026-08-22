@@ -105,7 +105,10 @@ Page({
     const _h = new Date().getHours();
     const auto = _h >= 22 || _h < 6;
     this.setData({ isNight: manual === 'on' ? true : manual === 'off' ? false : auto });
-    this.setData({ persona: wx.getStorageSync('hb_persona') || '', myPhrases: wx.getStorageSync('hb_myPhrases') || [] });
+    // 常用语按使用次数排序（最常说的排前面）
+    const uses0 = wx.getStorageSync('hb_phraseUses') || {};
+    const sorted = (wx.getStorageSync('hb_myPhrases') || []).slice().sort((a, b) => (uses0[b] || 0) - (uses0[a] || 0));
+    this.setData({ persona: wx.getStorageSync('hb_persona') || '', myPhrases: sorted });
     const savedDraft = wx.getStorageSync('hb_inputDraft');
     if (savedDraft && !this.data.input) this.setData({ input: savedDraft });
     this.setData({ phraseUses: wx.getStorageSync('hb_phraseUses') || {} });

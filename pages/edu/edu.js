@@ -295,14 +295,16 @@ Page({
     const i = Number(e.currentTarget.dataset.i);
     const l = this.data.lessons[i];
     if (!l) return;
+    const done = this.data.doneCount || 0;
     const body = [
       '【心语伴 · 心理小课】' + l.icon + ' ' + l.title,
       l.intro,
       '',
       ...l.points.map((p) => '· ' + p),
       '',
-      '💚 今天可以这样做：' + l.do
-    ].join('\n');
+      '💚 今天可以这样做：' + l.do,
+      done ? '（我已经学到第 ' + done + '/' + this.data.total + ' 节啦）' : ''
+    ].filter(Boolean).join('\n');
     wx.setClipboardData({ data: body, success: () => wx.showToast({ title: '已复制这一课', icon: 'success' }) });
   },
 

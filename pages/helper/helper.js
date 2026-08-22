@@ -39,6 +39,8 @@ Page({
     scriptSituation: '',
     scriptText: '',
     scriptHist: [],     // 最近复制过的话术（本地 ≤3 条，可再复制）
+    askAll: false,      // 情境列表是否展开全部
+    askViews: [],       // 当前展示的情境（收起时前 4 个）
     callLog: [],        // 最近拨打过的热线（本地 ≤5 条）
     packStale: false,   // 安全包超过 30 天未更新
     careGrad: false,            // 四段陪伴计划走完后的「毕业卡」（一次性）
@@ -75,6 +77,11 @@ Page({
   },
 
   // ---- 开口求助话术生成器（本地模板，可复制发送）----
+  toggleAskAll() {
+    const all = !this.data.askAll;
+    this.setData({ askAll: all, askViews: all ? this.data.askSituations : this.data.askSituations.slice(0, 4) });
+  },
+
   pickSituation(e) {
     const k = e.currentTarget.dataset.k;
     this.setData({ scriptSituation: k });
@@ -244,6 +251,7 @@ Page({
     this.setData({ scriptHist: wx.getStorageSync('hb_scriptHist') || [] });
     const cl = (wx.getStorageSync('hb_callLog') || []).map((x) => Object.assign({}, x, { rel: this.fmtCallTime(x.time) }));
     this.setData({ callLog: cl });
+    if (!this.data.askViews.length) this.setData({ askViews: this.data.askSituations.slice(0, 4) });
   },
 
   // 毕业卡关闭：记住已看，不再打扰

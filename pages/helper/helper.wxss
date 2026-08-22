@@ -152,3 +152,5 @@
 .hc-end { font-size: 20rpx; color: #7a9a82; border: 1rpx solid #cfe3d4; border-radius: 999rpx; padding: 4rpx 14rpx; margin-right: 12rpx; }
 
 .pack-stale { margin-top: 12rpx; background: #fdf3e3; border: 1rpx solid #e8d5ac; border-radius: 12rpx; padding: 12rpx 18rpx; font-size: 22rpx; color: #8a6a2f; line-height: 1.7; }
+
+.af-more { font-size: 22rpx; color: #5b8def; margin-top: 4rpx; }
