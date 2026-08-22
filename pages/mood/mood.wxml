@@ -131,6 +131,7 @@
     <view class="sm-row" wx:for="{{smalls}}" wx:key="i">
       <view class="sm-check {{item.done ? 'on' : ''}}" data-i="{{index}}" bindtap="onSmallDone" role="checkbox" aria-checked="{{item.done}}" aria-label="今天第{{index + 1}}件小事已完成">{{item.done ? '✓' : ''}}</view>
       <input class="sm-input {{item.done ? 'done' : ''}}" value="{{item.text}}" data-i="{{index}}" bindinput="onSmallInput" placeholder="例：晚饭后散步 10 分钟" maxlength="40" />
+      <text class="sm-at" wx:if="{{item.done && item.at}}">{{item.at}}</text>
     </view>
     <view class="sm-scenes">
       <view class="sm-scene {{smallScene === 'study' ? 'on' : ''}}" data-s="study" bindtap="setSmallScene" role="button" aria-label="学习恢复灵感">📚 学习恢复</view>

@@ -196,3 +196,5 @@
 .msg-divider:empty { display: none; }
 
 .mp-use { color: #c9a06a; font-size: 20rpx; }
+
+.input-count { flex-shrink: 0; font-size: 20rpx; color: #b0b7c8; margin-right: 4rpx; }

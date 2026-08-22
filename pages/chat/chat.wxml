@@ -162,9 +162,11 @@ module.exports = { divider: divider };
         placeholder="{{inputPh || '说点什么…'}}"
         value="{{input}}"
         confirm-type="send"
+        maxlength="200"
         bindinput="onInput"
         bindconfirm="onSend"
       />
+      <text class="input-count" wx:if="{{input.length > 150}}">{{input.length}}/200</text>
       <button class="send" bindtap="onSend" loading="{{loading}}">发送</button>
     </view>
 

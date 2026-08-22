@@ -242,6 +242,13 @@ Page({
     const i = Number(e.currentTarget.dataset.i);
     if (!items[i]) return;
     items[i].done = !items[i].done;
+    // 记下完成时刻（取消勾选时清除）：晚上回看时知道自己几点照顾了自己
+    if (items[i].done) {
+      const d = new Date();
+      items[i].at = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+    } else {
+      items[i].at = '';
+    }
     this.setData({ smalls: items });
     const all = items.filter((x) => x.done).length === 3 && items.some((x) => x.text);
     if (all) {

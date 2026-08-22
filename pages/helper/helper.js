@@ -397,6 +397,21 @@ Page({
     }
   },
 
+  endHushCareNow() {
+    wx.showModal({
+      title: '结束静音关怀？',
+      content: '心语会立刻回到平时的样子。24 小时回访安排也会取消。',
+      confirmText: '结束',
+      cancelText: '再留一天',
+      success: (r) => {
+        if (!r.confirm) return;
+        wx.removeStorageSync('crisisCheck');
+        this.setData({ hushCare: false });
+        wx.showToast({ title: '已结束，我一直都在', icon: 'none' });
+      }
+    });
+  },
+
   closeHushCare() {
     try { wx.setStorageSync('helperHushSeen', new Date().toDateString()); } catch (e) {}
     this.setData({ hushCare: false });
