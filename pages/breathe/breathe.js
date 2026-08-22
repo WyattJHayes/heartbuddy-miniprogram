@@ -412,7 +412,8 @@ Page({
         if (!wx.getStorageSync('ach_breathe')) wx.setStorageSync('ach_breathe', true);
         if (bc >= 5 && !wx.getStorageSync('ach_breathe5')) wx.setStorageSync('ach_breathe5', true);
         wx.vibrateShort && wx.vibrateShort({ type: 'light' });
-        wx.showToast({ title: '已记下此刻的平静', icon: 'success' });
+        const wkN = this.weekCount();
+        wx.showToast({ title: '已记下 · 本周第 ' + wkN + ' 次', icon: 'success' });
         this.setData({ echoText: this.nextEcho() });
       } catch (e) {
         console.error('[breathe] 记录失败', e);

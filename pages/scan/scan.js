@@ -24,6 +24,7 @@ Page({
     timeTip: '',     // 按时段的扫描建议（一句话）
     feelTop: '',     // 身体感受词 Top1
     avgSlot: '',     // 平均完成时段
+    doneN: 0,        // 本次是累计第几次
     idx: 0,
     left: 30,
     pct: 0,
@@ -126,7 +127,7 @@ Page({
 
   async onFinish() {
     this.stop();
-    this.setData({ phase: 'done', feelPicked: '' });
+    this.setData({ phase: 'done', feelPicked: '', doneN: (wx.getStorageSync('hb_scanCount') || 0) + 1 });
     const ts = Date.now();
     wx.setStorageSync('hb_scanDone', ts);
     const dl = wx.getStorageSync('hb_scanDoneLog') || [];

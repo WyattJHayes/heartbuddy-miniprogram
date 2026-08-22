@@ -37,7 +37,7 @@
   <!-- 完成态 -->
   <view class="scan-card" wx:else>
     <view class="scan-hero">🌿</view>
-    <view class="scan-title">这次扫描，你做到了</view>
+    <view class="scan-title">这次扫描，你做到了<text wx:if="{{doneN}}"> · 累计第 {{doneN}} 次</text></view>
     <view class="scan-sub">给自己一点安静，本身就是一种照顾。</view>
     <view class="scan-last" wx:if="{{lastDone}}">{{lastDone}}</view>
     <!-- 完成时告知：已自动记一笔「平静」，可选此刻程度（1-5） -->

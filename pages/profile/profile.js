@@ -433,7 +433,9 @@ Page({
       '· 聊天倾诉 ' + (this.data.chatTotal || 0) + ' 次 · 自评 ' + (this.data.assessTotal || 0) + ' 次',
       '· 课后温故答对 ' + (wx.getStorageSync('hb_reviewOk') || 0) + ' 题',
       '',
-      '记录本身就是一种照顾，我会继续好好对自己。'
+      '记录本身就是一种照顾，我会继续好好对自己。',
+      '',
+      '（需要时随时拨 12356 心理援助热线，24 小时免费）'
     ].join('\n');
     wx.setClipboardData({ data: txt, success: () => wx.showToast({ title: '已复制我的概览', icon: 'success' }) });
   },
