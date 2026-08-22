@@ -342,6 +342,12 @@ Page({
       };
       const curAvg = mean(curList);
       const prevAvg = mean(prevRes.data || []);
+      const prevCount = (prevRes.data || []).length;
+      const monthCountText = prevCount
+        ? (curList.length > prevCount ? '本月 ' + curList.length + ' 条，比上月（' + prevCount + '）多了 ' + (curList.length - prevCount) + ' 条'
+           : curList.length < prevCount ? '本月 ' + curList.length + ' 条，比上月（' + prevCount + '）少了 ' + (prevCount - curList.length) + ' 条——记录少一点也没关系'
+           : '本月 ' + curList.length + ' 条，与上月持平')
+        : '本月已记录 ' + curList.length + ' 条（上月无记录）';
       // 平均强度（chat 强度滑条 / 快速记录的 intensity 字段）
       const ints = curList.map((m) => m.intensity).filter((v) => typeof v === 'number' && v > 0);
       const avgInt = ints.length ? +(ints.reduce((a, b) => a + b, 0) / ints.length).toFixed(1) : null;
@@ -373,6 +379,7 @@ Page({
       }
       this.setData({
         monthInfo: {
+        monthCountText,
           label: `${now.getMonth() + 1}月`,
           total: curList.length,
           days: daySet.size,

@@ -808,10 +808,11 @@ Page({
       const k = dayKey(ny, nm, d);
       cells.push({ num: d, inMonth: false, emoji: (map[k] || {}).emoji || '', count: (map[k] || {}).count || 0, isToday: false, key: k });
     }
-    // 本月
+    // 本月（周六/周日标 weekend，底色微调更好扫读）
     for (let d = 1; d <= total; d++) {
       const k = dayKey(y, m, d);
-      cells.push({ num: d, inMonth: true, emoji: (map[k] || {}).emoji || '', count: (map[k] || {}).count || 0, isToday: k === todayK, key: k });
+      const dow = new Date(y, m - 1, d).getDay();
+      cells.push({ num: d, inMonth: true, emoji: (map[k] || {}).emoji || '', count: (map[k] || {}).count || 0, isToday: k === todayK, weekend: dow === 0 || dow === 6, key: k });
     }
     // 下月补齐（凑满整周）
     let trailingDay = 1;

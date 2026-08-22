@@ -279,3 +279,8 @@
 
 .band-cell.today .band-e { outline: 2rpx solid #5b8def; border-radius: 8rpx; }
 .band-cell.today .band-d { color: #5b8def; font-weight: 700; }
+
+.thought-soon { margin-top: 10rpx; font-size: 22rpx; color: #8a6a2f; background: #fdf6ea; border: 1rpx solid #f0dcbc; border-radius: 10rpx; padding: 10rpx 16rpx; line-height: 1.6; }
+
+.cal-cell.wknd { background: #fbf7f2; }
+.cal-cell.wknd.has { background: #f5ead9; }

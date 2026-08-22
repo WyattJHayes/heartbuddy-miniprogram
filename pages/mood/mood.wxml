@@ -229,6 +229,7 @@
     </block>
     <block wx:elif="{{!thoughtReady}}">
       <view class="thought-due">已存下。还有 <text class="thought-num">{{7 - thoughtDue}}</text> 天就能回看 —— 到时看看它还是不是那么大。</view>
+      <view class="thought-soon" wx:if="{{thoughtDue === 6}}" role="note" aria-label="明天即可回看提醒">🌤 明天就能打开看了——今晚好好睡，念头交给时间。</view>
     </block>
     <block wx:else>
       <view class="thought-due">⏰ 7 天到了 —— 那个念头还在吗？</view>
@@ -314,7 +315,7 @@
     </view>
     <view class="cal-grid">
       <view
-        class="cal-cell {{item.inMonth ? '' : 'dim'}} {{item.isToday ? 'today' : ''}} {{item.count ? 'has' : ''}}"
+        class="cal-cell {{item.inMonth ? '' : 'dim'}} {{item.isToday ? 'today' : ''}} {{item.count ? 'has' : ''}} {{item.weekend ? 'wknd' : ''}}"
         wx:for="{{calCells}}"
         wx:key="key"
         bindtap="onCalDay"
