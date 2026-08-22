@@ -181,12 +181,21 @@ Page({
     const eduDone = (wx.getStorageSync('hb_eduDone') || []).length >= 7;
     if (eduDone) wx.setStorageSync('ach_edu', true);
     if (calcStreak(wx.getStorageSync('hb_eduDays') || []) >= 7) wx.setStorageSync('ach_edu7', true);
+    const badgeDates = wx.getStorageSync('hb_badgeDates') || {};
     const badges = defs.map((b) => {
       let got = !!wx.getStorageSync(b.key);
       if (b.key === 'ach_scan' && got) got = true;
       if (b.key === 'ach_scan3' && scanCount >= 3) got = true;
-      return { ...b, got };
+      // 点亮日期：第一次见到它已解锁时记下（本地，用于展示）
+      let gotDate = badgeDates[b.key] || '';
+      if (got && !gotDate) {
+        const d = new Date();
+        gotDate = (d.getMonth() + 1) + '/' + d.getDate();
+        badgeDates[b.key] = gotDate;
+      }
+      return { ...b, got, gotDate };
     });
+    wx.setStorageSync('hb_badgeDates', badgeDates);
     badges.sort((a, b) => (b.got ? 1 : 0) - (a.got ? 1 : 0)); // 已点亮排前面，一眼看到成绩
     const gotCount = badges.filter((b) => b.got).length;
     // 下一枚徽章提示（最靠前的未解锁项，答辩/日常都更有目标感）

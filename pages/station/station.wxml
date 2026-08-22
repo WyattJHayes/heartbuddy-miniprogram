@@ -5,6 +5,11 @@
     <view class="st-hero-sub">不是鸡汤，是能马上做的小事</view>
   </view>
 
+  <!-- 常读提示：你最常翻的一张卡 -->
+  <view class="top-read" wx:if="{{topRead}}" role="note" aria-label="最常翻的卡片">
+    📖 你最常翻：「{{topRead.title}}」（{{topRead.n}} 次）——它似乎对你特别有用。
+  </view>
+
   <!-- 收藏概览：已收藏几张、长按可取消 -->
   <view class="fav-summary" wx:if="{{favTitles.length}}" role="note" aria-label="收藏概览">
     ⭐ 已收藏 {{favTitles.length}}/3 张（置顶显示 · 长按卡片头可取消）

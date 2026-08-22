@@ -68,3 +68,5 @@ page { background: #F7F8FB; }
 .es-none { margin: 14rpx 4rpx; font-size: 23rpx; color: #9aa3b8; background: #fff; border: 1rpx dashed #dfe4ef; border-radius: 12rpx; padding: 16rpx 20rpx; line-height: 1.7; }
 
 .ls-idx { display: inline-block; font-size: 20rpx; color: #5b8def; background: #eef3ff; border-radius: 8rpx; padding: 2rpx 12rpx; margin-right: 12rpx; vertical-align: middle; }
+
+.gc-review { margin-top: 10rpx; font-size: 22rpx; color: #a05a2c; }

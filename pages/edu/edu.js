@@ -128,6 +128,7 @@ Page({
     streak: 0,     // 连续学习天数
     myNote: '',    // 学习心得：一句话写给自己（本地）
     review: null,  // 温故一题：全部学完后随机复习
+    reviewOk: 0,   // 温故累计答对题数
     doneCount: 0,
     total: LESSONS.length,
     openIdx: -1,
@@ -140,6 +141,7 @@ Page({
     const doneMap = {};
     (done || []).forEach((k) => { doneMap[k] = true; });
     this.setData({ myNote: wx.getStorageSync('hb_eduNote') || '' });
+    this.setData({ reviewOk: wx.getStorageSync('hb_reviewOk') || 0 });
     // 全部学完：每天打开自动出一道温故题
     if (LESSONS.every((l) => doneMap[l.key])) {
       const rk = 'hb_eduReview_' + new Date().toDateString();
@@ -243,6 +245,11 @@ Page({
     const rv = this.data.review;
     if (!rv || rv.picked >= 0) return;
     const ok = o === rv.quiz.ans;
+    if (ok) {
+      // 温故答对计数（本地）：结业卡上展示
+      wx.setStorageSync('hb_reviewOk', (wx.getStorageSync('hb_reviewOk') || 0) + 1);
+      this.setData({ reviewOk: wx.getStorageSync('hb_reviewOk') });
+    }
     // 错题本：答错记下、答对移出（温故时优先抽）
     const wrong = wx.getStorageSync('hb_eduWrong') || [];
     const i = wrong.indexOf(rv.key);

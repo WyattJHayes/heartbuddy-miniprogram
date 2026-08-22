@@ -6,6 +6,7 @@ Page({
     favTitles: [],      // 收藏的卡片标题（最多 3 张，置顶+★）
     cardTags: ['全部', '焦虑', '难过', '生气', '睡前', '学习', '平静'],
     showTag: '全部',    // 按心情筛选当前展示哪些卡
+    topRead: null,      // 最常翻的一张卡（≥3 次才显示）
     cards: [
       {
         emoji: '🌀',
@@ -188,6 +189,11 @@ Page({
     if (!this._allCards) this._allCards = this.data.cards.slice();
     this.setData({ todayLine: this.getDailyLine() });
     this.applyFavs();
+    // 常读 Top1：阅读次数最多的卡（≥3 次才提示）
+    const reads = wx.getStorageSync('hb_stReads') || {};
+    const keys = Object.keys(reads).sort((a, b) => reads[b] - reads[a]);
+    const top = keys[0];
+    this.setData({ topRead: (top && reads[top] >= 3) ? { title: top, n: reads[top] } : null });
   },
 
   setCardTag(e) {

@@ -96,3 +96,5 @@
 .ys-n { color: #5b8def; font-weight: 700; }
 
 .accompany-milestone { margin: 14rpx 24rpx 0; background: linear-gradient(135deg, #fdf6ea, #fff); border: 1rpx solid #f0dcbc; border-radius: 14rpx; padding: 14rpx 20rpx; font-size: 24rpx; color: #8a6a2f; line-height: 1.7; }
+
+.b-date { font-size: 20rpx; color: #9aa3b8; font-weight: 400; }

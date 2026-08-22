@@ -77,7 +77,7 @@
     <view class="badges">
       <view class="badge {{item.got ? 'got' : 'lock'}}" wx:for="{{badges}}" wx:key="key">
         <text class="b-emoji">{{item.got ? item.emoji : '🔒'}}</text>
-        <text class="b-title">{{item.title}}</text>
+        <text class="b-title">{{item.title}}<text class="b-date" wx:if="{{item.got && item.gotDate}}"> · {{item.gotDate}}</text></text>
         <text class="b-desc">{{item.desc}}</text>
       </view>
     </view>
