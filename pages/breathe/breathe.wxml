@@ -41,6 +41,9 @@
   </view>
 
   <!-- 呼吸节奏切换 -->
+  <!-- 上次中断的温柔提示（24h 内有效） -->
+  <view class="resume-tip" wx:if="{{resumeTip && phase === 'ready'}}" role="note" aria-label="上次练习中断提示">{{resumeTip}}</view>
+
   <!-- 按时段推荐：一句话告诉你此刻更适合哪种节奏 -->
   <view class="time-hint" wx:if="{{timeHint}}" role="note" aria-label="此刻推荐节奏">{{timeHint}}</view>
   <view class="presets">

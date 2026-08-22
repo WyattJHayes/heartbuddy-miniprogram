@@ -46,6 +46,12 @@ Page({
     this.refreshFavs();
   },
 
+  copyMilestone(e) {
+    const t = e.currentTarget.dataset.t;
+    if (!t) return;
+    wx.setClipboardData({ data: '我和心语伴相伴 ' + (this.data.accompanyDays || 0) + ' 天：' + t, success: () => wx.showToast({ title: '已复制这份纪念', icon: 'success' }) });
+  },
+
   // 陪伴天数里程碑：7/30/100/365 天给一句专属文案
   accompanyMilestone(days) {
     if (!days) return '';

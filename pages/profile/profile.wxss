@@ -101,3 +101,5 @@
 
 .fw-col { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 0 6rpx; }
 .fw-label { font-size: 20rpx; color: #b0b7c8; margin-top: 6rpx; }
+
+.am-copy { float: right; font-size: 20rpx; color: #b08a4a; }

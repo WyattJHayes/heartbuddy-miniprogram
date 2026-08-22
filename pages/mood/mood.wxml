@@ -175,6 +175,9 @@
       <view class="band-title">近 {{bandDays}} 天情绪色带<text class="band-best" wx:if="{{bestStreak >= 3}}">🏆 最长连记 {{bestStreak}} 天</text><text class="band-switch" bindtap="toggleBandDays" role="button" aria-label="切换色带显示天数">⇄ {{bandDays === 14 ? '30' : '14'}} 天</text><text class="band-tip">点某天看小结 / 写一句</text>
         <text class="band-write-btn" bindtap="writeNoteToday" role="button" aria-label="给今天补写一句心情日记">✍️ 写一句</text>
       </view>
+      <view class="band-legend" role="note" aria-label="色带图例">
+        <text class="bl-item" wx:for="{{bandLegend}}" wx:key="k">{{item.e}} {{item.l}}</text>
+      </view>
       <view class="band-row">
         <view class="band-cell {{item.has ? '' : 'empty'}}" wx:for="{{band}}" wx:key="d"
               data-k="{{item.k}}" data-d="{{item.d}}" bindtap="tapBand" bindlongpress="longpressBand"

@@ -67,6 +67,7 @@ Page({
     moodShift: '',         // 本月最常见情绪转变链
     bestStreak: 0,         // 历史最长连续记录天数
     peakDay: '',           // 当月记录最多的一天
+    bandLegend: Object.keys(MOOD_META).map((k) => ({ k, e: MOOD_META[k].emoji, l: MOOD_META[k].label })),
     noteList: [],          // 小结日记本（筛选后展示）
     noteFilter: 'all',    // 日记本筛选：all | week | month
     noteBookOpen: false    // 日记本展开状态

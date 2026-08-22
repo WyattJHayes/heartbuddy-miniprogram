@@ -48,6 +48,7 @@ Page({
     calmInt: 3,          // 记录「平静」时的强度（1-5，默认 3）
     dayGoal: DAILY_GOAL_MIN, // 面向 WXML 展示
     echoText: '',          // 完成一次呼吸后的「呼吸回响」
+    resumeTip: '',         // 上次练习中断的温柔提示
     heat: [],              // 近 4 周放松热力图
     dayPart: { m: 0, n: 0, e: 0, late: 0 }, // 完成时段分布：早/中/晚/深夜
     timeHint: '',          // 按时段推荐节奏的一句话
@@ -57,6 +58,13 @@ Page({
   },
 
   onLoad() {
+    // 上次练习中断提示：练习中退出（未完成）会留痕，这次进来温柔提一句
+    const brokeAt = wx.getStorageSync('hb_breathBroke');
+    if (brokeAt && Date.now() - brokeAt < 86400000) {
+      const h = new Date(brokeAt).getHours();
+      this.setData({ resumeTip: h >= 22 || h < 6 ? '🌙 昨晚那次呼吸没做完——没关系，睡着也是一种完成。' : '🌱 上次呼吸练到一半就走了，这次想续上吗？' });
+    }
+    wx.removeStorageSync('hb_breathBroke');
     this._timers = [];
     this._stop = false;
     this._running = false;
@@ -254,6 +262,7 @@ Page({
   start() {
     if (this.data.presetKey === 'stare') { this.startStare(); return; }
     if (this._running) return;
+    wx.setStorageSync('hb_breathBroke', Date.now()); // 进行中标记（完成后清除）
     this._timers.forEach((t) => clearTimeout(t));
     this._timers = [];
     this._running = true;
@@ -272,6 +281,7 @@ Page({
       } else {
         this._running = false;
         this.setData({ phase: 'done', text: PH_TEXT.done });
+        wx.removeStorageSync('hb_breathBroke'); // 完成即清除中断标记
         // 发呆结束：直接给一句专属回响（也算一次放松）
         if (this.data.presetKey === 'stare') {
           this.setData({ echoText: this.nextEcho() });

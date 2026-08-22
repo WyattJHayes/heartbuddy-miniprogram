@@ -5,8 +5,8 @@
     <text class="dg-text">{{greetText}}</text>
     <text class="dg-days" wx:if="{{accompanyDays}}" role="img" aria-label="累计陪伴天数"> · 已陪伴 {{accompanyDays}} 天</text>
   </view>
-  <view class="accompany-milestone" wx:if="{{accompanyMilestoneText}}" role="note" aria-label="陪伴里程碑">
-    🏅 {{accompanyMilestoneText}}
+  <view class="accompany-milestone" wx:if="{{accompanyMilestoneText}}" role="note" aria-label="陪伴里程碑" bindtap="copyMilestone" data-t="{{accompanyMilestoneText}}">
+    🏅 {{accompanyMilestoneText}}<text class="am-copy">复制</text>
   </view>
 
   <!-- 好久不见：>3 天没记记录，温柔接你回来 -->
