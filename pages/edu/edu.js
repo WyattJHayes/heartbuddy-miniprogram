@@ -130,7 +130,8 @@ Page({
     review: null,  // 温故一题：全部学完后随机复习
     doneCount: 0,
     total: LESSONS.length,
-    openIdx: -1
+    openIdx: -1,
+    kw: ''             // 课程搜索关键词
   },
 
   onLoad() {
@@ -147,8 +148,19 @@ Page({
     // 续学：自动展开第一节还没学完的课（全部学完则收起）
     let openIdx = -1;
     for (let i = 0; i < LESSONS.length; i++) { if (!doneMap[LESSONS[i].key]) { openIdx = i; break; } }
-    this.setData({ lessons: LESSONS, doneMap, doneCount: Object.keys(doneMap).length, quizOk: {}, answered: {}, streak: this.calcStreak(), openIdx });
+    this.setData({ lessons: this.filterLessons(this.data.kw), doneMap, doneCount: Object.keys(doneMap).length, quizOk: {}, answered: {}, streak: calcStreak(wx.getStorageSync('hb_eduDays') || []), openIdx });
   },
+
+  filterLessons(kw) {
+    const k = (kw || '').trim().toLowerCase();
+    if (!k) return LESSONS;
+    return LESSONS.filter((l) =>
+      (l.title + l.intro + l.points.join(' ') + l.do).toLowerCase().includes(k));
+  },
+  onSearch(e) {
+    this.setData({ kw: e.detail.value, lessons: this.filterLessons(e.detail.value) });
+  },
+  clearSearch() { this.setData({ kw: '', lessons: LESSONS }); },
 
   toggle(e) {
     const i = Number(e.currentTarget.dataset.i);
@@ -193,7 +205,7 @@ Page({
     if (o === l.quiz.ans) {
       const quizOk = this.data.quizOk;
       quizOk[key] = true;
-      this.setData({ answered, quizOk, streak: this.calcStreak() });
+      this.setData({ answered, quizOk, streak: calcStreak(wx.getStorageSync('hb_eduDays') || []) });
       let done = wx.getStorageSync(DONE_KEY) || [];
       if (!done.includes(key)) {
         done.push(key);

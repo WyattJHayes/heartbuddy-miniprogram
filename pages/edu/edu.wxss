@@ -56,3 +56,8 @@ page { background: #F7F8FB; }
 
 .ls-btn-row { margin-top: 14rpx; }
 .ls-copy { display: inline-block; font-size: 23rpx; color: #5b8def; border: 1rpx solid #cfe0fb; border-radius: 999rpx; padding: 8rpx 26rpx; }
+
+.edu-search { display: flex; align-items: center; margin: 18rpx 0 6rpx; background: #fff; border: 1rpx solid #e8ecf4; border-radius: 999rpx; padding: 10rpx 24rpx; }
+.es-input { flex: 1; font-size: 24rpx; color: #3a465e; }
+.es-clear { font-size: 24rpx; color: #b0b7c8; padding: 4rpx 8rpx; }
+.es-count { font-size: 22rpx; color: #9aa3b8; margin: 8rpx 4rpx 0; }

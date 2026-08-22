@@ -26,6 +26,12 @@
               aria-label="{{item.d}} 练习 {{item.n}} 次"></view>
       </view>
       <view class="heat-sub">近 4 周放松热力 · 一共 {{breatheWeek}} 次本周 / 颜色越深越勤 🌊</view>
+      <view class="dp-row" wx:if="{{dayPart.m + dayPart.n + dayPart.e + dayPart.late >= 3}}" role="note" aria-label="放松时段分布">
+        <text class="dp-chip">🌅 早晨 {{dayPart.m}}</text>
+        <text class="dp-chip">🌤 白天 {{dayPart.n}}</text>
+        <text class="dp-chip">🌙 晚上 {{dayPart.e}}</text>
+        <text class="dp-chip" wx:if="{{dayPart.late}}">🌃 深夜 {{dayPart.late}}</text>
+      </view>
     </view>
     <text class="dg-sub" wx:else>一天两次呼吸，就是给自己护好 10 分钟</text>
     <view class="dg-log" wx:if="{{recentLog.length}}">
