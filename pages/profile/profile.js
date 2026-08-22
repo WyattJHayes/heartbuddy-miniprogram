@@ -242,9 +242,16 @@ Page({
       }
       // 近 7 天记录足迹（最老 → 最新）
       const mood7 = [];
+      const wkLabels = ['日', '一', '二', '三', '四', '五', '六'];
       for (let i = 6; i >= 0; i--) {
         const d = new Date(today.getTime() - i * DAY);
         mood7.push(daySet.has(d.toDateString()) ? 1 : 0);
+      }
+      // 星期标签：与 7 格一一对应（最后一格是今天）
+      const wk = [];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(today.getTime() - i * DAY);
+        wk.push(i === 0 ? '今' : wkLabels[d.getDay()]);
       }
       // 本月平均强度 + 最常用记录入口（trigger 统计，脱敏展示）
       const mStart = new Date(today.getFullYear(), today.getMonth(), 1).getTime();
@@ -283,6 +290,7 @@ Page({
         pBreath, pScan, pWrite,
         streakDays,
         mood7Days: mood7,
+        wkLabels: wk,
         monthAvgInt,
         topTrig,
         footprintSum: (moods.total || 0) + (assessments.total || 0) + (crisis.total || 0),

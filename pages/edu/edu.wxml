@@ -81,6 +81,7 @@
     <view class="gc-title">全部学完，结业啦！</view>
     <view class="gc-text">这 7 节课不会让情绪永远不来，但会让它来的时候，你知道该怎么办。</view>
     <view class="gc-review" wx:if="{{reviewOk}}">🔁 课后温故累计答对 {{reviewOk}} 题</view>
+    <view class="gc-date" wx:if="{{gradDate}}">结业于 {{gradDate}}</view>
     <view class="gc-btn" bindtap="copyGradText" role="button" aria-label="复制结业词留念">复制我的结业词</view>
   </view>
 

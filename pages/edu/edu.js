@@ -129,6 +129,7 @@ Page({
     myNote: '',    // 学习心得：一句话写给自己（本地）
     review: null,  // 温故一题：全部学完后随机复习
     reviewOk: 0,   // 温故累计答对题数
+    gradDate: '',  // 结业日期（首次全部学完那天）
     doneCount: 0,
     total: LESSONS.length,
     openIdx: -1,
@@ -142,6 +143,7 @@ Page({
     (done || []).forEach((k) => { doneMap[k] = true; });
     this.setData({ myNote: wx.getStorageSync('hb_eduNote') || '' });
     this.setData({ reviewOk: wx.getStorageSync('hb_reviewOk') || 0 });
+    this.setData({ gradDate: wx.getStorageSync('hb_eduGradDate') || '' });
     // 全部学完：每天打开自动出一道温故题
     if (LESSONS.every((l) => doneMap[l.key])) {
       const rk = 'hb_eduReview_' + new Date().toDateString();
@@ -217,6 +219,12 @@ Page({
         this.setData({ doneMap, doneCount: Object.keys(doneMap).length });
       }
       wx.showToast({ title: '答对了，已点亮 🎉', icon: 'success' });
+      // 全部学完的这一天 = 结业日（只记一次）
+      const doneMap2 = this.data.doneMap;
+      if (LESSONS.every((l) => doneMap2[l.key]) && !wx.getStorageSync('hb_eduGradDate')) {
+        const gd = new Date();
+        wx.setStorageSync('hb_eduGradDate', gd.getFullYear() + ' 年 ' + (gd.getMonth() + 1) + ' 月 ' + gd.getDate() + ' 日');
+      }
     } else {
       this.setData({ answered });
       wx.showToast({ title: '再想想，不着急', icon: 'none' });

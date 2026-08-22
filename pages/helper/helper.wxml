@@ -214,7 +214,7 @@
     <view class="text-muted tip">热线号码请以官方最新发布为准。</view>
     <view class="call-log" wx:if="{{callLog.length}}" role="note" aria-label="最近拨打记录">
       <view class="cl2-title">🕘 你最近为自己拨打过</view>
-      <view class="cl2-item" wx:for="{{callLog}}" wx:key="time">· {{item.name}}（{{item.number}}）</view>
+      <view class="cl2-item" wx:for="{{callLog}}" wx:key="time">· {{item.name}}（{{item.number}}）· {{item.rel}}</view>
       <view class="cl2-note">能拨出去，已经是很勇敢的一步。</view>
     </view>
   </view>

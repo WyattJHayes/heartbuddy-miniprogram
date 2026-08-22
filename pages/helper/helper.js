@@ -238,7 +238,8 @@ Page({
     // 安全包（升级版）：兼容旧的纯称呼格式
     this.setData({ safeContacts: this.loadSafeContacts() });
     this.setData({ scriptHist: wx.getStorageSync('hb_scriptHist') || [] });
-    this.setData({ callLog: wx.getStorageSync('hb_callLog') || [] });
+    const cl = (wx.getStorageSync('hb_callLog') || []).map((x) => Object.assign({}, x, { rel: this.fmtCallTime(x.time) }));
+    this.setData({ callLog: cl });
   },
 
   // 毕业卡关闭：记住已看，不再打扰
@@ -515,6 +516,14 @@ Page({
     wx.setStorageSync('hb_callLog', log.slice(0, 5));
     this.setData({ callLog: log.slice(0, 5) });
     wx.makePhoneCall({ phoneNumber: number, fail: () => {} });
+  },
+  // 相对时间：刚刚 / N 分钟前 / N 小时前 / N 天前
+  fmtCallTime(ts) {
+    const diff = Date.now() - ts;
+    if (diff < 60000) return '刚刚';
+    if (diff < 3600000) return Math.floor(diff / 60000) + ' 分钟前';
+    if (diff < 86400000) return Math.floor(diff / 3600000) + ' 小时前';
+    return Math.floor(diff / 86400000) + ' 天前';
   },
 
   goBreathe() {

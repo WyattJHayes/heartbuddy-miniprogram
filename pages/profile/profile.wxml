@@ -97,7 +97,10 @@
       <text class="em-go">{{eduDone >= eduTotal ? '全部学完 🎉' : '继续学 ›'}}</text>
     </view>
     <view class="foot-week">
-      <view class="fw-cell {{item ? 'on' : ''}}" wx:for="{{mood7Days}}" wx:key="index" aria-label="{{item ? '今日已记录' : '今日未记录'}}"></view>
+      <view class="fw-col" wx:for="{{mood7Days}}" wx:key="index">
+        <view class="fw-cell {{item ? 'on' : ''}}" aria-label="{{wkLabels[index] === '今' ? '今天' : '星期' + wkLabels[index]}}{{item ? '已记录' : '未记录'}}"></view>
+        <text class="fw-label">{{wkLabels[index]}}</text>
+      </view>
     </view>
     <view class="year-stat" wx:if="{{yearStat}}" role="note" aria-label="年度统计">
       📅 {{yearStat.y}} 年，你已经记下了 <text class="ys-n">{{yearStat.n}}</text> 条心情、覆盖 <text class="ys-n">{{yearStat.days}}</text> 天

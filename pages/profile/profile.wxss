@@ -34,8 +34,8 @@
 .foot-item { flex: 1; text-align: center; }
 .foot-num { display: block; font-size: 34rpx; font-weight: 700; color: #3a4a63; }
 .foot-label { display: block; margin-top: 6rpx; font-size: 22rpx; color: #8a97ad; }
-.foot-week { display: flex; gap: 12rpx; }
-.fw-cell { flex: 1; height: 44rpx; border-radius: 12rpx; background: #f0f2f7; }
+.foot-week { display: flex; }
+.fw-cell { width: 100%; height: 44rpx; border-radius: 12rpx; background: #f0f2f7; }
 .fw-cell.on { background: linear-gradient(135deg, #9dc2ff, #5b8def); }
 
 /* 我的珍藏 */
@@ -98,3 +98,6 @@
 .accompany-milestone { margin: 14rpx 24rpx 0; background: linear-gradient(135deg, #fdf6ea, #fff); border: 1rpx solid #f0dcbc; border-radius: 14rpx; padding: 14rpx 20rpx; font-size: 24rpx; color: #8a6a2f; line-height: 1.7; }
 
 .b-date { font-size: 20rpx; color: #9aa3b8; font-weight: 400; }
+
+.fw-col { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 0 6rpx; }
+.fw-label { font-size: 20rpx; color: #b0b7c8; margin-top: 6rpx; }

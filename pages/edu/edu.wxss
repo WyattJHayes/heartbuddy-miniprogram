@@ -70,3 +70,5 @@ page { background: #F7F8FB; }
 .ls-idx { display: inline-block; font-size: 20rpx; color: #5b8def; background: #eef3ff; border-radius: 8rpx; padding: 2rpx 12rpx; margin-right: 12rpx; vertical-align: middle; }
 
 .gc-review { margin-top: 10rpx; font-size: 22rpx; color: #a05a2c; }
+
+.gc-date { margin-top: 6rpx; font-size: 20rpx; color: #c9a98a; }
