@@ -108,6 +108,18 @@ Page({
       }));
       let histDelta = '';
       let trendText = '';
+      // 首次至今总变化：跨度最长的一句（≥3 次才显示）
+      let longTrend = '';
+      if (list.length >= 3) {
+        const first = list[list.length - 1].total;
+        const cur = list[0].total;
+        if (typeof first === 'number' && typeof cur === 'number' && first !== cur) {
+          const d = cur - first;
+          longTrend = d < 0
+            ? '从第一次自评到现在，总分降了 ' + (-d) + ' 分——这段时间的你，真的在慢慢变轻松 🌱'
+            : '从第一次自评到现在，总分升了 ' + d + ' 分。波动是正常的，也值得多给自己一点关注。';
+        }
+      }
       // 近 3 次得分对比条（最近一次高亮，条高按分数/21 归一）
       const last3 = list.slice(0, 3).reverse(); // 时间正序（最老→最新）
       const maxScore = 21;
@@ -147,7 +159,7 @@ Page({
         const imp = best.filter((o) => o.g > 0).slice(0, 2).map((o) => Q_SHORT[o.q]);
         if (imp.length) improveText = `在改善：${imp.join('、')}`;
       }
-      this.setData({ hist: list, last3Bars, histDelta, trendText, topWeakText, improveText });
+      this.setData({ hist: list, last3Bars, histDelta, trendText, longTrend, topWeakText, improveText });
     } catch (err) {
       console.warn('[assessment] 历史读取失败', err);
     }

@@ -49,6 +49,7 @@ Page({
     dayGoal: DAILY_GOAL_MIN, // 面向 WXML 展示
     echoText: '',          // 完成一次呼吸后的「呼吸回响」
     resumeTip: '',         // 上次练习中断的温柔提示
+    weekVs: '',           // 本周 vs 上周练习次数对比
     heat: [],              // 近 4 周放松热力图
     dayPart: { m: 0, n: 0, e: 0, late: 0 }, // 完成时段分布：早/中/晚/深夜
     timeHint: '',          // 按时段推荐节奏的一句话
@@ -133,6 +134,20 @@ Page({
   },
 
   // 本周已展示（本地周计数，周一重置）
+  // 本周 vs 上周练习次数：一句对比（周一起算）
+  buildWeekVs(wk) {
+    const now = new Date();
+    const t1 = new Date(now.getFullYear(), now.getMonth(), now.getDate() - ((now.getDay() + 6) % 7)).getTime();
+    const t0 = t1 - 7 * 86400000;
+    const cur = (wk || []).filter((t) => t >= t1).length;
+    const prev = (wk || []).filter((t) => t >= t0 && t < t1).length;
+    if (!prev && !cur) return '';
+    if (!prev) return '本周已练 ' + cur + ' 次——上周还是 0，你重新开始了 🌱';
+    if (cur > prev) return '本周 ' + cur + ' 次，比上周（' + prev + '）多了 ' + (cur - prev) + ' 次，越来越会照顾自己';
+    if (cur < prev) return '本周 ' + cur + ' 次，上周是 ' + prev + ' 次——节奏慢下来也没关系';
+    return '本周 ' + cur + ' 次，与上周持平，稳稳的';
+  },
+
   // 完成时段分布：你的放松习惯偏早还是偏晚（本地时间戳统计）
   buildDayPart(wk) {
     const r = { m: 0, n: 0, e: 0, late: 0 };
@@ -218,7 +233,7 @@ Page({
     const mins = (wx.getStorageSync('hb_breatheMins') || 0);
     const wk = this.weekCount();
     const td = this.todayCount();
-    this.setData({ heat: this.buildHeat(wk), dayPart: this.buildDayPart(wk) });
+    this.setData({ heat: this.buildHeat(wk), dayPart: this.buildDayPart(wk), weekVs: this.buildWeekVs(wk) });
     this.setData({ timeHint: this.timeHint() });
     this.setData({ breatheCount: count, breatheMins: mins, breatheWeek: wk, breatheToday: td,
       lastDone: count ? `已累计练习 ${count} 次 · ${mins} 分钟 🌿` : '还没有练习记录，来一次吗？' });
@@ -371,7 +386,7 @@ Page({
         wk.push(Date.now());
         wx.setStorageSync('breatheWeek', wk);
         this.setData({ breatheWeek: this.weekCount(), breatheToday: this.todayCount() });
-        this.setData({ heat: this.buildHeat(wx.getStorageSync('breatheWeek') || []), dayPart: this.buildDayPart(wx.getStorageSync('breatheWeek') || []) });
+        this.setData({ heat: this.buildHeat(wx.getStorageSync('breatheWeek') || []), dayPart: this.buildDayPart(wx.getStorageSync('breatheWeek') || []), weekVs: this.buildWeekVs(wx.getStorageSync('breatheWeek') || []) });
         this.touchDayGoal(5); // 每次约 5 分钟平静 → 累计到今日目标
         if (!wx.getStorageSync('ach_breathe')) wx.setStorageSync('ach_breathe', true);
         if (bc >= 5 && !wx.getStorageSync('ach_breathe5')) wx.setStorageSync('ach_breathe5', true);

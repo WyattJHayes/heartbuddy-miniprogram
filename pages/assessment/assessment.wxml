@@ -60,6 +60,10 @@
     </view>
 
     <!-- 自评历史回顾：最近几次变化 -->
+    <view class="card mt long-trend" wx:if="{{longTrend}}" role="note" aria-label="首次至今总变化">
+      <view class="lt-text">📈 {{longTrend}}</view>
+    </view>
+
     <!-- 近 3 次得分对比：一眼看到自己在往哪走 -->
     <view class="card mt" wx:if="{{last3Bars.length >= 2}}">
       <view class="section-title">近 3 次得分对比</view>

@@ -89,3 +89,6 @@
 .l3-bar.hot { background: linear-gradient(180deg, #7fb2ff, #5b8def); }
 .l3-date { font-size: 20rpx; color: #b0b7c8; margin-top: 8rpx; }
 .l3-tip { margin-top: 14rpx; font-size: 21rpx; text-align: center; }
+
+.card.long-trend { background: #f4faf6; border-color: #d5ecdb; }
+.lt-text { font-size: 25rpx; color: #3f7a52; line-height: 1.7; }

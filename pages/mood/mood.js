@@ -1,6 +1,7 @@
 // pages/mood/mood.js —— 情绪记录 & 可视化
 const app = getApp();
 const { MOOD_META, MOOD_SCORE } = require('../../utils/moodscore');
+const { calcStreak } = require('../../utils/streak');
 const planlib = require('../../utils/plan');
 
 // 一键快速记录（顺序即 UI 顺序）
@@ -53,6 +54,7 @@ Page({
     calDay: null,          // 点选某天后的当日小结
     smalls: [],            // 今日三件小事 [{i,text,done}]
     smallCelebrate: false, // 三件全完成时的庆祝条
+    smallStreak: 0,        // 连续全勾三件小事的天数
     band: [],              // 近 14 天情绪色带 [{d,e,has}]
     todayTip: false,       // 今日未记录心情时的轻提醒（当天一次可关）
     dayNote: '',           // 今日小结（21 点后的收尾）
@@ -209,7 +211,7 @@ Page({
       items = raw.items;
     }
     const all = items.filter((x) => x.done).length === 3 && items.some((x) => x.text);
-    this.setData({ smalls: items.map((x, i) => Object.assign({ i }, x)), smallCelebrate: all });
+    this.setData({ smalls: items.map((x, i) => Object.assign({ i }, x)), smallCelebrate: all, smallStreak: calcStreak(wx.getStorageSync('hb_smallDays') || []) });
   },
 
   // 灵感库：不知道写什么时，一键填入一件可做的小事（按场景分组，只填第一个空格）
@@ -256,6 +258,11 @@ Page({
     const all = items.filter((x) => x.done).length === 3 && items.some((x) => x.text);
     if (all) {
       wx.setStorageSync('ach_small_three', true);
+      // 连续全勾天数：每天全勾 3 件记一天（本地日期队列）
+      const days = wx.getStorageSync('hb_smallDays') || [];
+      const td = new Date().toDateString();
+      if (!days.includes(td)) { days.push(td); wx.setStorageSync('hb_smallDays', days.slice(-400)); }
+      this.setData({ smallStreak: calcStreak(wx.getStorageSync('hb_smallDays') || []) });
       wx.showToast({ title: '三件小事都完成 ✨', icon: 'success' });
     }
     this.setData({ smallCelebrate: all });
