@@ -10,6 +10,7 @@ Page({
     drawMsg: '',        // 抽一张后的缘分提示
     readTotal: 0,       // 卡片阅读总数
     newCount: 0,        // 还没看过的卡片数（NEW 角标）
+    drawOther: '',      // 抽一张后顺带推荐的另一张
     cards: [
       {
         emoji: '🌀',
@@ -252,8 +253,22 @@ Page({
     const cnt = wx.getStorageSync('hb_stDraws') || {};
     cnt[c.title] = (cnt[c.title] || 0) + 1;
     wx.setStorageSync('hb_stDraws', cnt);
-    this.setData({ open: i, drawMsg: cnt[c.title] > 1 ? '第 ' + cnt[c.title] + ' 次抽中「' + c.title + '」——它好像特别懂你。' : '' });
+    // 顺手推荐另一张（不同的卡），点一下直接展开
+    const others = cards.filter((x, j) => j !== i);
+    const other = others[Math.floor(Math.random() * others.length)];
+    this.setData({
+      open: i,
+      drawMsg: cnt[c.title] > 1 ? '第 ' + cnt[c.title] + ' 次抽中「' + c.title + '」——它好像特别懂你。' : '',
+      drawOther: other ? other.title : ''
+    });
     wx.vibrateShort && wx.vibrateShort({ type: 'light' });
+  },
+
+  openDrawOther() {
+    const t = this.data.drawOther;
+    if (!t) return;
+    const i = (this.data.cards || []).findIndex((c) => c.title === t);
+    if (i >= 0) this.setData({ open: i, drawOther: '' });
   },
 
   copyCard(e) {

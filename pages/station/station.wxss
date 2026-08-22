@@ -43,3 +43,5 @@
 .read-total { margin: 16rpx 24rpx 0; font-size: 22rpx; color: #3f6498; background: #f0f7ff; border: 1rpx solid #d3e5fa; border-radius: 12rpx; padding: 10rpx 18rpx; text-align: center; }
 
 .new-badge { display: inline-block; margin-left: 14rpx; font-size: 19rpx; color: #e05656; background: #fdeeee; border: 1rpx solid #f2c9c9; border-radius: 999rpx; padding: 2rpx 12rpx; vertical-align: middle; }
+
+.draw-other { margin-top: 8rpx; font-size: 21rpx; color: #7a5a8c; text-decoration: underline; }

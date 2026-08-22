@@ -74,6 +74,7 @@ Page({
     dayPref: '',           // 记录时段偏好洞察
     monthRun: '',          // 当月最长连续记录段
     intDist: '',           // 近30天强度分布
+    weekFull: '',          // 本周全勤庆祝条（一次性）
     today: (new Date().getMonth() + 1) + '/' + new Date().getDate(), // 色带今天描边用
     noteList: [],          // 小结日记本（筛选后展示）
     noteFilter: 'all',    // 日记本筛选：all | week | month
@@ -735,6 +736,7 @@ Page({
       this.setData({ peakDay: this.buildPeakDay(raw) });
       this.setData({ monthRun: this.buildMonthRun(raw) });
       this.setData({ intDist: this.buildIntDist(raw) });
+      this.setData({ weekFull: this.buildWeekFull(raw) });
       this.setData({ trigMonth: this.buildTrigMonth(raw) });
       this.setData({ trigShift: this.buildTrigShift(raw) });
       this.setData({ dayPref: this.buildDayPref(raw) });
@@ -1084,6 +1086,28 @@ Page({
     const [a, b] = top.split('→');
     const L = (k) => (MOOD_META[k] ? MOOD_META[k].label : k);
     return '本月你最常经历的转变是「' + L(a) + ' → ' + L(b) + '」（' + cnt[top] + ' 次）——情绪会流动，它不会停在一个地方。';
+  },
+
+  // 本周全勤检测：周一至今天每天有记录（今天可暂缺）→ 一次性庆祝
+  buildWeekFull(raw) {
+    const now = new Date();
+    const mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() - ((now.getDay() + 6) % 7));
+    const set = new Set((raw || []).map((m) => new Date(m.createdAt).toDateString()));
+    let hit = 0, total = 0;
+    for (let d = new Date(mon); d <= now; d = new Date(d.getTime() + 86400000)) {
+      total++;
+      if (set.has(d.toDateString())) hit++;
+    }
+    if (total < 5) return ''; // 周初不判定
+    const fullTodayToo = hit === total;
+    const fullBeforeToday = hit === total - 1 && !set.has(now.toDateString());
+    if (!fullTodayToo && !fullBeforeToday) return '';
+    const k = 'hb_weekFull_' + mon.toDateString();
+    if (fullTodayToo && !wx.getStorageSync(k)) {
+      wx.setStorageSync(k, true);
+      return '🎉 本周 ' + total + '/' + total + ' 天全都有记录——完整的一周，你做到了全勤。';
+    }
+    return '';
   },
 
   // 强度分布：近 30 天 1-5 各档占比（观察波动范围，不评判）

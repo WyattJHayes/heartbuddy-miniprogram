@@ -6,7 +6,9 @@
   </view>
 
   <!-- 抽一张的缘分提示（第 N 次抽中） -->
-  <view class="draw-msg" wx:if="{{drawMsg}}" role="note" aria-label="抽中提示">🎴 {{drawMsg}}</view>
+  <view class="draw-msg" wx:if="{{drawMsg}}" role="note" aria-label="抽中提示">🎴 {{drawMsg}}
+    <view class="draw-other" wx:if="{{drawOther}}" bindtap="openDrawOther" role="button" aria-label="展开另一张推荐卡片">也许这张也有用：「{{drawOther}}」›</view>
+  </view>
 
   <!-- 常读提示：你最常翻的一张卡 -->
   <view class="top-read" wx:if="{{topRead}}" role="note" aria-label="最常翻的卡片">

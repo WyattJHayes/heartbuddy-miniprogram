@@ -5,6 +5,7 @@ Page({
   data: {
     loading: true, openid: '', showNotice: false, shared: false, welcomed: true, showLog: false,
     changelog: [
+      { v: '1.9', t: '第 8 节课「和父母好好说话」；小测选项随机打乱；周报含晚间小结；本周全勤庆祝' },
       { v: '1.8', t: '温故正确率/每课重学遍数；呼吸最长连练纪录；充电站 NEW 角标与心情筛选' },
       { v: '1.7', t: '自评近3次对比条与首次至今变化；求助话术9情境；想法盒、学习日历、月度进度条' },
       { v: '1.6', t: '心理小课 7 节 + 温故一题 + 结业卡；小结日记本；情绪词库卡' },
