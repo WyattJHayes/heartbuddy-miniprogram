@@ -26,6 +26,8 @@ Page({
     favs: [],
     favsToday: [],    // 今天珍藏的
     favsEarlier: [],  // 更早珍藏的
+    breatheTotal: 0,  // 呼吸累计（本地计数）
+    scanTotal: 0,    // 扫描累计（本地计数）
     eduDone: 0,          // 心理小课已学节数
     nextBadge: null,     // 下一枚待解锁徽章
     yearStat: null,      // 年度统计（今年记录条数/天数）
@@ -43,6 +45,7 @@ Page({
     this.loadStats();
     this.refreshBadges();
     this.setData({ eduDone: (wx.getStorageSync('hb_eduDone') || []).length });
+    this.setData({ breatheTotal: wx.getStorageSync('breatheCount') || 0, scanTotal: wx.getStorageSync('hb_scanCount') || 0 });
     this.calcYearStat();
     this.setData({ accompanyMilestoneText: this.accompanyMilestone(this.data.accompanyDays || 0) });
     this.refreshFavs();

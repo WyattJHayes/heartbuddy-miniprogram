@@ -9,6 +9,7 @@ Page({
     topRead: null,      // 最常翻的一张卡（≥3 次才显示）
     drawMsg: '',        // 抽一张后的缘分提示
     readTotal: 0,       // 卡片阅读总数
+    newCount: 0,        // 还没看过的卡片数（NEW 角标）
     cards: [
       {
         emoji: '🌀',
@@ -189,6 +190,9 @@ Page({
 
   onShow() {
     if (!this._allCards) this._allCards = this.data.cards.slice();
+    // NEW 标记：没看过的卡（hb_stReads 无记录）计数，展开过自动消
+    const reads0 = wx.getStorageSync('hb_stReads') || {};
+    this.setData({ newCount: (this._allCards || []).filter((c) => !reads0[c.title]).length });
     this.setData({ todayLine: this.getDailyLine() });
     this.applyFavs();
     // 常读 Top1：阅读次数最多的卡（≥3 次才提示）

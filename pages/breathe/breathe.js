@@ -51,6 +51,7 @@ Page({
     resumeTip: '',         // 上次练习中断的温柔提示
     weekVs: '',           // 本周 vs 上周练习次数对比
     stareCount: 0,       // 发呆模式累计次数
+    bestRun: 0,         // 最长连练天数
     heat: [],              // 近 4 周放松热力图
     dayPart: { m: 0, n: 0, e: 0, late: 0 }, // 完成时段分布：早/中/晚/深夜
     timeHint: '',          // 按时段推荐节奏的一句话
@@ -135,6 +136,20 @@ Page({
   },
 
   // 本周已展示（本地周计数，周一重置）
+  // 最长连练：历史上连续有练习的天数最大值（韧性记录）
+  buildBestRun(wk) {
+    const set = new Set((wk || []).map((t) => new Date(t).toDateString()));
+    if (!set.size) return 0;
+    const days = Array.from(set).map((k) => new Date(k + ' 00:00:00').getTime()).sort((a, b) => a - b);
+    let best = 1, cur = 1;
+    const DAY = 86400000;
+    for (let i = 1; i < days.length; i++) {
+      if (days[i] - days[i - 1] === DAY) { cur++; if (cur > best) best = cur; }
+      else cur = 1;
+    }
+    return best;
+  },
+
   // 本周 vs 上周练习次数：一句对比（周一起算）
   buildWeekVs(wk) {
     const now = new Date();
@@ -237,6 +252,7 @@ Page({
     this.setData({ heat: this.buildHeat(wk), dayPart: this.buildDayPart(wk), weekVs: this.buildWeekVs(wk) });
     this.setData({ timeHint: this.timeHint() });
     this.setData({ stareCount: wx.getStorageSync('hb_stareCount') || 0 });
+    this.setData({ bestRun: this.buildBestRun(wx.getStorageSync('breatheWeek') || []) });
     this.setData({ breatheCount: count, breatheMins: mins, breatheWeek: wk, breatheToday: td,
       lastDone: count ? `已累计练习 ${count} 次 · ${mins} 分钟 🌿` : '还没有练习记录，来一次吗？' });
   },

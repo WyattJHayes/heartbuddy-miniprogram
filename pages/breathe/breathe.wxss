@@ -86,3 +86,5 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .week-vs { margin-top: 10rpx; font-size: 22rpx; color: #4e7a58; background: #f6fbf6; border-radius: 10rpx; padding: 10rpx 16rpx; line-height: 1.6; }
 
 .stare-n { display: block; width: 100%; text-align: center; font-size: 21rpx; color: #7a82a0; margin-top: 10rpx; }
+
+.best-run { margin-top: 8rpx; font-size: 22rpx; color: #8a6a2f; background: #fdf6ea; border-radius: 10rpx; padding: 10rpx 16rpx; }
