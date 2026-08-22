@@ -39,6 +39,7 @@ Page({
     scriptSituation: '',
     scriptText: '',
     scriptHist: [],     // 最近复制过的话术（本地 ≤3 条，可再复制）
+    callLog: [],        // 最近拨打过的热线（本地 ≤5 条）
     careGrad: false,            // 四段陪伴计划走完后的「毕业卡」（一次性）
     safeContacts: [],           // 安全包（升级版）：[{n:'妈妈', p:'138…'}]，支持一键拨打
     hotlines,
@@ -232,6 +233,7 @@ Page({
     // 安全包（升级版）：兼容旧的纯称呼格式
     this.setData({ safeContacts: this.loadSafeContacts() });
     this.setData({ scriptHist: wx.getStorageSync('hb_scriptHist') || [] });
+    this.setData({ callLog: wx.getStorageSync('hb_callLog') || [] });
   },
 
   // 毕业卡关闭：记住已看，不再打扰
@@ -443,6 +445,12 @@ Page({
   call(e) {
     const number = e.currentTarget.dataset.number;
     if (!number) return;
+    // 记下拨打史（本地 ≤5 条）：回来后能看到自己曾为自己迈出过这一步
+    const name = e.currentTarget.dataset.name || '热线';
+    const log = wx.getStorageSync('hb_callLog') || [];
+    log.unshift({ name, number, time: Date.now() });
+    wx.setStorageSync('hb_callLog', log.slice(0, 5));
+    this.setData({ callLog: log.slice(0, 5) });
     wx.makePhoneCall({ phoneNumber: number, fail: () => {} });
   },
 

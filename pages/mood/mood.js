@@ -64,6 +64,7 @@ Page({
     yesterdayNote: '',     // 昨天的小结（次日回看）
     nightGreet: '',        // 晚间温柔提醒（21 点后一次性）
     emptyTip: '',          // 连续空白天数提醒（≥3 天，温柔语气）
+    moodShift: '',         // 本月最常见情绪转变链
     noteList: [],          // 小结日记本（全部历史小结，倒序）
     noteBookOpen: false    // 日记本展开状态
   },
@@ -680,6 +681,7 @@ Page({
       this.buildCal(raw);
       this.setData({ monthDays: this.buildMonthDays(raw) });
       this.setData({ trigMonth: this.buildTrigMonth(raw) });
+      this.setData({ moodShift: this.buildMoodShift(raw) });
     } catch (e) {
       console.error('[mood] 读取失败', e);
       this.setData({ loaded: true });
@@ -929,6 +931,33 @@ Page({
   },
 
   // 本月已记录的天数（去重）
+  // 本月情绪转换：同一天内「从 A 变到 B」最常出现的链（如 焦虑→平静）
+  buildMoodShift(raw) {
+    const now = new Date();
+    const y = now.getFullYear(), mo = now.getMonth();
+    const byDay = {};
+    (raw || []).forEach((m) => {
+      const d = new Date(m.createdAt);
+      if (d.getFullYear() !== y || d.getMonth() !== mo) return;
+      const k = d.toDateString();
+      (byDay[k] = byDay[k] || []).push({ t: m.createdAt, mood: m.mood });
+    });
+    const cnt = {};
+    Object.keys(byDay).forEach((k) => {
+      const arr = byDay[k].sort((a, b) => a.t - b.t);
+      for (let i = 1; i < arr.length; i++) {
+        if (arr[i].mood === arr[i - 1].mood) continue;
+        const key = arr[i - 1].mood + '→' + arr[i].mood;
+        cnt[key] = (cnt[key] || 0) + 1;
+      }
+    });
+    const top = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0];
+    if (!top || cnt[top] < 2) return '';
+    const [a, b] = top.split('→');
+    const L = (k) => (MOOD_META[k] ? MOOD_META[k].label : k);
+    return '本月你最常经历的转变是「' + L(a) + ' → ' + L(b) + '」（' + cnt[top] + ' 次）——情绪会流动，它不会停在一个地方。';
+  },
+
   buildMonthDays(raw) {
     const now = new Date();
     const y = now.getFullYear(), mo = now.getMonth();

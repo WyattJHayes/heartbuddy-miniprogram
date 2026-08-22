@@ -11,6 +11,9 @@
   <!-- 晚间温柔提醒（21 点后一次性） -->
   <view class="night-greet" wx:if="{{nightGreet}}" role="note" aria-label="晚间提醒">{{nightGreet}}</view>
 
+  <!-- 本月情绪转换：最常出现的 A→B 变化 -->
+  <view class="shift-card" wx:if="{{moodShift}}" role="note" aria-label="本月情绪转换洞察">{{moodShift}}</view>
+
   <!-- 小结日记本：所有写过的小结，随时翻回去看 -->
   <view class="notebook" wx:if="{{noteList.length}}">
     <view class="nb-head" bindtap="toggleNoteBook" role="button" aria-label="展开或收起小结日记本">

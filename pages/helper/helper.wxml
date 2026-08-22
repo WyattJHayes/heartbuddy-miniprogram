@@ -201,9 +201,14 @@
         <view class="line-name">{{item.name}}</view>
         <view class="line-desc">{{item.free}} · {{item.number}}</view>
       </view>
-      <button class="dial" data-number="{{item.number}}" bindtap="call">拨打</button>
+      <button class="dial" data-number="{{item.number}}" data-name="{{item.name}}" bindtap="call">拨打</button>
     </view>
     <view class="text-muted tip">热线号码请以官方最新发布为准。</view>
+    <view class="call-log" wx:if="{{callLog.length}}" role="note" aria-label="最近拨打记录">
+      <view class="cl2-title">🕘 你最近为自己拨打过</view>
+      <view class="cl2-item" wx:for="{{callLog}}" wx:key="time">· {{item.name}}（{{item.number}}）</view>
+      <view class="cl2-note">能拨出去，已经是很勇敢的一步。</view>
+    </view>
   </view>
 
   <view class="card">

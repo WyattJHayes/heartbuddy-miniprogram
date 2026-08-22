@@ -103,6 +103,8 @@ Page({
     const _h = new Date().getHours();
     this.setData({ isNight: _h >= 22 || _h < 6 });
     this.setData({ persona: wx.getStorageSync('hb_persona') || '', myPhrases: wx.getStorageSync('hb_myPhrases') || [] });
+    const savedDraft = wx.getStorageSync('hb_inputDraft');
+    if (savedDraft && !this.data.input) this.setData({ input: savedDraft });
     // 首次进入且未同意隐私 -> 去欢迎页
     if (!wx.getStorageSync('privacyAgreed')) {
       wx.redirectTo({ url: '/pages/welcome/welcome' });
@@ -677,7 +679,13 @@ Page({
       .exec();
   },
 
-  onInput(e) { this.setData({ input: e.detail.value }); },
+  onInput(e) {
+    this.setData({ input: e.detail.value });
+    // 未发送的草稿先存本地：切走/重启回来还在（发送或清空时移除）
+    const t = e.detail.value;
+    if (t) wx.setStorageSync('hb_inputDraft', t.slice(0, 300));
+    else wx.removeStorageSync('hb_inputDraft');
+  },
 
   // 此刻强度滑条（1–5）：影响下一次情绪记录的 intensity 字段
   onIntensity(e) {
@@ -790,6 +798,7 @@ Page({
   onSend() {
     const text = this.data.input.trim();
     if (!text) return;
+    wx.removeStorageSync('hb_inputDraft');
     this.setData({ input: '' });
     this.send(text);
   },

@@ -137,3 +137,8 @@
 .af-hist { margin-top: 16rpx; }
 .af-hist-t { font-size: 22rpx; color: #9aa3b8; }
 .af-hist-item { margin-top: 10rpx; font-size: 23rpx; color: #5b6b8c; background: #f6f8fc; border-radius: 10rpx; padding: 10rpx 16rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.call-log { margin-top: 16rpx; background: #f6fbf6; border: 1rpx solid #d9ecd9; border-radius: 12rpx; padding: 14rpx 18rpx; }
+.cl2-title { font-size: 23rpx; color: #3f7a52; font-weight: 600; }
+.cl2-item { font-size: 22rpx; color: #5a7a62; margin-top: 8rpx; }
+.cl2-note { margin-top: 10rpx; font-size: 21rpx; color: #8aa692; }
