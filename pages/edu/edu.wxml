@@ -66,7 +66,10 @@
     <view class="nt-title">✏️ 学到这里，写一句给自己的话</view>
     <textarea class="nt-input" value="{{myNote}}" bindinput="onNoteInput" maxlength="60"
               placeholder="例如：原来我不是矫情，只是太累了……" auto-height />
-    <view class="nt-save" bindtap="saveNote" role="button" aria-label="保存学习心得">保存</view>
+    <view class="nt-ops">
+      <view class="nt-save" bindtap="saveNote" role="button" aria-label="保存学习心得">保存</view>
+      <view class="nt-copy" bindtap="copyMyNote" role="button" aria-label="复制学习心得">复制</view>
+    </view>
   </view>
 
   <!-- 结业卡：全部学完显示（本地留念） -->

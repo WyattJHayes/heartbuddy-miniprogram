@@ -26,6 +26,7 @@ Page({
     favs: [],
     eduDone: 0,          // 心理小课已学节数
     nextBadge: null,     // 下一枚待解锁徽章
+    yearStat: null,      // 年度统计（今年记录条数/天数）
     eduTotal: 7,
     showFavs: false,
     favCount: 0,
@@ -40,6 +41,7 @@ Page({
     this.loadStats();
     this.refreshBadges();
     this.setData({ eduDone: (wx.getStorageSync('hb_eduDone') || []).length });
+    this.calcYearStat();
     this.refreshFavs();
   },
 
@@ -342,6 +344,24 @@ Page({
       success: () => wx.showToast({ title: '已保存 · 可以分享啦', icon: 'success' }),
       fail: () => wx.showModal({ title: '保存到相册', content: '需要你允许保存图片到相册，就能把这张卡发给别人。', confirmText: '去设置', success: (r) => r.confirm && wx.openSetting() })
     });
+  },
+
+  // 年度统计：今年记录了多少条、覆盖多少天（数据足迹的年度一栏）
+  async calcYearStat() {
+    try {
+      let openid = app.globalData.openid;
+      if (!openid) openid = await app.login();
+      if (!openid) return;
+      const y = new Date().getFullYear();
+      const start = new Date(y, 0, 1).getTime();
+      const db = wx.cloud.database();
+      const r = await db.collection('moods')
+        .where({ openid, createdAt: db.command.gte(start) })
+        .limit(100).get();
+      const list = r.data || [];
+      const days = new Set(list.map((m) => new Date(m.createdAt).toDateString())).size;
+      this.setData({ yearStat: { n: list.length, days, y } });
+    } catch (e) { /* 静默 */ }
   },
 
   goEdu() { wx.navigateTo({ url: '/pages/edu/edu' }); },

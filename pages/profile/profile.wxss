@@ -91,3 +91,6 @@
 .em-go { margin-left: 16rpx; font-size: 22rpx; color: #5b8def; }
 
 .badge-next { margin-top: 12rpx; font-size: 22rpx; color: #8a93a8; background: #f6f8fc; border-radius: 10rpx; padding: 10rpx 16rpx; line-height: 1.6; }
+
+.year-stat { margin-top: 16rpx; font-size: 24rpx; color: #5b6b8c; background: #f6f8fc; border-radius: 12rpx; padding: 14rpx 18rpx; line-height: 1.7; }
+.ys-n { color: #5b8def; font-weight: 700; }

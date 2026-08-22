@@ -255,6 +255,12 @@ Page({
 
   // 学习心得：一句话（本地保存，写在结业卡上方）
   onNoteInput(e) { this.setData({ myNote: e.detail.value }); },
+  copyMyNote() {
+    const t = (this.data.myNote || '').trim();
+    if (!t) { wx.showToast({ title: '还没写心得', icon: 'none' }); return; }
+    wx.setClipboardData({ data: '我在心语伴心理小课写给自己的一句话：\n「' + t + '」', success: () => wx.showToast({ title: '已复制', icon: 'success' }) });
+  },
+
   saveNote() {
     const t = (this.data.myNote || '').trim();
     wx.setStorageSync('hb_eduNote', t.slice(0, 60));

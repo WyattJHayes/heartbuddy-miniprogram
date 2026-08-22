@@ -96,6 +96,9 @@
     <view class="foot-week">
       <view class="fw-cell {{item ? 'on' : ''}}" wx:for="{{mood7Days}}" wx:key="index" aria-label="{{item ? '今日已记录' : '今日未记录'}}"></view>
     </view>
+    <view class="year-stat" wx:if="{{yearStat}}" role="note" aria-label="年度统计">
+      📅 {{yearStat.y}} 年，你已经记下了 <text class="ys-n">{{yearStat.n}}</text> 条心情、覆盖 <text class="ys-n">{{yearStat.days}}</text> 天
+    </view>
     <view class="text-muted stat-tip">近 7 天：点亮的小格是你记录过心情的日子。</view>
     <view class="foot-extra" wx:if="{{monthAvgInt || topTrig}}">
       <text wx:if="{{monthAvgInt}}">本月平均强度 <text class="foot-hl">{{monthAvgInt}}</text>/5</text>

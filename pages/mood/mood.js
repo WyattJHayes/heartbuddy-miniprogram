@@ -855,6 +855,29 @@ Page({
     this.setData({ calDay: { date: k, total: cell.count, list } });
   },
 
+  // 日历月报：把当月记录概况复制成一段文字（给老师/家长/自己看）
+  copyCalMonth() {
+    const y = this.data.calYear, mo = this.data.calMonth;
+    const days = this.data.monthDays || 0;
+    if (!days) { wx.showToast({ title: '本月还没有记录', icon: 'none' }); return; }
+    const raw = this._raw || [];
+    const cnt = {};
+    raw.forEach((m) => {
+      const d = new Date(m.createdAt);
+      if (d.getFullYear() === y && d.getMonth() + 1 === mo) cnt[m.mood] = (cnt[m.mood] || 0) + 1;
+    });
+    const total = Object.keys(cnt).reduce((a, k) => a + cnt[k], 0);
+    const top = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]).slice(0, 3)
+      .map((k) => (MOOD_META[k] ? MOOD_META[k].label : k) + '×' + cnt[k]).join('、');
+    const txt = [
+      '【' + y + ' 年 ' + mo + ' 月 心情月报 · 心语伴】',
+      '· 记录 ' + total + ' 条心情，覆盖 ' + days + ' 天',
+      '· 出现最多：' + (top || '—'),
+      '· 情绪有起有落都是正常的，记录本身就是在照顾自己。'
+    ].join('\n');
+    wx.setClipboardData({ data: txt, success: () => wx.showToast({ title: '已复制月报', icon: 'success' }) });
+  },
+
   closeCalDay() {
     this.setData({ calDay: null });
   },

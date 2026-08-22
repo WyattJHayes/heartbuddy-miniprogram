@@ -61,3 +61,6 @@ page { background: #F7F8FB; }
 .es-input { flex: 1; font-size: 24rpx; color: #3a465e; }
 .es-clear { font-size: 24rpx; color: #b0b7c8; padding: 4rpx 8rpx; }
 .es-count { font-size: 22rpx; color: #9aa3b8; margin: 8rpx 4rpx 0; }
+
+.nt-ops { margin-top: 14rpx; display: flex; }
+.nt-copy { margin-left: 16rpx; background: #fff; color: #5b8def; border: 1rpx solid #cfe0fb; border-radius: 999rpx; padding: 10rpx 36rpx; font-size: 24rpx; }
