@@ -129,6 +129,7 @@ Page({
     myNote: '',    // 学习心得：一句话写给自己（本地）
     review: null,  // 温故一题：全部学完后随机复习
     reviewOk: 0,   // 温故累计答对题数
+    reviewAll: 0,  // 温故累计答题数（算正确率）
     reviewStreak: 0, // 温故连续天数
     gradDate: '',  // 结业日期（首次全部学完那天）
     studyCal: [],  // 近 14 天学习日历（最右=今天）
@@ -146,6 +147,7 @@ Page({
     this.setData({ myNote: wx.getStorageSync('hb_eduNote') || '' });
     this.setData({ reviewOk: wx.getStorageSync('hb_reviewOk') || 0 });
     this.setData({ reviewStreak: calcStreak(wx.getStorageSync('hb_reviewDays') || []) });
+    this.setData({ reviewAll: wx.getStorageSync('hb_reviewAll') || 0 });
     this.setData({ gradDate: wx.getStorageSync('hb_eduGradDate') || '' });
     // 全部学完：每天打开自动出一道温故题
     if (LESSONS.every((l) => doneMap[l.key])) {
@@ -274,6 +276,12 @@ Page({
     if (ok) {
       // 温故答对计数（本地）：结业卡上展示
       wx.setStorageSync('hb_reviewOk', (wx.getStorageSync('hb_reviewOk') || 0) + 1);
+      wx.setStorageSync('hb_reviewAll', (wx.getStorageSync('hb_reviewAll') || 0) + 1);
+    } else {
+      wx.setStorageSync('hb_reviewAll', (wx.getStorageSync('hb_reviewAll') || 0) + 1);
+    }
+    this.setData({ reviewAll: wx.getStorageSync('hb_reviewAll') || 0 });
+    if (ok) {
       // 温故连续天数：答对当天记一天
       const rd = wx.getStorageSync('hb_reviewDays') || [];
       const td = new Date().toDateString();

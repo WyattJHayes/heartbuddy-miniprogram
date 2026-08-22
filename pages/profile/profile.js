@@ -24,6 +24,8 @@ Page({
     footprintSum: 0,
     // 我的珍藏（聊天长按珍藏，本地保存）
     favs: [],
+    favsToday: [],    // 今天珍藏的
+    favsEarlier: [],  // 更早珍藏的
     eduDone: 0,          // 心理小课已学节数
     nextBadge: null,     // 下一枚待解锁徽章
     yearStat: null,      // 年度统计（今年记录条数/天数）
@@ -99,7 +101,12 @@ Page({
 
   openFavs() {
     const favs = wx.getStorageSync('hb_favs') || [];
-    this.setData({ showFavs: true, favs });
+    // 分组：今天珍藏的 / 更早的（时间字段是 toLocaleString 字符串）
+    const todayStr = new Date().toLocaleDateString('zh-CN');
+    const isToday = (t) => String(t || '').includes(todayStr.slice(0, 4)) && String(t || '').includes((new Date().getMonth() + 1) + '/' + new Date().getDate());
+    const favsToday = favs.filter((f) => isToday(f.time));
+    const favsEarlier = favs.filter((f) => !isToday(f.time));
+    this.setData({ showFavs: true, favs, favsToday, favsEarlier });
   },
 
   closeFavs() { this.setData({ showFavs: false }); },

@@ -188,10 +188,18 @@
     </view>
     <scroll-view scroll-y class="fav-list" aria-label="我的珍藏列表">
       <view class="fav-empty" wx:if="{{!favs.length}}">长按聊天消息即可珍藏一句</view>
-      <view class="fav-item" wx:for="{{favs}}" wx:key="index" bindlongpress="delFav" data-i="{{index}}" aria-label="长按可删除这条珍藏">
-        <view class="fav-time">{{item.role === 'user' ? '我' : '心语伴'}} · {{item.time}}</view>
-        <view class="fav-text" bindtap="copyFav" data-text="{{item.text}}">{{item.text}}</view>
-      </view>
+      <block wx:if="{{favs.length}}">
+        <view class="fav-group-t" wx:if="{{favsToday.length}}">🌤 今天（{{favsToday.length}}）</view>
+        <view class="fav-item" wx:for="{{favsToday}}" wx:key="time" bindlongpress="delFav" data-i="{{favs.indexOf(item)}}" aria-label="长按可删除这条珍藏">
+          <view class="fav-time">{{item.role === 'user' ? '我' : '心语伴'}} · {{item.time}}</view>
+          <view class="fav-text" bindtap="copyFav" data-text="{{item.text}}">{{item.text}}</view>
+        </view>
+        <view class="fav-group-t" wx:if="{{favsEarlier.length}}">🕘 更早（{{favsEarlier.length}}）</view>
+        <view class="fav-item" wx:for="{{favsEarlier}}" wx:key="time" bindlongpress="delFav" data-i="{{favs.indexOf(item)}}" aria-label="长按可删除这条珍藏">
+          <view class="fav-time">{{item.role === 'user' ? '我' : '心语伴'}} · {{item.time}}</view>
+          <view class="fav-text" bindtap="copyFav" data-text="{{item.text}}">{{item.text}}</view>
+        </view>
+      </block>
     </scroll-view>
     <view class="fav-foot" bindtap="closeFavs">关闭</view>
   </view>

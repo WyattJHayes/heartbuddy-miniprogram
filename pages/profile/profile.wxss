@@ -110,3 +110,5 @@
 .mp-fill { height: 100%; background: linear-gradient(90deg, #9dc2ff, #5b8def); border-radius: 99rpx; }
 
 .badge-pct { margin-top: 12rpx; text-align: center; font-size: 24rpx; color: #b07a2a; font-weight: 700; }
+
+.fav-group-t { font-size: 22rpx; color: #9aa3b8; padding: 14rpx 4rpx 6rpx; }

@@ -266,6 +266,16 @@ Page({
     this.setData({ packStat: { n: sc.length, tel: withPhone } });
     this.setData({ scriptHist: wx.getStorageSync('hb_scriptHist') || [] });
     const cl = (wx.getStorageSync('hb_callLog') || []).map((x) => Object.assign({}, x, { rel: this.fmtCallTime(x.time) }));
+    // 热线排序：最近拨过的排前面（更顺手）
+    const called = (wx.getStorageSync('hb_callLog') || []).map((x) => x.number);
+    const hl = hotlines.slice().sort((a, b) => {
+      const ia = called.indexOf(a.number), ib = called.indexOf(b.number);
+      if (ia === -1 && ib === -1) return 0;
+      if (ia === -1) return 1;
+      if (ib === -1) return -1;
+      return ia - ib;
+    });
+    this.setData({ hotlines: hl });
     const CHEERS = [
       '每一次拨出，都是你把自己当回事的证明。',
       '求助不是软弱，是你最清醒的时刻之一。',
