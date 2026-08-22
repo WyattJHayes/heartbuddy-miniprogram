@@ -836,13 +836,25 @@ Page({
   },
   delMyPhrase(e) {
     const t = e.currentTarget.dataset.t;
-    const list = this.data.myPhrases.filter((x) => x !== t);
-    wx.setStorageSync('hb_myPhrases', list);
-    const uses = wx.getStorageSync('hb_phraseUses') || {};
-    delete uses[t];
-    wx.setStorageSync('hb_phraseUses', uses);
-    this.setData({ myPhrases: list, phraseUses: uses });
-    wx.showToast({ title: '已删除', icon: 'none' });
+    wx.showModal({
+      title: '删除这条常用语？',
+      content: '「' + (t.length > 14 ? t.slice(0, 14) + '…' : t) + '」',
+      confirmText: '删除',
+      cancelText: '留下',
+      success: (r) => {
+        if (!r.confirm) return;
+        const list = this.data.myPhrases.filter((x) => x !== t);
+        wx.setStorageSync('hb_myPhrases', list);
+        const uses = wx.getStorageSync('hb_phraseUses') || {};
+        delete uses[t];
+        wx.setStorageSync('hb_phraseUses', uses);
+        const last = wx.getStorageSync('hb_phraseLast') || {};
+        delete last[t];
+        wx.setStorageSync('hb_phraseLast', last);
+        this.setData({ myPhrases: list, phraseUses: uses });
+        wx.showToast({ title: '已删除', icon: 'none' });
+      }
+    });
   },
 
   onSend() {

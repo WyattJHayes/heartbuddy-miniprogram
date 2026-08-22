@@ -149,6 +149,7 @@ Page({
     reviewAll: 0,  // 温故累计答题数（算正确率）
     reviewStreak: 0, // 温故连续天数
     gradDate: '',  // 结业日期（首次全部学完那天）
+    gradSpan: 0,   // 学习总天数（首次学习→结业）
     studyCal: [],  // 近 14 天学习日历（最右=今天）
     lessonCounts: {}, // 每课学习次数
     doneCount: 0,
@@ -167,6 +168,7 @@ Page({
     this.setData({ reviewStreak: calcStreak(wx.getStorageSync('hb_reviewDays') || []) });
     this.setData({ reviewAll: wx.getStorageSync('hb_reviewAll') || 0 });
     this.setData({ gradDate: wx.getStorageSync('hb_eduGradDate') || '' });
+    this.setData({ gradSpan: wx.getStorageSync('hb_eduSpanDays') || 0 });
     // 全部学完：每天打开自动出一道温故题
     if (LESSONS.every((l) => doneMap[l.key])) {
       const rk = 'hb_eduReview_' + new Date().toDateString();
@@ -283,6 +285,13 @@ Page({
       if (LESSONS.every((l) => doneMap2[l.key]) && !wx.getStorageSync('hb_eduGradDate')) {
         const gd = new Date();
         wx.setStorageSync('hb_eduGradDate', gd.getFullYear() + ' 年 ' + (gd.getMonth() + 1) + ' 月 ' + gd.getDate() + ' 日');
+        // 学习总天数：第一次学习日 → 结业日
+        const days = wx.getStorageSync('hb_eduDays') || [];
+        if (days.length >= 2) {
+          const first = new Date(days[0]);
+          const span = Math.max(1, Math.round((gd - first) / 86400000));
+          wx.setStorageSync('hb_eduSpanDays', span);
+        }
       }
     } else {
       this.setData({ answered });

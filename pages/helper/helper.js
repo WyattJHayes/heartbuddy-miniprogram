@@ -48,6 +48,7 @@ Page({
     packStat: null,     // 安全包完整度 {n, tel}
     cheerLine: '',      // 拨打记录上方的鼓励语（轮换）
     safeNotes: {},      // 安全包联系人备注（为什么信任 TA）
+    callTotal: 0,       // 累计拨打次数
     careGrad: false,            // 四段陪伴计划走完后的「毕业卡」（一次性）
     safeContacts: [],           // 安全包（升级版）：[{n:'妈妈', p:'138…'}]，支持一键拨打
     hotlines,
@@ -267,7 +268,8 @@ Page({
     this.setData({ packStat: { n: sc.length, tel: withPhone } });
     this.setData({ safeNotes: wx.getStorageSync('hbSafeNotes') || {} });
     this.setData({ scriptHist: wx.getStorageSync('hb_scriptHist') || [] });
-    const cl = (wx.getStorageSync('hb_callLog') || []).map((x) => Object.assign({}, x, { rel: this.fmtCallTime(x.time) }));
+    const clFull = wx.getStorageSync('hb_callLog') || [];
+    const cl = clFull.map((x) => Object.assign({}, x, { rel: this.fmtCallTime(x.time) }));
     // 热线排序：最近拨过的排前面（更顺手）
     const called = (wx.getStorageSync('hb_callLog') || []).map((x) => x.number);
     const hl = hotlines.slice().sort((a, b) => {
@@ -284,7 +286,7 @@ Page({
       '你做了很多人不敢做的事——为自己开口。',
       '拨出去的那一刻，你就不是一个人在扛了。'
     ];
-    this.setData({ callLog: cl, cheerLine: CHEERS[(cl.length - 1 + CHEERS.length) % CHEERS.length] || CHEERS[0] });
+    this.setData({ callLog: cl, cheerLine: CHEERS[(cl.length - 1 + CHEERS.length) % CHEERS.length] || CHEERS[0], callTotal: wx.getStorageSync('hb_callTotal') || clFull.length });
     if (!this.data.askViews.length) this.setData({ askViews: this.data.askSituations.slice(0, 4) });
   },
 
@@ -585,7 +587,8 @@ Page({
     const log = wx.getStorageSync('hb_callLog') || [];
     log.unshift({ name, number, time: Date.now() });
     wx.setStorageSync('hb_callLog', log.slice(0, 5));
-    this.setData({ callLog: log.slice(0, 5) });
+    wx.setStorageSync('hb_callTotal', (wx.getStorageSync('hb_callTotal') || 0) + 1);
+    this.setData({ callLog: log.slice(0, 5), callTotal: wx.getStorageSync('hb_callTotal') });
     wx.makePhoneCall({ phoneNumber: number, fail: () => {} });
   },
   // 相对时间：刚刚 / N 分钟前 / N 小时前 / N 天前
