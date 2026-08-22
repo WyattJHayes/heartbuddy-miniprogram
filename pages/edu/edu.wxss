@@ -64,3 +64,5 @@ page { background: #F7F8FB; }
 
 .nt-ops { margin-top: 14rpx; display: flex; }
 .nt-copy { margin-left: 16rpx; background: #fff; color: #5b8def; border: 1rpx solid #cfe0fb; border-radius: 999rpx; padding: 10rpx 36rpx; font-size: 24rpx; }
+
+.es-none { margin: 14rpx 4rpx; font-size: 23rpx; color: #9aa3b8; background: #fff; border: 1rpx dashed #dfe4ef; border-radius: 12rpx; padding: 16rpx 20rpx; line-height: 1.7; }

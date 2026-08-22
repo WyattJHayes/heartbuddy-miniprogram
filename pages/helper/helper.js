@@ -246,6 +246,19 @@ Page({
     wx.navigateTo({ url: '/pages/edu/edu' });
   },
 
+  // 长按联系人：清掉存的电话（保留称呼）
+  clearSafePhone(e) {
+    const n = e.currentTarget.dataset.n;
+    if (!n) return;
+    const list = this.loadSafeContacts();
+    const hit = list.find((c) => c.n === n);
+    if (!hit || !hit.p) return;
+    hit.p = '';
+    wx.setStorageSync('hbSafeContacts', list);
+    this.setData({ safeContacts: list });
+    wx.showToast({ title: '已清除 ' + n + ' 的号码', icon: 'none' });
+  },
+
   // 安全包文字版：导出（换手机/怕丢失时先存一份）
   exportSafePack() {
     const list = this.loadSafeContacts();

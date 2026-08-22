@@ -163,8 +163,8 @@
     <view class="urgent-safe" wx:if="{{safeContacts.length}}">
       <text class="urgent-safe-t">🔒 你提前放好的安全包（点名字直接拨）：</text>
       <view class="safe-contacts">
-        <view class="sc-chip" wx:for="{{safeContacts}}" wx:key="n" bindtap="callSafe" data-p="{{item.p}}"
-              role="button" aria-label="拨打{{item.n}}{{item.p ? '的电话' : '，未存电话，去补充'}}">
+        <view class="sc-chip" wx:for="{{safeContacts}}" wx:key="n" bindtap="callSafe" data-p="{{item.p}}" data-n="{{item.n}}"
+              bindlongpress="clearSafePhone" role="button" aria-label="拨打{{item.n}}{{item.p ? '的电话，长按清除号码' : '，未存电话，去补充'}}">
           <text class="sc-name">{{item.n}}</text>
           <text class="sc-act">{{item.p ? '📞' : '＋电话'}}</text>
         </view>

@@ -871,12 +871,19 @@ Page({
     const total = Object.keys(cnt).reduce((a, k) => a + cnt[k], 0);
     const top = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]).slice(0, 3)
       .map((k) => (MOOD_META[k] ? MOOD_META[k].label : k) + '×' + cnt[k]).join('、');
+    // 本月写过的小结篇数（本地小结日记本）
+    const noteMap = wx.getStorageSync('hbDayNote') || {};
+    const noteN = Object.keys(noteMap).filter((k) => {
+      const p = k.split('-').map(Number);
+      return p[0] === y && p[1] === mo;
+    }).length;
     const txt = [
       '【' + y + ' 年 ' + mo + ' 月 心情月报 · 心语伴】',
       '· 记录 ' + total + ' 条心情，覆盖 ' + days + ' 天',
       '· 出现最多：' + (top || '—'),
+      noteN ? '· 晚间小结 ' + noteN + ' 篇' : '',
       '· 情绪有起有落都是正常的，记录本身就是在照顾自己。'
-    ].join('\n');
+    ].filter(Boolean).join('\n');
     wx.setClipboardData({ data: txt, success: () => wx.showToast({ title: '已复制月报', icon: 'success' }) });
   },
 

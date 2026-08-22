@@ -17,6 +17,9 @@
     <text class="es-clear" wx:if="{{kw}}" bindtap="clearSearch" role="button" aria-label="清空搜索">✕</text>
   </view>
   <view class="es-count" wx:if="{{kw}}">找到 {{lessons.length}} 节相关课程</view>
+  <view class="es-none" wx:if="{{kw && !lessons.length}}" role="note" aria-label="没有找到相关课程">
+    没有找到「{{kw}}」相关的课 —— 试试换个词，比如：睡不着、朋友、考试、求助。
+  </view>
 
   <!-- 课程列表 -->
   <view class="lesson" wx:for="{{lessons}}" wx:key="key" role="button" aria-label="展开{{item.title}}">
