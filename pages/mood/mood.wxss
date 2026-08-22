@@ -274,3 +274,5 @@
 
 .band-legend { display: flex; flex-wrap: wrap; margin-top: 10rpx; }
 .bl-item { font-size: 20rpx; color: #9aa3b8; margin-right: 18rpx; }
+
+.trig-shift { margin-top: 12rpx; font-size: 22rpx; color: #7a5a8c; background: #faf6fd; border: 1rpx solid #e8dcf2; border-radius: 10rpx; padding: 10rpx 16rpx; line-height: 1.7; }

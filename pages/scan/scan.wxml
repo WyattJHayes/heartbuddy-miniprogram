@@ -18,6 +18,7 @@
     </view>
     <button class="btn-primary full" bindtap="begin">开始扫描</button>
     <view class="scan-last" wx:if="{{lastDone}}">{{lastDone}}</view>
+    <view class="scan-next" role="button" bindtap="goBreathe" aria-label="再去呼吸页做一轮">🌿 还想再放松？接着做一轮呼吸 →</view>
     <button class="btn-ghost full mt" bindtap="exit">返回</button>
   </view>
 
@@ -60,6 +61,7 @@
       </view>
     </view>
     <button class="btn-primary full" bindtap="again">再来一次</button>
+    <view class="scan-next" role="button" bindtap="goBreathe" aria-label="再去呼吸页做一轮">🌿 还想再放松？接着做一轮呼吸 →</view>
     <button class="btn-ghost full mt" bindtap="exit">返回</button>
   </view>
 </view>

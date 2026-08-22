@@ -343,6 +343,7 @@
       <view class="trig-chip" wx:for="{{trigMonth}}" wx:key="k">{{item.k}} × {{item.c}}</view>
     </view>
     <view class="trig-tip">同一类场面反复出现？可能是个值得留意的小信号 🌱</view>
+    <view class="trig-shift" wx:if="{{trigShift}}" role="note" aria-label="触发来源环比洞察">📉 {{trigShift}}</view>
   </view>
 
   <!-- 最近记录 -->

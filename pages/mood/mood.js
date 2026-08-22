@@ -68,6 +68,7 @@ Page({
     bestStreak: 0,         // 历史最长连续记录天数
     peakDay: '',           // 当月记录最多的一天
     bandLegend: Object.keys(MOOD_META).map((k) => ({ k, e: MOOD_META[k].emoji, l: MOOD_META[k].label })),
+    trigShift: '',         // 触发来源环比洞察
     noteList: [],          // 小结日记本（筛选后展示）
     noteFilter: 'all',    // 日记本筛选：all | week | month
     noteBookOpen: false    // 日记本展开状态
@@ -722,6 +723,7 @@ Page({
       this.setData({ monthDays: this.buildMonthDays(raw) });
       this.setData({ peakDay: this.buildPeakDay(raw) });
       this.setData({ trigMonth: this.buildTrigMonth(raw) });
+      this.setData({ trigShift: this.buildTrigShift(raw) });
       this.setData({ moodShift: this.buildMoodShift(raw) });
     } catch (e) {
       console.error('[mood] 读取失败', e);
@@ -984,6 +986,29 @@ Page({
   },
 
   // 本月触发来源排行（trigger 频率 Top4，读懂「最近一个月情绪从哪里来」）
+  // 触发来源环比：本月 Top1 与上月 Top1 是否同一个（变化也是信号）
+  buildTrigShift(raw) {
+    const now = new Date();
+    const cnt = (m) => {
+      const c = {};
+      (raw || []).forEach((x) => {
+        const d = new Date(x.createdAt);
+        if (d.getFullYear() === now.getFullYear() && d.getMonth() === m) {
+          const k = x.trigger || '其他';
+          c[k] = (c[k] || 0) + 1;
+        }
+      });
+      return c;
+    };
+    const cur = cnt(now.getMonth());
+    const prev = cnt(now.getMonth() - 1);
+    const top = (c) => Object.keys(c).sort((a, b) => c[b] - c[a])[0];
+    const t1 = top(cur), t0 = top(prev);
+    if (!t1 || !t0) return '';
+    if (t1 === t0) return '本月和上月的主要触发都是「' + t1 + '」——它可能是你当前最大的压力源，值得专门想想办法。';
+    return '本月的主要触发变成了「' + t1 + '」（上月是「' + t0 + '」）——压力源在变，你面对的也在变。';
+  },
+
   buildTrigMonth(raw) {
     const now = new Date();
     const y = now.getFullYear(), mo = now.getMonth();

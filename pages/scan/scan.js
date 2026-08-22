@@ -97,6 +97,8 @@ Page({
     this.setData({ feelLog: log.slice(-5).reverse() });
   },
 
+  goBreathe() { wx.navigateTo({ url: '/pages/breathe/breathe' }); },
+
   finish() { this.onFinish() },
 
   async onFinish() {

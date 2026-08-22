@@ -308,6 +308,13 @@ Page({
     wx.setClipboardData({ data: body, success: () => wx.showToast({ title: '已复制这一课', icon: 'success' }) });
   },
 
+  onShareAppMessage() {
+    return {
+      title: this.data.gradDate ? '我在心语伴学完了 7 节心理小课 🎓' : '一起来学几分钟就能用的心理小课 📚',
+      path: '/pages/edu/edu'
+    };
+  },
+
   copyGradText() {
     const d = new Date();
     const t = [
