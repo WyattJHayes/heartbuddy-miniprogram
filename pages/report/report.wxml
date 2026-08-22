@@ -34,6 +34,9 @@
         </view>
         <view class="mix-read" role="note" aria-label="构成说明">{{mixRead}}</view>
       </view>
+      <view class="hero-stats" wx:if="{{weekNotes}}" role="note" aria-label="本周晚间小结篇数" style="margin-top:10rpx;">
+        <view class="hero-item"><text class="num">{{weekNotes}}</text><text class="unit">篇晚间小结</text></view>
+      </view>
       <view wx:if="{{weekAvg}}" class="avg-line">
         <text class="avg-num">本周均值 {{weekAvg}}</text>
         <text wx:if="{{prevAvg}}" class="avg-cmp">上周 {{prevAvg}}</text>

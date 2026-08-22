@@ -337,8 +337,9 @@ Page({
   exportSafePack() {
     const list = this.loadSafeContacts();
     if (!list.length) { wx.showToast({ title: '安全包还是空的', icon: 'none' }); return; }
+    const notes = wx.getStorageSync('hbSafeNotes') || {};
     const txt = ['【我的安全包 · 心语伴】危急时找这些人：',
-      ...list.map((c) => '· ' + c.n + (c.p ? '（' + c.p + '）' : '（未存电话）')),
+      ...list.map((c) => '· ' + c.n + (c.p ? '（' + c.p + '）' : '（未存电话）') + (notes[c.n] ? ' — ' + notes[c.n] : '')),
       '', '全国心理援助热线：12356（24 小时免费）'].join('\n');
     wx.setClipboardData({ data: txt, success: () => wx.showToast({ title: '已复制安全包', icon: 'success' }) });
   },

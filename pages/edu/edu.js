@@ -175,7 +175,7 @@ Page({
     // 续学：自动展开第一节还没学完的课（全部学完则收起）
     let openIdx = -1;
     for (let i = 0; i < LESSONS.length; i++) { if (!doneMap[LESSONS[i].key]) { openIdx = i; break; } }
-    this.setData({ lessons: this.filterLessons(this.data.kw), doneMap, doneCount: Object.keys(doneMap).length, quizOk: {}, answered: {}, streak: calcStreak(wx.getStorageSync('hb_eduDays') || []), openIdx });
+    this.setData({ lessons: this.filterLessons(this.data.kw).map((l) => this.shuffleQuiz(l)), doneMap, doneCount: Object.keys(doneMap).length, quizOk: {}, answered: {}, streak: calcStreak(wx.getStorageSync('hb_eduDays') || []), openIdx });
     // 近 14 天学习日历：学过的天点亮（最右是今天）
     const set = new Set(wx.getStorageSync('hb_eduDays') || []);
     const cal = [];
@@ -187,6 +187,18 @@ Page({
     this.setData({ lessonCounts: wx.getStorageSync('hb_lessonCounts') || {} });
   },
 
+  // 小测选项打乱：防止背位置，真正记住内容（答案下标重映射）
+  shuffleQuiz(l) {
+    if (!l || !l.quiz) return l;
+    const q = l.quiz;
+    const idx = q.opts.map((_, i) => i);
+    for (let i = idx.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const t = idx[i]; idx[i] = idx[j]; idx[j] = t;
+    }
+    return Object.assign({}, l, { quiz: Object.assign({}, q, { opts: idx.map((i) => q.opts[i]), ans: idx.indexOf(q.ans) }) });
+  },
+
   filterLessons(kw) {
     const k = (kw || '').trim().toLowerCase();
     if (!k) return LESSONS;
@@ -194,7 +206,7 @@ Page({
       (l.title + l.intro + l.points.join(' ') + l.do).toLowerCase().includes(k));
   },
   onSearch(e) {
-    this.setData({ kw: e.detail.value, lessons: this.filterLessons(e.detail.value) });
+    this.setData({ kw: e.detail.value, lessons: this.filterLessons(e.detail.value).map((l) => this.shuffleQuiz(l)) });
   },
   clearSearch() { this.setData({ kw: '', lessons: LESSONS }); },
 
@@ -292,7 +304,8 @@ Page({
     const wrong = wx.getStorageSync('hb_eduWrong') || [];
     const pool = wrong.length ? all.filter((l) => wrong.includes(l.key)) : all;
     const use = pool.length ? pool : all;
-    const l = use[Math.floor(Math.random() * use.length)];
+    const l0 = use[Math.floor(Math.random() * use.length)];
+    const l = this.shuffleQuiz(l0);
     this.setData({ review: { key: l.key, icon: l.icon, title: l.title, quiz: l.quiz, picked: -1, ok: false } });
   },
   answerReview(e) {

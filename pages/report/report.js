@@ -242,9 +242,19 @@ Page({
         peace: '本周情绪平稳，这是很棒的自我调节力。'
       };
 
+      // 本周晚间小结篇数（本地小结日记，按日期落在本周一之后）
+      const noteMap = wx.getStorageSync('hbDayNote') || {};
+      const mon0 = new Date(); mon0.setHours(0, 0, 0, 0);
+      mon0.setDate(mon0.getDate() - ((mon0.getDay() + 6) % 7));
+      const weekNotes = Object.keys(noteMap).filter((k) => {
+        const p2 = k.split('-').map(Number);
+        if (p2.length !== 3) return false;
+        return new Date(p2[0], p2[1] - 1, p2[2]) >= mon0;
+      }).length;
       this.setData({
         loaded: true,
         empty: false,
+        weekNotes,
         topEmoji: MOOD_EMOJI[top] || '😌',
         topLabel: MOOD_LABEL[top] || '平稳',
         chatCount: list.length,
