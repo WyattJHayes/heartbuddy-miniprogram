@@ -199,6 +199,11 @@ Page({
     });
   },
 
+  // 求助前先稳一口气：跳到呼吸页（比直接开口更容易）
+  goBreatheFirst() {
+    wx.navigateTo({ url: '/pages/breathe/breathe' });
+  },
+
   onComfort() {
     const P = [
       '抱撑到现在已经很好了，今天也辛苦啦。',

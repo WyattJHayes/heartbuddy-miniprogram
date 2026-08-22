@@ -160,6 +160,9 @@
   <view class="card urgent">
     <view class="section-title">如果你现在很不好</view>
     <view class="urgent-text">请优先联系最近的成年人、老师或直接拨打心理援助热线。你不需要独自承受。</view>
+    <view class="urgent-breathe" bindtap="goBreatheFirst" role="button" aria-label="先做60秒呼吸再求助">
+      🫁 手在抖/心很乱？先做 60 秒呼吸，再开口会更容易 →
+    </view>
     <view class="urgent-safe" wx:if="{{safeContacts.length}}">
       <text class="urgent-safe-t">🔒 你提前放好的安全包（点名字直接拨）：</text>
       <view class="safe-contacts">

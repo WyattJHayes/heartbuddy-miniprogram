@@ -267,3 +267,5 @@
 .nb-filters { display: flex; border-top: 1rpx solid #f0f2f7; padding: 12rpx 22rpx 0; }
 .nb-f { font-size: 22rpx; color: #7a86a6; background: #f1f3f8; border-radius: 999rpx; padding: 6rpx 20rpx; margin-right: 12rpx; }
 .nb-f.on { background: #5b8def; color: #fff; }
+
+.cal-peak { margin-top: 10rpx; font-size: 22rpx; color: #7a5a8c; background: #faf6fd; border: 1rpx solid #e8dcf2; border-radius: 10rpx; padding: 10rpx 16rpx; line-height: 1.7; }

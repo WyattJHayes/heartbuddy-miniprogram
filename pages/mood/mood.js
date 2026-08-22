@@ -66,6 +66,7 @@ Page({
     emptyTip: '',          // 连续空白天数提醒（≥3 天，温柔语气）
     moodShift: '',         // 本月最常见情绪转变链
     bestStreak: 0,         // 历史最长连续记录天数
+    peakDay: '',           // 当月记录最多的一天
     noteList: [],          // 小结日记本（筛选后展示）
     noteFilter: 'all',    // 日记本筛选：all | week | month
     noteBookOpen: false    // 日记本展开状态
@@ -708,6 +709,7 @@ Page({
       this.celebrateMilestone(list.length);
       this.buildCal(raw);
       this.setData({ monthDays: this.buildMonthDays(raw) });
+      this.setData({ peakDay: this.buildPeakDay(raw) });
       this.setData({ trigMonth: this.buildTrigMonth(raw) });
       this.setData({ moodShift: this.buildMoodShift(raw) });
     } catch (e) {
@@ -1014,6 +1016,23 @@ Page({
     const [a, b] = top.split('→');
     const L = (k) => (MOOD_META[k] ? MOOD_META[k].label : k);
     return '本月你最常经历的转变是「' + L(a) + ' → ' + L(b) + '」（' + cnt[top] + ' 次）——情绪会流动，它不会停在一个地方。';
+  },
+
+  // 当月最强情绪日：记录条数最多的那一天（"那一天你特别需要被看见"）
+  buildPeakDay(raw) {
+    const now = new Date();
+    const y = now.getFullYear(), mo = now.getMonth();
+    const cnt = {};
+    (raw || []).forEach((m) => {
+      const d = new Date(m.createdAt);
+      if (d.getFullYear() !== y || d.getMonth() !== mo) return;
+      cnt[d.getDate()] = (cnt[d.getDate()] || 0) + 1;
+    });
+    const days = Object.keys(cnt);
+    if (!days.length) return '';
+    const top = days.sort((a, b) => cnt[b] - cnt[a])[0];
+    if (cnt[top] < 2) return '';
+    return mo + 1 + ' 月 ' + top + ' 日，你记了 ' + cnt[top] + ' 条心情——那天一定很不容易，你都走过来了。';
   },
 
   buildMonthDays(raw) {

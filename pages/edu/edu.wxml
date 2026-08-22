@@ -26,7 +26,7 @@
     <view class="ls-head" bindtap="toggle" data-i="{{index}}">
       <text class="ls-icon">{{item.icon}}</text>
       <view class="ls-main">
-        <view class="ls-title">{{item.title}}</view>
+        <view class="ls-title"><text class="ls-idx">第 {{index + 1}} 节</text>{{item.title}}</view>
         <view class="ls-meta">{{item.mins}} · {{item.intro}}</view>
       </view>
       <text class="ls-flag {{doneMap[item.key] ? 'on' : ''}}">{{doneMap[item.key] ? '已学完' : '▸'}}</text>
