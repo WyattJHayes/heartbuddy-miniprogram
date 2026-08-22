@@ -69,6 +69,7 @@ Page({
     phraseUses: {},      // 常用语使用次数（显示 · N 次）
     sumTip: false,       // 对话小结后：顺手去心情页记一笔的引导条
     nightHint: '',       // 夜间模式开启提示（每天一次）
+    phraseLast: {},     // 常用语最近使用时间（格式化文案）
     quickReplies,
     quickEnglish: [
       "I've been so anxious lately…",
@@ -115,7 +116,10 @@ Page({
     // 常用语按使用次数排序（最常说的排前面）
     const uses0 = wx.getStorageSync('hb_phraseUses') || {};
     const sorted = (wx.getStorageSync('hb_myPhrases') || []).slice().sort((a, b) => (uses0[b] || 0) - (uses0[a] || 0));
-    this.setData({ persona: wx.getStorageSync('hb_persona') || '', myPhrases: sorted });
+    const last0 = wx.getStorageSync('hb_phraseLast') || {};
+    const phraseLast = {};
+    sorted.forEach((t) => { if (last0[t]) phraseLast[t] = this.fmtPhraseLast(last0[t]); });
+    this.setData({ persona: wx.getStorageSync('hb_persona') || '', myPhrases: sorted, phraseLast });
     const savedDraft = wx.getStorageSync('hb_inputDraft');
     if (savedDraft && !this.data.input) this.setData({ input: savedDraft });
     this.setData({ phraseUses: wx.getStorageSync('hb_phraseUses') || {} });
@@ -812,12 +816,23 @@ Page({
   useMyPhrase(e) {
     const t = e.currentTarget.dataset.t;
     if (!t) return;
-    // 记使用次数（本地）
+    // 记使用次数与最近使用时间（本地）
     const uses = wx.getStorageSync('hb_phraseUses') || {};
     uses[t] = (uses[t] || 0) + 1;
     wx.setStorageSync('hb_phraseUses', uses);
+    const last = wx.getStorageSync('hb_phraseLast') || {};
+    last[t] = Date.now();
+    wx.setStorageSync('hb_phraseLast', last);
     this.setData({ phraseUses: uses });
     this.setData({ showQuick: false, input: t });
+  },
+  fmtPhraseLast(ts) {
+    if (!ts) return '';
+    const diff = Date.now() - ts;
+    if (diff < 60000) return '刚刚用过';
+    if (diff < 3600000) return Math.floor(diff / 60000) + ' 分钟前用过';
+    if (diff < 86400000) return Math.floor(diff / 3600000) + ' 小时前用过';
+    return Math.floor(diff / 86400000) + ' 天前用过';
   },
   delMyPhrase(e) {
     const t = e.currentTarget.dataset.t;

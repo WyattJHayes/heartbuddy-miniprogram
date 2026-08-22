@@ -200,3 +200,5 @@
 .input-count { flex-shrink: 0; font-size: 20rpx; color: #b0b7c8; margin-right: 4rpx; }
 
 .night-hint { text-align: center; font-size: 21rpx; color: #7c86a0; margin: 8rpx 0; }
+
+.mp-last { display: block; font-size: 19rpx; color: #b6bdcc; margin-top: 2rpx; }
