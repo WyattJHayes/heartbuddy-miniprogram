@@ -210,6 +210,7 @@
       <view class="scg-line">· 都不是 → 你现在安全，允许自己只是「有点难受」。</view>
     </view>
     <view class="sc-act" bindtap="call" data-number="12356" role="button" aria-label="拨打心理援助热线 12356">📞 无论如何，12356 都能拨</view>
+    <view class="sc-copy" bindtap="copySelfCheck" role="button" aria-label="复制这份自检方法">📋 复制这份自检（发给需要的人）</view>
   </view>
 
   <!-- 帮助朋友：身边的人很难受时，你怎么做（可复制给你自己看） -->

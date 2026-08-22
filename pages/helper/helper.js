@@ -190,6 +190,21 @@ Page({
     wx.setClipboardData({ data: t, success: () => wx.showToast({ title: '已再次复制', icon: 'success' }) });
   },
 
+  copySelfCheck() {
+    const t = [
+      '【此刻安全自检 · 3 个问题】',
+      '① 这几天，有没有出现过「想伤害自己」的念头？',
+      '② 身边（家里/宿舍）现在有没有可以找到的人？',
+      '③ 这个状态，是不是已经持续两周以上？',
+      '',
+      '· 只有 ① 是 → 先做一次呼吸，然后拨 12356，或告诉一个真实的人。',
+      '· ①+③ 都是 → 建议尽快联系心理老师或医院心理科，这不是小题大做。',
+      '· 都不是 → 你现在安全，允许自己只是「有点难受」。',
+      '—— 无论如何，12356（24 小时免费）都能拨。来自「心语伴」'
+    ].join('\n');
+    wx.setClipboardData({ data: t, success: () => wx.showToast({ title: '已复制这份自检', icon: 'success' }) });
+  },
+
   editScript() {
     const t = this.data.scriptText;
     if (!t) return;

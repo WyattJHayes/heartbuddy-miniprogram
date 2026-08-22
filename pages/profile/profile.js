@@ -467,7 +467,8 @@ Page({
               'hbCareGrad', 'hbCareGradSeen', 'hbCarePlan', 'crisisCheck', 'hbSafePackTs', 'hb_breathBroke',
               'hb_eduNote', 'hb_smallDays', 'hb_reviewDays', 'hb_stareCount',
               'hb_lessonCounts', 'hb_scanDoneLog', 'hb_phraseLast', 'hb_reviewAll', 'hbSafeNotes',
-              'hb_eduSpanDays', 'hb_callTotal', 'hb_inputDraft'];
+              'hb_eduSpanDays', 'hb_callTotal', 'hb_inputDraft',
+              'hb_opsCache', 'hb_lastChatTs'];
             keys.forEach((k) => wx.removeStorageSync(k));
             this.setData({ safePeople: '', favCount: 0, eduDone: 0 });
             wx.showToast({ title: '本机记录已清空', icon: 'success' });
