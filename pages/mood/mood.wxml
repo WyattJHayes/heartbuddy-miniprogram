@@ -327,6 +327,7 @@
       </view>
     </view>
     <view class="cal-tip" wx:if="{{!calDay}}">点亮小表情的日期是记录过心情的日子，点一下看当日小结</view>
+    <view class="cal-peak" wx:if="{{monthRun && !calDay}}" role="note" aria-label="当月最长连续记录">🏅 {{monthRun}}</view>
     <view class="cal-peak" wx:if="{{peakDay && !calDay}}" role="note" aria-label="当月记录最多的一天">📌 {{peakDay}}</view>
     <view class="cal-month-copy" bindtap="copyCalMonth" wx:if="{{!calDay && monthDays}}" role="button" aria-label="复制本月月报">📋 复制本月月报（{{monthDays}} 天有记录）</view>
     <view class="cal-day-info" wx:if="{{calDay}}">

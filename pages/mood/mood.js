@@ -72,6 +72,7 @@ Page({
     bandLegend: Object.keys(MOOD_META).map((k) => ({ k, e: MOOD_META[k].emoji, l: MOOD_META[k].label })),
     trigShift: '',         // 触发来源环比洞察
     dayPref: '',           // 记录时段偏好洞察
+    monthRun: '',          // 当月最长连续记录段
     today: (new Date().getMonth() + 1) + '/' + new Date().getDate(), // 色带今天描边用
     noteList: [],          // 小结日记本（筛选后展示）
     noteFilter: 'all',    // 日记本筛选：all | week | month
@@ -731,6 +732,7 @@ Page({
       this.buildCal(raw);
       this.setData({ monthDays: this.buildMonthDays(raw) });
       this.setData({ peakDay: this.buildPeakDay(raw) });
+      this.setData({ monthRun: this.buildMonthRun(raw) });
       this.setData({ trigMonth: this.buildTrigMonth(raw) });
       this.setData({ trigShift: this.buildTrigShift(raw) });
       this.setData({ dayPref: this.buildDayPref(raw) });
@@ -1079,6 +1081,24 @@ Page({
     const [a, b] = top.split('→');
     const L = (k) => (MOOD_META[k] ? MOOD_META[k].label : k);
     return '本月你最常经历的转变是「' + L(a) + ' → ' + L(b) + '」（' + cnt[top] + ' 次）——情绪会流动，它不会停在一个地方。';
+  },
+
+  // 当月最长连续记录段：连着记了多少天（历史韧性）
+  buildMonthRun(raw) {
+    const now = new Date();
+    const y = now.getFullYear(), mo = now.getMonth();
+    const set = new Set();
+    (raw || []).forEach((m) => {
+      const d = new Date(m.createdAt);
+      if (d.getFullYear() === y && d.getMonth() === mo) set.add(d.getDate());
+    });
+    let best = 0, cur = 0;
+    const dim = new Date(y, mo + 1, 0).getDate();
+    for (let i = 1; i <= dim; i++) {
+      if (set.has(i)) { cur++; if (cur > best) best = cur; }
+      else cur = 0;
+    }
+    return best >= 3 ? '本月最长连续记录 ' + best + ' 天——那几天你没有放开自己。' : '';
   },
 
   // 当月最强情绪日：记录条数最多的那一天（"那一天你特别需要被看见"）
