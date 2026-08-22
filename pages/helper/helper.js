@@ -40,6 +40,7 @@ Page({
     scriptText: '',
     scriptHist: [],     // 最近复制过的话术（本地 ≤3 条，可再复制）
     callLog: [],        // 最近拨打过的热线（本地 ≤5 条）
+    packStale: false,   // 安全包超过 30 天未更新
     careGrad: false,            // 四段陪伴计划走完后的「毕业卡」（一次性）
     safeContacts: [],           // 安全包（升级版）：[{n:'妈妈', p:'138…'}]，支持一键拨打
     hotlines,
@@ -237,6 +238,9 @@ Page({
     this.setData({ careGrad: !!(grad && !wx.getStorageSync('hbCareGradSeen')) });
     // 安全包（升级版）：兼容旧的纯称呼格式
     this.setData({ safeContacts: this.loadSafeContacts() });
+    // 安全包保鲜提醒：超过 30 天没更新，提示确认一遍（电话可能变了）
+    const packTs = wx.getStorageSync('hbSafePackTs') || 0;
+    this.setData({ packStale: packTs && (Date.now() - packTs > 30 * 86400000) });
     this.setData({ scriptHist: wx.getStorageSync('hb_scriptHist') || [] });
     const cl = (wx.getStorageSync('hb_callLog') || []).map((x) => Object.assign({}, x, { rel: this.fmtCallTime(x.time) }));
     this.setData({ callLog: cl });
@@ -288,6 +292,7 @@ Page({
         }).filter((c) => c.n).slice(0, 3);
         if (!contacts.length) { wx.showToast({ title: '剪贴板里没找到安全包', icon: 'none' }); return; }
         wx.setStorageSync('hbSafeContacts', contacts);
+        wx.setStorageSync('hbSafePackTs', Date.now());
         wx.setStorageSync('hbSafePeople', contacts.map((c) => c.n).join('、'));
         this.setData({ safeContacts: contacts, safePeople: contacts.map((c) => c.n).join('、') });
         wx.showToast({ title: '已恢复 ' + contacts.length + ' 位联系人', icon: 'success' });
@@ -326,6 +331,7 @@ Page({
             return { n: x.slice(0, i).trim(), p: x.slice(i + 1).replace(/\D/g, '') };
           }).filter((c) => c.n);
         wx.setStorageSync('hbSafeContacts', contacts);
+        wx.setStorageSync('hbSafePackTs', Date.now());
         wx.setStorageSync('hbSafePeople', contacts.map((c) => c.n).join('、')); // 兼容旧字段展示
         this.setData({ safePeople: contacts.map((c) => c.n).join('、'), safeContacts: contacts });
         wx.showToast({ title: contacts.length ? '已收进安全包 🌱' : '已清空', icon: 'none' });

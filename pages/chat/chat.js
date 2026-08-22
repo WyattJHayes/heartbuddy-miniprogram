@@ -380,8 +380,8 @@ Page({
     const content = item.content || '';
     const isUser = item.role === 'user';
     const itemList = isUser
-      ? ['复制这条消息', '引用这条', '珍藏（存到我的珍藏）', '撤回我的这条']
-      : ['复制一句话', '引用这句话', '珍藏（存到我的珍藏）', '换个说法（重新生成）'];
+      ? ['复制这条消息', '引用这条', '珍藏（存到我的珍藏）', '存进想法盒（7 天后回看）', '撤回我的这条']
+      : ['复制一句话', '引用这句话', '珍藏（存到我的珍藏）', '存进想法盒（7 天后回看）', '换个说法（重新生成）'];
     wx.showActionSheet({
       itemList,
       success: (r) => {
@@ -404,14 +404,20 @@ Page({
           wx.setStorageSync('hb_favs', favs);
           wx.showToast({ title: '已珍藏 💛', icon: 'none' });
           if (!wx.getStorageSync('ach_fav')) wx.setStorageSync('ach_fav', true);
-        } else if (isUser && r.tapIndex === 3) {
+        } else if (r.tapIndex === 3) {
+          // 存进想法盒：与心情页「想法小剧场」同源，7 天后回看
+          const box = wx.getStorageSync('hbThoughtBox') || [];
+          box.push({ text: content.slice(0, 60), t: Date.now(), from: 'chat' });
+          wx.setStorageSync('hbThoughtBox', box.slice(-10));
+          wx.showToast({ title: '已存进想法盒，7 天后见 📮', icon: 'none' });
+        } else if (isUser && r.tapIndex === 4) {
           // 撤回我的这条：删掉该消息及紧随其后的 AI 回复，本地即时生效
           const messages = this.data.messages.slice();
           const drop = messages[idx + 1] && messages[idx + 1].role === 'ai' ? 2 : 1;
           messages.splice(idx, drop);
           this.setData({ messages });
           wx.showToast({ title: '已撤回这条', icon: 'none' });
-        } else if (!isUser && r.tapIndex === 3) {
+        } else if (!isUser && r.tapIndex === 4) {
           // 换个说法：把这条 AI 回复重生成（用同样的上文重新问一次）
           this.reask(idx);
         }

@@ -175,6 +175,9 @@
       </view>
       <view class="urgent-edit" bindtap="editSafePeople">改</view>
     </view>
+    <view class="pack-stale" wx:if="{{packStale}}" bindtap="editSafePeople" role="button" aria-label="安全包很久没更新，去确认一遍">
+      ⏰ 安全包超过 30 天没更新了—— tap 确认一遍，电话和称呼还都对吗？
+    </view>
     <view class="safe-pack-ops" wx:if="{{safeContacts.length}}">
       <text class="spo-btn" bindtap="exportSafePack" role="button" aria-label="复制安全包文字版">📤 导出文字版</text>
       <text class="spo-btn ghost" bindtap="importSafePack" role="button" aria-label="从剪贴板恢复安全包">📥 从剪贴板恢复</text>

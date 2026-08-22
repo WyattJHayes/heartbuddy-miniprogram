@@ -219,6 +219,13 @@ Page({
         this.setData({ doneMap, doneCount: Object.keys(doneMap).length });
       }
       wx.showToast({ title: '答对了，已点亮 🎉', icon: 'success' });
+      // 自动展开下一节未学完的课（学完最后一节则收起，专注温故）
+      const lessons = this.data.lessons;
+      let next = -1;
+      for (let j = 0; j < lessons.length; j++) {
+        if (!this.data.doneMap[lessons[j].key]) { next = j; break; }
+      }
+      if (next >= 0) setTimeout(() => this.setData({ openIdx: next }), 900);
       // 全部学完的这一天 = 结业日（只记一次）
       const doneMap2 = this.data.doneMap;
       if (LESSONS.every((l) => doneMap2[l.key]) && !wx.getStorageSync('hb_eduGradDate')) {
