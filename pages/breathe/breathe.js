@@ -251,7 +251,7 @@ Page({
     const wk = this.weekCount();
     const td = this.todayCount();
     this.setData({ heat: this.buildHeat(wk), dayPart: this.buildDayPart(wk), weekVs: this.buildWeekVs(wk) });
-    this.setData({ timeHint: this.timeHint() });
+    this.setData({ timeHint: this.data.presetKey === 'stare' ? '🌑 什么都不用做——就发会儿呆，这也是练习' : this.timeHint() });
     this.setData({ stareCount: wx.getStorageSync('hb_stareCount') || 0 });
     this.setData({ bestRun: this.buildBestRun(wx.getStorageSync('breatheWeek') || []) });
     this.setData({ breatheCount: count, breatheMins: mins, breatheWeek: wk, breatheToday: td,
@@ -279,6 +279,7 @@ Page({
     }
     this._rounds = p.rounds;
     this.setData({ presetKey: key, phase: 'ready', round: 0, ball: 150, trans: 0.5,
+      timeHint: key === 'stare' ? '🌑 什么都不用做——就发会儿呆，这也是练习' : this.timeHint(),
       text: '已选「' + p.label + '」，点击开始' + (key === 'stare' ? '安安静静待着' : '跟着节奏呼吸'), calm: false });
   },
 

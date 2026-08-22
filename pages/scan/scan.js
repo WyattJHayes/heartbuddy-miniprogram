@@ -114,6 +114,9 @@ Page({
   // 身体感受一词：扫完身体，给现在的自己一个描述（本地留最近 5 次）
   pickFeel(e) {
     const w = e.currentTarget.dataset.w;
+    // 温柔回执：身体的话被记下来了
+    const ACK = { '松了': '松了就好，身体谢谢你 🌿', '暖了': '暖意留住了 🌤', '还有点紧': '还紧着也没关系，已经比刚才好一点', '没什么感觉': '没感觉也是一种答案，不急', '困了': '困了就去睡，晚安 🌙', '轻了': '变轻了！这是身体的反馈', '稳了': '稳稳的，很好', '累了': '累了就早点休息，你辛苦了' };
+    if (ACK[w]) wx.showToast({ title: ACK[w], icon: 'none' });
     this.setData({ feelPicked: w });
     const log = wx.getStorageSync('hb_scanFeel') || [];
     log.push({ w, t: Date.now() });

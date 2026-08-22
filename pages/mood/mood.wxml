@@ -211,6 +211,7 @@
     </block>
     <block wx:elif="{{!letterReady}}">
       <view class="letter-due">这封信已在路上，还有 <text class="letter-num">{{7 - letterDue}}</text> 天可以打开。</view>
+      <view class="letter-soon" wx:if="{{letterDue === 6}}" role="note" aria-label="明天可以拆信提醒">📮 明天就能拆开看了——今晚早点睡，把惊喜留给明天的自己。</view>
       <button class="btn-ghost letter-ghost" bindtap="openLetter" disabled>还不能拆开哦</button>
     </block>
     <block wx:else>
