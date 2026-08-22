@@ -66,7 +66,8 @@ Page({
     emptyTip: '',          // 连续空白天数提醒（≥3 天，温柔语气）
     moodShift: '',         // 本月最常见情绪转变链
     bestStreak: 0,         // 历史最长连续记录天数
-    noteList: [],          // 小结日记本（全部历史小结，倒序）
+    noteList: [],          // 小结日记本（筛选后展示）
+    noteFilter: 'all',    // 日记本筛选：all | week | month
     noteBookOpen: false    // 日记本展开状态
   },
 
@@ -104,13 +105,7 @@ Page({
     // 21 点后、今天还没写小结、且今天记录过心情时才提示（避免打扰）
     const want = !mine && d.getHours() >= 21;
     // 小结日记本：全部按日期倒序（最多 30 条）
-    const noteList = Object.keys(map)
-      .sort((a, b) => {
-        const pa = a.split('-').map(Number), pb = b.split('-').map(Number);
-        return (pb[0] - pa[0]) || (pb[1] - pa[1]) || (pb[2] - pa[2]);
-      })
-      .slice(0, 30)
-      .map((k) => ({ date: k, text: map[k] }));
+    const noteList = this.filterNotes(map, this.data.noteFilter || 'all');
     this.setData({ todayNote: mine, yesterdayNote: ynote, dayNoteBanner: want, noteList });
   },
   onDayNoteInput(e) { this.setData({ dayNoteInput: e.detail.value }); },
@@ -129,6 +124,37 @@ Page({
   },
   // 21 点后的轻提醒：点一下 → 弹出书写
   toggleNoteBook() { this.setData({ noteBookOpen: !this.data.noteBookOpen }); },
+  setNoteFilter(e) {
+    const f = e.currentTarget.dataset.f;
+    if (!['all', 'week', 'month'].includes(f)) return;
+    const map = wx.getStorageSync('hbDayNote') || {};
+    this.setData({ noteFilter: f, noteList: this.filterNotes(map, f) });
+  },
+  // 日记本筛选：全部 / 本周(近7天) / 本月
+  filterNotes(map, f) {
+    const DAY = 86400000;
+    const now = new Date();
+    const weekAgo = new Date(now.getTime() - 7 * DAY);
+    let list = Object.keys(map)
+      .sort((a, b) => {
+        const pa = a.split('-').map(Number), pb = b.split('-').map(Number);
+        return (pb[0] - pa[0]) || (pb[1] - pa[1]) || (pb[2] - pa[2]);
+      })
+      .map((k) => ({ date: k, text: map[k] }));
+    if (f === 'week') {
+      list = list.filter((x) => {
+        const p = x.date.split('-').map(Number);
+        const d = new Date(p[0], p[1] - 1, p[2]);
+        return d >= weekAgo;
+      });
+    } else if (f === 'month') {
+      list = list.filter((x) => {
+        const p = x.date.split('-').map(Number);
+        return p[0] === now.getFullYear() && p[1] === now.getMonth() + 1;
+      });
+    }
+    return list.slice(0, 30);
+  },
   copyNoteItem(e) {
     const t = e.currentTarget.dataset.t;
     if (!t) return;

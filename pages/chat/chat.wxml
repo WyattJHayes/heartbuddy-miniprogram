@@ -152,6 +152,7 @@ module.exports = { divider: divider };
     </view>
     <view class="chat-stats" wx:if="{{chatStat}}" role="note" aria-label="本轮聊天计数">{{chatStat}} · 谢谢你信任我</view>
     <view class="input-row">
+      <view class="quick-toggle" bindtap="toggleNight" role="button" aria-label="切换夜间柔光模式">{{isNight ? '☀️' : '🌙'}}</view>
       <view class="quick-toggle {{showQuick ? 'on' : ''}}" bindtap="toggleQuick">⚡快捷</view>
       <view class="reset-chat" bindtap="copyTalk" role="button" aria-label="复制这段对话留档">📋</view>
       <view class="reset-chat" bindtap="summarize" role="button" aria-label="总结这轮对话">✨</view>

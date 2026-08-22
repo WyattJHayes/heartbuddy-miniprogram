@@ -72,6 +72,11 @@
         <view class="cb-op" bindtap="adjCustom" data-f="out" data-d="1" role="button" aria-label="呼气增加 1 秒">＋</view>
       </view>
     </view>
+    <view class="cb-presets">
+      <text class="cb-quick" bindtap="fillCustom" data-k="relax" role="button" aria-label="填入4-4-6放松节奏">放松 4-4-6</text>
+      <text class="cb-quick" bindtap="fillCustom" data-k="sleep" role="button" aria-label="填入4-7-8助眠节奏">助眠 4-7-8</text>
+      <text class="cb-quick" bindtap="fillCustom" data-k="long" role="button" aria-label="填入6-2-6长呼节奏">长呼 6-2-6</text>
+    </view>
     <view class="cb-tip">呼气比吸气长一点，会更放松（经典 4-7-8 助眠）。</view>
   </view>
 

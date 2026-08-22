@@ -77,3 +77,6 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 
 .dp-row { display: flex; flex-wrap: wrap; margin-top: 12rpx; }
 .dp-chip { font-size: 21rpx; color: #5b6b8c; background: #f1f4fa; border-radius: 999rpx; padding: 6rpx 18rpx; margin: 0 10rpx 8rpx 0; }
+
+.cb-presets { display: flex; margin-top: 12rpx; }
+.cb-quick { font-size: 22rpx; color: #4a6ab0; background: #eef3fc; border: 1rpx solid #d8e4f8; border-radius: 999rpx; padding: 8rpx 20rpx; margin-right: 12rpx; }

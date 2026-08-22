@@ -100,9 +100,11 @@ Page({
   },
 
   async onLoad() {
-    // 夜间柔和模式：22:00-6:00 自动切换深色氛围（仅陪伴页，减少刺眼）
+    // 夜间柔和模式：手动开关优先（hb_nightManual: 'on'|'off'），否则 22:00-6:00 自动
+    const manual = wx.getStorageSync('hb_nightManual');
     const _h = new Date().getHours();
-    this.setData({ isNight: _h >= 22 || _h < 6 });
+    const auto = _h >= 22 || _h < 6;
+    this.setData({ isNight: manual === 'on' ? true : manual === 'off' ? false : auto });
     this.setData({ persona: wx.getStorageSync('hb_persona') || '', myPhrases: wx.getStorageSync('hb_myPhrases') || [] });
     const savedDraft = wx.getStorageSync('hb_inputDraft');
     if (savedDraft && !this.data.input) this.setData({ input: savedDraft });
@@ -679,6 +681,13 @@ Page({
         if (rect) wx.pageScrollTo({ scrollTop: rect.top + rect.height, duration: 200 });
       })
       .exec();
+  },
+
+  toggleNight() {
+    const next = !this.data.isNight;
+    wx.setStorageSync('hb_nightManual', next ? 'on' : 'off');
+    this.setData({ isNight: next });
+    wx.showToast({ title: next ? '已切到夜间柔光 🌙' : '已切回日间模式', icon: 'none' });
   },
 
   onInput(e) {

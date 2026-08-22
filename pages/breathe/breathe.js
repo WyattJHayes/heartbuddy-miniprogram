@@ -286,6 +286,27 @@ Page({
   },
 
   // 结束后把此刻情绪记成「平静」（与心情页/曲线无缝联动）
+  // 经典节奏一键填入自定义（4-7-8 助眠 / 4-4-6 放松 / 6-2-6 长呼）
+  fillCustom(e) {
+    const k = e.currentTarget.dataset.k;
+    const presets = {
+      relax: { in: 4, hold: 4, out: 6 },
+      sleep: { in: 4, hold: 7, out: 8 },
+      long:  { in: 6, hold: 2, out: 6 }
+    };
+    const c = presets[k];
+    if (!c) return;
+    wx.setStorageSync(CUSTOM_STORE, c);
+    const rounds = buildCustomRounds(c);
+    const patch = { customCfg: c, presets: PRESETS.concat([{ key: 'custom', label: customLabel(c), rounds }]) };
+    if (this.data.presetKey === 'custom' && !this._running) {
+      this._rounds = rounds;
+      patch.text = '已填入「' + customLabel(c) + '」，点击开始';
+    }
+    this.setData(patch);
+    wx.showToast({ title: '已填入 ' + c.in + '-' + c.hold + '-' + c.out, icon: 'none' });
+  },
+
   // 自定义节奏：吸/屏/呼 秒数加减（2-10 秒，屏气可为 0）
   adjCustom(e) {
     const f = e.currentTarget.dataset.f;

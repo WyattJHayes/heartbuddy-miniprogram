@@ -17,8 +17,13 @@
   <!-- 小结日记本：所有写过的小结，随时翻回去看 -->
   <view class="notebook" wx:if="{{noteList.length}}">
     <view class="nb-head" bindtap="toggleNoteBook" role="button" aria-label="展开或收起小结日记本">
-      <text class="nb-title">📖 小结日记本 · {{noteList.length}} 篇</text>
+      <text class="nb-title">📖 小结日记本 · {{noteList.length}} 篇{{noteFilter === 'week' ? '（近 7 天）' : noteFilter === 'month' ? '（本月）' : ''}}</text>
       <text class="nb-arrow {{noteBookOpen ? 'up' : ''}}">▾</text>
+    </view>
+    <view class="nb-filters" wx:if="{{noteBookOpen}}">
+      <text class="nb-f {{noteFilter === 'week' ? 'on' : ''}}" data-f="week" bindtap="setNoteFilter" role="button" aria-label="只看近7天小结">近 7 天</text>
+      <text class="nb-f {{noteFilter === 'month' ? 'on' : ''}}" data-f="month" bindtap="setNoteFilter" role="button" aria-label="只看本月小结">本月</text>
+      <text class="nb-f {{noteFilter === 'all' ? 'on' : ''}}" data-f="all" bindtap="setNoteFilter" role="button" aria-label="看全部小结">全部</text>
     </view>
     <view class="nb-list" wx:if="{{noteBookOpen}}">
       <view class="nb-item" wx:for="{{noteList}}" wx:key="date">

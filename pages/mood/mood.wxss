@@ -263,3 +263,7 @@
 .cal-month-copy { display: inline-block; margin-top: 10rpx; font-size: 22rpx; color: #5b8def; background: #eef3ff; border-radius: 999rpx; padding: 8rpx 22rpx; }
 
 .band-best { font-size: 20rpx; color: #b07a2a; margin-left: 14rpx; background: #fdf6ea; border-radius: 999rpx; padding: 2rpx 12rpx; }
+
+.nb-filters { display: flex; border-top: 1rpx solid #f0f2f7; padding: 12rpx 22rpx 0; }
+.nb-f { font-size: 22rpx; color: #7a86a6; background: #f1f3f8; border-radius: 999rpx; padding: 6rpx 20rpx; margin-right: 12rpx; }
+.nb-f.on { background: #5b8def; color: #fff; }
