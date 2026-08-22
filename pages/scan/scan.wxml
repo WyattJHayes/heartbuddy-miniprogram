@@ -56,6 +56,7 @@
               data-w="{{item}}" bindtap="pickFeel" role="button" aria-label="{{item}}">{{item}}</view>
       </view>
       <view class="fp-top" wx:if="{{feelTop}}" role="note" aria-label="身体感受最常反馈">🫧 {{feelTop}}</view>
+      <view class="fp-slot" wx:if="{{avgSlot}}" role="note" aria-label="最常完成时段">🕰 {{avgSlot}}</view>
       <view class="fp-log" wx:if="{{feelLog.length}}" role="note" aria-label="最近几次身体感受">
         <text class="fp-log-t">最近几次：</text>
         <text class="fp-log-i" wx:for="{{feelLog}}" wx:key="t">{{item.w}}</text>

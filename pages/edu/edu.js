@@ -133,6 +133,7 @@ Page({
     reviewStreak: 0, // 温故连续天数
     gradDate: '',  // 结业日期（首次全部学完那天）
     studyCal: [],  // 近 14 天学习日历（最右=今天）
+    lessonCounts: {}, // 每课学习次数
     doneCount: 0,
     total: LESSONS.length,
     openIdx: -1,
@@ -166,6 +167,7 @@ Page({
       cal.push({ on: set.has(d.toDateString()), today: i === 0 });
     }
     this.setData({ studyCal: cal });
+    this.setData({ lessonCounts: wx.getStorageSync('hb_lessonCounts') || {} });
   },
 
   filterLessons(kw) {
@@ -208,6 +210,13 @@ Page({
     const t = new Date().toDateString();
     if (!days.includes(t)) { days.push(t); wx.setStorageSync('hb_eduDays', days.slice(-400)); }
   },
+  // 每课学习次数：答对即学过一次（重学也计）
+  bumpLessonCount(key) {
+    const c = wx.getStorageSync('hb_lessonCounts') || {};
+    c[key] = (c[key] || 0) + 1;
+    wx.setStorageSync('hb_lessonCounts', c);
+    this.setData({ lessonCounts: c });
+  },
 
   // 随堂小测：答对自动点亮「学完」
   answerQuiz(e) {
@@ -216,6 +225,7 @@ Page({
     const l = this.data.lessons[i];
     if (!l || !l.quiz) return;
     this.markStudyToday();
+    this.bumpLessonCount(l.key);
     const key = l.key;
     const answered = this.data.answered;
     answered[key] = o;

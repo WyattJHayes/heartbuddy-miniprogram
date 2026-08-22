@@ -23,6 +23,7 @@ Page({
     feelLog: [],     // 最近几次身体感受回看
     timeTip: '',     // 按时段的扫描建议（一句话）
     feelTop: '',     // 身体感受词 Top1
+    avgSlot: '',     // 平均完成时段
     idx: 0,
     left: 30,
     pct: 0,
@@ -44,6 +45,21 @@ Page({
     log0.forEach((x) => { cnt[x.w] = (cnt[x.w] || 0) + 1; });
     const top = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0];
     this.setData({ feelTop: (top && cnt[top] >= 3) ? '身体最常的反馈是「' + top + '」（' + cnt[top] + ' 次）——身体在学会放松。' : '' });
+    // 平均完成时段：最近完成时刻的众数（扫描记录 hb_scanDone 存的是最后一次，改为队列统计）
+    const doneTs = wx.getStorageSync('hb_scanDoneLog') || [];
+    if (doneTs.length >= 3) {
+      const buckets = { morning: 0, noon: 0, evening: 0, night: 0 };
+      doneTs.forEach((t) => {
+        const h = new Date(t).getHours();
+        if (h < 6) buckets.night++;
+        else if (h < 12) buckets.morning++;
+        else if (h < 18) buckets.noon++;
+        else buckets.evening++;
+      });
+      const nm = { morning: '早晨', noon: '白天', evening: '晚上', night: '深夜' };
+      const bk = Object.keys(buckets).sort((a, b) => buckets[b] - buckets[a])[0];
+      this.setData({ avgSlot: '你最常在' + nm[bk] + '完成扫描（' + doneTs.length + ' 次里 ' + buckets[bk] + ' 次）——那个时段最需要安静。' });
+    }
     const h = new Date().getHours();
     this.setData({ timeTip: h >= 22 || h < 6 ? '🌙 睡前扫描：躺着做就行，允许自己中途睡着' : h < 11 ? '☀️ 早晨扫描：帮身体先「醒」过来，再开始一天' : h < 18 ? '🌤 白天扫描：课间/午休 5 分钟，给紧绷的地方松绑' : '🌇 傍晚扫描：把今天的压力从身体里扫出去' });
   },
@@ -113,6 +129,9 @@ Page({
     this.setData({ phase: 'done', feelPicked: '' });
     const ts = Date.now();
     wx.setStorageSync('hb_scanDone', ts);
+    const dl = wx.getStorageSync('hb_scanDoneLog') || [];
+    dl.push(ts);
+    wx.setStorageSync('hb_scanDoneLog', dl.slice(-30));
     this.setData({ lastDone: `上次完成：${this.fmtDate(ts)}` });
     // 记一次「平静」情绪，进入心情曲线
     try {

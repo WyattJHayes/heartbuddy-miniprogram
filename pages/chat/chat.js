@@ -68,6 +68,7 @@ Page({
     myPhrases: [],       // 我的常用语（本地最多 5 条，长按删除）
     phraseUses: {},      // 常用语使用次数（显示 · N 次）
     sumTip: false,       // 对话小结后：顺手去心情页记一笔的引导条
+    nightHint: '',       // 夜间模式开启提示（每天一次）
     quickReplies,
     quickEnglish: [
       "I've been so anxious lately…",
@@ -104,7 +105,13 @@ Page({
     const manual = wx.getStorageSync('hb_nightManual');
     const _h = new Date().getHours();
     const auto = _h >= 22 || _h < 6;
-    this.setData({ isNight: manual === 'on' ? true : manual === 'off' ? false : auto });
+    const isNight = manual === 'on' ? true : manual === 'off' ? false : auto;
+    this.setData({ isNight });
+    // 夜间提示语：自动进入夜间模式的那天，轻提一句护眼（每天最多一次）
+    if (isNight && auto && manual !== 'off') {
+      const k = 'hb_nightHint_' + new Date().toDateString();
+      if (!wx.getStorageSync(k)) { wx.setStorageSync(k, true); this.setData({ nightHint: '🌙 已为你调成夜间柔光——眼睛舒服一点，心也是。' }); }
+    }
     // 常用语按使用次数排序（最常说的排前面）
     const uses0 = wx.getStorageSync('hb_phraseUses') || {};
     const sorted = (wx.getStorageSync('hb_myPhrases') || []).slice().sort((a, b) => (uses0[b] || 0) - (uses0[a] || 0));

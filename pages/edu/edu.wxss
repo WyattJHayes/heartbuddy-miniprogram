@@ -79,3 +79,5 @@ page { background: #F7F8FB; }
 .sc-cell.on { background: #7fb2ff; }
 .sc-cell.today { border: 2rpx solid #5b8def; }
 .sc-sub { margin-top: 8rpx; font-size: 20rpx; color: #9aa3b8; }
+
+.ls-cnt { font-size: 20rpx; color: #c08a3e; margin-left: 10rpx; font-weight: 400; }
