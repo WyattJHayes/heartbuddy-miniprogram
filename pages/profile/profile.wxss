@@ -94,3 +94,5 @@
 
 .year-stat { margin-top: 16rpx; font-size: 24rpx; color: #5b6b8c; background: #f6f8fc; border-radius: 12rpx; padding: 14rpx 18rpx; line-height: 1.7; }
 .ys-n { color: #5b8def; font-weight: 700; }
+
+.accompany-milestone { margin: 14rpx 24rpx 0; background: linear-gradient(135deg, #fdf6ea, #fff); border: 1rpx solid #f0dcbc; border-radius: 14rpx; padding: 14rpx 20rpx; font-size: 24rpx; color: #8a6a2f; line-height: 1.7; }

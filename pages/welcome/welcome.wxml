@@ -34,6 +34,7 @@
     <view class="fg-item"><text class="fg-num">2</text>顺手记心情 → 「心情」页一键记录，周报自动生成</view>
     <view class="fg-item"><text class="fg-num">3</text>难受的时候 → 「求助」页有热线，「充电站」有能马上做的事</view>
     <view class="fg-ok" bindtap="hideGuide" role="button" aria-label="收起新手引导">知道了，开始吧</view>
+    <view class="fg-skip" bindtap="hideGuide" role="button" aria-label="直接进入须知">跳过引导，直接开始 ›</view>
   </view>
 
   <!-- 更新日志：最新版本做了什么（可折叠） -->

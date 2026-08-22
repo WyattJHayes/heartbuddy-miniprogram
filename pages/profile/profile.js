@@ -42,7 +42,18 @@ Page({
     this.refreshBadges();
     this.setData({ eduDone: (wx.getStorageSync('hb_eduDone') || []).length });
     this.calcYearStat();
+    this.setData({ accompanyMilestoneText: this.accompanyMilestone(this.data.accompanyDays || 0) });
     this.refreshFavs();
+  },
+
+  // 陪伴天数里程碑：7/30/100/365 天给一句专属文案
+  accompanyMilestone(days) {
+    if (!days) return '';
+    if (days >= 365) return '一年了。谢谢你把这一年的心事，也分了我一份。';
+    if (days >= 100) return '100 天了——你是最长情的照顾自己的人。';
+    if (days >= 30) return '满一个月啦。习惯不是坚持出来的，是温柔地重复出来的。';
+    if (days >= 7) return '一周了，你已经证明了「我可以一直陪自己」。';
+    return '';
   },
 
   // 按时段的轻问候（每 2 小时换一次文案）

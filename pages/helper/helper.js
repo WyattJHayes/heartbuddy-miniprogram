@@ -246,6 +246,36 @@ Page({
     wx.navigateTo({ url: '/pages/edu/edu' });
   },
 
+  // 安全包文字版：导出（换手机/怕丢失时先存一份）
+  exportSafePack() {
+    const list = this.loadSafeContacts();
+    if (!list.length) { wx.showToast({ title: '安全包还是空的', icon: 'none' }); return; }
+    const txt = ['【我的安全包 · 心语伴】危急时找这些人：',
+      ...list.map((c) => '· ' + c.n + (c.p ? '（' + c.p + '）' : '（未存电话）')),
+      '', '全国心理援助热线：12356（24 小时免费）'].join('\n');
+    wx.setClipboardData({ data: txt, success: () => wx.showToast({ title: '已复制安全包', icon: 'success' }) });
+  },
+  // 安全包恢复：粘贴文字版一键导回（格式同导出）
+  importSafePack() {
+    wx.getClipboardData({
+      success: (r) => {
+        const raw = r.data || '';
+        const lines = raw.split('\n').filter((l) => l.trim().startsWith('·'));
+        const contacts = lines.map((l) => {
+          const body = l.replace('·', '').trim();
+          const m = body.match(/^(.+?)[（(]([0-9*#]+)?[）)]?$/);
+          if (m) return { n: m[1].trim(), p: (m[2] || '').replace(/\D/g, '') };
+          return { n: body, p: '' };
+        }).filter((c) => c.n).slice(0, 3);
+        if (!contacts.length) { wx.showToast({ title: '剪贴板里没找到安全包', icon: 'none' }); return; }
+        wx.setStorageSync('hbSafeContacts', contacts);
+        wx.setStorageSync('hbSafePeople', contacts.map((c) => c.n).join('、'));
+        this.setData({ safeContacts: contacts, safePeople: contacts.map((c) => c.n).join('、') });
+        wx.showToast({ title: '已恢复 ' + contacts.length + ' 位联系人', icon: 'success' });
+      }
+    });
+  },
+
   // 安全包解析：新格式「称呼:电话」、旧格式「称呼」都兼容
   loadSafeContacts() {
     const rawNew = wx.getStorageSync('hbSafeContacts');

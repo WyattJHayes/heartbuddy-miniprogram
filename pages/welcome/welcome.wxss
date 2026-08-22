@@ -57,3 +57,5 @@
 .cl-item { display: flex; margin-top: 10rpx; }
 .cl-v { flex-shrink: 0; width: 90rpx; font-size: 22rpx; color: #5b8def; font-weight: 700; }
 .cl-t { flex: 1; font-size: 22rpx; color: #5b6b8c; line-height: 1.7; }
+
+.fg-skip { margin-top: 12rpx; text-align: center; font-size: 22rpx; color: #9aa3b8; }

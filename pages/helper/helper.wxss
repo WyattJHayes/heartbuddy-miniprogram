@@ -142,3 +142,7 @@
 .cl2-title { font-size: 23rpx; color: #3f7a52; font-weight: 600; }
 .cl2-item { font-size: 22rpx; color: #5a7a62; margin-top: 8rpx; }
 .cl2-note { margin-top: 10rpx; font-size: 21rpx; color: #8aa692; }
+
+.safe-pack-ops { display: flex; margin-top: 10rpx; }
+.spo-btn { font-size: 22rpx; color: #3f5c95; background: #f2f7ff; border: 1rpx solid #d9e6fb; border-radius: 999rpx; padding: 8rpx 22rpx; margin-right: 14rpx; }
+.spo-btn.ghost { background: #fff; }

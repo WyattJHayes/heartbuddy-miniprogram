@@ -171,6 +171,10 @@
       </view>
       <view class="urgent-edit" bindtap="editSafePeople">改</view>
     </view>
+    <view class="safe-pack-ops" wx:if="{{safeContacts.length}}">
+      <text class="spo-btn" bindtap="exportSafePack" role="button" aria-label="复制安全包文字版">📤 导出文字版</text>
+      <text class="spo-btn ghost" bindtap="importSafePack" role="button" aria-label="从剪贴板恢复安全包">📥 从剪贴板恢复</text>
+    </view>
     <view class="urgent-safe-set" wx:else bindtap="editSafePeople" role="button" aria-label="准备好自己的安全包">🛟 提前放好「我信任的人」 → 危急时心语会第一个提醒你找他们</view>
     <view class="urgent-num">
       <view class="urgent-num-main">
