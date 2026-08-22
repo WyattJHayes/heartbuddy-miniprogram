@@ -47,6 +47,7 @@ Page({
     packStale: false,   // 安全包超过 30 天未更新
     packStat: null,     // 安全包完整度 {n, tel}
     cheerLine: '',      // 拨打记录上方的鼓励语（轮换）
+    safeNotes: {},      // 安全包联系人备注（为什么信任 TA）
     careGrad: false,            // 四段陪伴计划走完后的「毕业卡」（一次性）
     safeContacts: [],           // 安全包（升级版）：[{n:'妈妈', p:'138…'}]，支持一键拨打
     hotlines,
@@ -264,6 +265,7 @@ Page({
     const sc = this.loadSafeContacts();
     const withPhone = sc.filter((c) => c.p).length;
     this.setData({ packStat: { n: sc.length, tel: withPhone } });
+    this.setData({ safeNotes: wx.getStorageSync('hbSafeNotes') || {} });
     this.setData({ scriptHist: wx.getStorageSync('hb_scriptHist') || [] });
     const cl = (wx.getStorageSync('hb_callLog') || []).map((x) => Object.assign({}, x, { rel: this.fmtCallTime(x.time) }));
     // 热线排序：最近拨过的排前面（更顺手）
@@ -294,6 +296,28 @@ Page({
   goEduFromGrad() {
     this.closeGrad();
     wx.navigateTo({ url: '/pages/edu/edu' });
+  },
+
+  // 长按联系人（两指/双击不便）：改用「备注」按钮入口写在完整度行下
+  editSafeNote(e) {
+    const n = e.currentTarget.dataset.n;
+    if (!n) return;
+    const notes = wx.getStorageSync('hbSafeNotes') || {};
+    wx.showModal({
+      title: '为什么信任 ' + n + '？',
+      content: notes[n] || '',
+      editable: true,
+      placeholderText: '例如：她总是先听我说完',
+      confirmText: '保存',
+      success: (r) => {
+        if (!r.confirm) return;
+        const t = (r.content || '').trim().slice(0, 30);
+        if (t) notes[n] = t; else delete notes[n];
+        wx.setStorageSync('hbSafeNotes', notes);
+        this.setData({ safeNotes: notes });
+        wx.showToast({ title: t ? '已记下这份信任 🌱' : '已清空备注', icon: 'none' });
+      }
+    });
   },
 
   // 长按联系人：清掉存的电话（保留称呼）

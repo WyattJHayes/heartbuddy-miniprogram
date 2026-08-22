@@ -73,6 +73,7 @@ Page({
     trigShift: '',         // 触发来源环比洞察
     dayPref: '',           // 记录时段偏好洞察
     monthRun: '',          // 当月最长连续记录段
+    intDist: '',           // 近30天强度分布
     today: (new Date().getMonth() + 1) + '/' + new Date().getDate(), // 色带今天描边用
     noteList: [],          // 小结日记本（筛选后展示）
     noteFilter: 'all',    // 日记本筛选：all | week | month
@@ -733,6 +734,7 @@ Page({
       this.setData({ monthDays: this.buildMonthDays(raw) });
       this.setData({ peakDay: this.buildPeakDay(raw) });
       this.setData({ monthRun: this.buildMonthRun(raw) });
+      this.setData({ intDist: this.buildIntDist(raw) });
       this.setData({ trigMonth: this.buildTrigMonth(raw) });
       this.setData({ trigShift: this.buildTrigShift(raw) });
       this.setData({ dayPref: this.buildDayPref(raw) });
@@ -1082,6 +1084,22 @@ Page({
     const [a, b] = top.split('→');
     const L = (k) => (MOOD_META[k] ? MOOD_META[k].label : k);
     return '本月你最常经历的转变是「' + L(a) + ' → ' + L(b) + '」（' + cnt[top] + ' 次）——情绪会流动，它不会停在一个地方。';
+  },
+
+  // 强度分布：近 30 天 1-5 各档占比（观察波动范围，不评判）
+  buildIntDist(raw) {
+    const since = Date.now() - 30 * 86400000;
+    const cnt = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    let n = 0;
+    (raw || []).forEach((m) => {
+      if (m.createdAt < since) return;
+      const v = m.intensity;
+      if (typeof v === 'number' && v >= 1 && v <= 5) { cnt[v]++; n++; }
+    });
+    if (n < 5) return '';
+    const parts = [1, 2, 3, 4, 5].map((k) => k + '分·' + Math.round(cnt[k] / n * 100) + '%').join(' / ');
+    const hi = cnt[4] + cnt[5];
+    return '近 30 天强度分布：' + parts + (hi / n > 0.5 ? '——高强度记录偏多，记得多给自己缓冲。' : '——大部分在可承受范围里。');
   },
 
   // 当月最长连续记录段：连着记了多少天（历史韧性）

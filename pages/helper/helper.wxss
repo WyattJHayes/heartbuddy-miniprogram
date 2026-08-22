@@ -158,3 +158,5 @@
 .ps-stat { font-size: 20rpx; color: #7a8db0; font-weight: 400; margin-left: 8rpx; }
 
 .cl2-cheer { font-size: 21rpx; color: #6f9a7d; margin-top: 6rpx; font-style: italic; }
+
+.sc-note { font-size: 20rpx; color: #8aa692; font-weight: 400; }
