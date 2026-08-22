@@ -405,8 +405,9 @@ Page({
       '· 已陪伴我 ' + (this.data.accompanyDays || 0) + ' 天，连续打卡 ' + (this.data.streakDays || 0) + ' 天',
       '· 累计心情记录 ' + (this.data.footprintSum || 0) + ' 条',
       '· 呼吸练习 ' + br + ' 次 · 身体扫描 ' + sc + ' 次',
-      '· 心理小课已学 ' + edu + '/7 节',
+      '· 心理小课已学 ' + edu + '/7 节' + (wx.getStorageSync('hb_eduGradDate') ? '（已结业）' : ''),
       '· 聊天倾诉 ' + (this.data.chatTotal || 0) + ' 次 · 自评 ' + (this.data.assessTotal || 0) + ' 次',
+      '· 课后温故答对 ' + (wx.getStorageSync('hb_reviewOk') || 0) + ' 题',
       '',
       '记录本身就是一种照顾，我会继续好好对自己。'
     ].join('\n');

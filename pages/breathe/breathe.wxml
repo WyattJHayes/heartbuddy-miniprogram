@@ -96,10 +96,10 @@
   </view>
 
   <button wx:if="{{phase === 'done'}}" class="ghost" bindtap="recordCalm" loading="{{calm && false}}">
-    {{calm ? '已记下此刻' : '记下此刻的平静心情'}}
+    {{calm ? '已记下此刻' : (presetKey === 'stare' ? '把这段安静记下来' : '记下此刻的平静心情')}}
   </button>
   <!-- 记录前可选平静强度（1-5） -->
-  <view class="calm-pick" wx:if="{{phase === 'done' && !calm}}">
+  <view class="calm-pick" wx:if="{{phase === 'done' && !calm && presetKey !== 'stare'}}">
     <view class="cp-label">此刻的平静程度？</view>
     <view class="cp-row">
       <view class="cp-chip {{calmInt === item ? 'on' : ''}}" wx:for="{{[1,2,3,4,5]}}" wx:key="*this"
