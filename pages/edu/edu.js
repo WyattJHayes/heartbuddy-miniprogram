@@ -150,6 +150,7 @@ Page({
     reviewStreak: 0, // 温故连续天数
     gradDate: '',  // 结业日期（首次全部学完那天）
     gradSpan: 0,   // 学习总天数（首次学习→结业）
+    studyDays: 0,  // 一共在多少天打开过小课
     studyCal: [],  // 近 14 天学习日历（最右=今天）
     lessonCounts: {}, // 每课学习次数
     doneCount: 0,
@@ -169,6 +170,7 @@ Page({
     this.setData({ reviewAll: wx.getStorageSync('hb_reviewAll') || 0 });
     this.setData({ gradDate: wx.getStorageSync('hb_eduGradDate') || '' });
     this.setData({ gradSpan: wx.getStorageSync('hb_eduSpanDays') || 0 });
+    this.setData({ studyDays: (wx.getStorageSync('hb_eduDays') || []).length });
     // 全部学完：每天打开自动出一道温故题
     if (LESSONS.every((l) => doneMap[l.key])) {
       const rk = 'hb_eduReview_' + new Date().toDateString();

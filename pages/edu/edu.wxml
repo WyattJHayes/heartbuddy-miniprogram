@@ -86,6 +86,7 @@
     <view class="gc-text">这 7 节课不会让情绪永远不来，但会让它来的时候，你知道该怎么办。</view>
     <view class="gc-review" wx:if="{{reviewOk}}">🔁 课后温故累计答对 {{reviewOk}}/{{reviewAll}} 题（{{reviewAll ? Math.round(reviewOk / reviewAll * 100) : 0}}%）<text wx:if="{{reviewStreak >= 2}}"> · 连续 {{reviewStreak}} 天 🔥</text></view>
     <view class="gc-date" wx:if="{{gradDate}}">结业于 {{gradDate}}<text wx:if="{{gradSpan}}"> · 一共学了 {{gradSpan}} 天</text></view>
+    <view class="gc-days" wx:if="{{studyDays}}">👣 学习足迹：{{studyDays}} 个学习日</view>
     <view class="gc-btn" bindtap="copyGradText" role="button" aria-label="复制结业词留念">复制我的结业词</view>
   </view>
 

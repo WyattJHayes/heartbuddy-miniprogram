@@ -92,6 +92,7 @@
       <view class="foot-item"><text class="foot-num">{{streakDays}}</text><text class="foot-label">连续打卡(天)</text></view>
       <view class="foot-item"><text class="foot-num">{{firstDate}}</text><text class="foot-label">最早记录</text></view>
       <view class="foot-item"><text class="foot-num">{{breatheTotal + scanTotal}}</text><text class="foot-label">呼吸+扫描</text></view>
+      <view class="foot-item"><text class="foot-num">{{noteTotal}}</text><text class="foot-label">晚间小结</text></view>
     </view>
     <view class="month-prog" wx:if="{{monthProg}}" role="note" aria-label="本月记录进度">
       <text class="mp-t">📅 本月已记录 {{monthProg.done}}/{{monthProg.passed}} 天</text>
