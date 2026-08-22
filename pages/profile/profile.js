@@ -31,7 +31,7 @@ Page({
     eduDone: 0,          // 心理小课已学节数
     nextBadge: null,     // 下一枚待解锁徽章
     yearStat: null,      // 年度统计（今年记录条数/天数）
-    eduTotal: 7,
+    eduTotal: 8,
     showFavs: false,
     favCount: 0,
     // 日签问候
@@ -189,12 +189,12 @@ Page({
       { key: 'ach_scan3',       emoji: '🌌', title: '内在旅行者', desc: '身体扫描累计 3 次' },
       { key: 'ach_small3',      emoji: '💫', title: '微小而确定', desc: '一天之内做完 3 件小事' },
       { key: 'ach_share',       emoji: '🤝', title: '陪伴他人', desc: '把心语伴分享出去' },
-      { key: 'ach_edu',        emoji: '🎓', title: '小学霸', desc: '学完心理小课全部 7 节' },
+      { key: 'ach_edu',        emoji: '🎓', title: '小学霸', desc: '学完心理小课全部 8 节' },
       { key: 'ach_askOut',     emoji: '📣', title: '开口一次', desc: '复制求助话术发给信任的人' },
       { key: 'ach_edu7',       emoji: '🔥', title: '连学 7 天', desc: '心理小课连续学习一周' }
     ];
     const scanCount = wx.getStorageSync('hb_scanCount') || 0;
-    const eduDone = (wx.getStorageSync('hb_eduDone') || []).length >= 7;
+    const eduDone = (wx.getStorageSync('hb_eduDone') || []).length >= 8;
     if (eduDone) wx.setStorageSync('ach_edu', true);
     if (calcStreak(wx.getStorageSync('hb_eduDays') || []) >= 7) wx.setStorageSync('ach_edu7', true);
     const badgeDates = wx.getStorageSync('hb_badgeDates') || {};
@@ -429,7 +429,7 @@ Page({
       '· 已陪伴我 ' + (this.data.accompanyDays || 0) + ' 天，连续打卡 ' + (this.data.streakDays || 0) + ' 天',
       '· 累计心情记录 ' + (this.data.footprintSum || 0) + ' 条',
       '· 呼吸练习 ' + br + ' 次 · 身体扫描 ' + sc + ' 次',
-      '· 心理小课已学 ' + edu + '/7 节' + (wx.getStorageSync('hb_eduGradDate') ? '（已结业）' : ''),
+      '· 心理小课已学 ' + edu + '/8 节' + (wx.getStorageSync('hb_eduGradDate') ? '（已结业）' : ''),
       '· 聊天倾诉 ' + (this.data.chatTotal || 0) + ' 次 · 自评 ' + (this.data.assessTotal || 0) + ' 次',
       '· 课后温故答对 ' + (wx.getStorageSync('hb_reviewOk') || 0) + ' 题',
       '',

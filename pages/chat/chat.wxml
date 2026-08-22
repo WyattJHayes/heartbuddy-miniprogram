@@ -186,7 +186,7 @@ module.exports = { divider: divider };
         <view class="quick-panel-item" wx:for="{{quickReplies}}" wx:key="*this"
               data-text="{{item}}" bindtap="onQuick">{{item}}</view>
       </view>
-      <view class="quick-panel-title mine">⭐ 我的常用语 · 一键说出口
+      <view class="quick-panel-title mine">⭐ 我的常用语 · 已存 {{myPhrases.length}}/5
         <text class="mp-add" bindtap="addMyPhrase" role="button" aria-label="添加常用语">＋ 添加</text>
       </view>
       <view class="quick-panel-list" wx:if="{{myPhrases.length}}">
