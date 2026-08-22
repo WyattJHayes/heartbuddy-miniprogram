@@ -52,6 +52,7 @@ Page({
     weekVs: '',           // 本周 vs 上周练习次数对比
     stareCount: 0,       // 发呆模式累计次数
     bestRun: 0,         // 最长连练天数
+    sleepHint: '',      // 深夜完成后的「去睡吧」提示
     heat: [],              // 近 4 周放松热力图
     dayPart: { m: 0, n: 0, e: 0, late: 0 }, // 完成时段分布：早/中/晚/深夜
     timeHint: '',          // 按时段推荐节奏的一句话
@@ -318,6 +319,9 @@ Page({
         // 发呆结束：直接给一句专属回响（也算一次放松）
         if (this.data.presetKey === 'stare') {
           this.setData({ echoText: this.nextEcho() });
+        // 深夜完成：练完就去睡（22 点后追加一句）
+        const hh = new Date().getHours();
+        if (hh >= 22 || hh < 5) this.setData({ sleepHint: '练完了就去睡吧——现在的任务只有一个：休息。' });
           const sn = (wx.getStorageSync('hb_stareCount') || 0) + 1;
           wx.setStorageSync('hb_stareCount', sn);
           this.setData({ stareCount: sn });
@@ -415,6 +419,9 @@ Page({
         const wkN = this.weekCount();
         wx.showToast({ title: '已记下 · 本周第 ' + wkN + ' 次', icon: 'success' });
         this.setData({ echoText: this.nextEcho() });
+        // 深夜完成：练完就去睡（22 点后追加一句）
+        const hh = new Date().getHours();
+        if (hh >= 22 || hh < 5) this.setData({ sleepHint: '练完了就去睡吧——现在的任务只有一个：休息。' });
       } catch (e) {
         console.error('[breathe] 记录失败', e);
         wx.showToast({ title: '记录失败（可稍后在心情页补记）', icon: 'none' });

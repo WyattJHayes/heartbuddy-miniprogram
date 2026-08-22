@@ -69,6 +69,7 @@ Page({
     phraseUses: {},      // 常用语使用次数（显示 · N 次）
     sumTip: false,       // 对话小结后：顺手去心情页记一笔的引导条
     nightHint: '',       // 夜间模式开启提示（每天一次）
+    gapGreet: '',        // 间隔多日后的温和问候
     phraseLast: {},     // 常用语最近使用时间（格式化文案）
     quickReplies,
     quickEnglish: [
@@ -108,6 +109,15 @@ Page({
     const auto = _h >= 22 || _h < 6;
     const isNight = manual === 'on' ? true : manual === 'off' ? false : auto;
     this.setData({ isNight });
+    // 间隔问候：距上次打开聊天 ≥2 天，轻提一句（不算打扰，只是「还在」）
+    const lastTs = wx.getStorageSync('hb_lastChatTs') || 0;
+    if (lastTs) {
+      const gapDays = Math.floor((Date.now() - lastTs) / 86400000);
+      if (gapDays >= 2 && gapDays <= 60) {
+        this.setData({ gapGreet: gapDays >= 7 ? '🫂 有 ' + gapDays + ' 天没见了——不用解释去哪了，回来就好。' : '🌤 ' + gapDays + ' 天没聊了，我一直在。' });
+      }
+    }
+    wx.setStorageSync('hb_lastChatTs', Date.now());
     // 夜间提示语：自动进入夜间模式的那天，轻提一句护眼（每天最多一次）
     if (isNight && auto && manual !== 'off') {
       const k = 'hb_nightHint_' + new Date().toDateString();

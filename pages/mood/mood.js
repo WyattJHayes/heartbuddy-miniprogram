@@ -600,7 +600,15 @@ Page({
       // 本周第 N 条：让记录有「又前进一步」的实感
       const weekAgo = Date.now() - 7 * 86400000;
       const wkN = (this._raw || []).filter((m) => m.createdAt > weekAgo).length + 1;
-      wx.showToast({ title: meta.label + ' · 本周第 ' + wkN + ' 条', icon: 'success' });
+      // 距上一条多久（今天已有记录时，多一句"变化被看见了"）
+      const todays = (this._raw || []).filter((m) => new Date(m.createdAt).toDateString() === new Date().toDateString());
+      let gapLine = '';
+      if (todays.length) {
+        const last = todays[todays.length - 1];
+        const h = Math.floor((Date.now() - last.createdAt) / 3600000);
+        gapLine = h >= 1 ? '（距上一条 ' + h + ' 小时）' : '';
+      }
+      wx.showToast({ title: meta.label + ' · 本周第 ' + wkN + ' 条' + gapLine, icon: 'success' });
       const _hh = new Date().getHours();
       if (_hh >= 23 || _hh < 6) {
         setTimeout(() => wx.showToast({ title: '夜深了，记完早点休息 🌙', icon: 'none' }), 600);

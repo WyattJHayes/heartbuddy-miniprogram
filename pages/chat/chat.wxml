@@ -91,6 +91,8 @@ module.exports = { divider: divider };
       <view id="scrollAnchor"></view>
     </view>
 
+    <!-- 间隔多日的温和问候 -->
+    <view class="night-hint" wx:if="{{gapGreet}}" role="note" aria-label="间隔问候">{{gapGreet}}</view>
     <!-- 夜间模式提示（自动进入的那天，轻提一句护眼） -->
     <view class="night-hint" wx:if="{{nightHint}}" role="note" aria-label="夜间模式提示">{{nightHint}}</view>
     <!-- 快捷问题 -->
