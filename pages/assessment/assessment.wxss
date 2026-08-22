@@ -80,3 +80,12 @@
 
 .radar-canvas { width:320rpx; height:320rpx; margin:14rpx auto 0; display:block; }
 .radar-note { font-size:22rpx; color:#a3adc4; margin-top:6rpx; }
+
+.l3-row { display: flex; align-items: flex-end; justify-content: space-around; margin-top: 20rpx; padding: 0 20rpx; }
+.l3-col { display: flex; flex-direction: column; align-items: center; width: 140rpx; }
+.l3-num { font-size: 26rpx; color: #8a93a8; margin-bottom: 8rpx; }
+.l3-num.hot { color: #5b8def; font-weight: 700; }
+.l3-bar { width: 56rpx; min-height: 12rpx; border-radius: 10rpx 10rpx 4rpx 4rpx; background: #dde4f0; }
+.l3-bar.hot { background: linear-gradient(180deg, #7fb2ff, #5b8def); }
+.l3-date { font-size: 20rpx; color: #b0b7c8; margin-top: 8rpx; }
+.l3-tip { margin-top: 14rpx; font-size: 21rpx; text-align: center; }

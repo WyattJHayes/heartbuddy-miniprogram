@@ -583,7 +583,10 @@ Page({
       wx.vibrateShort && wx.vibrateShort({ type: 'light' });
       if (!wx.getStorageSync('ach_firstRecord')) wx.setStorageSync('ach_firstRecord', true); // 成就：走出第一步
       wx.setStorageSync('hb_lastMoodDate', new Date().toDateString()); // 供 chat 晨间提醒判断
-      wx.showToast({ title: meta.label + ' / 已记下', icon: 'success' });
+      // 本周第 N 条：让记录有「又前进一步」的实感
+      const weekAgo = Date.now() - 7 * 86400000;
+      const wkN = (this._raw || []).filter((m) => m.createdAt > weekAgo).length + 1;
+      wx.showToast({ title: meta.label + ' · 本周第 ' + wkN + ' 条', icon: 'success' });
       const _hh = new Date().getHours();
       if (_hh >= 23 || _hh < 6) {
         setTimeout(() => wx.showToast({ title: '夜深了，记完早点休息 🌙', icon: 'none' }), 600);

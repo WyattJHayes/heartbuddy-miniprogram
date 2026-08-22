@@ -7,6 +7,7 @@ Page({
     cardTags: ['全部', '焦虑', '难过', '生气', '睡前', '学习', '平静'],
     showTag: '全部',    // 按心情筛选当前展示哪些卡
     topRead: null,      // 最常翻的一张卡（≥3 次才显示）
+    drawMsg: '',        // 抽一张后的缘分提示
     cards: [
       {
         emoji: '🌀',
@@ -226,7 +227,12 @@ Page({
     const cards = this.data.cards || [];
     if (!cards.length) return;
     const i = Math.floor(Math.random() * cards.length);
-    this.setData({ open: i });
+    // 抽中计数：第 N 次抽到同一张，说明它跟你有缘
+    const c = cards[i];
+    const cnt = wx.getStorageSync('hb_stDraws') || {};
+    cnt[c.title] = (cnt[c.title] || 0) + 1;
+    wx.setStorageSync('hb_stDraws', cnt);
+    this.setData({ open: i, drawMsg: cnt[c.title] > 1 ? '第 ' + cnt[c.title] + ' 次抽中「' + c.title + '」——它好像特别懂你。' : '' });
     wx.vibrateShort && wx.vibrateShort({ type: 'light' });
   },
 

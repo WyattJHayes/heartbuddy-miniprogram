@@ -5,6 +5,9 @@
     <view class="st-hero-sub">不是鸡汤，是能马上做的小事</view>
   </view>
 
+  <!-- 抽一张的缘分提示（第 N 次抽中） -->
+  <view class="draw-msg" wx:if="{{drawMsg}}" role="note" aria-label="抽中提示">🎴 {{drawMsg}}</view>
+
   <!-- 常读提示：你最常翻的一张卡 -->
   <view class="top-read" wx:if="{{topRead}}" role="note" aria-label="最常翻的卡片">
     📖 你最常翻：「{{topRead.title}}」（{{topRead.n}} 次）——它似乎对你特别有用。

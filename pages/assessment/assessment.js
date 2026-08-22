@@ -108,6 +108,15 @@ Page({
       }));
       let histDelta = '';
       let trendText = '';
+      // 近 3 次得分对比条（最近一次高亮，条高按分数/21 归一）
+      const last3 = list.slice(0, 3).reverse(); // 时间正序（最老→最新）
+      const maxScore = 21;
+      const last3Bars = last3.map((x, i) => ({
+        date: x.date,
+        total: x.total,
+        h: Math.max(12, Math.round((x.total / maxScore) * 100)),
+        latest: i === last3.length - 1
+      }));
       if (list.length >= 2 && typeof list[0].total === 'number' && typeof list[1].total === 'number') {
         const d = list[0].total - list[1].total;
         histDelta = d < 0 ? `较上次低 ${-d} 分，焦虑在回落 👍` : d > 0 ? `较上次高 ${d} 分，建议多关注自己` : '与上次持平，保持关注';
@@ -138,7 +147,7 @@ Page({
         const imp = best.filter((o) => o.g > 0).slice(0, 2).map((o) => Q_SHORT[o.q]);
         if (imp.length) improveText = `在改善：${imp.join('、')}`;
       }
-      this.setData({ hist: list, histDelta, trendText, topWeakText, improveText });
+      this.setData({ hist: list, last3Bars, histDelta, trendText, topWeakText, improveText });
     } catch (err) {
       console.warn('[assessment] 历史读取失败', err);
     }
