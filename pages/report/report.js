@@ -438,7 +438,7 @@ Page({
     wx.setClipboardData({ data: txt, success: () => wx.showToast({ title: '已复制月度小结', icon: 'success' }) });
   },
 
-  // 复制文字版周报（答辩/聊天分享友好）
+  // 复制文字版周报（答辩/聊天分享友好；含本周晚间小结篇数）
   copyWeekText() {
     const d = this.data;
     if (d.empty) {
@@ -449,6 +449,7 @@ Page({
       ['【心语伴 · 本周情绪小报】',
        `主要情绪：${d.topLabel} ${d.topEmoji}`,
        `倾诉 ${d.chatCount} 次 · ${d.dayCount} 天有记录`,
+       ...(d.weekNotes ? [`晚间小结 ${d.weekNotes} 篇`] : []),
        ...(d.practiceText ? [`${d.practiceText}`] : []),
        `给这周的你：${d.suggestion}`,
        ...(d.weekNote ? [`对自己说：${d.weekNote}`] : []),

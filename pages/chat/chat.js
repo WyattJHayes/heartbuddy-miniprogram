@@ -805,7 +805,10 @@ Page({
         if (!t) return;
         const list = this.data.myPhrases.slice();
         if (list.includes(t)) { wx.showToast({ title: '已经存过啦', icon: 'none' }); return; }
-        if (list.length >= 5) list.shift();
+        if (list.length >= 5) {
+          list.shift();
+          wx.showToast({ title: '已满 5 条：替换了最早的一条', icon: 'none' });
+        }
         list.push(t);
         wx.setStorageSync('hb_myPhrases', list);
         this.setData({ myPhrases: list });
