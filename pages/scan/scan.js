@@ -22,6 +22,7 @@ Page({
     feelPicked: '',   // 完成后的身体感受一词
     feelLog: [],     // 最近几次身体感受回看
     timeTip: '',     // 按时段的扫描建议（一句话）
+    feelTop: '',     // 身体感受词 Top1
     idx: 0,
     left: 30,
     pct: 0,
@@ -37,6 +38,12 @@ Page({
     this.setData({ scanCount: wx.getStorageSync('hb_scanCount') || 0 });
     this.setData({ opening: this.dayOpening() });
     this.setData({ feelLog: (wx.getStorageSync('hb_scanFeel') || []).slice(-5).reverse() });
+    // 感受词 Top1：扫描后身体最常给你的反馈
+    const log0 = wx.getStorageSync('hb_scanFeel') || [];
+    const cnt = {};
+    log0.forEach((x) => { cnt[x.w] = (cnt[x.w] || 0) + 1; });
+    const top = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0];
+    this.setData({ feelTop: (top && cnt[top] >= 3) ? '身体最常的反馈是「' + top + '」（' + cnt[top] + ' 次）——身体在学会放松。' : '' });
     const h = new Date().getHours();
     this.setData({ timeTip: h >= 22 || h < 6 ? '🌙 睡前扫描：躺着做就行，允许自己中途睡着' : h < 11 ? '☀️ 早晨扫描：帮身体先「醒」过来，再开始一天' : h < 18 ? '🌤 白天扫描：课间/午休 5 分钟，给紧绷的地方松绑' : '🌇 傍晚扫描：把今天的压力从身体里扫出去' });
   },

@@ -103,3 +103,8 @@
 .fw-label { font-size: 20rpx; color: #b0b7c8; margin-top: 6rpx; }
 
 .am-copy { float: right; font-size: 20rpx; color: #b08a4a; }
+
+.month-prog { margin-top: 16rpx; }
+.mp-t { font-size: 23rpx; color: #5b6b8c; }
+.mp-bar { margin-top: 8rpx; height: 12rpx; background: #e9edf5; border-radius: 99rpx; overflow: hidden; }
+.mp-fill { height: 100%; background: linear-gradient(90deg, #9dc2ff, #5b8def); border-radius: 99rpx; }

@@ -277,6 +277,12 @@ Page({
         if (t) trig[t] = (trig[t] || 0) + 1;
       });
       const topTrig = Object.keys(trig).sort((a, b) => trig[b] - trig[a])[0] || '';
+      // 本月记录天数 / 本月已过天数（进度条）
+      const nowD = new Date();
+      const daysInMonth = new Date(nowD.getFullYear(), nowD.getMonth() + 1, 0).getDate();
+      const passed = nowD.getDate();
+      const mDaySet = new Set(mList.map((m) => new Date(m.createdAt).getDate()));
+      const monthProg = { done: mDaySet.size, passed, pct: Math.round(mDaySet.size / passed * 100) };
       // 本月练习痕迹：呼吸 / 身体扫描 / 写给自己
       const pBreath = mList.filter((m) => (m.trigger || '').indexOf('呼吸') >= 0).length;
       const pScan = mList.filter((m) => (m.trigger || '').indexOf('扫描') >= 0).length;
@@ -298,6 +304,7 @@ Page({
         mood7Days: mood7,
         wkLabels: wk,
         monthAvgInt,
+        monthProg,
         topTrig,
         footprintSum: (moods.total || 0) + (assessments.total || 0) + (crisis.total || 0),
         missDays
