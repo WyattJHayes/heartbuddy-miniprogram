@@ -45,3 +45,5 @@
 .new-badge { display: inline-block; margin-left: 14rpx; font-size: 19rpx; color: #e05656; background: #fdeeee; border: 1rpx solid #f2c9c9; border-radius: 999rpx; padding: 2rpx 12rpx; vertical-align: middle; }
 
 .draw-other { margin-top: 8rpx; font-size: 21rpx; color: #7a5a8c; text-decoration: underline; }
+
+.st-read-n { font-size: 19rpx; color: #9aa3b8; margin-left: 10rpx; background: #f1f3f8; border-radius: 8rpx; padding: 2rpx 10rpx; }

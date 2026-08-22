@@ -11,6 +11,7 @@ Page({
     readTotal: 0,       // 卡片阅读总数
     newCount: 0,        // 还没看过的卡片数（NEW 角标）
     drawOther: '',      // 抽一张后顺带推荐的另一张
+    stReads: {},        // 各卡已读次数（展示用）
     cards: [
       {
         emoji: '🌀',
@@ -140,6 +141,19 @@ Page({
         ]
       },
       {
+        emoji: '🫀',
+        title: '情绪藏在身体的哪里？',
+        tags: ['焦虑', '难过', '生气'],
+        lines: [
+          '肩颈发紧、牙关咬紧 —— 常是「压力/生气」在身体上的样子',
+          '胃里发堵、吃不下 —— 焦虑最爱的藏身处之一',
+          '胸口发闷、想叹气 —— 多半是委屈或难过',
+          '手心出汗、心悸 —— 恐慌/紧张的身体信号',
+          '浑身发沉、不想动 —— 情绪耗竭在喊「我需要休息」',
+          '下次说不清情绪时，先扫一遍身体——它往往先一步知道答案。'
+        ]
+      },
+      {
         emoji: '🌅',
         title: '考试当天早晨 · 5 分钟',
         tags: ['学习'],
@@ -205,7 +219,7 @@ Page({
     if (!this._allCards) this._allCards = this.data.cards.slice();
     // NEW 标记：没看过的卡（hb_stReads 无记录）计数，展开过自动消
     const reads0 = wx.getStorageSync('hb_stReads') || {};
-    this.setData({ newCount: (this._allCards || []).filter((c) => !reads0[c.title]).length });
+    this.setData({ newCount: (this._allCards || []).filter((c) => !reads0[c.title]).length, stReads: reads0 });
     this.setData({ todayLine: this.getDailyLine() });
     this.applyFavs();
     // 常读 Top1：阅读次数最多的卡（≥3 次才提示）

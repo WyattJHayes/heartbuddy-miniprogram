@@ -202,3 +202,5 @@
 .night-hint { text-align: center; font-size: 21rpx; color: #7c86a0; margin: 8rpx 0; }
 
 .mp-last { display: block; font-size: 19rpx; color: #b6bdcc; margin-top: 2rpx; }
+
+.mp-sample { display: block; margin-top: 8rpx; color: #5b8def; text-decoration: underline; }

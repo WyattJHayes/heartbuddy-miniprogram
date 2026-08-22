@@ -547,6 +547,15 @@ Page({
 
   // 重新开始这轮对话：清空当前消息流、换新会话；情绪记录与成就不受影响
   // 复制这段对话（数据主权：你的倾诉随时可以带走留档）
+  fillSamplePhrases() {
+    const samples = ['我今天有点撑不住了', '想被安慰一下，不用给建议', '就是想找人说说话'];
+    const list = this.data.myPhrases.slice();
+    samples.forEach((t) => { if (!list.includes(t) && list.length < 5) list.push(t); });
+    wx.setStorageSync('hb_myPhrases', list);
+    this.setData({ myPhrases: list });
+    wx.showToast({ title: '已填入 3 条示例，可长按删除', icon: 'none' });
+  },
+
   copyTalk() {
     const msgs = this.data.messages || [];
     if (!msgs.length) { wx.showToast({ title: '还没有对话内容', icon: 'none' }); return; }

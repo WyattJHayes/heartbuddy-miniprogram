@@ -37,6 +37,7 @@
             role="button" aria-label="展开或收起{{item.title}}，长按收藏">
         <text class="st-emoji">{{item.emoji}}</text>
         <text class="st-title">{{item.title}}</text>
+        <text class="st-read-n" wx:if="{{stReads[item.title] >= 2}}">{{stReads[item.title]}}次</text>
         <text class="st-fav" wx:if="{{favTitles.indexOf(item.title) > -1}}">★</text>
         <text class="st-arrow {{open === index ? 'up' : ''}}">▾</text>
       </view>
