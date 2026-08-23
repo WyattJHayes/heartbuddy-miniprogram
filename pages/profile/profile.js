@@ -381,7 +381,8 @@ Page({
       lines.slice(0, 3).forEach((ln, idx) => ctx.fillText(ln, 150, 92 + idx * 24));
       // 数据行
       ctx.fillStyle = '#8b9ac0'; ctx.font = '11px sans-serif';
-      ctx.fillText(`已陪你 ${this.data.streakDays || 0} 天 · 写过 ${this.data.footprintSum || 0} 次心情 · 连续打卡 ${this.data.streakDays || 0} 天`, 150, 168);
+      const talkD = (wx.getStorageSync('hb_talkStreak') || {}).d || 0;
+      ctx.fillText(`已陪你 ${this.data.streakDays || 0} 天 · 连续倾诉 ${talkD} 天 · 写过 ${this.data.footprintSum || 0} 次心情`, 150, 168);
       ctx.fillStyle = '#b8c2da';
       ctx.fillText('—— 心语伴：你的情绪守护小伙伴', 150, 196);
       // 存图
