@@ -3,6 +3,9 @@
   <view class="title">心语伴</view>
   <view class="slogan">随时在线的情绪陪伴者</view>
 
+  <!-- 今日一句：每天换一句话给你 -->
+  <view class="welcome-line" wx:if="{{todayLine}}" bindtap="copyTodayLine" role="button" aria-label="今日一句，点击复制">{{todayLine}}</view>
+
   <!-- 来自朋友的分享 -->
   <view class="share-banner" wx:if="{{shared}}">
     🌱 你的朋友把「心语伴」分享给了你。看完须知就能开始，随时聊聊。

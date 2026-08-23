@@ -1,9 +1,17 @@
 // pages/welcome/welcome.js —— 隐私同意 & AI 使用说明
 const app = getApp();
+const { dailyQuotes } = require('../../config/index');
+
+// 今日一句（日轮换，与 chat/充电站同源）
+function todayLine() {
+  const d = new Date();
+  return dailyQuotes[(d.getDate() + d.getMonth()) % dailyQuotes.length] || '';
+}
 
 Page({
   data: {
     loading: true, openid: '', showNotice: false, shared: false, welcomed: true, showLog: false,
+    todayLine: '',
     changelog: [
       { v: '2.5', t: '呼吸完成带今日进度；扫描补今日次数；月报补最长连续记录；温故连 7 天鼓励；复制对话落款陪伴天数' },
       { v: '2.4', t: '扫描分钟并入今日放松目标；撤回可改后重发；徽章列表可复制；周报补连续倾诉；今夜托付明早回看；扫描连续天数' },
@@ -29,13 +37,19 @@ Page({
 
   onLoad(options) {
     if (options && options.src === 'share') this.setData({ shared: true });
-    this.setData({ welcomed: wx.getStorageSync('hb_welcomed') === true }); // 首次引导卡只出现一次
+    this.setData({ welcomed: wx.getStorageSync('hb_welcomed') === true, todayLine: todayLine() }); // 首次引导卡只出现一次
     if (!wx.getStorageSync('privacyAgreed')) {
       this.setData({ loading: false });
       return;
     }
     // 已同意过，直接进主页
     wx.switchTab({ url: '/pages/chat/chat' });
+  },
+
+  // 今日一句：点击复制（随时带走一句温柔）
+  copyTodayLine() {
+    if (!this.data.todayLine) return;
+    wx.setClipboardData({ data: this.data.todayLine, success: () => wx.showToast({ title: '已复制今日一句话', icon: 'none' }) });
   },
 
   toggleLog() { this.setData({ showLog: !this.data.showLog }); },
