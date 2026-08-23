@@ -347,6 +347,19 @@ Page({
       }
     });
   },
+
+  // 睡不着：给几个「不卷自救」的路口，任选一个
+  nightSleepless() {
+    wx.showActionSheet({
+      itemList: ['🌙 去「睡前安神」卡（充电站）', '🧘 去呼吸页发呆/安神', '🤖 和我聊到有点困', '✍️ 把睡不着的念头写下来（写给自己）'],
+      success: (r) => {
+        if (r.tapIndex === 0) wx.navigateTo({ url: '/pages/station/station' });
+        else if (r.tapIndex === 1) wx.navigateTo({ url: '/pages/breathe/breathe' });
+        else if (r.tapIndex === 2) this.pushAI('睡不着也没关系，不用跟睡意较劲。我在这儿陪你聊几句：今晚是因为什么还醒着？一点一点说给我听就好。');
+        else if (r.tapIndex === 3) this.nightToSelf();
+      }
+    });
+  },
   // 写给自己：把此刻想说的一句话写进 mood note（trigger='深夜暗语'）
   nightToSelf() {
     wx.showModal({

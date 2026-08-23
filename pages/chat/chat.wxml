@@ -71,6 +71,7 @@ module.exports = { divider: divider };
       <view class="night-chip" bindtap="nightWrite" role="button" aria-label="写下烦心事">写下烦心事</view>
       <view class="night-chip" bindtap="nightLater" role="button" aria-label="把烦恼留给明天">把烦恼留给明天</view>
       <view class="night-chip" bindtap="nightTomorrow" role="button" aria-label="写下明天的三件小事">📝 明日三件小事</view>
+      <view class="night-chip" bindtap="nightSleepless" role="button" aria-label="睡不着时怎么办">🌙 睡不着</view>
     </view>
   </view>
   <!-- 消息区 -->
