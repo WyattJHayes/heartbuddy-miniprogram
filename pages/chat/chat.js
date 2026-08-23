@@ -596,8 +596,9 @@ Page({
     const lines = msgs.map((m) => fmt(m.ts) + (m.role === 'user' ? '我：' : '心语：') + (m.text || m.content || ''));
     const first = msgs.find((m) => m.role === 'user');
     const topic = first ? String(first.text || first.content || '').slice(0, 12) : '这段对话';
+    const talkD = (wx.getStorageSync('hb_talkStreak') || {}).d || 0;
     wx.setClipboardData({
-      data: '—— 我和心语伴的对话 · ' + new Date().toLocaleDateString() + ' · 关于「' + topic + '」——\n\n' + lines.join('\n'),
+      data: '—— 我和心语伴的对话 · ' + new Date().toLocaleDateString() + ' · 关于「' + topic + '」——\n\n' + lines.join('\n') + '\n\n（已连续来找心语 ' + talkD + ' 天 🌱）',
       success: () => wx.showToast({ title: '已复制整段对话', icon: 'success' })
     });
   },
