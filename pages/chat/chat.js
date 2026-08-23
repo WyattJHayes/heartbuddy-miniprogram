@@ -71,6 +71,7 @@ Page({
     sumTip: false,       // 对话小结后：顺手去心情页记一笔的引导条
     nightHint: '',       // 夜间模式开启提示（每天一次）
     gapGreet: '',        // 间隔多日后的温和问候
+    worryReturn: '',     // 昨夜托付的事：今天首次打开的回看提醒
     phraseLast: {},     // 常用语最近使用时间（格式化文案）
     quickReplies,
     quickEnglish: [
@@ -119,6 +120,15 @@ Page({
       }
     }
     wx.setStorageSync('hb_lastChatTs', Date.now());
+    // 昨夜托付：若昨夜（或更早）把烦心事托付给了「明天」，今天首次打开轻声提醒回看
+    const box = wx.getStorageSync('hb_worryBox');
+    if (box && typeof box === 'object' && box.what) {
+      const today = new Date().toDateString();
+      if (box.date !== today && !box.bye) {
+        wx.setStorageSync('hb_worryBox', Object.assign({}, box, { bye: true })); // 只提醒一次
+        this.setData({ worryReturn: '🌅 昨天你把「' + (box.what.length > 18 ? box.what.slice(0, 18) + '…' : box.what) + '」交给了明天的你——它现在还在吗？想做点什么再说？' });
+      }
+    }
     // 夜间提示语：自动进入夜间模式的那天，轻提一句护眼（每天最多一次）
     if (isNight && auto && manual !== 'off') {
       const k = 'hb_nightHint_' + new Date().toDateString();
@@ -299,7 +309,20 @@ Page({
   },
   nightWrite() { wx.switchTab({ url: '/pages/mood/mood' }); },
   nightLater() {
-    wx.showToast({ title: '把烦心事留给明天的你吧，先去睡 🛌', icon: 'none' });
+    // 把烦心事「托付」给明天的自己：写下来 → 入睡；明早首次打开轻声回看
+    wx.showModal({
+      title: '把什么交给明天？',
+      content: '写下此刻还放不下的事，先让今晚的自己下班。明天醒来，再一起看它还在不在。',
+      editable: true,
+      placeholderText: '例：明天要交的作业还没写完',
+      confirmText: '交给你了',
+      cancelText: '算了',
+      success: (r) => {
+        const what = (r.content || '').trim();
+        wx.showToast({ title: what ? '已交给明天的你 🛌' : '好，那今晚先放下', icon: 'none' });
+        wx.setStorageSync('hb_worryBox', what ? { what, date: new Date().toDateString(), bye: false } : null);
+      }
+    });
   },
   // 写给自己：把此刻想说的一句话写进 mood note（trigger='深夜暗语'）
   nightToSelf() {
@@ -439,12 +462,12 @@ Page({
           wx.setStorageSync('hbThoughtBox', box.slice(-10));
           wx.showToast({ title: '已存进想法盒，7 天后见 📮', icon: 'none' });
         } else if (isUser && r.tapIndex === 4) {
-          // 撤回我的这条：删掉该消息及紧随其后的 AI 回复，本地即时生效
+          // 撤回我的这条：删掉该消息及紧随其后的 AI 回复，本地即时生效；原句带回输入框可改后重发
           const messages = this.data.messages.slice();
           const drop = messages[idx + 1] && messages[idx + 1].role === 'ai' ? 2 : 1;
           messages.splice(idx, drop);
-          this.setData({ messages });
-          wx.showToast({ title: '已撤回这条', icon: 'none' });
+          this.setData({ messages, input: content.slice(0, 150) });
+          wx.showToast({ title: '已撤回 · 原句已在输入框，可改了再发', icon: 'none' });
         } else if (!isUser && r.tapIndex === 4) {
           // 换个说法：把这条 AI 回复重生成（用同样的上文重新问一次）
           this.reask(idx);
