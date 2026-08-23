@@ -24,6 +24,9 @@
 .q-test { background: linear-gradient(135deg, #fff7ed, #ffe9d6); border-color: #f3d9b0; }
 .q-breathe { background: linear-gradient(135deg, #eefaf1, #d9f3e3); border-color: #bfe6cd; }
 .share-line { width: 100%; margin: -12rpx 0 32rpx; font-size: 24rpx; color: #5b8def; background: #f5f8ff; border: 1rpx dashed #b9cdf5; border-radius: 999rpx; padding: 16rpx 0; line-height: 1; }
+.wf-version { margin-top: 40rpx; text-align: center; }
+.wf-v { font-size: 23rpx; color: #8b96b0; font-weight: 600; }
+.wf-s { margin-top: 8rpx; font-size: 21rpx; color: #a9b2c4; line-height: 1.7; padding: 0 30rpx; }
 .qe-emoji { font-size: 44rpx; }
 .qe-t { font-size: 30rpx; font-weight: 700; color: #3a4a63; }
 .qe-d { font-size: 22rpx; color: #8b96b0; }
