@@ -63,6 +63,7 @@ Page({
     quickInt: 3,           // 快速记录可选强度 1-5（默认 3）
     bandDays: 14,          // 情绪色带天数：14 / 30 可切换
     smallScene: 'body',    // 三件小事灵感场景：study/body/social/me
+    smallWeekN: 0,      // 本周已勾选完成的小事件数（跨周重置）
     dayNoteBanner: false,  // 21 点后还没写小结 → 温柔提示
     yesterdayNote: '',     // 昨天的小结（次日回看）
     nightGreet: '',        // 晚间温柔提醒（21 点后一次性）
@@ -249,7 +250,26 @@ Page({
       items = raw.items;
     }
     const all = items.filter((x) => x.done).length === 3 && items.some((x) => x.text);
-    this.setData({ smalls: items.map((x, i) => Object.assign({ i }, x)), smallCelebrate: all, smallStreak: calcStreak(wx.getStorageSync('hb_smallDays') || []) });
+    this.setData({ smalls: items.map((x, i) => Object.assign({ i }, x)), smallCelebrate: all, smallStreak: calcStreak(wx.getStorageSync('hb_smallDays') || []), smallWeekN: this._smallWeekN() });
+  },
+
+  // 本周已勾选完成的小事件数：勾选时 +1、取消 -1，周一自然重置（纯本地周计数）
+  _smallWeek() {
+    const d = new Date();
+    const mon = new Date(d.getTime() - ((d.getDay() + 6) % 7) * 86400000);
+    return mon.toDateString();
+  },
+  _smallWeekN() {
+    const w = wx.getStorageSync('hb_smallWeek');
+    return (w && w.k === this._smallWeek()) ? (w.n || 0) : 0;
+  },
+  touchSmallWeek(delta) {
+    const k = this._smallWeek();
+    const w = wx.getStorageSync('hb_smallWeek');
+    const rec = (w && w.k === k) ? w : { k, n: 0 };
+    rec.n = Math.max(0, (rec.n || 0) + delta);
+    wx.setStorageSync('hb_smallWeek', rec);
+    this.setData({ smallWeekN: rec.n });
   },
 
   // 灵感库：不知道写什么时，一键填入一件可做的小事（按场景分组，只填第一个空格）
@@ -294,6 +314,8 @@ Page({
     }
     this.setData({ smalls: items });
     const all = items.filter((x) => x.done).length === 3 && items.some((x) => x.text);
+    // 本周完成小事件数（勾选 +1 / 取消 -1）
+    this.touchSmallWeek(items[i].done ? 1 : -1);
     if (all) {
       wx.setStorageSync('ach_small_three', true);
       // 连续全勾天数：每天全勾 3 件记一天（本地日期队列）
