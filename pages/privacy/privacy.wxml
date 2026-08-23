@@ -1,6 +1,7 @@
 <view class="wrap">
   <view class="p-title">隐私政策</view>
   <view class="p-meta">更新日期：{{updated}} · 生效日期：与更新日期一致</view>
+  <view class="p-copy" bindtap="copyPolicy" role="button" aria-label="一键复制隐私政策全文">📋 复制政策全文（数据主权：留存自己一份）</view>
 
   <scroll-view scroll-y class="doc">
     <view class="block">
