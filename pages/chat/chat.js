@@ -324,6 +324,29 @@ Page({
       }
     });
   },
+
+  // 深夜写下明天 3 件小事：明早首次进心情页会自动填进「今日三件小事」
+  nightTomorrow() {
+    wx.showModal({
+      title: '明天想做的 3 件小事 🌱',
+      content: '写下明天要为自己做的事（用「、」或换行分开，最多 3 件）。明早打开「心情」页，就会自动出现在三件小事里。',
+      editable: true,
+      placeholderText: '例：晚饭后散步 10 分钟、给爸妈打个电话、整理错题',
+      confirmText: '写好了',
+      cancelText: '算了',
+      success: (r) => {
+        if (!r.confirm) return;
+        const raw = (r.content || '').trim();
+        const arr = raw.split(/[、\n，,]/).map((x) => x.trim()).filter(Boolean).slice(0, 3);
+        if (arr.length) {
+          wx.setStorageSync('hb_tomorrowSmall', { date: new Date().toDateString(), items: arr });
+          wx.showToast({ title: '已写好，明天来取 🌙', icon: 'success' });
+        } else {
+          wx.showToast({ title: '没写下也没关系，睡前安顿好自己就好', icon: 'none' });
+        }
+      }
+    });
+  },
   // 写给自己：把此刻想说的一句话写进 mood note（trigger='深夜暗语'）
   nightToSelf() {
     wx.showModal({
