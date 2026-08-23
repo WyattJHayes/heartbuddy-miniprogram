@@ -39,8 +39,11 @@ Page({
   goFromGuide(e) {
     const u = e.currentTarget.dataset.u;
     wx.setStorageSync('hb_welcomed', true);
-    if (u && wx.getStorageSync('privacyAgreed')) wx.switchTab({ url: u });
-    else this.setData({ welcomed: true });
+    if (!u || !wx.getStorageSync('privacyAgreed')) { this.setData({ welcomed: true }); return; }
+    // 页签（tabBar）用 switchTab，普通页用 navigateTo（呼吸/求助等都不是 tab）
+    const tabs = ['/pages/chat/chat', '/pages/mood/mood', '/pages/helper/helper', '/pages/profile/profile'];
+    if (tabs.indexOf(u) >= 0) wx.switchTab({ url: u });
+    else wx.navigateTo({ url: u });
   },
 
   hideGuide() {

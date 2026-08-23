@@ -27,12 +27,13 @@
     </view>
   </view>
 
-  <!-- 第一次来：3 步教你用心语伴（一次性，看过就收起） -->
+  <!-- 第一次来：4 步教你用心语伴（一次性，看过就收起） -->
   <view class="card first-guide" wx:if="{{!welcomed}}" role="note" aria-label="第一次使用引导">
-    <view class="section-title">第一次来？3 步开始 🌱</view>
+    <view class="section-title">第一次来？4 步开始 🌱</view>
     <view class="fg-item" bindtap="goFromGuide" data-u="/pages/chat/chat"><text class="fg-num">1</text>心里有事 → 去「陪伴」和心语聊聊，它会接住你</view>
     <view class="fg-item" bindtap="goFromGuide" data-u="/pages/mood/mood"><text class="fg-num">2</text>顺手记心情 → 「心情」页一键记录，周报自动生成</view>
-    <view class="fg-item" bindtap="goFromGuide" data-u="/pages/helper/helper"><text class="fg-num">3</text>难受的时候 → 「求助」页有热线，「充电站」有能马上做的事</view>
+    <view class="fg-item" bindtap="goFromGuide" data-u="/pages/breathe/breathe"><text class="fg-num">3</text>紧绷的时候 → 「呼吸」页 4 分钟帮身体先松下来</view>
+    <view class="fg-item" bindtap="goFromGuide" data-u="/pages/helper/helper"><text class="fg-num">4</text>难受的时候 → 「求助」页有热线，「充电站」有能马上做的事</view>
     <view class="fg-ok" bindtap="hideGuide" role="button" aria-label="收起新手引导">知道了，开始吧</view>
     <view class="fg-skip" bindtap="hideGuide" role="button" aria-label="直接进入须知">跳过引导，直接开始 ›</view>
   </view>
