@@ -48,6 +48,10 @@ module.exports = { divider: divider };
   <view class="today-n" wx:if="{{todayN > 0}}" role="note" aria-label="今天已倾诉次数">
     ☁️ 今天第 {{todayN}} 次来找我，谢谢你愿意和我说话
   </view>
+  <!-- 连续倾诉天数 🔥：把「我一直在」变成可见的陪伴 -->
+  <view class="streak-n" wx:if="{{streakN > 1}}" role="note" aria-label="连续倾诉天数">
+    🔥 已连续来找我 {{streakN}} 天，谢谢你一直在
+  </view>
   <!-- 想让我怎么陪你：三段身份，本地记住 -->
   <view class="persona-bar">
     <view

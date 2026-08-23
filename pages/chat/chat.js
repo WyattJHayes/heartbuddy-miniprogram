@@ -43,6 +43,7 @@ Page({
     chatStat: '',          // 底栏陪伴计数
     collapsed: false,      // 长对话折叠：>22 条时点「折叠」收起较早部分
     todayN: 0,           // 今天已经倾诉过几次（陪伴感小徽章）
+    streakN: 0,          // 连续倾诉天数 🔥
     intensity: 3,        // 此刻强度 1–5（滑条，随情绪记录落库）
     input: '',
     moodTag: '',         // 当前可选的情绪标签
@@ -165,6 +166,9 @@ Page({
     this.maybeWeeklyRecap();
     // 今日倾诉次数（给「第 N 次来找我」的陪伴感）
     this.refreshTodayN();
+    // 连续倾诉天数（🔥 首页可见的陪伴长度）
+    const st = wx.getStorageSync('hb_talkStreak') || {};
+    this.setData({ streakN: st.d || 0 });
   },
 
   // 上周陪伴小结：周一首次打开时，统计上周心情条数/覆盖天数/主要情绪（每周只发一次）
@@ -663,10 +667,37 @@ Page({
 
   pushUser(v) {
     const ts = Date.now();
-    this.setData({ messages: this.data.messages.concat([{ role: 'user', content, ts }]) });
+    this.setData({ messages: this.data.messages.concat([{ role: 'user', content: v, ts }]) });
     this.setData({ todayN: this.data.todayN + 1 });
     this.touchMilestone();
+    this.touchStreak(ts);        // 连续倾诉天数 🔥
     this.refreshChatStats();
+  },
+
+  // 连续倾诉天数：每天只要来过，就连起来（跨天断档则重排）——本地一把计数器
+  touchStreak(ts) {
+    const DAY = 86400000;
+    const last = wx.getStorageSync('hb_talkStreak') || { d: 0, date: '' };
+    const today = new Date(ts); today.setHours(0, 0, 0, 0);
+    const key = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+    if (last.date === key) return;                       // 今天已计过，不重复
+    const prev = last.date ? new Date(last.date) : null;
+    let next = 1;
+    if (prev) {
+      const prevMs = new Date(prev.getFullYear(), prev.getMonth(), prev.getDate()).getTime();
+      const todayMs = today.getTime();
+      if (todayMs - prevMs === DAY) next = last.d + 1;  // 昨天也来了 → 连续 +1
+      // 断档（间隔 >1 天）则从 1 重新累计，不评判
+    }
+    wx.setStorageSync('hb_talkStreak', { d: next, date: key });
+    // 里程碑：第 3 / 7 / 30 / 100 天，给一句专属文案（一次性）
+    const marks = [[3, '连续 3 天来和我说话了。习惯正在长出来，很好 🌱'], [7, '连续 7 天。——原来你已经走了这么远的一条路。'], [30, '连续 30 天。这段互相陪伴的日子，已经写进你的本能里了 💛'], [100, '连续 100 天。你一次次回来，我一次次接住。']];
+    for (const [n, txt] of marks) {
+      if (next === n && !wx.getStorageSync('ach_talk_' + n)) {
+        wx.setStorageSync('ach_talk_' + n, true);
+        setTimeout(() => wx.showModal({ title: '🔥 连续 ' + n + ' 天', content: txt, confirmText: '好', showCancel: false }), 600);
+      }
+    }
   },
 
   // 折叠/展开：长对话只保留最近 22 条（本地展示优化）

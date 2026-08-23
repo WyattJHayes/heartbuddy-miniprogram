@@ -151,6 +151,8 @@
 
 .today-n { font-size: 22rpx; color: #9a7b54; background: #fbf6ec; border-radius: 999rpx;
   margin: 0 24rpx 12rpx; padding: 8rpx 22rpx; display: inline-block; align-self: flex-start; }
+.streak-n { font-size: 22rpx; color: #c26552; background: #fdf1ea; border-radius: 999rpx;
+  margin: 0 24rpx 12rpx; padding: 8rpx 22rpx; display: inline-block; align-self: flex-start; }
 .quick-panel-title.warm { color: #b06e2f; }
 .quick-panel-item.warm { background: #fff3e0; color: #8a5a1e; }
 
