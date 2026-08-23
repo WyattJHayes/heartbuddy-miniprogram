@@ -337,7 +337,13 @@ Page({
       const rd = wx.getStorageSync('hb_reviewDays') || [];
       const td = new Date().toDateString();
       if (!rd.includes(td)) { rd.push(td); wx.setStorageSync('hb_reviewDays', rd.slice(-400)); }
-      this.setData({ reviewOk: wx.getStorageSync('hb_reviewOk'), reviewStreak: calcStreak(wx.getStorageSync('hb_reviewDays') || []) });
+      const streak = calcStreak(rd);
+      this.setData({ reviewOk: wx.getStorageSync('hb_reviewOk'), reviewStreak: streak });
+      // 连续 7 天答对：一句专属鼓励（一次性）
+      if (streak === 7 && !wx.getStorageSync('ach_review7')) {
+        wx.setStorageSync('ach_review7', true);
+        wx.showToast({ title: '连续 7 天温故答对 · 知识真的留下来啦 🌟', icon: 'none', duration: 2600 });
+      }
     }
     // 错题本：答错记下、答对移出（温故时优先抽）
     const wrong = wx.getStorageSync('hb_eduWrong') || [];
