@@ -191,6 +191,8 @@
 
 .trig-row { display:flex; flex-wrap:wrap; gap:12rpx; }
 .trig-chip { background:#eef4ff; color:#3a5bb8; border-radius:999rpx; padding:8rpx 20rpx; font-size:24rpx; }
+.trig-chip-warm { background:#fff4e2; color:#b2702e; }
+.trig-chip-warm.on { background:#e8a24c; color:#fff; }
 .trig-tip { margin-top:10rpx; font-size:22rpx; color:#b0a48d; }
 
 

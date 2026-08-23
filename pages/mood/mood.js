@@ -23,6 +23,7 @@ Page({
     quickList,           // 快速记录按钮
     trig: [],            // 本次选中的触发来源（多选）
     trigChips: ['作业·考试', '朋友·室友', '家里人', '身体不舒服', '睡不着', '加班·DDL', '天气', '说不出原因'],
+    topTrig: [],           // 常用触发词置顶（本地按使用频率 Top2，去重后排在前面）
     quicking: '',        // 正在提交的 key
     plan: null,          // 3 天陪伴计划（评测页生成，本地共享）
     planIdx: -1,
@@ -90,6 +91,24 @@ Page({
     this.refreshSmall();
     this.refreshDayNote();
     this.refreshNightGreeting();
+    this.refreshTopTrig();
+  },
+
+  // 常用触发词置顶：把本地统计里用得最多的 2 个词排在 chips 最前（去重，不覆盖原有）
+  refreshTopTrig() {
+    const use = wx.getStorageSync('hb_triggerUse') || {};
+    const list = Object.keys(use).sort((a, b) => (use[b] || 0) - (use[a] || 0)).filter((t) => t && t !== '说不出原因');
+    const top = list.slice(0, 2);
+    const base = this.data.trigChips || [];
+    const merged = [...top.filter((t) => base.indexOf(t) < 0), ...base];
+    this.setData({ topTrig: top.length ? top : [], trigChips: merged });
+  },
+
+  trackTriggerUse() {
+    const use = wx.getStorageSync('hb_triggerUse') || {};
+    (this.data.trig || []).forEach((t) => { use[t] = (use[t] || 0) + 1; });
+    wx.setStorageSync('hb_triggerUse', use);
+    this.refreshTopTrig();
   },
 
   // ---- 今日小结：21 点后温柔收个尾，第二天早上能回看昨天 ---
@@ -614,6 +633,8 @@ Page({
         setTimeout(() => wx.showToast({ title: '夜深了，记完早点休息 🌙', icon: 'none' }), 600);
       }
       this.fetchMoods();
+      // 记录触发词频率 → 下次快速记录时常用词自动置顶
+      if (this.data.trig && this.data.trig.length) this.trackTriggerUse();
       // 一句随心情的暖心回应（本地文案，保持陪伴感）＋ 情绪急救包
       this.setData({ quickWord: this.randomWord(key), aidPack: this.buildAid(key) });
     } catch (e) {
