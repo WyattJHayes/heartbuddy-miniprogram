@@ -465,6 +465,7 @@ Page({
       ['【心语伴 · 本周情绪小报】',
        `主要情绪：${d.topLabel} ${d.topEmoji}`,
        `倾诉 ${d.chatCount} 次 · ${d.dayCount} 天有记录`,
+       `连续倾诉 ${((wx.getStorageSync('hb_talkStreak') || {}).d || 0)} 天`,
        ...(d.weekNotes ? [`晚间小结 ${d.weekNotes} 篇`] : []),
        ...((d.mixBar && d.mixBar.length) ? [`本周主要构成：${d.mixBar[0].emoji}${d.mixBar[0].label} ${d.mixBar[0].pct}%`] : []),
        ...(d.practiceText ? [`${d.practiceText}`] : []),
