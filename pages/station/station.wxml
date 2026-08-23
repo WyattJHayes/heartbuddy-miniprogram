@@ -26,6 +26,16 @@
           data-t="{{item}}" bindtap="setCardTag" role="button" aria-label="筛选{{item}}">{{item}}</view>
   </view>
 
+  <!-- 关键词搜索：忘了卡叫什么，多搜几次标题/内容/标签 -->
+  <view class="st-search" role="search" aria-label="搜索充电站卡片">
+    <input class="st-search-input" value="{{searchWord}}" placeholder="🔍 搜卡片：如「考试」「睡」「生气」…" confirm-type="search"
+           bindinput="onSearchInput" bindconfirm="onSearchConfirm" />
+    <view class="st-search-clear" wx:if="{{searchWord}}" bindtap="clearSearch" role="button" aria-label="清除搜索">✕</view>
+  </view>
+  <view class="st-search-empty" wx:if="{{searchWord && !cards.length}}" role="note" aria-label="没有找到卡片">
+    没有找到相关卡片，换个词试试，或看看上面分类。
+  </view>
+
   <view class="st-cards">
     <!-- 今天的一句（换日轮换，纯本地） -->
   <view class="daily-line" wx:if="{{todayLine}}" role="note" aria-label="今天的一句话">{{todayLine}}

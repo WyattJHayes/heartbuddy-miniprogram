@@ -34,6 +34,12 @@
 .tf-chip { font-size: 23rpx; color: #5b6b8c; background: #fff; border: 1rpx solid #e2e7f2; border-radius: 999rpx; padding: 8rpx 24rpx; margin: 0 12rpx 12rpx 0; }
 .tf-chip.on { background: #5b8def; color: #fff; border-color: #5b8def; }
 
+/* 关键词搜索 */
+.st-search { display: flex; align-items: center; margin: 14rpx 24rpx 0; background: #f2f5fa; border-radius: 999rpx; padding: 6rpx 24rpx; }
+.st-search-input { flex: 1; font-size: 25rpx; color: #3a4a63; height: 60rpx; }
+.st-search-clear { margin-left: 10rpx; padding: 6rpx 10rpx; color: #9aa4ba; font-size: 26rpx; }
+.st-search-empty { margin: 18rpx 24rpx 0; padding: 26rpx; text-align: center; font-size: 24rpx; color: #8b96b0; background: #f7f9fc; border-radius: 18rpx; }
+
 .fav-summary { margin: 14rpx 24rpx 0; font-size: 22rpx; color: #b07a2a; background: #fdf6ea; border: 1rpx solid #f0dcbc; border-radius: 12rpx; padding: 10rpx 18rpx; }
 
 .top-read { margin: 14rpx 24rpx 0; font-size: 22rpx; color: #3f6498; background: #f0f7ff; border: 1rpx solid #d3e5fa; border-radius: 12rpx; padding: 10rpx 18rpx; line-height: 1.6; }

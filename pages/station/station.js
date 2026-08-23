@@ -200,15 +200,23 @@ Page({
         ]
       }
     ],
-    open: -1   // 当前展开的卡片索引
+    open: -1,   // 当前展开的卡片索引
+    kw: ''      // 关键词搜索框（标题/标签/内容匹配，与标签筛选叠加）
   },
 
   // 收藏置顶：长按卡片头 ★ 收藏/取消（本地，最多 3 张）
   applyFavs() {
     const favs = wx.getStorageSync('hb_stFavs') || [];
     const tag = this.data.showTag || '全部';
+    const kw = (this.data.kw || '').trim().toLowerCase();
     const src = (this._allCards || this.data.cards || []).slice();
-    const cards = tag === '全部' ? src : src.filter((c) => (c.tags || []).includes(tag));
+    let cards = tag === '全部' ? src : src.filter((c) => (c.tags || []).includes(tag));
+    if (kw) {
+      cards = cards.filter((c) => {
+        const hay = (c.title + ' ' + (c.tags || []).join(' ') + ' ' + (c.lines || []).join(' ')).toLowerCase();
+        return hay.indexOf(kw) > -1;
+      });
+    }
     cards.sort((a, b) => {
       const fa = favs.indexOf(a.title), fb = favs.indexOf(b.title);
       if (fa === -1 && fb === -1) return 0;
@@ -218,6 +226,11 @@ Page({
     });
     this.setData({ cards, favTitles: favs });
   },
+
+  // 关键词搜索（与标签筛选叠加生效）
+  onSearchInput(e) { this.setData({ kw: e.detail.value }); this.applyFavs(); },
+  onSearchConfirm() { wx.hideKeyboard && wx.hideKeyboard(); },
+  clearSearch() { this.setData({ kw: '' }); this.applyFavs(); },
 
   toggleFav(e) {
     const t = e.currentTarget.dataset.t;
