@@ -312,6 +312,8 @@ Page({
   },
 
   // 连续低日提醒：最近连续 <2.5 的记录天数 ≥2 时，给一句温和建议
+  goStation() { wx.navigateTo({ url: '/pages/station/station' }); },
+
   buildLowStreakTip(avg7) {
     let streak = 0;
     for (let i = avg7.length - 1; i >= 0; i--) {
