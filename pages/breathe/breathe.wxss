@@ -62,7 +62,8 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .cb-tip { margin-top: 10rpx; font-size: 22rpx; color: #9aa3b8; line-height: 1.6; }
 
 .echo-main { flex: 1; }
-.echo-link { margin-top: 8rpx; font-size: 22rpx; color: #4a8a63; text-decoration: underline; }
+.echo-actions { display: flex; gap: 26rpx; margin-top: 10rpx; }
+.echo-link { font-size: 22rpx; color: #4a8a63; text-decoration: underline; }
 
 .heat-wrap { margin-top: 16rpx; }
 .heat-row { display: flex; flex-wrap: wrap; gap: 6rpx; }

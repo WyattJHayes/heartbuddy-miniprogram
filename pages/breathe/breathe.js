@@ -403,6 +403,13 @@ Page({
     wx.navigateTo({ url: '/pages/scan/scan' });
   },
 
+  // 复制这段「呼吸回响」：把此刻的放松也带走一句
+  copyEcho() {
+    if (!this.data.echoText) return;
+    wx.setClipboardData({ data: this.data.echoText, success: () => wx.showToast({ title: '已复制回响', icon: 'success' }) });
+  },
+
+  // 结束后的此刻情绪记录（与心情页/曲线无缝联动）
   async recordCalm() {
     if (this.data.calm) return;
     this.setData({ calm: true });

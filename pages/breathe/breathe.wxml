@@ -119,7 +119,10 @@
     <text class="echo-emoji">🫧</text>
     <view class="echo-main">
       <text class="echo-text">{{echoText}}</text>
-      <view class="echo-link" bindtap="goEdu" role="button" aria-label="去心理小课了解呼吸为什么有用">为什么呼吸有用？→ 心理小课</view>
+      <view class="echo-actions">
+        <view class="echo-link" bindtap="copyEcho" role="button" aria-label="复制这段回响">📋 复制这段回响</view>
+        <view class="echo-link" bindtap="goEdu" role="button" aria-label="去心理小课了解呼吸为什么有用">为什么呼吸有用？→ 心理小课</view>
+      </view>
     </view>
   </view>
   <view wx:if="{{phase === 'done'}}" class="tip scan-link" role="button" bindtap="goScan">还想更放松？试试 5 分钟身体扫描 →</view>
