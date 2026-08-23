@@ -22,6 +22,8 @@
 .qentry:active { transform: scale(0.98); }
 .q-chat { background: linear-gradient(135deg, #eef3ff, #dbe8ff); border-color: #b9cdf5; }
 .q-test { background: linear-gradient(135deg, #fff7ed, #ffe9d6); border-color: #f3d9b0; }
+.q-breathe { background: linear-gradient(135deg, #eefaf1, #d9f3e3); border-color: #bfe6cd; }
+.share-line { width: 100%; margin: -12rpx 0 32rpx; font-size: 24rpx; color: #5b8def; background: #f5f8ff; border: 1rpx dashed #b9cdf5; border-radius: 999rpx; padding: 16rpx 0; line-height: 1; }
 .qe-emoji { font-size: 44rpx; }
 .qe-t { font-size: 30rpx; font-weight: 700; color: #3a4a63; }
 .qe-d { font-size: 22rpx; color: #8b96b0; }

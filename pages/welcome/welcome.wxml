@@ -28,7 +28,15 @@
       <view class="qe-t">情绪自评</view>
       <view class="qe-d">7 题 · 约 3 分钟</view>
     </view>
+    <view class="qentry q-breathe" bindtap="goBreathe">
+      <view class="qe-emoji">🌬️</view>
+      <view class="qe-t">去呼吸</view>
+      <view class="qe-d">4 分钟帮身体先松下来</view>
+    </view>
   </view>
+
+  <!-- 把温柔带给朋友：今日一句即成分享首页 -->
+  <button class="share-line" open-type="share">💌 把今天这句分享给朋友</button>
 
   <!-- 第一次来：4 步教你用心语伴（一次性，看过就收起） -->
   <view class="card first-guide" wx:if="{{!welcomed}}" role="note" aria-label="第一次使用引导">
