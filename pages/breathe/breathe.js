@@ -113,6 +113,18 @@ Page({
       wx.setStorageSync('hb_breatheStreak', st);
       if (st.n === 1) wx.setStorageSync('ach_breatheDay', true);
       if (st.n === 3 && !wx.getStorageSync('ach_breathe3day')) wx.setStorageSync('ach_breathe3day', true);
+      // 连续 7 天达标：给一句有「走了很远」实感的专属庆祝（一次性）
+      if (st.n === 7 && !wx.getStorageSync('ach_breathe7day')) {
+        wx.setStorageSync('ach_breathe7day', true);
+        setTimeout(() => {
+          wx.showModal({
+            title: '🌿 连续 7 天，好好呼吸',
+            content: '一周了。你每天抽出几分钟，让身体放下一点——这比任何「多努力一下」都更照顾自己。',
+            showCancel: false,
+            confirmText: '我做到了'
+          });
+        }, 900);
+      }
       setTimeout(() => {
         wx.showModal({
           title: '🌸 今日放松目标达成',

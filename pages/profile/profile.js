@@ -183,6 +183,7 @@ Page({
       { key: 'ach_streak7', emoji: '🌿', title: '坚持 7 天', desc: '连续打卡 7 天' },
       { key: 'ach_breathe',     emoji: '🍃', title: '一呼一吸', desc: '完成一次呼吸练习' },
       { key: 'ach_breathe5',    emoji: '🧘', title: '呼吸行者', desc: '呼吸练习累计 5 次' },
+      { key: 'ach_breathe7day', emoji: '🌿', title: '一周一息', desc: '连续 7 天完成每日放松目标' },
       { key: 'ach_assess',      emoji: '📋', title: '认识自己', desc: '完成一次自评' },
       { key: 'ach_letter',      emoji: '💌', title: '写给未来', desc: '寄出时光信' },
       { key: 'ach_care',        emoji: '💛', title: '也请心语来看我', desc: '安排一次 24h 回访' },
@@ -425,10 +426,13 @@ Page({
     const edu = (wx.getStorageSync('hb_eduDone') || []).length;
     const br = wx.getStorageSync('breatheCount') || 0;
     const sc = wx.getStorageSync('hb_scanCount') || 0;
+    const talk = wx.getStorageSync('hb_talkStreak') || {};
+    const phrases = (wx.getStorageSync('hb_myPhrases') || []).length;
     const d = new Date();
     const txt = [
       '【我的概览 · 心语伴】' + d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月 ' + d.getDate() + ' 日',
       '· 已陪伴我 ' + (this.data.accompanyDays || 0) + ' 天，连续打卡 ' + (this.data.streakDays || 0) + ' 天',
+      '· 连续来找心语聊天 ' + (talk.d || 0) + ' 天 · 常用语 ' + phrases + '/5 条',
       '· 累计心情记录 ' + (this.data.footprintSum || 0) + ' 条',
       '· 呼吸练习 ' + br + ' 次 · 身体扫描 ' + sc + ' 次',
       '· 心理小课已学 ' + edu + '/8 节' + (wx.getStorageSync('hb_eduGradDate') ? '（已结业）' : ''),
@@ -468,7 +472,7 @@ Page({
               'hb_eduNote', 'hb_smallDays', 'hb_reviewDays', 'hb_stareCount',
               'hb_lessonCounts', 'hb_scanDoneLog', 'hb_phraseLast', 'hb_reviewAll', 'hbSafeNotes',
               'hb_eduSpanDays', 'hb_callTotal', 'hb_inputDraft',
-              'hb_opsCache', 'hb_lastChatTs'];
+              'hb_opsCache', 'hb_lastChatTs', 'hb_talkStreak', 'hb_triggerUse', 'ach_breathe7day', 'ach_talk_3', 'ach_talk_7', 'ach_talk_30', 'ach_talk_100'];
             keys.forEach((k) => wx.removeStorageSync(k));
             this.setData({ safePeople: '', favCount: 0, eduDone: 0 });
             wx.showToast({ title: '本机记录已清空', icon: 'success' });
