@@ -79,7 +79,7 @@
 
     <view class="card mt" wx:if="{{hist.length}}">
       <view class="section-title">📈 自评历史变化</view>
-      <view class="hrow" wx:for="{{hist}}" wx:key="index">
+      <view class="hrow" wx:for="{{hist}}" wx:key="index" bindtap="openHistDetail" data-i="{{index}}" role="button" aria-label="点开查看当时逐题回答">
         <text class="hdate">{{item.date}}</text>
         <view class="hdrop"><view class="hbar" style="width: {{item.total / 21 * 100}}%"></view></view>
         <text class="hval">{{item.total}} 分 · {{item.level}}</text>
@@ -87,6 +87,21 @@
       <view wx:if="{{histDelta}}" class="text-muted hdelta">{{histDelta}}</view>
       <view wx:if="{{topWeakText}}" class="hinsight">🧭 最常困扰你：<text class="hinsight-b">{{topWeakText}}</text></view>
       <view wx:if="{{improveText}}" class="hinsight">💚 {{improveText}}</view>
+      <view class="hrow-tip">点某次自评，可回看当时每一题的答案</view>
+    </view>
+
+    <!-- 历史逐题回看浮层 -->
+    <view class="hd-mask" wx:if="{{histDetail}}" bindtap="closeHistDetail">
+      <view class="hd-sheet" catchtap="noop">
+        <view class="hd-title">🗓 {{histDetail.date}} 的自评 · {{histDetail.total}} 分（{{histDetail.level}}）</view>
+        <scroll-view scroll-y class="hd-scroll">
+          <view class="hd-item" wx:for="{{histDetail.items}}" wx:key="index">
+            <view class="hd-q">{{index + 1}}. {{quesList[index]}}</view>
+            <view class="hd-a">我选了：{{histDetail.items[index]}} 分</view>
+          </view>
+        </scroll-view>
+        <view class="hd-close" bindtap="closeHistDetail" role="button" aria-label="关闭">知道了</view>
+      </view>
     </view>
 
     <!-- 7 维感受雷达：每题得分可视化，看一眼“自己现在的形状” -->

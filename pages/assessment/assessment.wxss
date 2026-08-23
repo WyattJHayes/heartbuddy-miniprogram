@@ -54,6 +54,17 @@
 .hinsight { margin-top: 12rpx; font-size: 25rpx; color: #4a5b76; line-height: 1.6; }
 .hinsight + .hinsight { margin-top: 6rpx; }
 .hinsight-b { font-weight: 600; color: #3f6fe0; }
+.hrow-tip { margin-top: 10rpx; font-size: 21rpx; color: #9aa4ba; }
+
+/* 历史逐题回看浮层 */
+.hd-mask { position: fixed; inset: 0; background: rgba(20, 28, 46, .45); z-index: 99; display: flex; align-items: flex-end; }
+.hd-sheet { width: 100%; background: #fff; border-radius: 28rpx 28rpx 0 0; padding: 30rpx 32rpx calc(34rpx + env(safe-area-inset-bottom)); max-height: 74vh; display: flex; flex-direction: column; }
+.hd-title { font-size: 28rpx; font-weight: 700; color: #3a4a63; margin-bottom: 18rpx; }
+.hd-scroll { flex: 1; min-height: 0; }
+.hd-item { padding: 14rpx 0; border-bottom: 1rpx solid #eef1f7; }
+.hd-q { font-size: 25rpx; color: #4a5b76; line-height: 1.6; }
+.hd-a { margin-top: 6rpx; font-size: 23rpx; color: #3f6fe0; }
+.hd-close { margin-top: 18rpx; text-align: center; color: #5b8def; font-size: 27rpx; font-weight: 600; padding: 14rpx 0; }
 
 /* 历史波动提醒 */
 .trend-pill { margin-top: 18rpx; padding: 16rpx 20rpx; border-radius: 14rpx; background: #eef6ff;

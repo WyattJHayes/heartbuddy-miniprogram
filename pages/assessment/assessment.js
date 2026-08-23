@@ -44,6 +44,8 @@ Page({
     lastDays: null,   // 距上次测评天数（≥3 天显示「复测」提示）
     retestRemind: false, // 3 天复查提醒：已设置 or 到期
     retestDue: false,      // 复查是否已到期（到期 → pink 强调 + 立即重测）
+    quesList: QUESTIONS,
+    histDetail: null,     // 正在回看的某次历史自评 {date,total,level,items}
   },
 
   onLoad() {
@@ -59,6 +61,16 @@ Page({
     const at = wx.getStorageSync('hb_retest_at') || 0;
     if (at && Date.now() >= at) this.setData({ retestRemind: true, retestDue: true });
   },
+
+  // 点某次历史自评 → 回看当时逐题回答
+  openHistDetail(e) {
+    const i = Number(e.currentTarget.dataset.i);
+    const h = this.data.hist[i];
+    if (!h) return;
+    this.setData({ histDetail: h });
+  },
+  closeHistDetail() { this.setData({ histDetail: null }); },
+  noop() {},
 
   // 距上次测评 ≥3 天 → 顶部轻提示条（可一键开始新一次）
   checkLastGap() {
