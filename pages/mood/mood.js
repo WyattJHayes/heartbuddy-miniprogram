@@ -248,6 +248,18 @@ Page({
     const raw = wx.getStorageSync('hb_small');
     if (raw && raw.date === today && Array.isArray(raw.items) && raw.items.length === 3) {
       items = raw.items;
+    } else {
+      // 昨夜在聊天页写下的「明日三件小事」→ 今天自动填进三件小事（只消费一次）
+      const tm = wx.getStorageSync('hb_tomorrowSmall');
+      const yesterday = new Date(Date.now() - 86400000).toDateString();
+      const isY = tm && tm.date === yesterday;
+      if ((tm && tm.date === today) || isY) {
+        const filled = items.map((x, i) => (tm.items[i] ? { text: tm.items[i], done: false, at: '' } : x));
+        if (filled.some((x) => x.text)) {
+          items = filled;
+          wx.removeStorageSync('hb_tomorrowSmall');
+        }
+      }
     }
     const all = items.filter((x) => x.done).length === 3 && items.some((x) => x.text);
     this.setData({ smalls: items.map((x, i) => Object.assign({ i }, x)), smallCelebrate: all, smallStreak: calcStreak(wx.getStorageSync('hb_smallDays') || []), smallWeekN: this._smallWeekN() });
@@ -270,6 +282,37 @@ Page({
     rec.n = Math.max(0, (rec.n || 0) + delta);
     wx.setStorageSync('hb_smallWeek', rec);
     this.setData({ smallWeekN: rec.n });
+  },
+
+  // 一键「先替你做」：把三件小事填满并全部勾上（适合今天没状态，先给自己留个完成记录）
+  fillAllSmall() {
+    const SCENES = {
+      study: ['课间趴 3 分钟闭眼休息', '整理错题只做 3 道', '番茄钟 25 分钟后必休息', '把明天要交的作业先列出来'],
+      body:  ['晚饭后散步 10 分钟', '睡前把手机放到桌上充电', '喝够 3 杯水', '吃一顿好好咀嚼的午饭', '晚上 10 点半前躺下', '把书桌收拾干净再睡'],
+      social:['和同桌说一句玩笑话', '给老朋友发一句「最近好吗」', '放学路上听一首喜欢的歌', '对家人说一句今天的小事'],
+      me:    ['给窗台的植物浇浇水', '写 3 行日记再睡', '洗一个长长的热水澡', '对着镜子说一句辛苦了']
+    };
+    const ideas = SCENES[this.data.smallScene || 'body'] || SCENES.body;
+    const items = this.data.smalls.slice();
+    const now = new Date();
+    const at = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    const used = new Set(items.map((x) => x.text).filter(Boolean));
+    const pool = ideas.filter((i) => !used.has(i));
+    items.forEach((x, i) => {
+      if (!x.text && pool[i]) x.text = pool[i];
+      x.done = !!x.text;
+      if (x.done) x.at = at;
+    });
+    this.setData({ smalls: items, smallCelebrate: items.every((x) => x.done && x.text) });
+    wx.setStorageSync('ach_small_three', true);
+    const days = wx.getStorageSync('hb_smallDays') || [];
+    const td = new Date().toDateString();
+    if (!days.includes(td)) { days.push(td); wx.setStorageSync('hb_smallDays', days.slice(-400)); }
+    this.setData({ smallStreak: calcStreak(wx.getStorageSync('hb_smallDays') || []) });
+    // 周计数：一次性 +3
+    this.touchSmallWeek(3);
+    this.saveSmall();
+    wx.showToast({ title: '今天先好好待自己 ✨', icon: 'success' });
   },
 
   // 灵感库：不知道写什么时，一键填入一件可做的小事（按场景分组，只填第一个空格）
