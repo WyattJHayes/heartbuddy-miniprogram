@@ -50,7 +50,8 @@
 
 .changelog-card { border: 1rpx solid #dbe7fb; background: #f7faff; }
 .cl-head { display: flex; align-items: center; justify-content: space-between; }
-.cl-title { font-size: 26rpx; font-weight: 600; color: #3f5c95; }
+.cl-title { display: flex; align-items: center; gap: 8rpx; font-size: 26rpx; font-weight: 600; color: #3f5c95; flex: 1; }
+.cl-copy { font-size: 22rpx; color: #8a95ad; padding: 4rpx 14rpx; background: #f2f5fc; border-radius: 999rpx; }
 .cl-arrow { color: #b0b7c8; transition: transform .2s; }
 .cl-arrow.up { transform: rotate(180deg); }
 .cl-list { margin-top: 12rpx; }

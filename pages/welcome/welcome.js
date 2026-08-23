@@ -37,6 +37,12 @@ Page({
 
   toggleLog() { this.setData({ showLog: !this.data.showLog }); },
 
+  // 一键复制更新日志：把最近版本说明整段复制（可发给老师/答辩留档）
+  copyLog() {
+    const body = ['【心语伴 · 版本更新日志】', '', ...this.data.changelog.map((c) => `v${c.v}：${c.t}`)].join('\n');
+    wx.setClipboardData({ data: body, success: () => wx.showToast({ title: '已复制版本说明', icon: 'success' }) });
+  },
+
   goFromGuide(e) {
     const u = e.currentTarget.dataset.u;
     wx.setStorageSync('hb_welcomed', true);

@@ -40,9 +40,12 @@
 
   <!-- 更新日志：最新版本做了什么（可折叠） -->
   <view class="card changelog-card">
-    <view class="cl-head" bindtap="toggleLog" role="button" aria-label="展开或收起更新日志">
-      <text class="cl-title">🆕 最近更新了什么</text>
-      <text class="cl-arrow {{showLog ? 'up' : ''}}">▾</text>
+    <view class="cl-head">
+      <view class="cl-title" bindtap="toggleLog" role="button" aria-label="展开或收起更新日志">
+        <text>🆕 最近更新了什么</text>
+        <text class="cl-arrow {{showLog ? 'up' : ''}}">▾</text>
+      </view>
+      <view class="cl-copy" bindtap="copyLog" role="button" aria-label="复制版本说明">📋 复制</view>
     </view>
     <view class="cl-list" wx:if="{{showLog}}">
       <view class="cl-item" wx:for="{{changelog}}" wx:key="v">
