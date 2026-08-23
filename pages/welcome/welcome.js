@@ -53,6 +53,22 @@ Page({
     wx.setClipboardData({ data: this.data.todayLine, success: () => wx.showToast({ title: '已复制今日一句话', icon: 'none' }) });
   },
 
+  // 分享给朋友：今日一句当作欢迎语（未同意前也可把温柔带给别人）
+  onShareAppMessage() {
+    return {
+      title: this.data.todayLine || '心语伴 · 随时在线的情绪陪伴者',
+      path: '/pages/welcome/welcome?src=share'
+    };
+  },
+
+  // 分享到朋友圈：同样的今日一句
+  onShareTimeline() {
+    return {
+      title: this.data.todayLine || '心语伴 · 随时在线的情绪陪伴者',
+      query: 'src=share'
+    };
+  },
+
   toggleLog() { this.setData({ showLog: !this.data.showLog }); },
 
   // 一键复制更新日志：把最近版本说明整段复制（可发给老师/答辩留档）
@@ -93,6 +109,8 @@ Page({
   goChat() { wx.switchTab({ url: '/pages/chat/chat' }); },
 
   goTest() { wx.navigateTo({ url: '/pages/assessment/assessment' }); },
+
+  goBreathe() { wx.switchTab({ url: '/pages/breathe/breathe' }); },
 
   goMood() { wx.switchTab({ url: '/pages/mood/mood' }); }
 });
