@@ -57,7 +57,7 @@
       <!-- 本周「相对最好的一天」正向叙事 -->
       <view class="best-tip" wx:if="{{bestDayText}}" role="note" aria-label="本周最好一天肯定">{{bestDayText}}</view>
       <!-- 本周「练习足迹」：数一数自我照顾的次数 -->
-      <view class="best-tip" wx:if="{{practiceText}}" role="note" aria-label="本周练习足迹">{{practiceText}}</view>
+      <view class="best-tip" wx:if="{{practiceText}}" role="note" aria-label="本周练习足迹">{{practiceText}}<text wx:if="{{weekSmallN}}"> · 三件小事做了 {{weekSmallN}} 件</text></view>
     </view>
 
     <!-- 一句话总结：拼词不加判断，开头先给一句安心的 -->
@@ -89,7 +89,7 @@
     <!-- 月度小结：本月构成 + 与上月对比 -->
     <view class="card mt" wx:if="{{monthInfo}}">
       <view class="section-title">📅 {{monthInfo.label}} 心情小结</view>
-      <view class="month-line">这个月你记录了 <text class="hl">{{monthInfo.total}}</text> 条心情，覆盖 <text class="hl">{{monthInfo.days}}</text> 天</view>
+      <view class="month-line">这个月你记录了 <text class="hl">{{monthInfo.total}}</text> 条心情，覆盖 <text class="hl">{{monthInfo.days}}</text> 天<text wx:if="{{monthInfo.bestRun}}"> · {{monthInfo.bestRun}}</text></view>
       <view class="month-count" wx:if="{{monthInfo.monthCountText}}" role="note" aria-label="本月与上月条数对比">📊 {{monthInfo.monthCountText}}</view>
       <view class="month-copy" bindtap="copyMonthText" role="button" aria-label="复制月度小结文字版">📋 复制月度小结（可发给老师/家长）</view>
       <view class="mtop" wx:for="{{monthInfo.top3}}" wx:key="index">

@@ -272,6 +272,7 @@ Page({
         bestDayText,
         oneLiner,
         practiceText,
+        weekSmallN: this._weekSmall(),
         cardData: {
           topEmoji: MOOD_EMOJI[top] || '😌',
           topLabel: MOOD_LABEL[top] || '平稳',
@@ -389,6 +390,15 @@ Page({
       } else if (curAvg != null) {
         delta = prevAvg == null ? '（上月无记录可对比）' : '';
       }
+      // 本月最长连续记录段：把记过的日期排好，数最长连续
+      const DAY = 86400000;
+      const allDays = Array.from(daySet).map((k) => new Date(k + ' 00:00:00').getTime()).sort((a, b) => a - b);
+      let bestRun = 0, run = 1;
+      for (let i = 1; i < allDays.length; i++) {
+        if (allDays[i] - allDays[i - 1] === DAY) { run += 1; if (run > bestRun) bestRun = run; }
+        else run = 1;
+      }
+      if (allDays.length) bestRun = Math.max(bestRun, 1);
       this.setData({
         monthInfo: {
         monthCountText,
@@ -399,12 +409,22 @@ Page({
           curAvg,
           avgInt,
           cloud,
-          delta
+          delta,
+          bestRun: bestRun >= 3 ? `最长连续记录 ${bestRun} 天 ⭐` : ''
         }
       });
     } catch (err) {
       console.warn('[report] 月度小结失败', err);
     }
+  },
+
+  // 本周已做小事数（mood 页三件小事共享的周计数）
+  _weekSmall() {
+    const w = wx.getStorageSync('hb_smallWeek');
+    if (!w || typeof w !== 'object') return 0;
+    const now = new Date();
+    const mon = new Date(now.getTime() - ((now.getDay() + 6) % 7) * 86400000);
+    return w.k === mon.toDateString() ? (w.n || 0) : 0;
   },
 
   goChat() { wx.switchTab({ url: '/pages/chat/chat' }); },
@@ -461,11 +481,13 @@ Page({
       wx.showToast({ title: '本周还没有记录', icon: 'none' });
       return;
     }
+    const smallN = this._weekSmall();
     const text =
       ['【心语伴 · 本周情绪小报】',
        `主要情绪：${d.topLabel} ${d.topEmoji}`,
        `倾诉 ${d.chatCount} 次 · ${d.dayCount} 天有记录`,
        `连续倾诉 ${((wx.getStorageSync('hb_talkStreak') || {}).d || 0)} 天`,
+       ...(smallN ? [`这周为自己做了 ${smallN} 件小事`] : []),
        ...(d.weekNotes ? [`晚间小结 ${d.weekNotes} 篇`] : []),
        ...((d.mixBar && d.mixBar.length) ? [`本周主要构成：${d.mixBar[0].emoji}${d.mixBar[0].label} ${d.mixBar[0].pct}%`] : []),
        ...(d.practiceText ? [`${d.practiceText}`] : []),
