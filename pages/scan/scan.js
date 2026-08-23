@@ -39,6 +39,7 @@ Page({
     left: 30,
     pct: 0,
     lastDone: '',
+    scanStreak: 0,     // 连续扫描天数（最近完成日志往前数）
     calmInt: 3        // 完成后「此刻平静程度」（1-5，默认 3，随记录入库）
   },
 
@@ -48,6 +49,7 @@ Page({
     const ts = wx.getStorageSync('hb_scanDone');
     if (ts) this.setData({ lastDone: `上次完成：${this.fmtDate(ts)}` });
     this.setData({ scanCount: wx.getStorageSync('hb_scanCount') || 0 });
+    this.setData({ scanStreak: this.buildScanStreak() });
     this.setData({ opening: this.dayOpening() });
     this.setData({ feelLog: (wx.getStorageSync('hb_scanFeel') || []).slice(-5).reverse() });
     // 感受词 Top1：扫描后身体最常给你的反馈
@@ -155,6 +157,9 @@ Page({
     dl.push(ts);
     wx.setStorageSync('hb_scanDoneLog', dl.slice(-30));
     this.setData({ lastDone: `上次完成：${this.fmtDate(ts)}` });
+    // 计入今日「放松累计」：扫描/快扫的分钟数也进呼吸页每日 10 分钟目标（跨页一致）
+    this.touchRelaxMins(this.data.mode === 'quick' ? 3 : 5);
+    this.setData({ scanStreak: this.buildScanStreak() });
     // 记一次「平静」情绪，进入心情曲线
     try {
       let openid = app.globalData.openid;
@@ -194,5 +199,32 @@ Page({
   again() {
     const stages = this.data.mode === 'quick' ? QUICK_STAGES : STAGES;
     this.setData({ phase: 'ready', idx: 0, left: stages[0].sec, pct: 0 });
+  },
+
+  // 连续扫描天数：从完成时间戳队列往前数（今天或昨天开始都算连续）
+  buildScanStreak() {
+    const doneTs = wx.getStorageSync('hb_scanDoneLog') || [];
+    if (!doneTs.length) return 0;
+    const days = Array.from(new Set(doneTs.map((t) => new Date(t).toDateString()))).map(
+      (k) => new Date(k + ' 00:00:00').getTime()
+    ).sort((a, b) => b - a);
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const DAY = 86400000;
+    let expect = (today.getTime() === days[0] || today.getTime() - DAY === days[0]) ? days[0] : -1;
+    let n = 0;
+    for (const d of days) {
+      if (expect === -1) break;
+      if (d === expect) { n += 1; expect -= DAY; } else break;
+    }
+    return n;
+  },
+
+  // 今日放松累计（跨页共享给呼吸页的每日目标）：按天记录扫描分钟数
+  touchRelaxMins(add) {
+    const today = new Date().toDateString();
+    const r = wx.getStorageSync('hb_relaxScan');
+    const rec = (r && typeof r === 'object' && r.date === today) ? r : { date: today, mins: 0 };
+    rec.mins = Math.min((rec.mins || 0) + add, 999);
+    wx.setStorageSync('hb_relaxScan', rec);
   }
 });

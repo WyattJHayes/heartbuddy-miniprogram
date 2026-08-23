@@ -14,8 +14,8 @@
   <view class="daygoal">
     <view class="dg-top">
       <text class="dg-label">🌤 今日放松目标</text>
-      <text class="dg-num" wx:if="{{dayDone}}">✅ 达成 {{dayMins}}/{{dayGoal}} 分钟</text>
-      <text class="dg-num" wx:else>{{dayMins}}/10 分钟</text>
+      <text class="dg-num" wx:if="{{dayDone}}">✅ 达成 {{dayTotal}}/{{dayGoal}} 分钟</text>
+      <text class="dg-num" wx:else>{{dayTotal}}/{{dayGoal}} 分钟<text wx:if="{{dayScanMins}}">（含快扫 {{dayScanMins}} 分钟）</text></text>
     </view>
     <view class="dg-bar"><view class="dg-fill" style="width: {{dayPct}}%"></view></view>
     <text class="dg-sub" wx:if="{{dayDone}}">连续 {{dayStreak}} 天达标，你越来越会照顾自己</text>

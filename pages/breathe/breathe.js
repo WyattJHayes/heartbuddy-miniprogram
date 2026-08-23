@@ -46,6 +46,9 @@ Page({
     text: '准备好了就开始',
     calm: false,
     calmInt: 3,          // 记录「平静」时的强度（1-5，默认 3）
+    dayMins: 0,          // 今日呼吸累计分钟
+    dayScanMins: 0,      // 今日扫描累计分钟（跨页合并展示）
+    dayTotal: 0,         // 今日放松总计 = 呼吸 + 扫描
     dayGoal: DAILY_GOAL_MIN, // 面向 WXML 展示
     echoText: '',          // 完成一次呼吸后的「呼吸回响」
     resumeTip: '',         // 上次练习中断的温柔提示
@@ -86,10 +89,16 @@ Page({
     const today = new Date().toDateString();
     const d = wx.getStorageSync('hb_breatheDay');
     const cur = d && typeof d === 'object' && d.date === today ? d : { mins: 0, done: false };
+    // 今日放松总计 = 呼吸分钟 + 身体扫描分钟（扫描页完成也会记入，跨页一致）
+    const s = wx.getStorageSync('hb_relaxScan');
+    const scanMins = (s && typeof s === 'object' && s.date === today) ? (s.mins || 0) : 0;
+    const total = Math.min((cur.mins || 0) + scanMins, DAILY_GOAL_MIN);
     const st = wx.getStorageSync('hb_breatheStreak');
     this.setData({
       dayMins: cur.mins || 0,
-      dayPct: Math.min(100, Math.round(((cur.mins || 0) / DAILY_GOAL_MIN) * 100)),
+      dayScanMins: scanMins,
+      dayTotal: total,
+      dayPct: Math.min(100, Math.round((total / DAILY_GOAL_MIN) * 100)),
       dayDone: !!cur.done,
       dayStreak: (st && st.n) || 0
     });
