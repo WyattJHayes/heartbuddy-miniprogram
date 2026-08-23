@@ -112,3 +112,6 @@
 .badge-pct { margin-top: 12rpx; text-align: center; font-size: 24rpx; color: #b07a2a; font-weight: 700; }
 
 .fav-group-t { font-size: 22rpx; color: #9aa3b8; padding: 14rpx 4rpx 6rpx; }
+
+/* 徽章一键复制 */
+.badge-copy { margin-bottom: 14rpx; display: inline-block; font-size: 22rpx; color: #7a83a0; background: #eef2fb; border-radius: 999rpx; padding: 6rpx 16rpx; }

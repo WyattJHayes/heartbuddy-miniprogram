@@ -175,6 +175,16 @@ Page({
     });
   },
 
+  // 复制徽章列表：把已点亮徽章导出为文字（分享/存档）
+  copyBadges() {
+    const got = (this.data.badges || []).filter((b) => b.got);
+    if (!got.length) { wx.showToast({ title: '还没有点亮徽章，先去用起来吧', icon: 'none' }); return; }
+    const txt = ['【心语伴 · 我的成就徽章】', `已点亮 ${got.length}/${this.data.badgeTotal || 0} 枚`, '']
+      .concat(got.map((b) => `${b.emoji} ${b.title}${b.gotDate ? '（' + b.gotDate + '）' : ''} —— ${b.desc}`))
+      .join('\n');
+    wx.setClipboardData({ data: txt, success: () => wx.showToast({ title: '已复制徽章列表', icon: 'success' }) });
+  },
+
   // 成就徽章（本地记录解锁情况）
   refreshBadges() {
     const defs = [
