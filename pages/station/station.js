@@ -273,15 +273,28 @@ Page({
   randomCard() {
     const cards = this.data.cards || [];
     if (!cards.length) return;
-    const i = Math.floor(Math.random() * cards.length);
+    // 今天抽到过的先不立刻重复（本地记录当天抽过的标题）
+    const today = new Date().toDateString();
+    const pool = this.data.drawPool || wx.getStorageSync('hb_stDrawPool') || {};
+    let drawnToday = (pool[today] || []).slice();
+    const avail = cards.filter((x) => drawnToday.indexOf(x.title) < 0);
+    const src = avail.length ? avail : cards;
+    const i = Math.floor(Math.random() * src.length);
+    const c = src[i];
     // 抽中计数：第 N 次抽到同一张，说明它跟你有缘
-    const c = cards[i];
     const cnt = wx.getStorageSync('hb_stDraws') || {};
     cnt[c.title] = (cnt[c.title] || 0) + 1;
     wx.setStorageSync('hb_stDraws', cnt);
+    // 记住今天的抽取（保持 ≤8 条，跨天自然失效）
+    if (!drawnToday.includes(c.title)) {
+      if (drawnToday.length >= 8) drawnToday = drawnToday.slice(drawnToday.length - 7);
+      drawnToday.push(c.title);
+    }
+    pool[today] = drawnToday;
+    wx.setStorageSync('hb_stDrawPool', pool);
     // 顺手推荐另一张（不同的卡），点一下直接展开
-    const others = cards.filter((x, j) => j !== i);
-    const other = others[Math.floor(Math.random() * others.length)];
+    const others = src.filter((x, j) => j !== i);
+    const other = others.length ? others[Math.floor(Math.random() * others.length)] : null;
     this.setData({
       open: i,
       drawMsg: cnt[c.title] > 1 ? '第 ' + cnt[c.title] + ' 次抽中「' + c.title + '」——它好像特别懂你。' : '',
