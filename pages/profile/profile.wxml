@@ -106,10 +106,15 @@
     </view>
     <view class="foot-week">
       <view class="fw-col" wx:for="{{mood7Days}}" wx:key="index">
-        <view class="fw-cell {{item ? 'on' : ''}}" aria-label="{{wkLabels[index] === '今' ? '今天' : '星期' + wkLabels[index]}}{{item ? '已记录' : '未记录'}}"></view>
+        <view class="fw-cell mood {{item ? 'on' : ''}}" aria-label="{{wkLabels[index] === '今' ? '今天' : '星期' + wkLabels[index]}}{{item ? '已记录心情' : '未记录心情'}}"></view>
         <text class="fw-label">{{wkLabels[index]}}</text>
       </view>
+      <view class="fw-col" wx:for="{{practice7Days}}" wx:key="index">
+        <view class="fw-cell practice {{item ? 'on' : ''}}" aria-label="{{wkLabels[index] === '今' ? '今天' : '星期' + wkLabels[index]}}{{item ? '做过放松练习' : '未做练习'}}"></view>
+        <text class="fw-label p">{{item ? '练习' : ''}}</text>
+      </view>
     </view>
+    <view class="fw-tip">上排：记录心情 · 下排：做过放松练习（呼吸/扫描）</view>
     <view class="year-stat" wx:if="{{yearStat}}" role="note" aria-label="年度统计">
       📅 {{yearStat.y}} 年，你已经记下了 <text class="ys-n">{{yearStat.n}}</text> 条心情、覆盖 <text class="ys-n">{{yearStat.days}}</text> 天
     </view>

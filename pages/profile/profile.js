@@ -283,6 +283,14 @@ Page({
         const d = new Date(today.getTime() - i * DAY);
         wk.push(i === 0 ? '今' : wkLabels[d.getDay()]);
       }
+      // 近 7 天练习格子：当天做过呼吸或身体扫描即点亮（本地 breezeWeek + hb_scanDoneLog）
+      const practice7 = [];
+      const breathDays = new Set((wx.getStorageSync('breatheWeek') || []).map((t) => new Date(t).toDateString()));
+      const scanDays = new Set((wx.getStorageSync('hb_scanDoneLog') || []).map((t) => new Date(t).toDateString()));
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(today.getTime() - i * DAY);
+        practice7.push(breathDays.has(d.toDateString()) || scanDays.has(d.toDateString()) ? 1 : 0);
+      }
       // 本月平均强度 + 最常用记录入口（trigger 统计，脱敏展示）
       const mStart = new Date(today.getFullYear(), today.getMonth(), 1).getTime();
       const _ = db.command;
@@ -326,6 +334,7 @@ Page({
         pBreath, pScan, pWrite,
         streakDays,
         mood7Days: mood7,
+        practice7Days: practice7,
         wkLabels: wk,
         monthAvgInt,
         monthProg,
@@ -483,7 +492,7 @@ Page({
               'hb_eduNote', 'hb_smallDays', 'hb_reviewDays', 'hb_stareCount',
               'hb_lessonCounts', 'hb_scanDoneLog', 'hb_phraseLast', 'hb_reviewAll', 'hbSafeNotes',
               'hb_eduSpanDays', 'hb_callTotal', 'hb_inputDraft',
-              'hb_opsCache', 'hb_lastChatTs', 'hb_talkStreak', 'hb_triggerUse', 'ach_breathe7day', 'ach_talk_3', 'ach_talk_7', 'ach_talk_30', 'ach_talk_100', 'ach_review7',
+              'hb_opsCache', 'hb_lastChatTs', 'hb_talkStreak', 'hb_triggerUse', 'ach_breathe7day', 'ach_talk_3', 'ach_talk_7', 'ach_talk_30', 'ach_talk_100', 'ach_review7', 'hb_tomorrowSmall',
               'hb_smallWeek', 'hb_stDrawPool', 'hb_relaxScan', 'hb_worryBox'];
             keys.forEach((k) => wx.removeStorageSync(k));
             this.setData({ safePeople: '', favCount: 0, eduDone: 0 });
