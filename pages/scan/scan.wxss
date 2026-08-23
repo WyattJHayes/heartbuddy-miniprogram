@@ -44,3 +44,11 @@
 .fp-top { margin-top: 10rpx; font-size: 22rpx; color: #3f7a52; background: #f2f9f4; border-radius: 8rpx; padding: 8rpx 14rpx; }
 
 .fp-slot { margin-top: 8rpx; font-size: 22rpx; color: #5b6b8c; }
+
+/* 双模式选择：5 分钟全身 / 3 分钟快扫 */
+.scan-mode-pick { display: flex; gap: 14rpx; margin-top: 18rpx; }
+.sm-item { flex: 1; border: 2rpx solid #dfe6f2; border-radius: 14rpx; padding: 14rpx 12rpx;
+  background: #fff; text-align: center; }
+.sm-item.on { border-color: #5b8def; background: #f0f5ff; }
+.sm-t { display: block; font-size: 25rpx; color: #33415c; font-weight: 600; }
+.sm-d { display: block; margin-top: 4rpx; font-size: 21rpx; color: #9aa3b8; }

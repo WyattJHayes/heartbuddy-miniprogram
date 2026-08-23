@@ -15,10 +15,20 @@ const STAGES = [
   { t: '回到当下', d: '慢慢活动手指脚趾，眨眨眼睛，再看一眼周围的安静。', sec: 45 }
 ];
 
+// 3 分钟「午间快扫」：课间/休息时也能来一轮（更轻，也计入累计完成）
+const QUICK_STAGES = [
+  { t: '找一个舒服的姿势', d: '坐着或躺着都行，轻轻闭上眼睛，肩膀先松一松。', sec: 40 },
+  { t: '跟着呼吸三次', d: '不用刻意调整，跟着呼气把今天绷着的东西放一放。', sec: 40 },
+  { t: '扫过大腿 → 胸口 → 肩膀', d: '顺着大腿往上，到胸口，再到肩膀——只是注意到它们，不调整什么。', sec: 60 },
+  { t: '回到此刻', d: '动动手指和脚趾，慢慢睁开眼睛，回到眼前这一分钟。', sec: 40 }
+];
+
 Page({
   data: {
     stages: STAGES,
     phase: 'ready',   // ready | run | done
+    mode: 'full',      // full=5 分钟全身扫描 | quick=3 分钟午间快扫
+    modeTotal: STAGES.length,
     feelPicked: '',   // 完成后的身体感受一词
     feelLog: [],     // 最近几次身体感受回看
     timeTip: '',     // 按时段的扫描建议（一句话）
@@ -85,8 +95,15 @@ Page({
     return `${d.getMonth() + 1}月${d.getDate()}日`;
   },
 
+  pickMode(e) {
+    const mode = e.currentTarget.dataset.m === 'quick' ? 'quick' : 'full';
+    const stages = mode === 'quick' ? QUICK_STAGES : STAGES;
+    this.setData({ mode, stages, modeTotal: stages.length, phase: 'ready', idx: 0, left: stages[0].sec, pct: 0 });
+  },
+
   begin() {
-    this.setData({ phase: 'run', idx: 0, left: STAGES[0].sec, pct: 0 });
+    const stages = this.data.mode === 'quick' ? QUICK_STAGES : STAGES;
+    this.setData({ phase: 'run', stages, modeTotal: stages.length, idx: 0, left: stages[0].sec, pct: 0 });
     this.startTimer();
   },
 
@@ -96,11 +113,12 @@ Page({
     this._timer = setInterval(() => {
       const { phase, idx, left } = self.data;
       if (phase !== 'run') return self.stop();
+      const stages = self.data.mode === 'quick' ? QUICK_STAGES : STAGES;
       if (left > 1) {
-        self.setData({ left: left - 1, pct: (1 - left / STAGES[idx].sec) * 100 });
-      } else if (idx + 1 < STAGES.length) {
+        self.setData({ left: left - 1, pct: (1 - left / stages[idx].sec) * 100 });
+      } else if (idx + 1 < stages.length) {
         const n = idx + 1;
-        self.setData({ idx: n, left: STAGES[n].sec, pct: 0 });
+        self.setData({ idx: n, left: stages[n].sec, pct: 0 });
       } else {
         self.onFinish();
       }
@@ -143,7 +161,7 @@ Page({
       if (!openid) openid = await app.login();
       if (!openid) return;
       await wx.cloud.database().collection('moods').add({
-        data: { openid, mood: 'peace', intensity: this.data.calmInt || 3, trigger: '身体扫描', note: '5分钟身体扫描完成', createdAt: Date.now() }
+        data: { openid, mood: 'peace', intensity: this.data.calmInt || 3, trigger: '身体扫描', note: this.data.mode === 'quick' ? '3分钟午间快扫完成' : '5分钟身体扫描完成', createdAt: Date.now() }
       });
       wx.setStorageSync('ach_body_scan', true);
       wx.setStorageSync('ach_scan', true);
@@ -174,6 +192,7 @@ Page({
   },
 
   again() {
-    this.setData({ phase: 'ready', idx: 0, left: STAGES[0].sec, pct: 0 });
+    const stages = this.data.mode === 'quick' ? QUICK_STAGES : STAGES;
+    this.setData({ phase: 'ready', idx: 0, left: stages[0].sec, pct: 0 });
   }
 });
