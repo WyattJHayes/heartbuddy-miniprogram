@@ -205,6 +205,17 @@ Page({
     wx.setClipboardData({ data: t, success: () => wx.showToast({ title: '已复制这份自检', icon: 'success' }) });
   },
 
+  // 把生成的话术存进「我的常用语」（聊天页共用同一份 hb_myPhrases，最多 5 条）
+  saveToPhrases() {
+    const t = (this.data.scriptText || '').trim();
+    if (!t) return;
+    const list = wx.getStorageSync('hb_myPhrases') || [];
+    if (list.indexOf(t) >= 0) { wx.showToast({ title: '已经存过这条了', icon: 'none' }); return; }
+    const next = list.concat([t]).slice(-5);
+    wx.setStorageSync('hb_myPhrases', next);
+    wx.showToast({ title: '已存进「我的常用语」', icon: 'success' });
+  },
+
   editScript() {
     const t = this.data.scriptText;
     if (!t) return;

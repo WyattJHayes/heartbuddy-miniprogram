@@ -145,6 +145,7 @@
       <view class="af-out-text" user-select>{{scriptText}}</view>
       <view class="af-actions">
         <view class="af-btn" bindtap="copyScript" role="button" aria-label="复制这段话">复制这段话</view>
+        <view class="af-btn ghost" bindtap="saveToPhrases" role="button" aria-label="存进我的常用语">⭐ 存进常用语</view>
         <view class="af-btn ghost" bindtap="editScript" role="button" aria-label="编辑后复制">✏️ 改一改</view>
         <view class="af-btn ghost" bindtap="regenScript" role="button" aria-label="换一种说法">换一种说法</view>
       </view>
