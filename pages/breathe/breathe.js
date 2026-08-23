@@ -440,6 +440,10 @@ Page({
         wx.vibrateShort && wx.vibrateShort({ type: 'light' });
         const wkN = this.weekCount();
         wx.showToast({ title: '已记下 · 本周第 ' + wkN + ' 次 · 今日放松 ' + this.data.dayTotal + '/' + DAILY_GOAL_MIN + ' 分钟', icon: 'success' });
+        // 今天已达标后再来一次：不催，只确认「你已经在照顾自己」
+        if (this.data.dayDone && this.data.dayTotal >= DAILY_GOAL_MIN) {
+          setTimeout(() => wx.showToast({ title: '今天目标已达成了，这几次是加给自己的温柔 💚', icon: 'none' }), 800);
+        }
         this.setData({ echoText: this.nextEcho() });
         // 深夜完成：练完就去睡（22 点后追加一句）
         const hh = new Date().getHours();
