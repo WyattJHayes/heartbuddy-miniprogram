@@ -473,7 +473,8 @@ Page({
               'hb_eduNote', 'hb_smallDays', 'hb_reviewDays', 'hb_stareCount',
               'hb_lessonCounts', 'hb_scanDoneLog', 'hb_phraseLast', 'hb_reviewAll', 'hbSafeNotes',
               'hb_eduSpanDays', 'hb_callTotal', 'hb_inputDraft',
-              'hb_opsCache', 'hb_lastChatTs', 'hb_talkStreak', 'hb_triggerUse', 'ach_breathe7day', 'ach_talk_3', 'ach_talk_7', 'ach_talk_30', 'ach_talk_100'];
+              'hb_opsCache', 'hb_lastChatTs', 'hb_talkStreak', 'hb_triggerUse', 'ach_breathe7day', 'ach_talk_3', 'ach_talk_7', 'ach_talk_30', 'ach_talk_100',
+              'hb_smallWeek', 'hb_stDrawPool'];
             keys.forEach((k) => wx.removeStorageSync(k));
             this.setData({ safePeople: '', favCount: 0, eduDone: 0 });
             wx.showToast({ title: '本机记录已清空', icon: 'success' });
