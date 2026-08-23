@@ -1053,5 +1053,14 @@ Page({
     }
   },
 
-  onUnload() { if (this.timer) clearInterval(this.timer); }
+  onUnload() { if (this.timer) clearInterval(this.timer); },
+
+  // 分享给朋友：只分享「心语伴」入口，不携带任何对话内容（隐私安全）
+  onShareAppMessage() {
+    wx.setStorageSync('ach_share', true); // 成就：陪伴他人
+    return {
+      title: '它也愿意听你说说心里话 · 心语伴',
+      path: '/pages/welcome/welcome?src=share'
+    };
+  }
 });
