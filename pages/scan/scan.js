@@ -40,6 +40,7 @@ Page({
     pct: 0,
     lastDone: '',
     scanStreak: 0,     // 连续扫描天数（最近完成日志往前数）
+    scanToday: 0,      // 今天已完成次数
     calmInt: 3        // 完成后「此刻平静程度」（1-5，默认 3，随记录入库）
   },
 
@@ -50,6 +51,7 @@ Page({
     if (ts) this.setData({ lastDone: `上次完成：${this.fmtDate(ts)}` });
     this.setData({ scanCount: wx.getStorageSync('hb_scanCount') || 0 });
     this.setData({ scanStreak: this.buildScanStreak() });
+    this.setData({ scanToday: this.buildScanToday() });
     this.setData({ opening: this.dayOpening() });
     this.setData({ feelLog: (wx.getStorageSync('hb_scanFeel') || []).slice(-5).reverse() });
     // 感受词 Top1：扫描后身体最常给你的反馈
@@ -159,7 +161,7 @@ Page({
     this.setData({ lastDone: `上次完成：${this.fmtDate(ts)}` });
     // 计入今日「放松累计」：扫描/快扫的分钟数也进呼吸页每日 10 分钟目标（跨页一致）
     this.touchRelaxMins(this.data.mode === 'quick' ? 3 : 5);
-    this.setData({ scanStreak: this.buildScanStreak() });
+    this.setData({ scanStreak: this.buildScanStreak(), scanToday: this.buildScanToday() });
     // 记一次「平静」情绪，进入心情曲线
     try {
       let openid = app.globalData.openid;
@@ -217,6 +219,13 @@ Page({
       if (d === expect) { n += 1; expect -= DAY; } else break;
     }
     return n;
+  },
+
+  // 今日已完成扫描次数（基于当天完成时间戳）
+  buildScanToday() {
+    const doneTs = wx.getStorageSync('hb_scanDoneLog') || [];
+    const t = new Date().toDateString();
+    return doneTs.filter((x) => new Date(x).toDateString() === t).length;
   },
 
   // 今日放松累计（跨页共享给呼吸页的每日目标）：按天记录扫描分钟数
