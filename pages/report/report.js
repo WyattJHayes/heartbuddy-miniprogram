@@ -409,6 +409,20 @@ Page({
 
   goChat() { wx.switchTab({ url: '/pages/chat/chat' }); },
 
+  // 往期周报：点击某一行 → 复制那一周的文字版摘要（不泄露对话内容）
+  copyHistoryWeek(e) {
+    const i = e.currentTarget.dataset.i;
+    const item = (this.data.history || [])[i];
+    if (!item) return;
+    const text = [
+      '【心语伴 · 往期周报 ' + (item.date || '') + '】',
+      '那一周主要情绪：' + (item.topLabel || '平稳') + ' ' + (item.topEmoji || '😌'),
+      '陪伴 ' + (item.chatCount || 0) + ' 次 · ' + (item.dayCount || 0) + ' 天有心情记录',
+      '—— 用 AI 心理陪伴，记录你的情绪地图 🌱'
+    ].join('\n');
+    wx.setClipboardData({ data: text, success: () => wx.showToast({ title: '已复制该周小报', icon: 'success' }) });
+  },
+
   today() {
     const d = new Date();
     const p = (x) => (x < 10 ? '0' + x : x);

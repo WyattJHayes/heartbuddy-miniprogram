@@ -113,8 +113,8 @@
     <button class="btn-primary full mt" bindtap="goChat">继续和心语聊聊</button>
 
     <view wx:if="{{history.length}}" class="card mt">
-      <view class="section-title">往期周报</view>
-      <view class="hrow" wx:for="{{history}}" wx:key="date">
+      <view class="section-title">往期周报<text class="text-muted">（点击可复制该周）</text></view>
+      <view class="hrow" wx:for="{{history}}" wx:key="date" data-i="{{index}}" bindtap="copyHistoryWeek" role="button" aria-label="复制往期周报{{item.date}}">
         <text class="hdate">{{item.date}}</text>
         <text class="htext">{{item.topLabel}} {{item.topEmoji}} · 倾诉 {{item.chatCount}} 次 · {{item.dayCount}} 天</text>
       </view>
