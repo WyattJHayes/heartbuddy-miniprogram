@@ -86,6 +86,13 @@
       <view class="best-tip" wx:if="{{weekTrend}}" role="note" aria-label="近四周趋势一句话">{{weekTrend}}</view>
     </view>
 
+    <!-- 今年以来小结：全年足迹一句话（年复一年，看见坚持） -->
+    <view class="card mt" wx:if="{{yearInfo}}">
+      <view class="section-title">🗓 {{yearInfo.label}} 心情小结<text class="section-sub">今年至今</text></view>
+      <view class="month-line">你记录了 <text class="hl">{{yearInfo.total}}</text> 条心情，覆盖 <text class="hl">{{yearInfo.days}}</text> 天 · 出现最多的是「{{yearInfo.topEmoji}} {{yearInfo.topLabel}}」<text wx:if="{{yearInfo.bestRun}}"> · 最长连续 {{yearInfo.bestRun}} 天</text></view>
+      <view class="year-copy" bindtap="copyYearText" role="button" aria-label="复制全年小结文字版">📋 复制全年小结（可发给老师/家长）</view>
+    </view>
+
     <!-- 月度小结：本月构成 + 与上月对比 -->
     <view class="card mt" wx:if="{{monthInfo}}">
       <view class="section-title">📅 {{monthInfo.label}} 心情小结</view>

@@ -35,6 +35,7 @@ Page({
     prevAvg: null,        // 上周情绪均值
     deltaText: '',        // 与上周对比文案（↗/↘/→ +0.4 等）
     monthInfo: null,       // 月度小结 {label,total,days,top3,curAvg,delta}
+    yearInfo: null,      // 今年以来小结 {total, days, topEmoji, topLabel, bestRun, text}
     weekNote: '',        // 本周「对自己说」备注（本地周键缓存）
     weekNoteHint: '',
     bestDayText: '',     // 本周「相对最好的一天」（正向叙事）
@@ -126,7 +127,7 @@ Page({
     this.setData({ history: wx.getStorageSync('weekReportHistory') || [] });
   },
 
-  onShow() { this.fetchWeek(); this.fetchMonth(); this.fetchWeeks(); this.refreshNote(); },
+  onShow() { this.fetchWeek(); this.fetchMonth(); this.fetchWeeks(); this.fetchYear(); this.refreshNote(); },
 
   async fetchWeek() {
     let openid = app.globalData.openid;
@@ -428,6 +429,57 @@ Page({
   },
 
   goChat() { wx.switchTab({ url: '/pages/chat/chat' }); },
+
+  // 今年以来小结：全年记录条数/覆盖天数/Top1 情绪/最长连续段（一次刷新，300 上限足够）
+  async fetchYear() {
+    try {
+      const app = getApp();
+      let openid = app.globalData.openid;
+      if (!openid) openid = await app.login();
+      if (!openid) return;
+      const now = new Date();
+      const yStart = new Date(now.getFullYear(), 0, 1).getTime();
+      const db = wx.cloud.database();
+      const _ = db.command;
+      const res = await db.collection('moods').where({ openid, createdAt: _.gte(yStart) }).limit(400).get();
+      const list = res.data || [];
+      if (!list.length) return;
+      const counts = {}; const daySet = new Set();
+      list.forEach((m) => { counts[m.mood] = (counts[m.mood] || 0) + 1; daySet.add(new Date(m.createdAt).toDateString()); });
+      const topMood = Object.keys(counts).sort((a, b) => counts[b] - counts[a])[0];
+      const DAY = 86400000;
+      const allDays = Array.from(daySet).map((k) => new Date(k + ' 00:00:00').getTime()).sort((a, b) => a - b);
+      let bestRun = 1, run = 1;
+      for (let i = 1; i < allDays.length; i++) {
+        if (allDays[i] - allDays[i - 1] === DAY) { run += 1; bestRun = Math.max(bestRun, run); }
+        else run = 1;
+      }
+      this.setData({
+        yearInfo: {
+          total: list.length,
+          days: daySet.size,
+          topEmoji: MOOD_EMOJI[topMood] || '😌',
+          topLabel: MOOD_LABEL[topMood] || '平稳',
+          bestRun: bestRun >= 3 ? bestRun : 0,
+          label: now.getFullYear() + ' 年'
+        }
+      });
+    } catch (e) {
+      console.warn('[report] 全年小结失败', e);
+    }
+  },
+
+  copyYearText() {
+    const y = this.data.yearInfo;
+    if (!y) return;
+    const lines = [
+      `【心语伴 · ${y.label} 心情小结】`,
+      `今年到现在，你记录了 ${y.total} 条心情，覆盖 ${y.days} 天`,
+      `出现最多的情绪是「${y.topEmoji} ${y.topLabel}」`,
+      ...(y.bestRun ? [`连续记录最长坚持了 ${y.bestRun} 天`] : [])
+    ];
+    wx.setClipboardData({ data: lines.join('\n'), success: () => wx.showToast({ title: '已复制全年小结', icon: 'success' }) });
+  },
 
   // 往期周报：点击某一行 → 复制那一周的文字版摘要（不泄露对话内容）
   copyHistoryWeek(e) {
