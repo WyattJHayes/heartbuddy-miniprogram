@@ -439,7 +439,7 @@ Page({
         if (bc >= 5 && !wx.getStorageSync('ach_breathe5')) wx.setStorageSync('ach_breathe5', true);
         wx.vibrateShort && wx.vibrateShort({ type: 'light' });
         const wkN = this.weekCount();
-        wx.showToast({ title: '已记下 · 本周第 ' + wkN + ' 次', icon: 'success' });
+        wx.showToast({ title: '已记下 · 本周第 ' + wkN + ' 次 · 今日放松 ' + this.data.dayTotal + '/' + DAILY_GOAL_MIN + ' 分钟', icon: 'success' });
         this.setData({ echoText: this.nextEcho() });
         // 深夜完成：练完就去睡（22 点后追加一句）
         const hh = new Date().getHours();
