@@ -8,6 +8,12 @@
   <!-- 连续空白提醒（≥3 天未记录，温柔语气） -->
   <view class="empty-tip" wx:if="{{emptyTip}}" role="note" aria-label="一段时间没记录的提醒">{{emptyTip}}</view>
 
+  <!-- 周末温和复盘（周六一次，可关闭） -->
+  <view class="weekend-recap" wx:if="{{weekendRecap}}" role="note" aria-label="周末温和复盘">
+    <text class="wr-text">{{weekendRecap}}</text>
+    <text class="wr-close" bindtap="closeWeekendRecap" role="button" aria-label="关闭复盘提示">✕</text>
+  </view>
+
   <!-- 晚间温柔提醒（21 点后一次性） -->
   <view class="night-greet" wx:if="{{nightGreet}}" role="note" aria-label="晚间提醒">{{nightGreet}}</view>
 

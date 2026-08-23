@@ -288,3 +288,10 @@
 .cal-cell.wknd.has { background: #f5ead9; }
 
 .letter-soon { margin-top: 10rpx; font-size: 22rpx; color: #8a6a2f; background: #fdf6ea; border: 1rpx solid #f0dcbc; border-radius: 10rpx; padding: 10rpx 16rpx; line-height: 1.6; }
+
+/* 周末温和复盘（周六一次，可关闭） */
+.weekend-recap { display: flex; align-items: center; justify-content: space-between;
+  background: #f3f7ee; border: 1rpx solid #dbe9d3; border-radius: 12rpx;
+  padding: 12rpx 18rpx; margin-bottom: 12rpx; }
+.wr-text { font-size: 23rpx; color: #4e6b3f; line-height: 1.5; flex: 1; }
+.wr-close { margin-left: 12rpx; color: #8aa07e; font-size: 24rpx; padding: 4rpx 10rpx; }

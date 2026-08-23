@@ -76,6 +76,7 @@ Page({
     monthRun: '',          // 当月最长连续记录段
     intDist: '',           // 近30天强度分布
     weekFull: '',          // 本周全勤庆祝条（一次性）
+    weekendRecap: '',    // 周六温和复盘条（每周一次，可关闭）
     today: (new Date().getMonth() + 1) + '/' + new Date().getDate(), // 色带今天描边用
     noteList: [],          // 小结日记本（筛选后展示）
     noteFilter: 'all',    // 日记本筛选：all | week | month
@@ -92,7 +93,21 @@ Page({
     this.refreshDayNote();
     this.refreshNightGreeting();
     this.refreshTopTrig();
+    this.refreshWeekendRecap();
   },
+
+  // 周末温和复盘：周六首次进心情页 → 一句「这一周辛苦了」，轻量非打扰（每周一次）
+  refreshWeekendRecap() {
+    const now = new Date();
+    const dow = now.getDay(); // 0=周日…6=周六
+    if (dow !== 6) return;      // 只在周六提示，避免打扰
+    const key = 'hb_weekendRecap_' + now.toDateString();
+    if (wx.getStorageSync(key)) return;
+    wx.setStorageSync(key, true);
+    this.setData({ weekendRecap: '🍃 周六了。这一周你已经做完了该做的事，剩下的交给休息。想去哪页看看都行，心语都在。' });
+  },
+
+  closeWeekendRecap() { this.setData({ weekendRecap: '' }); },
 
   // 常用触发词置顶：把本地统计里用得最多的 2 个词排在 chips 最前（去重，不覆盖原有）
   refreshTopTrig() {
