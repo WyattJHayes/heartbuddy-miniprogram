@@ -69,6 +69,13 @@ Page({
 
   // ---- 要一句安慰的话：随机温和短句，可记住 / 可复制给自己 ----
   // 现在最需要什么：三选一快速分流（先给出口，不给判断）
+  onNeedGo(e) {
+    const url = e.currentTarget.dataset.go;
+    if (!url) return;
+    wx.setStorageSync('hb_triageDone', new Date().toDateString()); // 今天选过就不再提示
+    if (url === '/pages/chat/chat' || url === '/pages/mood/mood') wx.switchTab({ url });
+    else wx.navigateTo({ url });
+  },
   onNeedNav() {
     wx.setStorageSync('hb_triageDone', new Date().toDateString());
     wx.showActionSheet({

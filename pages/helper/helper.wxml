@@ -13,9 +13,9 @@
   <view class="card now-tg" wx:if="{{!triageDone}}">
     <view class="section-title">现在最需要什么？选一个方向</view>
     <view class="tg-grid">
-      <view class="tg-item" role="button" bindtap="onNeedNav" aria-label="心太乱，去呼吸练习">🧘 心都停下来</view>
-      <view class="tg-item" role="button" bindtap="onNeedNav" aria-label="想说出来，去找心语">💬 想说出来</view>
-      <view class="tg-item" role="button" bindtap="onNeedNav" aria-label="想记录心情">📓 顺手记一下</view>
+      <view class="tg-item" role="button" data-go="/pages/breathe/breathe" bindtap="onNeedGo" aria-label="心太乱，去呼吸练习">🧘 心都停下来</view>
+      <view class="tg-item" role="button" data-go="/pages/chat/chat" bindtap="onNeedGo" aria-label="想说出来，去找心语">💬 想说出来</view>
+      <view class="tg-item" role="button" data-go="/pages/mood/mood" bindtap="onNeedGo" aria-label="想记录心情">📓 顺手记一下</view>
     </view>
     <view class="tg-more" bindtap="onNeedNav" role="button" aria-label="再想想，选一个方向">我选不出来 · 再想想 →</view>
   </view>
