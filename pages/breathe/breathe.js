@@ -63,11 +63,13 @@ Page({
     presetKey: 'calm',
     intent: '',         // 此刻心意：开始前选的意图词（稳/慢/等/放/无事）；完成态回印
     intentPicked: false, // 已选过（本轮）
+    vibeOn: true,        // 节律轻震动（吸/呼交界处柔和提示）
     presetLabel: '放松 · 4-4-6',
     customCfg: { in: 4, hold: 4, out: 6 }
   },
 
   onLoad() {
+    this.setData({ vibeOn: wx.getStorageSync('hb_vibe') !== false });
     // 上次练习中断提示：练习中退出（未完成）会留痕，这次进来温柔提一句
     const brokeAt = wx.getStorageSync('hb_breathBroke');
     if (brokeAt && Date.now() - brokeAt < 86400000) {
@@ -365,8 +367,22 @@ Page({
     }
     const [phase, ms, ball, trans] = rounds[step];
     this.setData({ round: r, phase, ball, trans, text: PH_TEXT[phase] });
+    // 节律轻震动：吸/呼开始时给一个柔和的提示（可关）
+    if (this.data.vibeOn && wx.vibrateShort) {
+      if (phase === 'in') wx.vibrateShort({ type: 'light' });
+      else if (phase === 'out') wx.vibrateShort({ type: 'light' });
+      else if (phase === 'hold') wx.vibrateShort({ type: 'heavy' });
+    }
     const timer = setTimeout(() => this.runRound(r, step + 1), ms);
     this._timers.push(timer);
+  },
+
+  // 节律震动开关：不想要提示就关掉（记忆）
+  toggleVibe() {
+    const v = !this.data.vibeOn;
+    wx.setStorageSync('hb_vibe', v);
+    this.setData({ vibeOn: v });
+    wx.showToast({ title: v ? '节律震动已开 🔔' : '节律震动已关', icon: 'none' });
   },
 
   // 结束后把此刻情绪记成「平静」（与心情页/曲线无缝联动）

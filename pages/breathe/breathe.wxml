@@ -107,6 +107,11 @@
   </view>
   <view class="done-intent" wx:elif="{{phase === 'done' && intent}}">这一轮的心意是「{{intent}}」——让它在呼吸里轻轻落下来。</view>
 
+  <!-- 节律轻震动开关（吸/呼交界柔和提示，可随时关） -->
+  <view class="vibe-toggle {{vibeOn ? 'on' : ''}}" bindtap="toggleVibe" role="button" aria-label="切换节律震动">
+    {{vibeOn ? '🔔 节律震动已开（吸/呼有轻提示）' : '🔕 节律震动已关'}}
+  </view>
+
   <view class="actions">
     <button class="primary" wx:if="{{phase === 'ready' || phase === 'done'}}" bindtap="start">
       {{phase === 'done' ? '再练一次' : (presetKey === 'stare' ? '开始发呆' : '开始呼吸')}}

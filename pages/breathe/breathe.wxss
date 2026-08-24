@@ -102,3 +102,7 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .intent-chip { padding: 10rpx 26rpx; border-radius: 30rpx; border: 2rpx solid #dde4f0; background: #fff; color: #55627e; font-size: 26rpx; }
 .intent-chip.on { border-color: #7fb0e6; background: #eaf4ff; color: #3f6aa8; font-weight: 600; }
 .done-intent { margin-top: 18rpx; text-align: center; font-size: 24rpx; color: #7a8aa8; }
+
+/* 节律震动开关 */
+.vibe-toggle { margin: 20rpx auto 0; width: 70%; text-align: center; padding: 12rpx 0; border-radius: 30rpx; background: #f3f6fb; color: #7a8aa8; font-size: 23rpx; }
+.vibe-toggle.on { background: #eaf4ff; color: #3f6aa8; }
