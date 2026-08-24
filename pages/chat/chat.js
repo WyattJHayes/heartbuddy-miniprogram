@@ -933,7 +933,18 @@ Page({
     setTimeout(() => { wx.vibrateShort && wx.vibrateShort({ type: 'medium' }); }, 600);
   },
 
-  // 给自己留个提醒：复习/喝水/休息间隙，页内横幅 + 震动（不耗 AI）
+  // 考前 3 分钟静默准备：不打 AI，跟着做一遍就安下心
+  preExamWarm() {
+    this.setData({ showQuick: false });
+    this.pushAI('我们不用说话，跟我默默做这 3 件事：' +
+      '\n1）把手机调静音，倒扣在桌上——它现在是你的同盟，不是干扰。' +
+      '\n2）闭眼，长长吸一口（4 秒）……屏住 1 秒……慢慢呼（6 秒），做 3 次。' +
+      '\n3）睁眼，看自己手心：写在手心的几个字就是你的锚——「我已经来了，我准备好了」。' +
+      '\n\n3 分钟里，不用想考得好不好：考场里的事，等进了考场再说。');
+    wx.vibrateShort && wx.vibrateShort({ type: 'light' });
+  },
+
+  // 给自己留个提醒：复习/休息间隙，页内横幅 + 震动（不耗 AI）
   setReminder(e) {
     this.setData({ showQuick: false });
     const min = Number(e.currentTarget.dataset.min) || 30;
