@@ -109,3 +109,6 @@
 .hd-note-t { font-size: 24rpx; color: #8a6a2f; font-weight: 600; }
 .hd-note-ta { width: 100%; box-sizing: border-box; margin-top: 10rpx; min-height: 90rpx; background: #fff; border-radius: 10rpx; padding: 12rpx; font-size: 25rpx; }
 .hd-note-save { margin-top: 10rpx; text-align: right; font-size: 23rpx; color: #b06f2c; }
+
+/* 逐题一句轻反馈 */
+.light-tip { margin-top: 12rpx; padding: 10rpx 16rpx; background: #f3f7ff; border-radius: 10rpx; color: #6b86b8; font-size: 23rpx; line-height: 1.6; text-align: center; }

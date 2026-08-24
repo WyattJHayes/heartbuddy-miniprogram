@@ -29,6 +29,7 @@
         <text>几乎每天</text><text class="mark">3</text>
       </view>
       <view class="text-muted tip">请根据「过去两周」的感受选择。</view>
+      <view class="light-tip" wx:if="{{lightTip && lightKey === cur - 1}}" role="note" aria-label="刚才那句轻反馈">{{lightTip}}</view>
     </view>
 
     <button class="btn-ghost prev" wx:if="{{cur > 0}}" bindtap="prev">上一题</button>

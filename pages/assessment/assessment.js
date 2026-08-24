@@ -2,6 +2,17 @@
 const app = getApp();
 const planlib = require('../../utils/plan');
 
+// 逐题一句轻反馈：不是评判，只是陪你在「照见自己」的路上继续
+const FEELBACK = [
+  '收到，先把这一题放下',
+  '能诚实地告诉自己，就已经是第一步',
+  '不用评判这个答案，它只是此刻的真实',
+  '记下了——我们在一点点认识自己',
+  '题目没有标准答案，怎么选都算数',
+  '这一笔，是今天离自己更近一步',
+  '没关系，剩下我们慢慢来'
+];
+
 const QUESTIONS = [
   '过去两周，我经常感到紧张、焦虑或提心吊胆',
   '我很难停止或控制自己的担忧',
@@ -25,6 +36,8 @@ Page({
     questions: QUESTIONS,
     cur: 0,          // 当前第几题（0 起）
     answers: [],     // 每题得分
+    lightTip: '',    // 逐题一句轻反馈
+    lightKey: -1,
     done: false,
     total: 0,
     levelLabel: '',
@@ -226,6 +239,20 @@ Page({
     const score = Number(e.currentTarget.dataset.score);
     const answers = this.data.answers;
     answers[idx] = score;
+    // 逐题一句轻反馈：不是评判，只是陪你在「照见自己」的路上继续（可关闭）
+    const FEEL = [
+      '收到，先把这一题放下',
+      '能诚实地告诉自己，就已经是第一步',
+      '不用评判这个答案，它只是此刻的真实',
+      '记下了——我们在一点点认识自己',
+      '题目没有标准答案，怎么选都算数',
+      '这一笔，是今天离自己更近一步',
+      '没关系，剩下的我们慢慢来'
+    ];
+    if (this._lastLightIdx !== idx || !this.data.lightTip) {
+      this.setData({ lightTip: FEELBACK[idx % FEELBACK.length], lightKey: idx });
+      this._lastLightIdx = idx;
+    }
     if (idx < QUESTIONS.length - 1) {
       this.setData({ answers, cur: idx + 1 });
     } else {
