@@ -12,6 +12,8 @@ Page({
   data: {
     loading: true, openid: '', showNotice: false, shared: false, welcomed: true, showLog: false,
     todayLine: '',
+    lastRoute: '',  // 继续上次：最近离开的功能页路径
+    lastLabel: '',  // 继续上次的按钮文案
     changelog: [
       { v: '2.12', t: '扫描1分钟微扫；呼吸节律轻震动；我的徽章墙成图；聊天主题起手；心情页本月晴雨表；深夜收尾陪伴' },
       { v: '2.11', t: '心理小课今日轻目标；呼吸此刻心意；给下个月的我一句；充电站一句话速读；聊天晚安收尾；心情日历冷暖色' },
@@ -45,12 +47,36 @@ Page({
   onLoad(options) {
     if (options && options.src === 'share') this.setData({ shared: true });
     this.setData({ welcomed: wx.getStorageSync('hb_welcomed') === true, todayLine: todayLine() }); // 首次引导卡只出现一次
+    // 继续上次：最近离开的功能页，欢迎页一键直达
+    const last = wx.getStorageSync('hbLastRoute') || '';
+    const ROUTE_LABEL = {
+      'pages/chat/chat': '继续上次对话',
+      'pages/mood/mood': '回心情页看看',
+      'pages/breathe/breathe': '回去呼吸',
+      'pages/scan/scan': '回去扫描',
+      'pages/station/station': '回充电站',
+      'pages/report/report': '看报告',
+      'pages/edu/edu': '回小课',
+      'pages/profile/profile': '回我的',
+      'pages/assessment/assessment': '回自评',
+      'pages/helper/helper': '回求助页',
+      'pages/privacy/privacy': '',
+      'pages/ops/ops': ''
+    };
+    if (ROUTE_LABEL[last]) this.setData({ lastRoute: last, lastLabel: ROUTE_LABEL[last] });
     if (!wx.getStorageSync('privacyAgreed')) {
       this.setData({ loading: false });
       return;
     }
     // 已同意过，直接进主页
     wx.switchTab({ url: '/pages/chat/chat' });
+  },
+
+  // 继续上次：直接回到最近停留的页面
+  goLast() {
+    if (!this.data.lastRoute) return;
+    if (this.data.lastRoute.indexOf('pages/chat/chat') === 0) { wx.switchTab({ url: this.data.lastRoute }); }
+    else wx.navigateTo({ url: '/' + this.data.lastRoute });
   },
 
   // 今日一句：点击复制（随时带走一句温柔）

@@ -71,3 +71,5 @@
 .fg-skip { margin-top: 12rpx; text-align: center; font-size: 22rpx; color: #9aa3b8; }
 
 .fg-item:active { opacity: .6; }
+
+.qentry.q-last { border: 2rpx dashed #b9c9e8; background: #f6f9ff; }

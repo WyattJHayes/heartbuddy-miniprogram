@@ -26,6 +26,15 @@ App({
 
   onShow() {
     this.checkDailyRemind();
+    // 记录最近离开的页面（欢迎页用于「继续上次」；welcome 自己不算）
+    try {
+      const pages = getCurrentPages();
+      const cur = pages.length ? pages[pages.length - 1] : null;
+      const route = cur ? cur.route : '';
+      if (route && route.indexOf('pages/welcome/') !== 0) {
+        wx.setStorageSync('hbLastRoute', route);
+      }
+    } catch (e) { /* 忽略 */ }
   },
 
   /**

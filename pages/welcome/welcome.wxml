@@ -13,6 +13,11 @@
 
   <!-- 快捷入口：演示/新用户 1 步触发核心能力 -->
   <view class="quick-entries">
+    <view class="qentry q-last" wx:if="{{lastRoute}}" bindtap="goLast">
+      <view class="qe-emoji">↩️</view>
+      <view class="qe-t">{{lastLabel}}</view>
+      <view class="qe-d">接着上次的节奏</view>
+    </view>
     <view class="qentry q-chat" bindtap="goChat">
       <view class="qe-emoji">💬</view>
       <view class="qe-t">和心语聊聊</view>
