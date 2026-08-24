@@ -205,7 +205,8 @@ Page({
     likeCards: [],  // 展开卡时「一起充电」同主题推荐（最多 2 张，未读优先）
     todayReads: 0,   // 今日展开过的卡片数（充电小结）
     favOpen: false,  // 收藏抽屉
-    favList: []      // 收藏抽屉里的完整卡数据
+    favList: [],      // 收藏抽屉里的完整卡数据
+    quickRead: false  // 一句话速读：点卡片只看一句核心，不展开
   },
 
   // 收藏置顶：长按卡片头 ★ 收藏/取消（本地，最多 3 张）
@@ -235,6 +236,9 @@ Page({
   onSearchInput(e) { this.setData({ kw: e.detail.value }); this.applyFavs(); },
   onSearchConfirm() { wx.hideKeyboard && wx.hideKeyboard(); },
   clearSearch() { this.setData({ kw: '' }); this.applyFavs(); },
+
+  // 一句话速读：开启后点卡只看核心句（不展开全文），适合「此刻只想要一句」
+  toggleQuickRead() { this.setData({ quickRead: !this.data.quickRead, open: -1 }); },
 
   noop() {},
 
@@ -318,6 +322,23 @@ Page({
 
   toggleCard(e) {
     const i = Number(e.currentTarget.dataset.index);
+    // 一句话速读：开启时点卡片只看核心一句（toast 即可带走），不展开全文
+    if (this.data.quickRead) {
+      const c = (this.data.cards || [])[i];
+      if (c) {
+        const reads = wx.getStorageSync('hb_stReads') || {};
+        reads[c.title] = (reads[c.title] || 0) + 1;
+        wx.setStorageSync('hb_stReads', reads);
+        const day = wx.getStorageSync('hb_stReadDay') || {};
+        const k = new Date().toDateString();
+        day[k] = (day[k] || 0) + 1;
+        wx.setStorageSync('hb_stReadDay', day);
+        this.setData({ todayReads: day[k] });
+        const first = (c.lines && c.lines[0]) || c.title;
+        wx.showToast({ title: first, icon: 'none', duration: 2600 });
+      }
+      return;
+    }
     const willOpen = this.data.open !== i;
     if (willOpen) {
       // 阅读计数：展开即读（本地，用于了解自己最常翻哪张）

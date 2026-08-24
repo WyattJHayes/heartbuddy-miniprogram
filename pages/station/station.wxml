@@ -43,6 +43,11 @@
           data-t="{{item}}" bindtap="setCardTag" role="button" aria-label="筛选{{item}}">{{item}}</view>
   </view>
 
+  <!-- 一句话速读：此刻只想要一句，点卡片只看核心句不展开 -->
+  <view class="quick-read-toggle {{quickRead ? 'on' : ''}}" bindtap="toggleQuickRead" role="button" aria-label="切换一句话速读">
+    {{quickRead ? '🌱 一句话速读已开——点卡只看核心一句' : '🌀 此刻只想要一句？开「一句话速读」'}}
+  </view>
+
   <!-- 关键词搜索：忘了卡叫什么，多搜几次标题/内容/标签 -->
   <view class="st-search" role="search" aria-label="搜索充电站卡片">
     <input class="st-search-input" value="{{searchWord}}" placeholder="🔍 搜卡片：如「考试」「睡」「生气」…" confirm-type="search"

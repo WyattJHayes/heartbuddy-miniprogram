@@ -78,3 +78,7 @@
 .fav-item-t { font-size: 26rpx; color: #33415c; }
 .fav-item-x { padding: 10rpx 16rpx; color: #c46a6a; font-size: 26rpx; }
 .fav-sheet-close { margin-top: 20rpx; text-align: center; font-size: 26rpx; color: #7a8aa8; }
+
+/* 一句话速读开关 */
+.quick-read-toggle { margin: 14rpx 2rpx; padding: 12rpx 18rpx; border-radius: 12rpx; background: #f6f9ff; border: 1rpx solid #dbe6fa; color: #6b86b8; font-size: 23rpx; }
+.quick-read-toggle.on { background: #eaf4ff; border-color: #9cc3f2; color: #3f6aa8; font-weight: 600; }
