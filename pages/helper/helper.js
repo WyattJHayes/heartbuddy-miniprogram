@@ -64,10 +64,42 @@ Page({
     selfResumeStep: 0,   // >0 表示有未走完的存档（第几步），可一键接着走
     followCare: null     // 回访关怀卡 { note, dueAt, dueText }
     ,hushCare: false   // 求助后静音关怀：安排回访 3 天内，顶部一条轻量不打扰的卡
-    ,smartTip: null      // 智能分流：此刻建议（按时段/连续低情绪天数，轻提示不打扰）
+    ,smartTip: null,      // 智能分流：此刻建议（按时段/连续低情绪天数，轻提示不打扰）
+    // 担忧交给明天：睡前把心里挂的事写下来，明早回看（本地，与三件小事呼应但独立）
+    worry: null,        // { text, date, at } 
+    worryNext: false,   // 是否明早回看
+    worryLast: '',      // 上一次写下的担忧回看留存
+    worryYesterday: null, // 昨晚写下的担忧（明早回看）
+    worryInput: '',
+    worryVisible: true,
+    worrySaved: '',
   },
 
-  // ---- 要一句安慰的话：随机温和短句，可记住 / 可复制给自己 ----
+  // ---- 担忧交给明天：今晚写下来 / 明早回看 (本地) ----
+  onWorryInput(e) { this.setData({ worryInput: e.detail.value }); },
+
+  // 今晚把担忧写下来，交给明天
+  saveWorry() {
+    const text = (this.data.worryInput || '').trim();
+    if (!text) { wx.showToast({ title: '先写一句你的担忧', icon: 'none' }); return; }
+    const today = new Date().toDateString();
+    wx.setStorageSync('hb_worry', { text, date: today, at: Date.now() });
+    wx.setStorageSync('hb_worryLast', text);
+    this.setData({ worry: null, worryYesterday: null, worryInput: '', worryLast: text, worrySaved: text });
+    wx.showToast({ title: '已交给明天 🌙', icon: 'none' });
+  },
+
+  // 明早回看昨晚的担忧：允许再写一句
+  doneWorry() {
+    wx.removeStorageSync('hb_worry');
+    this.setData({ worry: null, worryYesterday: null });
+    wx.showToast({ title: '看过了，放下吧', icon: 'none' });
+  },
+
+  // 收起担忧卡（不写也不删）
+  skipWorry() {
+    this.setData({ worryVisible: false });
+  },
   // 现在最需要什么：三选一快速分流（先给出口，不给判断）
   onNeedGo(e) {
     const url = e.currentTarget.dataset.go;
@@ -284,6 +316,17 @@ Page({
     this.loadSmartTip();
     // 当天已用过“方向选择”→ 隐藏（次日恢复）
     this.setData({ triageDone: wx.getStorageSync('hb_triageDone') === new Date().toDateString() });
+    // 担忧交给明天：读取前一条（今晚写、明早回看）
+    const worry = wx.getStorageSync('hb_worry');
+    if (worry && worry.date) {
+      const today = new Date().toDateString();
+      // 明早回看：写下的第二天才提示回看；当天写的不重复弹
+      this.setData({ worry: worry.date === today ? null : worry, worryYesterday: worry.date !== today ? worry : null });
+    } else {
+      this.setData({ worry: null, worryYesterday: null });
+    }
+    // 上次担忧回看留存（本地，展示「上一次交给明天的」）
+    this.setData({ worryLast: wx.getStorageSync('hb_worryLast') || '' });
     // 安全包：预先填写的「可信赖的人」称呼（本地）
     const ppl = wx.getStorageSync('hbSafePeople') || '';
     if (ppl !== this.data.safePeople) this.setData({ safePeople: ppl });

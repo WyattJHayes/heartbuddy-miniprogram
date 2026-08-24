@@ -95,6 +95,29 @@
     <view class="care-text">{{care.text}}</view>
   </view>
 
+  <!-- 担忧交给明天：今晚写下来，明早回看（睡前锚点，与三件小事呼应） -->
+  <view class="card worry" wx:if="{{worryVisible}}">
+    <block wx:if="{{worryYesterday}}">
+      <view class="worry-title">🌅 昨晚的担忧，今天回看</view>
+      <view class="worry-text">「{{worryYesterday.text}}」</view>
+      <view class="worry-q">还让它压着你吗？可以和它说再见了。</view>
+      <view class="worry-actions">
+        <button class="btn-ghost worry-btn" bindtap="doneWorry">看过了，放下</button>
+        <button class="btn-primary worry-btn" bindtap="skipWorry">再留一天</button>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="section-title">🌙 担忧交给明天</view>
+      <view class="worry-text">现在心里挂着的，写下来放在这里。今晚的床只负责睡觉，担忧明天再说。</view>
+      <textarea class="worry-ta" value="{{worryInput}}" bindinput="onWorryInput" placeholder="例：明天考试能不能考好/和TA说的话会不会太冲…" maxlength="200" auto-height />
+      <view class="worry-actions">
+        <button class="btn-ghost worry-min" bindtap="skipWorry">今晚不写</button>
+        <button class="btn-primary worry-btn" bindtap="saveWorry">交给明天 🌙</button>
+      </view>
+      <view class="worry-last" wx:if="{{worryLast}}" role="note" aria-label="上一次交给明天的">上次交给明天的是：「{{worryLast}}」——你处理过它了。</view>
+    </block>
+  </view>
+
   <!-- 我撑过来了：5 步自助引导（自救卡） -->
   <view class="card self">
     <block wx:if="{{selfStep === -1}}">

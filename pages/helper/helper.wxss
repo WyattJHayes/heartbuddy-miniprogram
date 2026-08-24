@@ -168,3 +168,14 @@
 .sc-act { margin-top: 14rpx; display: inline-block; background: #e05656; color: #fff; border-radius: 999rpx; padding: 12rpx 32rpx; font-size: 25rpx; }
 
 .sc-copy { margin-top: 12rpx; display: inline-block; font-size: 22rpx; color: #8a6a2f; border: 1rpx solid #e8d5ac; border-radius: 999rpx; padding: 8rpx 24rpx; }
+
+/* 担忧交给明天 */
+.worry { border: 1rpx solid #e6dcf2; background: linear-gradient(135deg, #fbf7ff, #fff); }
+.worry-title { font-size: 30rpx; font-weight: 700; color: #5a3d7a; }
+.worry-text { margin-top: 10rpx; font-size: 25rpx; color: #6a5d7a; line-height: 1.7; }
+.worry-q { margin-top: 12rpx; font-size: 24rpx; color: #7a6a8c; }
+.worry-ta { width: 100%; min-height: 110rpx; box-sizing: border-box; background: #f7f5fb; border-radius: 14rpx; padding: 16rpx; font-size: 26rpx; margin-top: 14rpx; }
+.worry-actions { display: flex; gap: 16rpx; margin-top: 16rpx; }
+.worry-btn { flex: 1; }
+.worry-min { flex: 1; background: #f4f2f8; color: #8a7a9c; }
+.worry-last { margin-top: 14rpx; font-size: 22rpx; color: #9a8aaa; line-height: 1.6; }
