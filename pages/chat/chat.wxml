@@ -218,9 +218,13 @@ module.exports = { divider: divider };
       <view class="quick-panel-list">
         <view class="quick-panel-item warm" bindtap="onPraise">今天辛苦了，夸夸我</view>
       </view>
-      <view class="quick-panel-title warm">💛 谢谢你 · 也对自己说声感谢</view>
+      <view class="quick-panel-title warm">💛 谢谢你 · 也对自己声感谢</view>
       <view class="quick-panel-list">
         <view class="quick-panel-item warm" bindtap="onThanks">谢谢你听我说这些</view>
+      </view>
+      <view class="quick-panel-title calm">🌙 晚安收尾</view>
+      <view class="quick-panel-list">
+        <view class="quick-panel-item calm" bindtap="onGoodnight">聊到这里，道个晚安</view>
       </view>
       <view class="quick-panel-title en">EN 英语角 · one tap to send</view>
       <view class="quick-panel-list">

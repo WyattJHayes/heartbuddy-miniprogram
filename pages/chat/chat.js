@@ -911,6 +911,20 @@ Page({
     else if ([5, 10, 20].includes(n)) wx.showToast({ title: '已经说了 ' + n + ' 次谢谢——你是懂得感恩的人 💛', icon: 'none' });
   },
 
+  // 晚安收尾：睡前给一句温柔的告别，AI 顺着道晚安（本地计「晚安次数」）
+  onGoodnight() {
+    this.setData({ showQuick: false });
+    const n = (wx.getStorageSync('hb_goodnightN') || 0) + 1;
+    wx.setStorageSync('hb_goodnightN', n);
+    const pool = [
+      '今天聊到这儿就好。晚安，明天见 🌙',
+      '谢谢你今晚愿意来找我说话。把今天放下，安稳地睡吧 🌙',
+      '不管今天怎样，它都结束了。晚安，睡个好觉 🌙'
+    ];
+    this.pushAI(pool[Math.floor(Math.random() * pool.length)]);
+    if ([5, 10, 30].includes(n)) wx.showToast({ title: '第 ' + n + ' 次晚安——已经连续好好收尾 ' + n + ' 个晚上 🌙', icon: 'none' });
+  },
+
   // 英语角：点一下直接发送（等同 onQuick，英文输入会自动触发英文回复）
   onQuickEn(e) { this.setData({ showQuick: false }); this.send(e.currentTarget.dataset.text); },
 
