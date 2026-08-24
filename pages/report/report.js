@@ -37,6 +37,9 @@ Page({
     monthInfo: null,       // 月度小结 {label,total,days,top3,curAvg,delta}
     yearInfo: null,      // 今年以来小结 {total, days, topEmoji, topLabel, bestRun, text}
     weekNote: '',        // 本周「对自己说」备注（本地周键缓存）
+    futureNote: '',      // 给下个月的我一句（本地，1 号回看）
+    futureSaved: '',     // 已写给下个月的自己（展示留存）
+    futureSeen: '',      // 回看到的「上个月写给自己的」
     weekNoteHint: '',
     bestDayText: '',     // 本周「相对最好的一天」（正向叙事）
   },
@@ -54,6 +57,35 @@ Page({
     if (raw.key === key) this.setData({ weekNote: raw.text || '' });
     else this.setData({ weekNote: '' });
   },
+
+  // 给下个月的我一句：写好后存起来，下月 1 号回看（本地）
+  loadFutureNote() {
+    const f = wx.getStorageSync('hb_futureNote');
+    const now = new Date();
+    // 已到下月 → 回看上月的留言（只回看一次，看过后清掉旧留）
+    if (f && f.toDate) {
+      const due = new Date(f.toDate + 'T00:00:00');
+      if (now.getTime() >= due.getTime()) {
+        this.setData({ futureDue: f.text, futureSaved: '' });
+        wx.removeStorageSync('hb_futureNote');
+        return;
+      }
+    }
+    // 未到期 → 展示已写给下个月的
+    if (f && f.text) this.setData({ futureSaved: f.text, futureDue: '' });
+  },
+  futureInput(e) { this.setData({ futureNote: e.detail.value }); },
+  saveFuture() {
+    const t = (this.data.futureNote || '').trim();
+    if (!t) { wx.showToast({ title: '先写一句给下个月的自己', icon: 'none' }); return; }
+    // 下月 1 号回看
+    const now = new Date();
+    const due = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    wx.setStorageSync('hb_futureNote', { text: t, key: `${due.getFullYear()}-${due.getMonth() + 1}-1` });
+    this.setData({ futureSaved: t, futureDue: '', futureNote: '' });
+    wx.showToast({ title: '已写给下个月的你 ☁️', icon: 'none' });
+  },
+  clearFutureDue() { this.setData({ futureDue: '' }); },
 
   // 构成一句话解读（读屏/快速理解）
   buildMixRead(counts, total) {
@@ -127,7 +159,7 @@ Page({
     this.setData({ history: wx.getStorageSync('weekReportHistory') || [] });
   },
 
-  onShow() { this.fetchWeek(); this.fetchMonth(); this.fetchWeeks(); this.fetchYear(); this.refreshNote(); },
+  onShow() { this.fetchWeek(); this.fetchMonth(); this.fetchWeeks(); this.fetchYear(); this.refreshNote(); this.loadFutureNote(); },
 
   async fetchWeek() {
     let openid = app.globalData.openid;

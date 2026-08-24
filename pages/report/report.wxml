@@ -126,6 +126,27 @@
         <text class="htext">{{item.topLabel}} {{item.topEmoji}} · 倾诉 {{item.chatCount}} 次 · {{item.dayCount}} 天</text>
       </view>
     </view>
+
+    <!-- 给下个月的我一句：现在写给未来的自己，下月 1 号回看（本地） -->
+    <view class="card mt future-card" role="note" aria-label="给下个月的我一句">
+      <block wx:if="{{futureDue}}">
+        <view class="future-title">☁️ 上个月，你写给自己的话</view>
+        <view class="future-seen">「{{futureDue}}」</view>
+        <view class="future-you">下个月的你，也辛苦了。这句话已经收到 🌥</view>
+        <view class="future-clear" bindtap="clearFutureDue" role="button" aria-label="收下这段话">收下</view>
+      </block>
+      <block wx:elif="{{futureSaved}}">
+        <view class="future-title">☁️ 你已写给下个月的自己</view>
+        <view class="future-seen">「{{futureSaved}}」</view>
+        <view class="future-you">下月 1 号会自动回看——先交给时间。</view>
+      </block>
+      <block wx:else>
+        <view class="future-title">☁️ 给下个月的我一句</view>
+        <view class="future-desc">现在的心情，下个月会不一样。写一句留给未来的自己，下月 1 号带着温柔回看。</view>
+        <textarea class="future-ta" value="{{futureNote}}" bindinput="futureInput" placeholder="例：下个月的你，辛苦了，记得吃饭和睡觉" maxlength="60" auto-height />
+        <view class="future-save" bindtap="saveFuture" role="button" aria-label="写给下个月的自己">写下，约好下月回看</view>
+      </block>
+    </view>
   </block>
 </view>
 
