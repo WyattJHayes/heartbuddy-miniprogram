@@ -42,6 +42,8 @@ const PH_TEXT = {
 Page({
   data: {
     phase: 'ready', // ready | in | hold | out | done
+    napOn: false,    // 小憩 20 分钟（独立计时，不占呼吸节奏）
+    napLeft: '20:00', // 剩余 mm:ss
     round: 0,
     total: 4,
     ball: 150,
@@ -292,9 +294,33 @@ Page({
   onUnload() {
     this._stop = true;
     (this._timers || []).forEach((t) => clearTimeout(t));
+    this._napTimer && clearInterval(this._napTimer);
   },
 
-  // 切换呼吸节奏（未开始时生效；进行中会先结束当前练习）
+  // 小憩 20 分钟：午休/考前间隙的小睡计时（到点震动+轻提示）
+  startNap() {
+    if (this._napTimer) clearInterval(this._napTimer);
+    this._napEnds = Date.now() + 20 * 60000;
+    this.setData({ napOn: true, napLeft: '20:00' });
+    this._napTimer = setInterval(() => {
+      const left = Math.max(0, this._napEnds - Date.now());
+      const mm = String(Math.floor(left / 60000)).padStart(2, '0');
+      const ss = String(Math.floor((left % 60000) / 1000)).padStart(2, '0');
+      this.setData({ napLeft: mm + ':' + ss });
+      if (left <= 0) {
+        clearInterval(this._napTimer); this._napTimer = null;
+        this.setData({ napOn: false, napLeft: '20:00' });
+        wx.vibrateShort && wx.vibrateShort({ type: 'medium' });
+        wx.showModal({ title: '🌙 小憩到点了', content: '慢慢起身，喝口水，睁眼看看光——从 20 分钟里缓缓回来。', showCancel: false, confirmText: '好的' });
+      }
+    }, 1000);
+  },
+  stopNap() {
+    this._napTimer && clearInterval(this._napTimer); this._napTimer = null;
+    this.setData({ napOn: false, napLeft: '20:00' });
+  },
+
+  // 切换呼吸节奏（不开始时生效；进行中会先结束当前练习）
   setPreset(e) {
     const key = e.currentTarget.dataset.key;
     const isCustom = key === 'custom';

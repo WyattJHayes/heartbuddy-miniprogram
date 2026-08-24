@@ -119,6 +119,15 @@
     <button wx:elif="{{phase !== 'done'}}" bindtap="reset">结束</button>
   </view>
 
+  <!-- 小憩 20 分钟：午休/考前间隙的小睡计时 -->
+  <view class="nap-card" wx:if="{{!napOn && phase === 'ready'}}" role="button" bindtap="startNap" aria-label="开始20分钟小憩">
+    <text class="nap-cta">🌙 午休小憩 20 分钟（到点轻轻叫醒你）</text>
+  </view>
+  <view class="nap-card on" wx:if="{{napOn}}" role="note" aria-label="小憩倒计时">
+    <text class="nap-left">{{napLeft}}</text>
+    <text class="nap-cta" bindtap="stopNap" role="button" aria-label="提前结束小憩">提前醒来 ›</text>
+  </view>
+
   <button wx:if="{{phase === 'done'}}" class="ghost" bindtap="recordCalm" loading="{{calm && false}}">
     {{calm ? '已记下此刻' : (presetKey === 'stare' ? '把这段安静记下来' : '记下此刻的平静心情')}}
   </button>
