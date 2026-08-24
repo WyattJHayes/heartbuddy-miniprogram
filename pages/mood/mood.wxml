@@ -368,6 +368,12 @@
     <view class="cal-day-info" wx:if="{{calDay}}">
       <view class="cal-day-title">📅 {{calDay.date}} · 共 {{calDay.total}} 条记录</view>
       <view class="cal-day-row" wx:for="{{calDay.list}}" wx:key="label">{{item.label}} × {{item.count}}</view>
+      <!-- 想对那天的自己说：跨时空的一句，只有自己看得到 -->
+      <view class="cal-say" wx:if="{{calSay}}">「{{calSay}}」</view>
+      <view class="cal-say-box" wx:if="{{calDayKey}}">
+        <input class="cal-say-input" value="{{calSay}}" bindinput="onCalSayInput" placeholder="想对那天的自己说一句…（只有你看得到）" maxlength="60" />
+        <view class="cal-say-save" bindtap="saveCalSay" role="button" aria-label="保存对那天自己的话">保存</view>
+      </view>
       <view class="cal-close" bindtap="closeCalDay">收起</view>
     </view>
   </view>

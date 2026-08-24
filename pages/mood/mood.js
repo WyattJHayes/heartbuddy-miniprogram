@@ -53,6 +53,8 @@ Page({
     calWeekday: ['日', '一', '二', '三', '四', '五', '六'],
     calTitle: '',
     calDay: null,          // 点选某天后的当日小结
+    calSay: '',          // 想对那天的自己说（本地存 hb_calSay_日期）
+    calSayKey: '',
     smalls: [],            // 今日三件小事 [{i,text,done}]
     smallCelebrate: false, // 三件全完成时的庆祝条
     smallStreak: 0,        // 连续全勾三件小事的天数
@@ -1035,7 +1037,18 @@ Page({
       names[meta.label] = (names[meta.label] || 0) + 1;
     });
     const list = Object.keys(names).map((label) => ({ label, count: names[label] })).sort((a, b) => b.count - a.count);
-    this.setData({ calDay: { date: k, total: cell.count, list } });
+    this.setData({ calDay: { date: k, total: cell.count, list }, calSay: wx.getStorageSync('hb_calSay_' + k) || '', calSayKey: k });
+  },
+
+  // 想对那天的自己说：点开过去某天时可以补一句，存在本地（只有自己看得到）
+  onCalSayInput(e) { this.setData({ calSay: e.detail.value }); },
+  saveCalSay() {
+    const k = this.data.calSayKey;
+    if (!k) return;
+    const t = (this.data.calSay || '').trim().slice(0, 60);
+    if (!t) { wx.setStorageSync('hb_calSay_' + k, ''); this.setData({ calSay: '' }); wx.showToast({ title: '已清空那天的这句话', icon: 'none' }); return; }
+    wx.setStorageSync('hb_calSay_' + k, t);
+    wx.showToast({ title: '已写给你那天的自己 👻', icon: 'none' });
   },
 
   // 日历月报：把当月记录概况复制成一段文字（给老师/家长/自己看）

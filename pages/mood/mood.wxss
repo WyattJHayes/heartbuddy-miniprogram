@@ -320,3 +320,9 @@
 .wb-fill.clody { background: #b8c4d4; }
 .wb-fill.rain { background: #7f9fd8; }
 .wb-tip { margin-top: 10rpx; font-size: 22rpx; color: #8a93a8; line-height: 1.6; }
+
+/* 想对那天的自己说 */
+.cal-say { margin-top: 12rpx; background: #f3f7ff; border-radius: 10rpx; padding: 10rpx 14rpx; color: #5f82ad; font-size: 24rpx; line-height: 1.6; }
+.cal-say-box { margin-top: 10rpx; display: flex; align-items: center; gap: 10rpx; }
+.cal-say-input { flex: 1; background: #f6f8fc; border-radius: 10rpx; padding: 10rpx 14rpx; font-size: 24rpx; }
+.cal-say-save { padding: 8rpx 20rpx; border-radius: 22rpx; background: #e3eeff; color: #3f6aa8; font-size: 23rpx; }
