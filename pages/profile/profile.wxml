@@ -206,6 +206,9 @@
     <view class="row" bindtap="tellParents">
       <text>💌 说给爸妈听（生成一段成长小结）</text><text class="arrow">›</text>
     </view>
+    <view class="row" bindtap="encourageFriend">
+      <text>🍀 送给朋友的一句鼓励</text><text class="arrow">›</text>
+    </view>
     <view class="row" bindtap="viewPrivacy">
       <text>隐私声明</text><text class="arrow">›</text>
     </view>

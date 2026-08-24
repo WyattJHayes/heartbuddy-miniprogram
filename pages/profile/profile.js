@@ -287,7 +287,31 @@ Page({
     });
   },
 
-  // ---- 我的珍藏（聊天页长按珍藏，本地）----
+  // 送给朋友的一句鼓励：朋友正难时，说「绵绵的话」而不是「大道理」（三句可复制）
+  encourageFriend() {
+    const d = new Date();
+    const lines = [
+      '想送给你三句，随时可以用 🍀',
+      '',
+      '1）「我在。你想说的时候告诉我，不想说我们就安静待着。」',
+      '2）「你现在这样就很好——别提‘应该开心’，你已经撑得很辛苦了。」',
+      '3）「要不要一起出去走走？不走也行，陪你在线上待着。」',
+      '',
+      '朋友不是要接住你所有的情绪，是让你知道：你不是一个人。',
+      '—— ' + (d.getMonth() + 1) + ' 月 ' + d.getDate() + ' 日'
+    ];
+    wx.showModal({
+      title: '送给朋友的一句鼓励',
+      content: '复制三句「不教育、只陪伴」的话，发给正需要它的朋友——比「别想太多有用得多。」',
+      confirmText: '复制',
+      success: (r) => r.confirm && wx.setClipboardData({
+        data: lines.join('\n'),
+        success: () => wx.showToast({ title: '已复制，可以发给 TA 了 🍀', icon: 'none' })
+      })
+    });
+  },
+
+  // ---- 我的珍藏（导航页长按珍藏，本地）----
   refreshFavs() {
     const favs = wx.getStorageSync('hb_favs') || [];
     this.setData({ favCount: favs.length });
