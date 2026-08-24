@@ -35,6 +35,7 @@ Page({
     phase: 'ready',   // ready | run | done
     mode: 'full',      // full=5 分钟全身扫描 | quick=3 分钟午间快扫
     modeTotal: STAGES.length,
+    bookmark: -1,      // 扫描书签：存了第几段（0 起，-1=没有）下次可从这继续
     feelPicked: '',   // 完成后的身体感受一词
     feelLog: [],     // 最近几次身体感受回看
     timeTip: '',     // 按时段的扫描建议（一句话）
@@ -59,6 +60,7 @@ Page({
     // 记住上次用的档位（full/quick/micro），下次打开直接用
     const lastMode = wx.getStorageSync('hb_scanMode');
     if (lastMode === 'quick' || lastMode === 'micro') this.setData({ mode: lastMode });
+    this.setData({ bookmark: Number(wx.getStorageSync('hb_scanBookmark') || -1) });
     const ts = wx.getStorageSync('hb_scanDone');
     if (ts) this.setData({ lastDone: `上次完成：${this.fmtDate(ts)}` });
     this.setData({ scanCount: wx.getStorageSync('hb_scanCount') || 0 });
@@ -137,6 +139,24 @@ Page({
     if (this.data.mode !== 'full') { this.begin(0); return; }
     this.begin(s);
     wx.showToast({ title: s === 8 ? '从头开始扫' : s === 6 ? '从胸口肩膀开始' : '从脚开始', icon: 'none' });
+  },
+
+  // 存书签：扫到一半想停，把当前段记下来，下次从这里继续
+  saveBookmark() {
+    if (this.data.phase !== 'run') return;
+    const i = this.data.idx;
+    wx.setStorageSync('hb_scanBookmark', i);
+    this.setData({ bookmark: i });
+    wx.showToast({ title: '已存书签：第 ' + (i + 1) + ' 段，下次从这里接着扫 🔖', icon: 'none' });
+  },
+  continueBookmark() {
+    if (this.data.bookmark < 0) return;
+    this.begin(this.data.bookmark);
+  },
+  clearBookmark() {
+    wx.setStorageSync('hb_scanBookmark', -1);
+    this.setData({ bookmark: -1 });
+    wx.showToast({ title: '书签已清掉', icon: 'none' });
   },
 
   startTimer() {

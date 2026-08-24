@@ -41,6 +41,13 @@
       <view class="ss-note">点哪个，就从那个部位开始这一轮</view>
     </view>
     <button class="btn-primary full" bindtap="begin">开始{{mode === 'micro' ? '微扫' : (mode === 'quick' ? '快扫' : '扫描')}}</button>
+    <view class="scan-bm" wx:if="{{bookmark >= 0 && mode === 'full'}}" role="group" aria-label="有扫描书签">
+      <text class="bm-tip">上次停在第 {{bookmark + 1}} 段「{{stages[bookmark].t}}」</text>
+      <view class="bm-actions">
+        <view class="bm-chip primary" bindtap="continueBookmark">🔖 从这里继续</view>
+        <view class="bm-chip" bindtap="clearBookmark">清掉书签</view>
+      </view>
+    </view>
     <view class="scan-last" wx:if="{{lastDone}}">{{lastDone}}</view>
     <view class="scan-next" role="button" bindtap="goBreathe" aria-label="再去呼吸页做一轮">🌿 还想再放松？接着做一轮呼吸 →</view>
     <button class="btn-ghost full mt" bindtap="exit">返回</button>
@@ -55,6 +62,7 @@
     <view class="scan-part">{{stages[idx].t}}</view>
     <view class="scan-desc">{{stages[idx].d}}</view>
     <view class="scan-countdown">{{left}}</view>
+    <button class="btn-ghost sm" bindtap="saveBookmark">🔖 存个书签（下次从这里继续）</button>
     <button class="btn-ghost full" bindtap="exit">提前结束</button>
   </view>
 
