@@ -34,6 +34,8 @@ Page({
     todayLine: '',
     weekGreet: '',  // 星期特别句（随当天）
     goldenLine: '', // 我的金句：小课存下的，每天换一条
+    weekPlan: '',   // 写给下周的一句话（周日留/周一看起）
+    weekPlanSet: false, // 本周是否已写
     todayCare: null,   // 今日状态卡：今天对自己照顾了什么（呼吸/记录/小事）
     role: '',          // 谁在用：student/teacher/parent/other（本地记住）
     roleTip: '',
@@ -83,6 +85,9 @@ Page({
     // 我的金句：小课里存下的每天晒一条（本地）
     const gold = wx.getStorageSync('hb_goldenLines') || [];
     if (gold.length) this.setData({ goldenLine: gold[(new Date().getDate() + new Date().getMonth()) % gold.length] });
+    // 写给下周的自己：周日留一句，整周回看（本地方周）
+    const wp = wx.getStorageSync('hb_weekPlan') || {};
+    this.setData({ weekPlan: (wp && wp.text) || '', weekPlanSet: !!(wp && wp.text) });
     this.setData({ todayCare: this.buildTodayCare() }); // 今日状态卡
     this.setData({ weekCare: this.buildWeekCare() }); // 本周照顾小结
     this.setData({ nurture: this.buildNurture() }); // 今日滋养三连
@@ -165,6 +170,16 @@ Page({
     rec[k] = rec[k] === today ? '' : today;
     wx.setStorageSync('hb_nurture', rec);
     this.setData({ nurture: this.buildNurture() });
+  },
+
+  // 写给下周的自己：周日晚写一句「下周想照顾自己/想做的事」→ 周一到周日可见提醒
+  planInput(e) { this.setData({ weekPlan: e.detail.value }); },
+  saveWeekPlan() {
+    const t = (this.data.weekPlan || '').trim();
+    if (!t) { wx.showToast({ title: '先写一句想对自己说的话', icon: 'none' }); return; }
+    wx.setStorageSync('hb_weekPlan', { text: t, at: Date.now() });
+    this.setData({ weekPlanSet: true });
+    wx.showToast({ title: '收好了，从下周一开始记得 ☀️', icon: 'none' });
   },
 
   // 本周小结：这一周你照顾自己的总账（纯本地，全部最细口径）

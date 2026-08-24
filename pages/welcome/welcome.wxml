@@ -7,6 +7,16 @@
   <view class="welcome-line" wx:if="{{todayLine}}" bindtap="copyTodayLine" role="button" aria-label="今日一句，点击复制">{{todayLine}}</view>
   <view class="welcome-week" wx:if="{{weekGreet}}" role="note" aria-label="星期特别句">{{weekGreet}}</view>
   <view class="welcome-gold" wx:if="{{goldenLine}}" role="note" aria-label="我的金句">💛 我的金句 · {{goldenLine}}</view>
+  <!-- 写给下周的自己：周日留一句，整周可见（点了输入就回想） -->
+  <view class="week-plan" wx:if="{{weekPlanSet}}" role="note" aria-label="写给下周自己的话">
+    <view class="wp-key">📮 写给下周自己的话 · 顺带回看一下</view>
+    <view class="wp-text">{{weekPlan}}</view>
+  </view>
+  <view class="week-plan write" wx:elif="{{!weekPlanSet}}" role="group" aria-label="写给下周的自己">
+    <view class="wp-key">✍️ 想给下周的自己留一句吗？</view>
+    <textarea class="wp-ta" value="{{weekPlan}}" bindinput="planInput" maxlength="60" placeholder="例如：下周试着早点睡一天…" auto-height />
+    <view class="wp-save" bindtap="saveWeekPlan" role="button" aria-label="收下这句话">收下·下周一看 ☀️</view>
+  </view>
 
   <!-- 来自朋友的分享 -->
   <view class="share-banner" wx:if="{{shared}}">

@@ -112,3 +112,9 @@
 .welcome-week { margin-top: 10rpx; font-size: 23rpx; color: #7f93b8; line-height: 1.6; }
 
 .welcome-gold { margin-top: 8rpx; font-size: 23rpx; color: #b07a3f; background: #fff8ec; border-radius: 10rpx; padding: 8rpx 12rpx; }
+
+.week-plan { margin-top: 12rpx; background: #f4f1ff; border: 1rpx solid #ddd6f5; border-radius: 14rpx; padding: 14rpx 16rpx; }
+.wp-key { font-size: 23rpx; color: #7a6aa8; margin-bottom: 6rpx; }
+.wp-text { font-size: 25rpx; color: #4a3f78; line-height: 1.7; }
+.wp-ta { width: 100%; font-size: 25rpx; color: #4a3f78; min-height: 60rpx; }
+.wp-save { margin-top: 10rpx; color: #6a5aa8; font-size: 24rpx; text-align: right; }
