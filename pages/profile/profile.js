@@ -26,6 +26,8 @@ Page({
     favs: [],
     favsToday: [],    // 今天珍藏的
     favsEarlier: [],  // 更早珍藏的
+    stickies: [],     // 📌 便签本（聊天「留下一句」，本地）
+    stickiesOpen: false,
     breatheTotal: 0,  // 呼吸累计（本地计数）
     scanTotal: 0,    // 扫描累计（本地计数）
     noteTotal: 0,   // 晚间小结累计篇数（本地）
@@ -199,6 +201,33 @@ Page({
   },
 
   goPlan() { wx.navigateTo({ url: '/pages/assessment/assessment' }); },
+
+  // ---- 📌 我的便签本（聊天「留下一句」，本地）----
+  refreshStickies() {
+    const z = (n) => String(n).padStart(2, '0');
+    const list = (wx.getStorageSync('hb_stickyNotes') || []).map((s) => {
+      const d = new Date(s.at);
+      const now = new Date();
+      const sameDay = d.toDateString() === now.toDateString();
+      const sameYear = d.getFullYear() === now.getFullYear();
+      const when = sameDay
+        ? '今天 ' + z(d.getHours()) + ':' + z(d.getMinutes())
+        : z(d.getMonth() + 1) + '/' + z(d.getDate()) + (sameYear ? '' : '/' + String(d.getFullYear()).slice(2));
+      return { t: s.t, at: s.at, when };
+    });
+    this.setData({ stickies: list });
+  },
+  openStickies() { this.refreshStickies(); this.setData({ stickiesOpen: true }); },
+  closeStickies() { this.setData({ stickiesOpen: false }); },
+  copySticky(e) { wx.setClipboardData({ data: e.currentTarget.dataset.t, success: () => wx.showToast({ title: '已复制', icon: 'success' }) }); },
+  deleteLastSticky() {
+    const list = wx.getStorageSync('hb_stickyNotes') || [];
+    if (!list.length) return;
+    list.shift();
+    wx.setStorageSync('hb_stickyNotes', list);
+    this.refreshStickies();
+    wx.showToast({ title: '已删除最近一条', icon: 'none' });
+  },
 
   // ---- 我的珍藏（聊天页长按珍藏，本地）----
   refreshFavs() {

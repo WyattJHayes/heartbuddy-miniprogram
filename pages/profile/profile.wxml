@@ -197,6 +197,9 @@
     <view class="row" bindtap="openFavs">
       <text>我的珍藏<text class="muted" wx:if="{{favCount}}">（{{favCount}} 条）</text></text><text class="arrow">›</text>
     </view>
+    <view class="row" bindtap="openStickies">
+      <text>📌 我的便签本<text class="muted" wx:if="{{stickies.length}}">（{{stickies.length}} 条）</text></text><text class="arrow">›</text>
+    </view>
     <view class="row" bindtap="viewPrivacy">
       <text>隐私声明</text><text class="arrow">›</text>
     </view>
@@ -253,6 +256,23 @@
       </block>
     </scroll-view>
     <view class="fav-foot" bindtap="closeFavs">关闭</view>
+  </view>
+
+<!-- 我的便签本弹层 -->
+  <view class="fav-mask" wx:if="{{stickiesOpen}}" bindtap="closeStickies" />
+  <view class="fav-pop" wx:if="{{stickiesOpen}}">
+    <view class="fav-head">
+      <text class="fav-title">📌 我的便签本</text>
+      <text class="fav-clear" bindtap="deleteLastSticky" wx:if="{{stickies.length}}" role="button" aria-label="删最近一条便签">删最近一条</text>
+    </view>
+    <scroll-view scroll-y class="fav-list" aria-label="便签列表">
+      <view class="fav-empty" wx:if="{{!stickies.length}}">在聊天里点「📌 留下一句」就能存下一句话</view>
+      <view class="fav-item" wx:for="{{stickies}}" wx:key="at" bindlongpress="copySticky" data-t="{{item.t}}" aria-label="点按复制这条便签">
+        <view class="fav-time">{{item.when}}</view>
+        <view class="fav-text">{{item.t}}</view>
+      </view>
+    </scroll-view>
+    <view class="fav-foot" bindtap="closeStickies">关闭</view>
   </view>
 </view>
 </view>
