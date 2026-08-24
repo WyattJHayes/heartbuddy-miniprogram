@@ -120,6 +120,7 @@ Page({
     const auto = _h >= 22 || _h < 6;
     const isNight = manual === 'on' ? true : manual === 'off' ? false : auto;
     this.setData({ isNight });
+    this.initRoleAsk(); // 老师/家长视角（欢迎页身份）
     // 间隔问候：距上次打开聊天 ≥2 天，轻提一句（不算打扰，只是「还在」）
     const lastTs = wx.getStorageSync('hb_lastChatTs') || 0;
     if (lastTs) {
@@ -919,6 +920,22 @@ Page({
     };
     const text = TOPICS[key] || '';
     if (text) this.send(text);
+  },
+
+  // 老师/家长视角起手：按欢迎页选的「谁在用」给一组更贴的起点
+  initRoleAsk() {
+    const role = wx.getStorageSync('hb_role') || '';
+    let set = [];
+    if (role === 'teacher') {
+      set = ['学生一直说「没事」，我该怎么开口问？', '想帮一个考前焦虑的学生，从哪句话开始？', '学生最近总说累，我该怎么回应不施压？'];
+    } else if (role === 'parent') {
+      set = ['孩子一提到考试就慌，我该怎么支持又不加压？', '孩子熬夜复习，我该劝还是算了？', '孩子最近不太愿意跟我说话，怎么办？'];
+    }
+    if (set.length) this.setData({ roleAsk: set });
+  },
+  onRoleAsk(e) {
+    const t = e.currentTarget.dataset.t;
+    if (t) this.send(t);
   },
 
   // 即时 3 次深呼吸引导（固定文案，不打 AI）

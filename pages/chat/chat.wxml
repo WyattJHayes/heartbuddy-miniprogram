@@ -199,6 +199,10 @@ module.exports = { divider: divider };
 
     <!-- 快捷面板（随时可展开） -->
     <view class="quick-panel" wx:if="{{showQuick}}">
+      <view class="quick-panel-title topic" wx:if="{{roleAsk.length}}">👨‍🏫 我是老师/家长 · 换个视角问</view>
+      <view class="quick-panel-list" wx:if="{{roleAsk.length}}">
+        <view class="quick-panel-item topic" wx:for="{{roleAsk}}" wx:key="*this" data-t="{{item}}" bindtap="onRoleAsk">{{item}}</view>
+      </view>
       <view class="quick-panel-title topic">💬 今天想聊点什么？</view>
       <view class="quick-panel-list topic">
         <view class="quick-panel-item topic" data-t="friend" bindtap="onTopic" role="button" aria-label="想聊朋友的事">朋友的小别扭</view>
