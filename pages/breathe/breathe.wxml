@@ -94,6 +94,19 @@
   <view class="phase-text" aria-live="polite">{{text}}</view>
   <view class="rounds" wx:if="{{phase !== 'ready' && phase !== 'done'}}">第 {{round}} / {{total}} 轮</view>
 
+  <!-- 此刻心意：开始前选一个意图词（本轮心念轻轻放向那边）；完成态回印 -->
+  <view class="intent-row" wx:if="{{phase === 'ready'}}">
+    <view class="intent-label">{{intentPicked ? '这一轮，把心意放在：「' + intent + '」上' : '开始前，选一个此刻的心意'}}</view>
+    <view class="intent-chips">
+      <view class="intent-chip {{intent === '稳' ? 'on' : ''}}" data-w="稳" bindtap="pickIntent" role="button" aria-label="心意 稳">稳</view>
+      <view class="intent-chip {{intent === '慢' ? 'on' : ''}}" data-w="慢" bindtap="pickIntent" role="button" aria-label="心意 慢">慢</view>
+      <view class="intent-chip {{intent === '等' ? 'on' : ''}}" data-w="等" bindtap="pickIntent" role="button" aria-label="心意 等">等</view>
+      <view class="intent-chip {{intent === '放' ? 'on' : ''}}" data-w="放" bindtap="pickIntent" role="button" aria-label="心意 放">放</view>
+      <view class="intent-chip {{intent === '无事' ? 'on' : ''}}" data-w="无事" bindtap="pickIntent" role="button" aria-label="心意 无事">无事</view>
+    </view>
+  </view>
+  <view class="done-intent" wx:elif="{{phase === 'done' && intent}}">这一轮的心意是「{{intent}}」——让它在呼吸里轻轻落下来。</view>
+
   <view class="actions">
     <button class="primary" wx:if="{{phase === 'ready' || phase === 'done'}}" bindtap="start">
       {{phase === 'done' ? '再练一次' : (presetKey === 'stare' ? '开始发呆' : '开始呼吸')}}

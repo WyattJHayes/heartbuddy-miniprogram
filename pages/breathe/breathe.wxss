@@ -94,3 +94,11 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .again-row { display: flex; align-items: center; justify-content: center; gap: 10rpx; margin: 18rpx 24rpx 0; padding: 16rpx 0; background: #eef7ff; border: 1rpx solid #d3e8fb; border-radius: 999rpx; color: #3f6498; font-size: 25rpx; font-weight: 600; }
 .again-emoji { font-size: 28rpx; }
 .again-t { color: #3f6498; }
+
+/* 此刻心意 */
+.intent-row { margin-top: 22rpx; text-align: center; }
+.intent-label { font-size: 24rpx; color: #7a8aa8; }
+.intent-chips { display: flex; justify-content: center; gap: 14rpx; margin-top: 12rpx; }
+.intent-chip { padding: 10rpx 26rpx; border-radius: 30rpx; border: 2rpx solid #dde4f0; background: #fff; color: #55627e; font-size: 26rpx; }
+.intent-chip.on { border-color: #7fb0e6; background: #eaf4ff; color: #3f6aa8; font-weight: 600; }
+.done-intent { margin-top: 18rpx; text-align: center; font-size: 24rpx; color: #7a8aa8; }

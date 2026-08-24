@@ -61,6 +61,8 @@ Page({
     timeHint: '',          // 按时段推荐节奏的一句话
     presets: PRESETS.concat([{ key: 'custom', label: '自定义 · 4-4-6', rounds: [] }]),
     presetKey: 'calm',
+    intent: '',         // 此刻心意：开始前选的意图词（稳/慢/等/放/无事）；完成态回印
+    intentPicked: false, // 已选过（本轮）
     presetLabel: '放松 · 4-4-6',
     customCfg: { in: 4, hold: 4, out: 6 }
   },
@@ -304,6 +306,14 @@ Page({
     this.setData({ presetKey: key, presetLabel: p.label, phase: 'ready', round: 0, ball: 150, trans: 0.5,
       timeHint: key === 'stare' ? '🌑 什么都不用做——就发会儿呆，这也是练习' : this.timeHint(),
       text: '已选「' + p.label + '」，点击开始' + (key === 'stare' ? '安安静静待着' : '跟着节奏呼吸'), calm: false });
+  },
+
+  // 此刻心意：开始前选一个意图词，本轮的心念就朝那个方向轻轻放
+  pickIntent(e) {
+    const w = e.currentTarget.dataset.w;
+    if (!w) return;
+    this.setData({ intent: w, intentPicked: true });
+    wx.vibrateShort && wx.vibrateShort({ type: 'light' });
   },
 
   startStare() {
