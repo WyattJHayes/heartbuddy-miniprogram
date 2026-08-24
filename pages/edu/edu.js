@@ -240,8 +240,18 @@ Page({
     let done = wx.getStorageSync(DONE_KEY) || [];
     if (!done.includes(l.key)) {
       done.push(l.key);
-      wx.setStorageSync(DARK_KEY, done);
-      wx.showToast({ title: '学完一节 🎉', icon: 'success' });
+      wx.setStorageSync(DONE_KEY, done);
+      // 学完自我回应：一句「此刻的你」给刚学完的自己（+整节里程碑）
+      const ECHO = [
+        '这一节学完，你对自己又了解了一点点 🎈',
+        '今天这一点点，会在考场上帮到你 🌱',
+        '认真学完的人，值得被自己夸一句 ☁️',
+        '每完成一节，都是你跟焦虑拉开的一点距离',
+        '刚学完的你，已经比昨天强了一点'
+      ];
+      const n = done.length;
+      const milli = n % 5 === 0 ? ' —— 已连续学完 ' + n + ' 节，很不容易。' : '';
+      wx.showToast({ title: '学完一节 🎉 ' + ECHO[(n - 1) % ECHO.length] + milli, icon: 'none', duration: 2600 });
     }
     const doneMap = this.data.doneMap;
     doneMap[l.key] = true;
