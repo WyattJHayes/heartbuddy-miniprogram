@@ -88,7 +88,7 @@
 
   <view class="ball-wrap">
     <view class="halo"></view>
-    <view class="ball" style="width: {{ball}}rpx; height: {{ball}}rpx; transition: all {{trans}}s ease-in-out;"></view>
+    <view class="ball {{phase}}" style="width: {{ball}}rpx; height: {{ball}}rpx; transition: all {{trans}}s ease-in-out;"></view>
   </view>
 
   <view class="phase-text" aria-live="polite">{{text}}</view>

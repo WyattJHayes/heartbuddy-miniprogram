@@ -124,3 +124,8 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .fp-chip2.on { background: #e3f6e3; color: #3f7a4f; }
 .fp-chip2.on2 { background: #fdecec; color: #a45c5c; }
 .face-tip { margin-top: 8rpx; font-size: 22rpx; color: #7a8ba0; }
+
+/* 呼吸球随阶段变色：吸=清澈蓝，屏=淡蓝静置，呼=暖橙回稳 */
+.ball.in { background: radial-gradient(circle at 32% 28%, #bcd8ff, #73a5f5 62%, #4f86e8); box-shadow: 0 12rpx 40rpx rgba(91, 141, 239, 0.35); }
+.ball.hold { background: radial-gradient(circle at 32% 28%, #eaf3ff, #b9d6fb 62%, #8fb4f0); box-shadow: 0 12rpx 40rpx rgba(143, 180, 240, 0.28); }
+.ball.out { background: radial-gradient(circle at 32% 28%, #ffe3c0, #ffc48f 62%, #f5a45f); box-shadow: 0 12rpx 40rpx rgba(245, 164, 95, 0.30); }
