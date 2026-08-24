@@ -255,6 +255,38 @@ Page({
     });
   },
 
+  // 说给爸妈听：把这段时间的成长写成一段暖话（叙述版，不是数据清单）
+  tellParents() {
+    const days = this.data.streakDays || 0;
+    const moods = this.data.footprintSum || 0;
+    const breathe = this.data.breatheTotal || 0;
+    const edu = this.data.eduDone || 0;
+    const d = new Date();
+    const lines = ['爸爸妈妈，想跟你们说一件小事 💛', ''];
+    lines.push('这段时间，我其实一直有在学着照顾自己：');
+    const bits = [];
+    if (moods) bits.push('· 我记下了 ' + moods + ' 次心情——高兴的、难过的，都没有让它烂在心里');
+    if (breathe) bits.push('· 我练过 ' + breathe + ' 分钟的呼吸，紧张的时候会先缓一缓');
+    if (edu) bits.push('· 我学了 ' + edu + ' 节心理小课，正在学着和压力相处');
+    if (days) bits.push('· 有 ' + days + ' 天，我都来找过这个小小的「树洞」');
+    if (!bits.length) bits.push('· 我刚来这个 App，正准备开始认真照顾自己');
+    lines.push.apply(lines, bits);
+    lines.push('');
+    lines.push('如果哪天我状态不太好，那不一定是不努力，可能只是那天有点累。');
+    lines.push('不用急着教育我「要坚强」——你轻轻问我一句「今天怎么样」，对我来说就是很大的支持。');
+    lines.push('');
+    lines.push('写于 ' + (d.getMonth() + 1) + ' 月 ' + d.getDate() + ' 日 · 来自心语伴 🌿');
+    wx.showModal({
+      title: '说给爸妈听',
+      content: '生成一段「我最近在怎么照顾自己」的话，复制后发给他们——用他们的语言，说你的努力。',
+      confirmText: '复制',
+      success: (r) => r.confirm && wx.setClipboardData({
+        data: lines.join('\n'),
+        success: () => wx.showToast({ title: '已复制，可以发给爸妈啦 💛', icon: 'none' })
+      })
+    });
+  },
+
   // ---- 我的珍藏（聊天页长按珍藏，本地）----
   refreshFavs() {
     const favs = wx.getStorageSync('hb_favs') || [];
