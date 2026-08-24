@@ -896,6 +896,21 @@ Page({
     this.pushAI(pool[Math.floor(Math.random() * pool.length)]);
   },
 
+  // 谢谢你：把感谢说出口（本地记一次「感恩时刻」，聊天里 AI 顺着回应）
+  onThanks() {
+    this.setData({ showQuick: false });
+    const n = (wx.getStorageSync('hb_thanksN') || 0) + 1;
+    wx.setStorageSync('hb_thanksN', n);
+    const pool = [
+      '谢谢你，愿意听我把这些话说出来。有你在真好 ✨',
+      '谢谢你没有嫌我烦，还一直温柔地接住我。',
+      '刚才那些话，谢谢你认真听完了——这是今晚最好的安慰。'
+    ];
+    this.pushAI(pool[Math.floor(Math.random() * pool.length)]);
+    if (n === 1) wx.showToast({ title: '第一次说谢谢，记下啦 💛', icon: 'none' });
+    else if ([5, 10, 20].includes(n)) wx.showToast({ title: '已经说了 ' + n + ' 次谢谢——你是懂得感恩的人 💛', icon: 'none' });
+  },
+
   // 英语角：点一下直接发送（等同 onQuick，英文输入会自动触发英文回复）
   onQuickEn(e) { this.setData({ showQuick: false }); this.send(e.currentTarget.dataset.text); },
 
