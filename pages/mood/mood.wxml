@@ -5,6 +5,9 @@
     <text class="tt-close" role="button" aria-label="今天先不提醒" bindtap="dismissTodayTip">✕</text>
   </view>
 
+  <!-- 今天放空：不评判的一天（可选） -->
+  <view class="skip-tip" wx:if="{{skipToday}}" role="note" aria-label="今天已放空">🌿 今天你选了「放空，不评判」——这也是照顾自己的一种。</view>
+
   <!-- 连续空白提醒（≥3 天未记录，温柔语气） -->
   <view class="empty-tip" wx:if="{{emptyTip}}" role="note" aria-label="一段时间没记录的提醒">{{emptyTip}}</view>
 

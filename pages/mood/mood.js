@@ -61,6 +61,7 @@ Page({
     smallStreak: 0,        // 连续全勾三件小事的天数
     band: [],              // 近 14 天情绪色带 [{d,e,has}]
     todayTip: false,       // 今日未记录心情时的轻提醒（当天一次可关）
+    skipToday: false,    // 今天「放空·不评判」：点了就不打扰（本地）
     dayNote: '',           // 今日小结（21 点后的收尾）
     aidPack: null,         // 情绪急救包（记录负性情绪后给即时可做的小事）
     quickInt: 3,           // 快速记录可选强度 1-5（默认 3）
@@ -841,7 +842,8 @@ Page({
         cliffTip,
         empty: list.length === 0,
         loaded: true,
-        todayTip: this.shouldShowTodayTip(raw)
+        todayTip: this.shouldShowTodayTip(raw),
+        skipToday: wx.getStorageSync("hb_skipDay_" + new Date().toDateString()) === 1 || wx.getStorageSync("hb_skipDay") === new Date().toDateString()
       });
       this._raw = raw;
       this.celebrateMilestone(list.length);
@@ -896,6 +898,17 @@ Page({
   dismissTodayTip() {
     wx.setStorageSync('hb_moodTipDismiss', new Date().toDateString());
     this.setData({ todayTip: false });
+  },
+
+  // 今天放空：不评判、不记录心情的「空白允许」日（本地，当天）
+  toggleTodaySkip() {
+    const t = new Date().toDateString();
+    const on = wx.getStorageSync('hb_skipDay') === t;
+    if (on) wx.removeStorageSync('hb_skipDay');
+    else wx.setStorageSync('hb_skipDay', t);
+    this.setData({ skipToday: !on });
+    if (!on) this.setData({ todayTip: false });
+    wx.showToast({ title: on ? '今天也欢迎回来记一笔 ☀️' : '收到，今天不评判自己 🌿', icon: 'none' });
   },
 
   // ---- 心情日历（月视图签到：按月看每天记了什么）----
