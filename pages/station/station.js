@@ -44,7 +44,8 @@ Page({
           '· 把明天的事写在一张纸上（卸下来，明天再看）',
           '· 关掉亮光，让身体先凉下来 1 度',
           '· 如果还是睡不着，允许自己“躺着休息”也是休息'
-        ]
+        ],
+        act: { k: 'breathe', label: '跟着去呼吸 5 分钟' }
       },
       {
         emoji: '💌',
@@ -55,7 +56,8 @@ Page({
           '· “我最不愿意放弃的东西是…”',
           '· “如果朋友像我一样低落，我会对 TA 说…”',
           '· 写完放好，难过时再拿出来读给自己听'
-        ]
+        ],
+        act: { k: 'mood', label: '去心情页写吧' }
       },
       {
         emoji: '🐢',
@@ -67,7 +69,8 @@ Page({
           '· 默默数 5…4…3…2…1，倒数完身体就先动了',
           '· 做完第一步就停一下，夸自己一句，再开下一轮',
           '· 记住：最难的不是完成任务，是开始那一下'
-        ]
+        ],
+        act: { k: 'mood', label: '去记一笔「开始的第一步」' }
       },
       {
         emoji: '📝',
@@ -78,7 +81,8 @@ Page({
           '· 明天只做 1 件事（写下来，明天只还这一件）',
           '· 写完放下手机：今天的你，已经做完了今天该做的',
           '· 晚安，这是你留给自己的拥抱'
-        ]
+        ],
+        act: { k: 'breathe', label: '睡前再来一轮呼吸' }
       },
       {
         emoji: '🔥',
@@ -90,7 +94,8 @@ Page({
           '· 脚趾抓地再松开 3 次，先让身体回到当下',
           '· 然后只做一件小事：离开现场 10 分钟，或把手浸凉水',
           '· 气是真的，但要不要炸，是你选的'
-        ]
+        ],
+        act: { k: 'breathe', label: '跟着做 60 秒呼吸' }
       },
       {
         emoji: '🪐',
@@ -516,6 +521,21 @@ Page({
 
   goBreathe() {
     wx.navigateTo({ url: '/pages/breathe/breathe' });
+  },
+  // 卡片建议直达：不同卡带一个小动作（去做 / 去学 / 去记一笔）
+  goAct(e) {
+    const k = e.currentTarget.dataset.act;
+    const map = {
+      breathe: ['/pages/breathe/breathe', '去呼吸'],
+      scan: ['/pages/scan/scan', '去扫描'],
+      mood: ['/pages/mood/mood', '去记一笔'],
+      edu: ['/pages/edu/edu', '去小课'],
+      chat: ['/pages/chat/chat', '去说一说']
+    };
+    const t = map[k];
+    if (!t) return;
+    wx.navigateTo({ url: t[0] });
+    if (k === 'mood') wx.showToast({ title: '去记一笔今天的心情 🎨', icon: 'none' });
   },
   // 换一句：当日轮换之外，手动换一张（当日一次，换过的当天不再换）
   reshuffleLine() {

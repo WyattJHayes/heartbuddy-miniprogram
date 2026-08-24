@@ -75,6 +75,7 @@
       </view>
       <view class="st-body" wx:if="{{open === index}}">
         <view class="st-line" wx:for="{{item.lines}}" wx:for-item="ln" wx:key="*this">{{ln}}</view>
+        <view class="st-go" wx:if="{{item.act}}" bindtap="goAct" data-act="{{item.act.k}}" role="button" aria-label="按卡片建议去做">{{item.act.label}} ›</view>
         <view class="st-copy" bindtap="copyCard" data-i="{{index}}" role="button" aria-label="复制这张卡">📄 复制这张卡</view>
         <!-- 一起充电：同主题推荐（未读优先，点开即换一张） -->
         <view class="st-like" wx:if="{{likeCards.length}}">
