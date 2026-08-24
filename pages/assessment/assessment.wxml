@@ -100,6 +100,12 @@
             <view class="hd-a">我选了：{{histDetail.items[index]}} 分</view>
           </view>
         </scroll-view>
+        <!-- 给那次的自己写一句（本地留存，下次回看可见） -->
+        <view class="hd-note">
+          <view class="hd-note-t">💌 对那次的自己说一句</view>
+          <textarea class="hd-note-ta" value="{{histDetail.note}}" bindinput="histNoteInput" placeholder="例如：那次辛苦了，现在的你已经好多了…" maxlength="120" auto-height />
+          <view class="hd-note-save" bindtap="saveHistNote" role="button" aria-label="保存留言">{{histDetail.note ? '保存留言' : '写上这句'}}</view>
+        </view>
         <view class="hd-close" bindtap="closeHistDetail" role="button" aria-label="关闭">知道了</view>
       </view>
     </view>

@@ -62,15 +62,31 @@ Page({
     if (at && Date.now() >= at) this.setData({ retestRemind: true, retestDue: true });
   },
 
-  // 点某次历史自评 → 回看当时逐题回答
+  // 点某次历史自评 → 回看当时逐题回答，并可给那次的自己写一句留言
   openHistDetail(e) {
     const i = Number(e.currentTarget.dataset.i);
     const h = this.data.hist[i];
     if (!h) return;
+    h.note = wx.getStorageSync('hb_hNote_' + h.date) || '';
     this.setData({ histDetail: h });
   },
   closeHistDetail() { this.setData({ histDetail: null }); },
   noop() {},
+
+  // 给「那次的自己」写一句（本地，下次回看能看到）
+  histNoteInput(e) { this.setData({ 'histDetail.note': e.detail.value }); },
+
+  // 保存给历史自己的留言
+  saveHistNote() {
+    const d = this.data.histDetail;
+    if (!d) return;
+    const key = 'hb_hNote_' + d.date;
+    if (d.note) wx.setStorageSync(key, d.note.trim());
+    else wx.removeStorageSync(key);
+    d.noteSaved = d.note;
+    this.setData({ histDetail: d });
+    wx.showToast({ title: d.note ? '已写给那次的自己 💌' : '留言已清空', icon: 'none' });
+  },
 
   // 距上次测评 ≥3 天 → 顶部轻提示条（可一键开始新一次）
   checkLastGap() {

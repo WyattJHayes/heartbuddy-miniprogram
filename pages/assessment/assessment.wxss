@@ -103,3 +103,9 @@
 
 .card.long-trend { background: #f4faf6; border-color: #d5ecdb; }
 .lt-text { font-size: 25rpx; color: #3f7a52; line-height: 1.7; }
+
+/* 给历史自己的留言 */
+.hd-note { margin-top: 16rpx; background: #fdf6ea; border: 1rpx solid #f0dcbc; border-radius: 14rpx; padding: 14rpx 18rpx; }
+.hd-note-t { font-size: 24rpx; color: #8a6a2f; font-weight: 600; }
+.hd-note-ta { width: 100%; box-sizing: border-box; margin-top: 10rpx; min-height: 90rpx; background: #fff; border-radius: 10rpx; padding: 12rpx; font-size: 25rpx; }
+.hd-note-save { margin-top: 10rpx; text-align: right; font-size: 23rpx; color: #b06f2c; }
