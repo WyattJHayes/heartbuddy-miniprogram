@@ -40,6 +40,16 @@
     </view>
   </view>
 
+  <!-- 今日滋养三连：喝水/好好吃饭/睡够了（每天一次小打卡） -->
+  <view class="nurture" role="group" aria-label="今日滋养三连">
+    <view class="nu-key">今天滋养过了吗？</view>
+    <view class="nu-row">
+      <view class="nu-chip {{nurture.water ? 'on' : ''}}" data-k="water" bindtap="toggleNurture" role="button" aria-label="喝水打卡">💧 喝水</view>
+      <view class="nu-chip {{nurture.food ? 'on' : ''}}" data-k="food" bindtap="toggleNurture" role="button" aria-label="好好吃饭打卡">🍚 好好吃饭</view>
+      <view class="nu-chip {{nurture.sleep ? 'on' : ''}}" data-k="sleep" bindtap="toggleNurture" role="button" aria-label="睡够了打卡">😴 睡够了</view>
+    </view>
+  </view>
+
   <!-- 本周小结：这一周你照顾自己的总账 -->
   <view class="week-care" wx:if="{{weekCare}}" role="note" aria-label="本周照顾小结">
     <view class="wc-key">这一周你做过的照顾</view>

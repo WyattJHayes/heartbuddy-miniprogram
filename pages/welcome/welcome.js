@@ -68,6 +68,7 @@ Page({
     this.setData({ welcomed: wx.getStorageSync('hb_welcomed') === true, todayLine: todayLine() }); // 首次引导卡只出现一次
     this.setData({ todayCare: this.buildTodayCare() }); // 今日状态卡
     this.setData({ weekCare: this.buildWeekCare() }); // 本周照顾小结
+    this.setData({ nurture: this.buildNurture() }); // 今日滋养三连
     this.setData({ openCount: wx.getStorageSync('hb_openCount') || 0 }); // 陪伴纪念日：第 N 次回来
     const savedRole = wx.getStorageSync('hb_role') || '';
     this.setData({ role: savedRole, roleTip: ROLE_HINT[savedRole] || '' });
@@ -120,6 +121,21 @@ Page({
     // 心情：今日记录过（同 chat 晨间提醒口径：toDateString）
     mood = wx.getStorageSync('hb_lastMoodDate') === todayStr;
     return { relaxMin, scanN, mood, small };
+  },
+
+  // 今日滋养三连：喝水/好好吃饭/睡够了（每天各一次，纯本地）
+  buildNurture() {
+    const today = new Date().toDateString();
+    const rec = wx.getStorageSync('hb_nurture') || {};
+    return { water: rec.water === today, food: rec.food === today, sleep: rec.sleep === today };
+  },
+  toggleNurture(e) {
+    const k = e.currentTarget.dataset.k;
+    const today = new Date().toDateString();
+    const rec = wx.getStorageSync('hb_nurture') || {};
+    rec[k] = rec[k] === today ? '' : today;
+    wx.setStorageSync('hb_nurture', rec);
+    this.setData({ nurture: this.buildNurture() });
   },
 
   // 本周小结：这一周你照顾自己的总账（纯本地，全部最细口径）

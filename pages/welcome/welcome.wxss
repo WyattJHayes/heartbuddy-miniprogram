@@ -98,3 +98,9 @@
 .wc-row { display: flex; flex-wrap: wrap; gap: 10rpx; }
 .wc-val { color: #5f8a4f; background: #eaf4e6; border-radius: 18rpx; padding: 4rpx 14rpx; font-size: 23rpx; }
 .wc-none { font-size: 22rpx; color: #9aa88a; }
+
+.nurture { margin-top: 12rpx; display: flex; align-items: center; gap: 10rpx; flex-wrap: wrap; }
+.nu-key { font-size: 23rpx; color: #8a93a8; }
+.nu-row { display: flex; gap: 10rpx; flex-wrap: wrap; }
+.nu-chip { padding: 8rpx 20rpx; border-radius: 24rpx; background: #f2f5fa; color: #7a8ba0; font-size: 23rpx; }
+.nu-chip.on { background: #e3f6e3; color: #3f7a4f; }
