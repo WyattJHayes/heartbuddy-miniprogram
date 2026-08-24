@@ -9,7 +9,8 @@ const PRESETS = [
   { key: 'long', label: '长呼 · 6-2-6-2', rounds: [['in', 6000, 520, 6.1], ['hold', 2000, 520, 0.6], ['out', 6000, 150, 6.1], ['hold', 2000, 150, 0.6]] },
   { key: 'stare', label: '发呆 · 2 分钟', rounds: [['stare', 120000, 150, 2]] },
   { key: 'mini', label: '课间 · 1.5 分钟', rounds: [['in', 3800, 460, 3.9], ['hold', 3200, 460, 0.6], ['out', 5600, 150, 5.6]] },
-  { key: 'wake', label: '晨起 · 3-1-5', rounds: [['in', 3000, 420, 3.1], ['hold', 1000, 420, 0.6], ['out', 5000, 150, 5.1]] }
+  { key: 'wake', label: '晨起 · 3-1-5', rounds: [['in', 3000, 420, 3.1], ['hold', 1000, 420, 0.6], ['out', 5000, 150, 5.1]] },
+  { key: 'rush', label: '紧张急救 · 60 秒', rounds: [['in', 4000, 460, 4.1], ['out', 5000, 150, 5.1], ['in', 4000, 460, 4.1], ['out', 5000, 150, 5.1]] }
 ];
 const DAILY_GOAL_MIN = 10; // 每日放松目标：累计 10 分钟（同一次约 5 分钟 → 两次达标）
 const CUSTOM_STORE = 'hbBreathCustom'; // 自定义节奏 { in, hold, out } 秒
