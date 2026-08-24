@@ -523,6 +523,56 @@ Page({
     });
   },
 
+  // 我的徽章墙：把已点亮的徽章拼成一张卡片保存（坚持看得见，可分享给家人老师）
+  async drawBadgeWall() {
+    if (this._wallBusy) return;
+    this._wallBusy = true;
+    try {
+      const q = this.createSelectorQuery();
+      const res = await new Promise((resolve) => {
+        q.select('#badgeWall').fields({ node: true, size: true }).exec((r) => resolve(r && r[0] && r[0].node ? r[0] : null));
+      });
+      if (!res) { wx.showToast({ title: '画布就绪中，再试一次', icon: 'none' }); return; }
+      const canvas = res.node;
+      const ctx = canvas.getContext('2d');
+      canvas.width = 300 * 2; canvas.height = 260 * 2;
+      ctx.scale(2, 2);
+      ctx.fillStyle = '#fdf6ee'; ctx.fillRect(0, 0, 300, 260);
+      ctx.fillStyle = '#ead9c8'; ctx.fillRect(0, 0, 300, 8);
+      ctx.fillStyle = '#8f6b1f'; ctx.font = 'bold 15px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('我的徽章墙 · 心语伴', 150, 34);
+      const d = new Date();
+      ctx.fillStyle = '#a3adc4'; ctx.font = '11px sans-serif';
+      ctx.fillText(`${d.getFullYear()} 年 ${d.getMonth() + 1} 月 ${d.getDate()} 日 · 已点亮 ${this.data.badges.filter((b) => b.got).length}/${this.data.badgeTotal} 枚`, 150, 54);
+      const got = this.data.badges.filter((b) => b.got);
+      if (!got.length) {
+        ctx.fillStyle = '#b8c2da'; ctx.font = '13px sans-serif';
+        ctx.fillText('还没有点亮徽章——旅程从第一枚开始 🌱', 150, 120);
+      } else {
+        // 每枚一行：emoji + 名称 + 点亮日期（最多 17 行）
+        got.slice(0, 12).forEach((b, i) => {
+          const y = 84 + i * 15;
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#7a6a5a'; ctx.font = '13px sans-serif';
+          ctx.fillText(b.emoji, 60, y);
+          ctx.textAlign = 'left';
+          ctx.fillStyle = '#4a5568';
+          ctx.fillText(b.title, 92, y);
+          ctx.fillStyle = '#a3adc4'; ctx.font = '10px sans-serif';
+          ctx.fillText((b.gotDate || '') ? '· ' + b.gotDate + ' 点亮' : '', 205, y);
+        });
+      }
+      ctx.fillStyle = '#b8c2da'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('—— 心语伴：把每一次照顾自己，都认真记下来', 150, 244);
+      const tmp = await new Promise((resolve) => {
+        wx.canvasToTempFilePath({ canvas, success: resolve, fail: () => resolve(null) }, this);
+      });
+      this._wallBusy = false;
+      if (!tmp || !tmp.tempFilePath) { wx.showToast({ title: '生成失败，请重试', icon: 'none' }); return; }
+      await this.saveToAlbum(tmp.tempFilePath);
+    } catch (e) { console.error('[profile] 徽章墙失败', e); this._wallBusy = false; }
+  },
+
   // 年度统计：今年记录了多少条、覆盖多少天（数据足迹的年度一栏）
   async calcYearStat() {
     try {

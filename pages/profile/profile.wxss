@@ -140,3 +140,5 @@
 .remind-left { flex: 1; display: flex; flex-direction: column; }
 .remind-sub { font-size: 21rpx; color: #a3aec4; margin-top: 4rpx; }
 .remind-btn { background: #eef4ff; color: #5b8def; border-radius: 999rpx; padding: 8rpx 22rpx; font-size: 22rpx; }
+
+.share-btn.alt { margin-top: 8rpx; }

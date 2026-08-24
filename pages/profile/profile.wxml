@@ -24,9 +24,13 @@
     <view class="share-btn" bindtap="drawShareCard" role="button" aria-label="生成今日心情卡保存到相册">
       🖼️ 今日心情卡（保存·可分享）
     </view>
+    <view class="share-btn alt" bindtap="drawBadgeWall" role="button" aria-label="生成我的徽章墙保存到相册">
+      🏅 我的徽章墙（已点亮拾起·保存）
+    </view>
   </view>
 
   <view class="share-slot"><canvas type="2d" id="shareCard"></canvas></view>
+  <view class="share-slot"><canvas type="2d" id="badgeWall"></canvas></view>
 
   <view class="card user">
     <view class="avatar">🌱</view>
