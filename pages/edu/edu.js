@@ -156,7 +156,9 @@ Page({
     doneCount: 0,
     total: LESSONS.length,
     openIdx: -1,
-    kw: ''             // 课程搜索关键词
+    kw: '',             // 课程搜索关键词
+    todayGoal: '',      // 今日轻目标文案
+    todayDone: false    // 今天是否学过
   },
 
   onLoad() {
@@ -171,6 +173,14 @@ Page({
     this.setData({ gradDate: wx.getStorageSync('hb_eduGradDate') || '' });
     this.setData({ gradSpan: wx.getStorageSync('hb_eduSpanDays') || 0 });
     this.setData({ studyDays: (wx.getStorageSync('hb_eduDays') || []).length });
+    // 今日轻目标：今天学过给「已经回顾」回执，没学过给「5 分钟就够」的轻承诺（当天有效）
+    const learnedToday = (wx.getStorageSync('hb_eduDays') || []).includes(new Date().toDateString());
+    this.setData({
+      todayDone: learnedToday,
+      todayGoal: learnedToday
+        ? '今天已经打开过小课了——这几分钟，就是你照顾自己的证据 🌿'
+        : '今天给心理小课 5 分钟就够：读完一节，就算今天的照顾做到了 🌱'
+    });
     // 全部学完：每天打开自动出一道温故题
     if (LESSONS.every((l) => doneMap[l.key])) {
       const rk = 'hb_eduReview_' + new Date().toDateString();

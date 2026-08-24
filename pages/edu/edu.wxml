@@ -4,6 +4,12 @@
     <text class="eh-sub">几分钟就能读完，随手学一点照顾自己的办法</text>
   </view>
 
+  <!-- 今日轻学目标：没学给 5 分钟小目标，学过给温柔回执（当天有效） -->
+  <view class="today-goal" wx:if="{{todayGoal}}" role="note" aria-label="今日轻学目标">
+    <text class="tg-emoji">{{todayDone ? '🌿' : '🌱'}}</text>
+    <text class="tg-text">{{todayGoal}}</text>
+  </view>
+
   <!-- 完成度进度条 -->
   <view class="edu-progress" role="progressbar" aria-label="课程完成度 {{doneCount}}/{{total}}">
     <view class="ep-num">已学完 {{doneCount}} / {{total}} 节<text wx:if="{{streak >= 2}}" class="ep-streak">🔥 连续学习 {{streak}} 天</text></view>
