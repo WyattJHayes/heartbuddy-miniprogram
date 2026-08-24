@@ -128,3 +128,9 @@
 .pe-action { color: #5a7db3; font-size: 24rpx; line-height: 1.6; }
 
 .self-letter { margin-top: 14rpx; display: inline-block; color: #4f7fae; font-size: 24rpx; background: #eef6ff; border-radius: 22rpx; padding: 8rpx 26rpx; }
+
+.after-card { margin-top: 12rpx; background: #f6f2ff; border: 1rpx solid #ded5f7; border-radius: 14rpx; padding: 14rpx 16rpx; }
+.af-t { color: #6a5aa8; font-size: 24rpx; font-weight: 600; margin-bottom: 8rpx; }
+.af-text { color: #4a3f78; font-size: 24rpx; line-height: 1.7; }
+.af-ta { width: 100%; font-size: 24rpx; color: #4a3f78; min-height: 60rpx; }
+.af-save { margin-top: 8rpx; color: #6a5aae; font-size: 24rpx; text-align: right; }

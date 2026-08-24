@@ -56,6 +56,17 @@
     </view>
   </view>
 
+  <!-- 考后归位：考试结束 1-3 天，给那场考试合上一页 -->
+  <view class="after-card" wx:if="{{afterSaved}}" role="note" aria-label="考后归位已写">
+    <view class="af-t">🌈 那场考试，你已经归位了</view>
+    <view class="af-text">{{afterword}}</view>
+  </view>
+  <view class="after-card" wx:elif="{{afterShow}}" role="group" aria-label="给这次考试归位一句话">
+    <view class="af-t">🖋 考试结束快一周了，写一句「它让我学到了什么」？</view>
+    <textarea class="af-ta" value="{{afterword}}" bindinput="afterInput" maxlength="60" auto-height placeholder="例：原来慌的时候深呼吸真能把我带回来…" />
+    <view class="af-save" bindtap="saveAfterword" role="button" aria-label="收下这句话">收下 · 那场考试翻页 🌈</view>
+  </view>
+
   <!-- 考前第 N 天·每天一点点 -->
   <view class="pre-exam" wx:if="{{preExam}}" role="note" aria-label="考前行动一点点">
     <view class="pe-title">📌 离 {{preExam.name}} 还有 {{preExam.days}} 天 · 今天做一点点</view>

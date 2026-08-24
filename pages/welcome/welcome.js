@@ -36,7 +36,9 @@ Page({
     goldenLine: '', // 我的金句：小课存下的，每天换一条
     weekPlan: '',   // 写给下周的一句话（周日留/周一看起）
     examWrap: null,  // 考完当天傍晚的收尾卡
-    preExam: null,   // 考前第 N 天「每天一点点」动作卡
+    preExam: null,   // 考前第 N 天
+    afterword: '',  // 考后归位：写一句（考完 1-3 天）
+    afterSaved: false,  // 考后已归位
     weekPlanSet: false, // 本周是否已写
     todayCare: null,   // 今日状态卡：今天对自己照顾了什么（呼吸/记录/小事）
     role: '',          // 谁在用：student/teacher/parent/other（本地记住）
@@ -98,6 +100,8 @@ Page({
     this.setData({ examMorning: this.buildExamMorning() }); // 考试当天早餐卡
     this.setData({ examWrap: this.buildExamWrap() }); // 考完的傍晚收尾卡
     this.setData({ preExam: this.buildPreExam() }); // 考前 7 天一点计划
+    this.setData({ afterword: wx.getStorageSync('hb_examAfterword') || '', afterSaved: !!wx.getStorageSync('hb_examAfterword') }); // 考后归位
+    this.setData({ afterShow: this.buildExamAfter() }); // 考完 1-3 天归位输入
     this.setData({ openCount: wx.getStorageSync('hb_openCount') || 0 }); // 陪伴纪念日：第 N 次回来
     const savedRole = wx.getStorageSync('hb_role') || '';
     this.setData({ role: savedRole, roleTip: ROLE_HINT[savedRole] || '' });
@@ -161,6 +165,24 @@ Page({
     const ex = new Date(dateStr); ex.setHours(0, 0, 0, 0);
     if (t.getTime() !== ex.getTime()) return null;
     return { name };
+  },
+
+  // 考后归位：考试结束 1-3 天，把「考试」在日记里合上一页
+  buildExamAfter() {
+    const dateStr = wx.getStorageSync('hb_examDate') || '';
+    if (!dateStr || this.data.afterSaved) return null;
+    const ex = new Date(dateStr); ex.setHours(0, 0, 0, 0);
+    const gap = Math.round((Date.now() - ex.getTime()) / 86400000);
+    if (gap < 1 || gap > 3) return null;
+    return true;
+  },
+  afterInput(e) { this.setData({ afterword: e.detail.value }); },
+  saveAfterword() {
+    const t = (this.data.afterword || '').trim();
+    if (!t) { wx.showToast({ title: '先写一句想留在那里的话', icon: 'none' }); return; }
+    wx.setStorageSync('hb_examAfterword', t);
+    this.setData({ afterSaved: true });
+    wx.showToast({ title: '收好了——那场考试，正式翻页 🌈', icon: 'none' });
   },
 
   // 考前 7 天「每天一点点」：第 7 天到考前一天每天一个 5 分钟动作
