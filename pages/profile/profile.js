@@ -37,7 +37,13 @@ Page({
     favCount: 0,
     // 日签问候
     greetEmoji: '🌤',
-    greetText: ''
+    greetText: '',
+    // 考前倒计时（学生场景：设一次考试日，剩下几天心里有数）
+    examInfo: null,
+    examToday: '',
+    // 每日轻提醒
+    remindOn: false,
+    remindTime: '21:00'
   },
 
   onShow() {
@@ -51,6 +57,102 @@ Page({
     this.calcYearStat();
     this.setData({ accompanyMilestoneText: this.accompanyMilestone(this.data.accompanyDays || 0) });
     this.refreshFavs();
+    this.loadExam();
+    this.loadRemind();
+  },
+
+  // ---- 每日轻提醒：约定一个时间，到点温柔问一句 ----
+  loadRemind() {
+    const cfg = wx.getStorageSync('hb_dailyRemind') || {};
+    this.setData({ remindOn: !!cfg.on, remindTime: cfg.time || '21:00' });
+  },
+
+  remindSwitch(e) {
+    const on = !!e.detail.value;
+    if (on) {
+      wx.setStorageSync('hb_dailyRemind', { on: true, time: this.data.remindTime });
+      wx.showToast({ title: '已开启 · 到点会轻声提醒', icon: 'none' });
+    } else {
+      wx.removeStorageSync('hb_dailyRemind');
+      wx.showToast({ title: '已关掉每日提醒', icon: 'none' });
+    }
+    this.setData({ remindOn: on });
+  },
+
+  remindTimeChange(e) {
+    const t = e.detail.value;
+    if (!t) return;
+    this.setData({ remindTime: t });
+    wx.setStorageSync('hb_dailyRemind', { on: this.data.remindOn, time: t });
+    wx.showToast({ title: '提醒时间已改到 ' + t, icon: 'none' });
+  },
+
+  // ---- 考前倒计时 ----
+  // 读本地考试日 → 算出「还有 N 天 / 就是今天 / 已考完」三态文案
+  loadExam() {
+    const dateStr = wx.getStorageSync('hb_examDate') || '';
+    const name = wx.getStorageSync('hb_examName') || '考试';
+    const t = new Date(); t.setHours(0, 0, 0, 0);
+    const today = this.fmtDate(t);
+    this.setData({ examToday: today });
+    if (!dateStr) { this.setData({ examInfo: null }); return; }
+    const ex = new Date(dateStr); ex.setHours(0, 0, 0, 0);
+    const DAY = 86400000;
+    const days = Math.round((ex.getTime() - t.getTime()) / DAY);
+    let body = '', tone = '', btn = null;
+    if (days > 3) {
+      body = `还有 ${days} 天。按自己的节奏复习，也记得吃饭睡觉。`;
+    } else if (days > 0) {
+      body = `还有 ${days} 天。紧张是正常的——现在最有用的是深呼吸。`;
+      btn = { text: '去呼吸放松', url: '/pages/breathe/breathe' };
+    } else if (days === 0) {
+      body = '就是今天。你已经准备很久了，做好深呼吸，会顺利的。';
+      btn = { text: '考前 1 分钟呼吸', url: '/pages/breathe/breathe' };
+    } else {
+      body = `已经过去了 ${-days} 天。辛苦了。今晚好好睡一觉。`;
+      btn = { text: '清掉这次倒计时', clear: true };
+    }
+    this.setData({ examInfo: { dateStr, name, days, body, btn } });
+  },
+
+  // picker 选择考试日
+  examDateChange(e) {
+    const v = e.detail.value;
+    if (!v) return;
+    // 顺带让用户写一句「这是什么考试」
+    wx.showModal({
+      title: '这是什么考试？',
+      editable: true,
+      placeholderText: '例如：数学期中',
+      confirmText: '记下',
+      success: (r) => {
+        if (!r.confirm) return;
+        wx.setStorageSync('hb_examDate', v);
+        wx.setStorageSync('hb_examName', (r.content || '').trim() || '考试');
+        this.loadExam();
+        wx.showToast({ title: '已记下，加油', icon: 'success' });
+      }
+    });
+  },
+
+  examAction() {
+    const exam = this.data.examInfo;
+    if (!exam || !exam.btn) return;
+    if (exam.btn.clear) {
+      wx.showModal({
+        title: '清掉倒计时？',
+        content: '考试已经结束，把这格倒计时收起来吧。',
+        confirmText: '收起',
+        success: (r) => {
+          if (!r.confirm) return;
+          wx.removeStorageSync('hb_examDate');
+          wx.removeStorageSync('hb_examName');
+          this.loadExam();
+        }
+      });
+      return;
+    }
+    if (exam.btn.url) wx.navigateTo({ url: exam.btn.url });
   },
 
   copyMilestone(e) {

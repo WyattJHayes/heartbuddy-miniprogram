@@ -36,6 +36,35 @@
     </view>
   </view>
 
+  <!-- 考前倒计时：设一次考试日，考前陪你倒数 + 考前3天起深呼吸 -->
+  <view class="card exam-card" wx:if="{{!examInfo}}">
+    <picker mode="date" value="{{examToday}}" start="{{examToday}}" bindchange="examDateChange">
+      <view class="exam-set">
+        <text class="exam-emoji">📝</text>
+        <view class="exam-main">
+          <view class="exam-title">考前倒计时</view>
+          <view class="exam-sub">填上最近一场考试的日子，心里有数</view>
+        </view>
+        <text class="exam-go">设置 ›</text>
+      </view>
+    </picker>
+  </view>
+  <view class="card exam-card exam-on" wx:if="{{examInfo}}" role="note" aria-label="考前倒计时：{{examInfo.name}}还有{{examInfo.days}}天">
+    <view class="exam-hd">
+      <text class="exam-emoji">{{examInfo.days >= 0 ? '📝' : '🎉'}}</text>
+      <view class="exam-main">
+        <view class="exam-title">{{examInfo.name}}<text class="exam-date"> · {{examInfo.dateStr}}</text></view>
+        <view class="exam-body">{{examInfo.body}}</view>
+      </view>
+    </view>
+    <view class="exam-ops">
+      <view class="exam-btn" bindtap="examAction">{{examInfo.btn.text}}</view>
+      <picker mode="date" value="{{examToday}}" start="{{examToday}}" bindchange="examDateChange">
+        <view class="exam-btn ghost" wx:if="{{examInfo.days >= 0}}">换日期</view>
+      </picker>
+    </view>
+  </view>
+
   <!-- 统计 -->
   <view class="card">
     <view class="section-title">我的数据</view>
@@ -178,6 +207,16 @@
     </view>
     <view class="row danger" bindtap="clearData">
       <text>清空我的记录（不可恢复）</text><text class="arrow">›</text>
+    </view>
+    <view class="row remind-row">
+      <view class="remind-left">
+        <text>每日轻声提醒<text class="muted" wx:if="{{remindOn}}"> · {{remindTime}}</text></text>
+        <view class="remind-sub">到点提醒自己：深呼吸一次 / 记一笔心情</view>
+      </view>
+      <picker mode="time" value="{{remindTime}}" bindchange="remindTimeChange" wx:if="{{remindOn}}">
+        <view class="remind-btn">改时间</view>
+      </picker>
+      <switch checked="{{remindOn}}" bindchange="remindSwitch" color="#5b8def" style="transform: scale(.8);" aria-label="每日轻声提醒开关"/>
     </view>
     <view class="row">
       <text>版本</text><text class="muted">v0.3.0（参赛 MVP）</text>

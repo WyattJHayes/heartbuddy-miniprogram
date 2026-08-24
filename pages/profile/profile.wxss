@@ -119,3 +119,24 @@
 
 /* 徽章一键复制 */
 .badge-copy { margin-bottom: 14rpx; display: inline-block; font-size: 22rpx; color: #7a83a0; background: #eef2fb; border-radius: 999rpx; padding: 6rpx 16rpx; }
+
+/* 考前倒计时 */
+.exam-card { border: 1rpx solid #f0e2ce; background: linear-gradient(135deg, #fffdf7, #fff7ea); }
+.exam-set { display: flex; align-items: center; gap: 16rpx; }
+.exam-emoji { font-size: 40rpx; }
+.exam-main { flex: 1; }
+.exam-title { font-size: 28rpx; font-weight: 700; color: #6d4c22; }
+.exam-sub { font-size: 22rpx; color: #a8895a; margin-top: 4rpx; }
+.exam-go { color: #b06f2c; font-size: 24rpx; }
+.exam-hd { display: flex; align-items: flex-start; gap: 16rpx; }
+.exam-date { font-size: 22rpx; color: #a8895a; font-weight: 400; }
+.exam-body { margin-top: 8rpx; font-size: 24rpx; color: #7a5a2e; line-height: 1.7; }
+.exam-ops { display: flex; gap: 16rpx; margin-top: 18rpx; align-items: center; }
+.exam-btn { background: #5b8def; color: #fff; border-radius: 999rpx; padding: 10rpx 28rpx; font-size: 24rpx; }
+.exam-btn.ghost { background: #f2f6ff; color: #5b8def; }
+
+/* 每日轻声提醒 */
+.remind-row { gap: 12rpx; }
+.remind-left { flex: 1; display: flex; flex-direction: column; }
+.remind-sub { font-size: 21rpx; color: #a3aec4; margin-top: 4rpx; }
+.remind-btn { background: #eef4ff; color: #5b8def; border-radius: 999rpx; padding: 8rpx 22rpx; font-size: 22rpx; }
