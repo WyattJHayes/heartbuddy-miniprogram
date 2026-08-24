@@ -21,10 +21,48 @@ App({
     }
     this.login();
     this.checkDailyRemind();
+    this.checkNightWindDown();
   },
 
   onShow() {
     this.checkDailyRemind();
+  },
+
+  /**
+   * 深夜收尾引导（本地）：22:30-5:00 首次打开时。
+   * 若今天已做过练习/记录/倾诉，给一次「今天你照顾过自己了」的收尾陪伴，
+   * 可选一键去呼吸发呆或直接去睡。每天只出现一次。
+   */
+  checkNightWindDown() {
+    try {
+      const now = new Date();
+      const h = now.getHours();
+      const isNight = h >= 22 || h < 5;
+      if (!isNight) return;
+      const todayKey = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+      if (wx.getStorageSync('hb_nightWind') === todayKey) return;
+      // 今天有没有做过「照顾自己的事」（任一即可，避免空转打扰）
+      const scanDone = (wx.getStorageSync('hb_scanDoneLog') || []).some((t) => new Date(t).toDateString() === now.toDateString());
+      const moodToday = wx.getStorageSync('hb_lastMoodDate') === todayKey;
+      const bd = wx.getStorageSync('hb_breatheDay');
+      const breatheDay = bd && bd.date === now.toDateString();
+      const smallN = (wx.getStorageSync('hb_smallWeek') || 0);
+      const didSomething = scanDone || moodToday || breatheDay || smallN > 0;
+      if (!didSomething) return;
+      wx.setStorageSync('hb_nightWind', todayKey);
+      wx.showModal({
+        title: '🌙 夜深了，你真的一天有好好照顾自己',
+        content: '今天的呼吸/记录，我都记得。睡前花 30 秒把今天轻轻合上：和心语道个晚安，或做一轮发呆呼吸。',
+        confirmText: '道个晚安去睡',
+        cancelText: '先去呼吸 🌬',
+        success: (r) => {
+          if (r.confirm) wx.switchTab({ url: '/pages/chat/chat' });
+          else wx.navigateTo({ url: '/pages/breathe/breathe' });
+        }
+      });
+    } catch (e) {
+      console.warn('[nightWind] 检查失败', e);
+    }
   },
 
   /**
