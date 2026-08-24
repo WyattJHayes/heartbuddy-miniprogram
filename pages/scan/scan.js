@@ -43,6 +43,7 @@ Page({
     lastDone: '',
     scanStreak: 0,     // 连续扫描天数（最近完成日志往前数）
     scanToday: 0,      // 今天已完成次数
+    scanWeek: 0,       // 本周已完成次数
     calmInt: 3        // 完成后「此刻平静程度」（1-5，默认 3，随记录入库）
   },
 
@@ -54,6 +55,7 @@ Page({
     this.setData({ scanCount: wx.getStorageSync('hb_scanCount') || 0 });
     this.setData({ scanStreak: this.buildScanStreak() });
     this.setData({ scanToday: this.buildScanToday() });
+    this.setData({ scanWeek: this.buildScanWeek() });
     this.setData({ opening: this.dayOpening() });
     this.setData({ feelLog: (wx.getStorageSync('hb_scanFeel') || []).slice(-5).reverse() });
     // 感受词 Top1：扫描后身体最常给你的反馈
@@ -160,7 +162,7 @@ Page({
     const dl = wx.getStorageSync('hb_scanDoneLog') || [];
     dl.push(ts);
     wx.setStorageSync('hb_scanDoneLog', dl.slice(-30));
-    this.setData({ lastDone: `上次完成：${this.fmtDate(ts)}`, scanToday: this.buildScanToday() });
+    this.setData({ lastDone: `上次完成：${this.fmtDate(ts)}`, scanToday: this.buildScanToday(), scanWeek: this.buildScanWeek() });
     // 完成回响：按累计次数与完成时段给一句「身体的留言」（可复制带走）
     this.setData({ scanEcho: this.buildScanEcho(), scanEchoCnt: (wx.getStorageSync('hb_scanCount') || 0) + 1 });
     // 计入今日「放松累计」：扫描/快扫的分钟数也进呼吸页每日 10 分钟目标（跨页一致）
@@ -254,6 +256,14 @@ Page({
     return doneTs.filter((x) => new Date(x).toDateString() === t).length;
   },
 
+  // 本周已完成扫描次数（周一起算）
+  buildScanWeek() {
+    const doneTs = wx.getStorageSync('hb_scanDoneLog') || [];
+    const now = new Date();
+    const mon = now.getTime() - ((now.getDay() + 6) % 7) * 86400000;
+    const start = new Date(mon).setHours(0, 0, 0, 0);
+    return doneTs.filter((x) => new Date(x).getTime() >= start).length;
+  },
 
   // 今日放松累计（跨页共享给呼吸页的每日目标）：按天记录扫描分钟数
   touchRelaxMins(add) {
