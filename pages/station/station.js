@@ -201,7 +201,9 @@ Page({
       }
     ],
     open: -1,   // 当前展开的卡片索引
-    kw: ''      // 关键词搜索框（标题/标签/内容匹配，与标签筛选叠加）
+    kw: '',      // 关键词搜索框（标题/标签/内容匹配，与标签筛选叠加）
+    likeCards: [],  // 展开卡时「一起充电」同主题推荐（最多 2 张，未读优先）
+    todayReads: 0   // 今日展开过的卡片数（充电小结）
   },
 
   // 收藏置顶：长按卡片头 ★ 收藏/取消（本地，最多 3 张）
@@ -285,6 +287,35 @@ Page({
       }
     }
     this.setData({ open: willOpen ? i : -1 });
+    // 展开时顺手推荐同主题卡（未读优先，最多 2 张）——「一起充电」
+    if (willOpen) this.setLikeCards(i);
+    else this.setData({ likeCards: [] });
+  },
+
+  // 「一起充电」：同标签的其它卡，还没看过的排前面（读得多更懂你要什么）
+  setLikeCards(i) {
+    const c = (this.data.cards || [])[i];
+    if (!c) return;
+    const reads = wx.getStorageSync('hb_stReads') || {};
+    const same = (this.data.cards || []).filter((x, j) => j !== i && (x.tags || []).some((t) => (c.tags || []).includes(t)));
+    // 未读优先，其次同标签数量多者优先；最多 2 张，且排除当前卡
+    const like = same.sort((a, b) => {
+      const wa = reads[a.title] ? 1 : 0, wb = reads[b.title] ? 1 : 0;
+      if (wa !== wb) return wa - wb;       // 未读(0) 在前
+      const ta = (b.tags || []).filter((t) => (c.tags || []).includes(t)).length;
+      const tb = (a.tags || []).filter((t) => (c.tags || []).includes(t)).length;
+      return ta - tb;                       // 重合标签更多者靠前
+    }).slice(0, 3);
+    this.setData({
+      likeCards: like.map((x) => ({ title: x.title, emoji: x.emoji, tags: (x.tags || []).join('·'), index: (this.data.cards || []).findIndex((cc) => cc.title === x.title) }))
+    });
+  },
+
+  // 点「一起充电」推荐卡：直接展开它，并重新推荐
+  openLikeCard(e) {
+    const idx = Number(e.currentTarget.dataset.index);
+    if (!(idx >= 0)) return;
+    this.toggleCard({ currentTarget: { dataset: { index: String(idx) } } });
   },
 
   goHelper() {

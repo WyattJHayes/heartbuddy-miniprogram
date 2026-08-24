@@ -54,6 +54,17 @@
       <view class="st-body" wx:if="{{open === index}}">
         <view class="st-line" wx:for="{{item.lines}}" wx:for-item="ln" wx:key="*this">{{ln}}</view>
         <view class="st-copy" bindtap="copyCard" data-i="{{index}}" role="button" aria-label="复制这张卡">📄 复制这张卡</view>
+        <!-- 一起充电：同主题推荐（未读优先，点开即换一张） -->
+        <view class="st-like" wx:if="{{likeCards.length}}">
+          <view class="st-like-t">🔋 一起充电 · 同主题还有</view>
+          <view class="st-like-row" wx:for="{{likeCards}}" wx:key="title" wx:for-item="lk"
+                bindtap="openLikeCard" data-index="{{lk.index}}" role="button" aria-label="展开{{lk.title}}">
+            <text class="st-like-e">{{lk.emoji}}</text>
+            <text class="st-like-title">{{lk.title}}</text>
+            <text class="st-like-tags">{{lk.tags}}</text>
+            <text class="st-like-go">›</text>
+          </view>
+        </view>
       </view>
     </view>
   </view>

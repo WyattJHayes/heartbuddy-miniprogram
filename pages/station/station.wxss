@@ -53,3 +53,14 @@
 .draw-other { margin-top: 8rpx; font-size: 21rpx; color: #7a5a8c; text-decoration: underline; }
 
 .st-read-n { font-size: 19rpx; color: #9aa3b8; margin-left: 10rpx; background: #f1f3f8; border-radius: 8rpx; padding: 2rpx 10rpx; }
+
+/* 一起充电：同主题推荐 */
+.st-like { margin-top: 16rpx; background: #f7fbff; border: 1rpx solid #dbe9fb; border-radius: 14rpx; padding: 14rpx 18rpx; }
+.st-like-t { font-size: 22rpx; color: #3f6498; font-weight: 600; margin-bottom: 6rpx; }
+.st-like-row { display: flex; align-items: center; gap: 12rpx; padding: 12rpx 4rpx; border-bottom: 1rpx solid #edf3fb; }
+.st-like-row:last-child { border-bottom: none; }
+.st-like-e { font-size: 32rpx; }
+.st-like-title { flex: 1; font-size: 25rpx; color: #3a4a63; }
+.st-like-tags { font-size: 19rpx; color: #9aa3b8; }
+.st-like-go { color: #5b8def; font-size: 28rpx; }
+
