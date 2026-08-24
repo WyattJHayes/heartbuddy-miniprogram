@@ -238,6 +238,11 @@ module.exports = { divider: divider };
       <view class="quick-panel-list">
         <view class="quick-panel-item warm" bindtap="onThanks">谢谢你听我说这些</view>
       </view>
+      <view class="quick-panel-title pine">🍃 一句放下 · 给紧绷的自己松口气</view>
+      <view class="quick-panel-list">
+        <view class="quick-panel-item pine" wx:for="{{quickAnchor}}" wx:key="*this"
+              data-text="{{item}}" bindtap="onQuick">{{item}}</view>
+      </view>
       <view class="quick-panel-title calm">🌙 晚安收尾</view>
       <view class="quick-panel-list">
         <view class="quick-panel-item calm" bindtap="onGoodnight">聊到这里，道个晚安</view>

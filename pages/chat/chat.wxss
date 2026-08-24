@@ -219,3 +219,6 @@
 .n-chip { padding: 8rpx 20rpx; border-radius: 26rpx; background: #f1f4fa; color: #7a88a0; font-size: 23rpx; }
 .n-chip.on { background: #e3eeff; color: #3f6aa8; }
 .need-hint { margin-left: 6rpx; font-size: 21rpx; color: #aab2c4; }
+
+.quick-panel-title.pine { color: #4f8a5f; }
+.quick-panel-item.pine { background: #ecf6ee; color: #3f7a4f; }
