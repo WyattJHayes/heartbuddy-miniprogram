@@ -200,6 +200,9 @@
     <view class="row" bindtap="openStickies">
       <text>📌 我的便签本<text class="muted" wx:if="{{stickies.length}}">（{{stickies.length}} 条）</text></text><text class="arrow">›</text>
     </view>
+    <view class="row" bindtap="exportMyData">
+      <text>📦 导出我的本地数据</text><text class="arrow">›</text>
+    </view>
     <view class="row" bindtap="viewPrivacy">
       <text>隐私声明</text><text class="arrow">›</text>
     </view>

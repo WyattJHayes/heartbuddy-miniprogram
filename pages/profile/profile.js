@@ -229,6 +229,32 @@ Page({
     wx.showToast({ title: '已删除最近一条', icon: 'none' });
   },
 
+  // 导出我的本地数据：把关键的使用足迹整理成一段文字，一键复制存档（尊重「我的数据我做主」）
+  exportMyData() {
+    const lines = ['【心语伴 · 我的本地数据导出】', '时间：' + new Date().toLocaleString('zh-CN', { hour12: false })];
+    lines.push('');
+    lines.push('· 陪你 ' + (this.data.streakDays || 0) + ' 天');
+    lines.push('· 累计心情记录 ' + (this.data.footprintSum || 0) + ' 条');
+    lines.push('· 连续倾诉 ' + ((wx.getStorageSync('hb_talkStreak') || {}).d || 0) + ' 天');
+    lines.push('· 呼吸累计 ' + (this.data.breatheTotal || 0) + ' 分钟（目标完成 ' + (this.data.breathDoneTotal || 0) + ' 次）');
+    lines.push('· 身体扫描 ' + (this.data.scanTotal || 0) + ' 次');
+    lines.push('· 心理小课已学 ' + this.data.eduDone + ' 节');
+    lines.push('· 自评完成 ' + (this.data.assessTotal || 0) + ' 次');
+    lines.push('· 珍藏 ' + this.data.favs.length + ' 条 · 便签 ' + this.data.stickies.length + ' 条');
+    lines.push('· 已点亮徽章 ' + this.data.badges.filter((b) => b.got).length + ' / ' + (this.data.badgeTotal || 0) + ' 枚');
+    lines.push('');
+    lines.push('以上数据默认只存在你的本地与你的云端账号下，可随时在「隐私政策」里了解去向。');
+    wx.showModal({
+      title: '导出本地数据',
+      content: '把上面的概要复制成文字（不含对话原文，只含统计）。对话与心情细节留在你的手机里。',
+      confirmText: '复制',
+      success: (r) => r.confirm && wx.setClipboardData({
+        data: lines.join('\n'),
+        success: () => wx.showToast({ title: '已复制，可粘贴到备忘录', icon: 'success' })
+      })
+    });
+  },
+
   // ---- 我的珍藏（聊天页长按珍藏，本地）----
   refreshFavs() {
     const favs = wx.getStorageSync('hb_favs') || [];
