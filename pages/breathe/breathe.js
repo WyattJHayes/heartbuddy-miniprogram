@@ -349,6 +349,25 @@ Page({
     wx.setClipboardData({ data: lines.join('\n'), success: () => wx.showToast({ title: '已复制，可以发给TA了 🤲', icon: 'none' }) });
   },
 
+  // 脸松没松：一次简单觉察。存近 5 次，连续 3 天多数「松」→ 温和确认
+  pickFace(e) {
+    const w = e.currentTarget.dataset.w;
+    const loose = w === '松';
+    const log = wx.getStorageSync('hb_faceLog') || [];
+    log.push({ w, t: Date.now() });
+    wx.setStorageSync('hb_faceLog', log.slice(-10));
+    let note = '';
+    if (loose) {
+      const recent = log.slice(-6).filter((x) => x.t === log[log.length - 1].t);
+      const three = log.slice(-6);
+      const junk = three.filter((x) => !x.loose && Date.now() - x.t < 3 * 86400000).length;
+      note = junk === 0 ? '这两天肩膀和脸都有慢慢放下——身体在回应你的练习 🌿' : '松下来就好，脸和身体都辛苦了 ☁️';
+    } else {
+      note = '还绷着也没关系——绷着也在呼吸，等会儿再来一轮就好。';
+    }
+    this.setData({ faceB: loose, faceNote: note });
+  },
+
   startStare() {
     if (this._running) return;
     this._timers.forEach((t) => clearTimeout(t));

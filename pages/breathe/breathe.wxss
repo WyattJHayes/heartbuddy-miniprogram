@@ -116,3 +116,11 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .done-for { margin-top: 14rpx; text-align: center; font-size: 24rpx; color: #5f8a6a; }
 
 .share-br { margin-top: 6rpx; }
+
+.face-pick { margin-top: 10rpx; text-align: center; }
+.fp-label2 { font-size: 23rpx; color: #8a93a8; margin-bottom: 8rpx; }
+.fp-row2 { display: flex; gap: 12rpx; justify-content: center; }
+.fp-chip2 { padding: 8rpx 22rpx; border-radius: 26rpx; background: #eef3f8; color: #6b7a8e; font-size: 24rpx; }
+.fp-chip2.on { background: #e3f6e3; color: #3f7a4f; }
+.fp-chip2.on2 { background: #fdecec; color: #a45c5c; }
+.face-tip { margin-top: 8rpx; font-size: 22rpx; color: #7a8ba0; }

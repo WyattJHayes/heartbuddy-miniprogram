@@ -123,6 +123,15 @@
     {{calm ? '已记下此刻' : (presetKey === 'stare' ? '把这段安静记下来' : '记下此刻的平静心情')}}
   </button>
   <button wx:if="{{phase === 'done'}}" class="ghost share-br" bindtap="shareBreath">🤲 把这一刻说给别人听</button>
+  <!-- 脸松没松：简单的身体觉察（记得抬头看自己一下） -->
+  <view class="face-pick" wx:if="{{phase === 'done'}}" role="group" aria-label="脸松没松">
+    <view class="fp-label2">练完看了眼：</view>
+    <view class="fp-row2">
+      <view class="fp-chip2 {{faceB ? 'on' : ''}}" data-w="松" bindtap="pickFace" role="button" aria-label="脸松下来了">脸松下来了</view>
+      <view class="fp-chip2 {{faceB === false ? 'on2' : ''}}" data-w="绷" bindtap="pickFace" role="button" aria-label="脸还是绷着">脸还是绷着</view>
+    </view>
+    <view class="face-tip" wx:if="{{faceNote}}">{{faceNote}}</view>
+  </view>
   <!-- 这一轮留给谁：把心意托付出去，完成感更稳 -->
   <view class="for-pick" wx:if="{{phase === 'done' && !breatheFor && presetKey !== 'stare'}}">
     <view class="fp-label">这一轮呼吸，我想留给……</view>
