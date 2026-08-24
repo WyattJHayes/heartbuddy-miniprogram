@@ -129,6 +129,25 @@ Page({
     wx.navigateTo({ url: '/pages/station/station' });
   },
 
+  // 复制一份本次自评小结：给老师/家长看，清晰且不夸大（纯文案）
+  copySelfTest() {
+    if (!this.data.done) return;
+    const d = new Date();
+    const lv = this.data.label || '';
+    const lines = [
+      '📋 心语伴 · 考前焦虑自评小结',
+      '时间：' + (d.getMonth() + 1) + ' 月 ' + d.getDate() + ' 日 ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'),
+      '得分：' + this.data.total + ' / 21（' + lv + '）',
+      '建议：' + this.data.advice,
+      '',
+      '这是自助量表参考，不能代替专业诊断。如有持续困扰，我们会建议联系校心理中心/医院心理科。'
+    ];
+    wx.setClipboardData({
+      data: lines.join('\n'),
+      success: () => wx.showToast({ title: '已复制自评小结 📋', icon: 'none' })
+    });
+  },
+
   // 自评历史：取本人最近 6 次（高分=焦虑高）→ 看变化趋势
   async loadHistory() {
     try {

@@ -43,6 +43,7 @@
       <view class="r-score">得分 {{total}} / 21</view>
       <view class="r-advice">{{advice}}</view>
       <view class="text-muted r-note">自评仅作参考，不能代替专业诊断。</view>
+      <view class="r-copy" bindtap="copySelfTest" role="button" aria-label="复制本次自评小结">📋 复制一份「我这次的自评」（给老师/家长都方便）</view>
       <!-- 安全责任：明确就医指引（得分高时显式提醒，低分也给出求助入口） -->
       <view class="care-note" wx:if="{{total >= 8}}" role="note" aria-label="更专业的帮助在等你">
         如果这份感受已经持续一段时间，或影响到了吃饭睡觉，欢迎你向校心理中心、医院心理科或咨询师求助，你不必一个人扛。
