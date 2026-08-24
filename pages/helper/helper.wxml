@@ -304,4 +304,15 @@
     <view class="section-title">重要说明</view>
     <view class="text-muted">心语伴是 AI 情绪陪伴助手，不能替代专业医疗诊断与治疗。危机时刻请优先寻求专业或他人帮助。</view>
   </view>
+
+  <!-- 给心语一句建议：写下来匿名送给运营团队（远端 feedbacks 闭环） -->
+  <view class="card fb-card">
+    <view class="section-title">💬 给心语一句建议</view>
+    <view class="fb-desc">想让哪句更好、哪里没帮上忙，写下来就好。会匿名送给运营团队（不显示你的身份）。</view>
+    <textarea class="fb-ta" value="{{fbText}}" bindinput="onFbInput" placeholder="例：希望情绪急救包再多一个「把自己接住」的思路…" maxlength="120" auto-height />
+    <view class="fb-actions">
+      <button class="btn-ghost fb-btn" bindtap="submitFeedback" loading="{{fbSending}}">送出建议 💌</button>
+    </view>
+    <view class="fb-ok" wx:if="{{fbSent}}">谢谢你，已经收到了（累计 {{fbCount}} 条）——每一条都会认真看 ☁️</view>
+  </view>
 </view>

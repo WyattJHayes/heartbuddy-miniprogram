@@ -73,9 +73,36 @@ Page({
     worryInput: '',
     worryVisible: true,
     worrySaved: '',
+    fbText: '',        // 给心语的建议
+    fbSending: false,  // 提交中
+    fbSent: false,     // 已送出
+    fbCount: 0,        // 历史累计送出条数（本地）
   },
 
-  // ---- 担忧交给明天：今晚写下来 / 明早回看 (本地) ----
+  // ---- 给心语一句建议：匿名云端反馈（ops 运营看板可收） ----
+  onFbInput(e) { this.setData({ fbText: e.detail.value }); },
+
+  async submitFeedback() {
+    const t = (this.data.fbText || '').trim();
+    if (!t) { wx.showToast({ title: '先写一句话吧', icon: 'none' }); return; }
+    if (this.data.fbSending) return;
+    this.setData({ fbSending: true });
+    try {
+      let openid = app.globalData.openid;
+      if (!openid) openid = await app.login();
+      const db = wx.cloud.database();
+      await db.collection('feedbacks').add({
+        data: { comment: t, status: 'open', createdAt: Date.now() }
+      });
+      const n = (wx.getStorageSync('hb_fbCount') || 0) + 1;
+      wx.setStorageSync('hb_fbCount', n);
+      this.setData({ fbSent: true, fbText: '', fbSending: false, fbCount: n });
+    } catch (e) {
+      console.warn('[helper] 建议提交失败', e);
+      this.setData({ fbSending: false });
+      wx.showToast({ title: '暂时没送出去，稍后再试', icon: 'none' });
+    }
+  },
   onWorryInput(e) { this.setData({ worryInput: e.detail.value }); },
 
   // 今晚把担忧写下来，交给明天
@@ -327,6 +354,7 @@ Page({
     }
     // 上次担忧回看留存（本地，展示「上一次交给明天的」）
     this.setData({ worryLast: wx.getStorageSync('hb_worryLast') || '' });
+    this.setData({ fbCount: wx.getStorageSync('hb_fbCount') || 0 });
     // 安全包：预先填写的「可信赖的人」称呼（本地）
     const ppl = wx.getStorageSync('hbSafePeople') || '';
     if (ppl !== this.data.safePeople) this.setData({ safePeople: ppl });
