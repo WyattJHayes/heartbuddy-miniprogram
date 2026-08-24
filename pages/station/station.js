@@ -1,4 +1,5 @@
 // pages/station/station.js —— 情绪充电站（轻知识 · 一组能马上做的事）
+const app = getApp();
 const { dailyQuotes: DAILY_LINES } = require('../../config/index');
 Page({
   data: {
@@ -11,6 +12,8 @@ Page({
     readTotal: 0,       // 卡片阅读总数
     newCount: 0,        // 还没看过的卡片数（NEW 角标）
     drawOther: '',      // 抽一张后顺带推荐的另一张
+    recMood: '',    // 最近一次心情（关键词推荐来源）
+    recCards: null,  // 推荐卡 {index,title} 列表
     stReads: {},        // 各卡已读次数（展示用）
     cards: [
       {
@@ -393,6 +396,7 @@ Page({
     // 阅读总数：所有卡片的展开次数之和
     const totalReads = keys.reduce((a, k) => a + reads[k], 0);
     this.setData({ readTotal: totalReads });
+    this.fetchLastMood(); // 最近心情 → 推荐 3 张卡
     // 今日已读计数（当天展开次数，温柔鼓励）
     this.setData({ todayReads: this.todayStationReads() });
   },
@@ -408,6 +412,36 @@ Page({
     const t = e.currentTarget.dataset.t;
     this.setData({ showTag: t, open: -1 });
     this.applyFavs();
+  },
+
+  // 读最近一次心情（云端 moods），按情绪映射关键词，推荐 3 张卡（安静，不影响主体）
+  async fetchLastMood() {
+    try {
+      let openid = app.globalData.openid;
+      if (!openid) openid = await app.login();
+      if (!openid) return;
+      const db = wx.cloud.database();
+      const res = await db.collection('moods').where({ openid }).orderBy('createdAt', 'desc').limit(1).get();
+      const m = (res.data || [])[0];
+      if (!m) return;
+      const SCORE = { happy: 5, ok: 4, flat: 3, low: 2, very_low: 1 };
+      const sc = SCORE[m.mood] !== undefined ? SCORE[m.mood] : 3;
+      let tag = '';
+      if (sc <= 2) tag = '难过';
+      else if (sc === 3) tag = '焦虑';
+      else tag = '平静';
+      const hits = this._allCards
+        .map((c, i) => ({ c, i }))
+        .filter((x) => (x.c.tags || []).includes(tag))
+        .slice(0, 3)
+        .map((x) => ({ index: x.i, title: x.c.title }));
+      if (hits.length) this.setData({ recMood: m.mood === 'calm' ? '平静' : (tag === '难过' ? '低落' : tag), recCards: hits });
+    } catch (err) { /* 云端不可用时静默 */ }
+  },
+  openRec(e) {
+    const idx = Number(e.currentTarget.dataset.idx);
+    if (!Number.isFinite(idx) || idx < 0) return;
+    this.toggleCard({ currentTarget: { dataset: { index: String(idx) } } });
   },
 
   toggleCard(e) {

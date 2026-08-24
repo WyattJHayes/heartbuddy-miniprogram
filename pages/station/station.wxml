@@ -5,7 +5,14 @@
     <view class="st-hero-sub">不是鸡汤，是能马上做的小事<text class="new-badge" wx:if="{{newCount}}">{{newCount}} 张待看 NEW</text></view>
   </view>
 
-  <!-- 抽一张的缘分提示（第 N 次抽中） -->
+  <!-- 最近心情推荐：读最近一次心情，按情绪给 3 张卡（安静、不打扰） -->
+  <view class="st-rec" wx:if="{{recCards}}" role="note" aria-label="按最近心情推荐卡片">
+    <view class="st-rec-t">🌊 你最近一次心情偏「{{recMood}}」——这几张卡也许对得上</view>
+    <view class="st-rec-list">
+      <view class="st-rec-item" wx:for="{{recCards}}" wx:key="index" data-idx="{{item.index}}" bindtap="openRec" role="button" aria-label="打开{{item.title}}">{{item.title}} ›</view>
+    </view>
+  </view>
+
   <view class="draw-msg" wx:if="{{drawMsg}}" role="note" aria-label="抽中提示">🎴 {{drawMsg}}
     <view class="draw-other" wx:if="{{drawOther}}" bindtap="openDrawOther" role="button" aria-label="展开另一张推荐卡片">也许这张也有用：「{{drawOther}}」›</view>
   </view>
