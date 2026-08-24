@@ -20,6 +20,47 @@ App({
       console.error('[cloud] init 失败：', e);
     }
     this.login();
+    this.checkDailyRemind();
+  },
+
+  onShow() {
+    this.checkDailyRemind();
+  },
+
+  /**
+   * 每日轻提醒（本地）：用户在我的页设置了提醒时间后，
+   * 每次打开小程序时检查：是否已到点、今天是否提醒过 —— 是则温柔弹一次，直达呼吸/记录。
+   */
+  checkDailyRemind() {
+    try {
+      const cfg = wx.getStorageSync('hb_dailyRemind');
+      if (!cfg || !cfg.on || !cfg.time) return;
+      const now = new Date();
+      const hm = String(cfg.time).split(':');
+      const h = Number(hm[0] || 0), m = Number(hm[1] || 0);
+      // 到点判定：当前时间 >= 设定时间
+      if (now.getHours() < h || (now.getHours() === h && now.getMinutes() < m)) return;
+      const todayKey = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+      if (wx.getStorageSync('hb_dailyRemindLast') === todayKey) return;
+      wx.setStorageSync('hb_dailyRemindLast', todayKey);
+      // 温柔提醒：不打扰在对话中的用户；深色氛围用 🌙
+      const night = now.getHours() >= 21 || now.getHours() < 6;
+      wx.showModal({
+        title: night ? '🌙 今天辛苦了' : '🌤 今天的照顾，别忘了',
+        content: '到约定的时间了——花一分钟照顾一下自己：深呼吸，或者把此刻的心情记下来。',
+        confirmText: '去呼吸放松',
+        cancelText: '稍后再说',
+        success: (r) => {
+          if (r.confirm) {
+            const page = getCurrentPages();
+            const url = night ? '/pages/scan/scan' : '/pages/breathe/breathe';
+            wx.navigateTo({ url });
+          }
+        }
+      });
+    } catch (e) {
+      console.warn('[dailyRemind] 检查失败', e);
+    }
   },
 
   /**
