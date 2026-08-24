@@ -933,6 +933,21 @@ Page({
     setTimeout(() => { wx.vibrateShort && wx.vibrateShort({ type: 'medium' }); }, 600);
   },
 
+  // 给自己留个提醒：复习/喝水/休息间隙，页内横幅 + 震动（不耗 AI）
+  setReminder(e) {
+    this.setData({ showQuick: false });
+    const min = Number(e.currentTarget.dataset.min) || 30;
+    const label = min < 60 ? min + ' 分钟' : Math.round(min / 60) + ' 小时';
+    wx.showToast({ title: min + ' 分钟后我会提醒你 ⏰', icon: 'none' });
+    this._remindTimer && clearTimeout(this._remindTimer);
+    this._remindTimer = setTimeout(() => {
+      this.setData({ remindAt: '⏰ ' + label + ' 到了——喝口水、起来走两步，或者回来和我说说话。' });
+      clearTimeout(this._remindTimer);
+      setTimeout(() => this.setData({ remindAt: '' }), 12000);
+      wx.vibrateShort && wx.vibrateShort({ type: 'medium' });
+    }, min * 60000);
+  },
+
   // 夸夸我：点击即给一句温柔夸奖（本地词库，不打字也不耗 AI）
   onPraise() {
     this.setData({ showQuick: false });

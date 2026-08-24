@@ -83,6 +83,7 @@ module.exports = { divider: divider };
   </view>
   <!-- 消息区 -->
   <scroll-view scroll-y class="msg-scroll" scroll-with-animation aria-live="polite">
+    <view class="remind-bar" wx:if="{{remindAt}}" role="note" aria-label="定时提醒">💡 {{remindAt}}</view>
     <view class="msg-list">
       <view class="collapse-bar" wx:if="{{collapsed && messages.length > 22}}" bindtap="expandChat" role="button" aria-label="展开更早的对话">📁 已折叠 {{messages.length - 22}} 条更早的对话 · 点我展开 ▾</view>
       <view class="fold-bar" wx:if="{{!collapsed && messages.length > 22}}" bindtap="collapseChat" role="button" aria-label="折叠更早的对话">↑ 收起更早的 {{messages.length - 22}} 条对话</view>
@@ -253,7 +254,13 @@ module.exports = { divider: divider };
       <view class="quick-panel-list">
         <view class="quick-panel-item sticky" bindtap="openSticky">把此刻想留的一句话存起来</view>
       </view>
-      <view class="quick-panel-title en">EN 英语角 · one tap to send</view>
+      <view class="quick-panel-title sticky">⏰ 给自己留个提醒</view>
+      <view class="quick-panel-list">
+        <view class="quick-panel-item sticky" data-min="10" bindtap="setReminder">10 分钟后提醒我</view>
+        <view class="quick-panel-item sticky" data-min="30" bindtap="setReminder">30 分钟后提醒我</view>
+        <view class="quick-panel-item sticky" data-min="60" bindtap="setReminder">1 小时后提醒我</view>
+      </view>
+      <view class="quick-panel-title en">EN 英语角 · one tap to learn</view>
       <view class="quick-panel-list">
         <view class="quick-panel-item en" wx:for="{{quickEnglish}}" wx:key="*this"
               data-text="{{item}}" bindtap="onQuickEn">{{item}}</view>
