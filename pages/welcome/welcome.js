@@ -69,6 +69,7 @@ Page({
     this.setData({ todayCare: this.buildTodayCare() }); // 今日状态卡
     this.setData({ weekCare: this.buildWeekCare() }); // 本周照顾小结
     this.setData({ nurture: this.buildNurture() }); // 今日滋养三连
+    this.setData({ examMorning: this.buildExamMorning() }); // 考试当天早餐卡
     this.setData({ openCount: wx.getStorageSync('hb_openCount') || 0 }); // 陪伴纪念日：第 N 次回来
     const savedRole = wx.getStorageSync('hb_role') || '';
     this.setData({ role: savedRole, roleTip: ROLE_HINT[savedRole] || '' });
@@ -121,6 +122,17 @@ Page({
     // 心情：今日记录过（同 chat 晨间提醒口径：toDateString）
     mood = wx.getStorageSync('hb_lastMoodDate') === todayStr;
     return { relaxMin, scanN, mood, small };
+  },
+
+  // 考试当天早晨：设了考试日且就是今天 → 显示「早晨 5 步」清单
+  buildExamMorning() {
+    const dateStr = wx.getStorageSync('hb_examDate') || '';
+    if (!dateStr) return null;
+    const name = wx.getStorageSync('hb_examName') || '考试';
+    const t = new Date(); t.setHours(0, 0, 0, 0);
+    const ex = new Date(dateStr); ex.setHours(0, 0, 0, 0);
+    if (t.getTime() !== ex.getTime()) return null;
+    return { name };
   },
 
   // 今日滋养三连：喝水/好好吃饭/睡够了（每天各一次，纯本地）

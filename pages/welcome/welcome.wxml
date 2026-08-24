@@ -40,7 +40,16 @@
     </view>
   </view>
 
-  <!-- 今日滋养三连：喝水/好好吃饭/睡够了（每天一次小打卡） -->
+  <!-- 考试当天早晨：就是今天——把「考试」交给稳的早晨 -->
+  <view class="exam-morning" wx:if="{{examMorning}}" role="note" aria-label="考试当天早晨清单">
+    <view class="em-title">就是今天：{{examMorning.name}} 🍀</view>
+    <view class="em-line">① 早喝一杯温水，慢慢来</view>
+    <view class="em-line">② 吃和平常一样的早饭：胃稳了心才稳</view>
+    <view class="em-line">③ 证件笔放门口，出门前扫一眼</view>
+    <view class="em-line">④ 路上做 3 次深呼吸，把「难」换成「到考场再说」</view>
+    <view class="em-line">⑤ 到场先对自己说：你已经准备很久了</view>
+  </view>
+
   <view class="nurture" role="group" aria-label="今日滋养三连">
     <view class="nu-key">今天滋养过了吗？</view>
     <view class="nu-row">

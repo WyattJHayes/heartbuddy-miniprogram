@@ -104,3 +104,7 @@
 .nu-row { display: flex; gap: 10rpx; flex-wrap: wrap; }
 .nu-chip { padding: 8rpx 20rpx; border-radius: 24rpx; background: #f2f5fa; color: #7a8ba0; font-size: 23rpx; }
 .nu-chip.on { background: #e3f6e3; color: #3f7a4f; }
+
+.exam-morning { margin-top: 12rpx; background: #fff8ea; border: 1rpx solid #f3dfb6; border-radius: 14rpx; padding: 14rpx 16rpx; }
+.em-title { color: #a5712e; font-size: 25rpx; font-weight: 600; margin-bottom: 8rpx; }
+.em-line { color: #8a6a3e; font-size: 23rpx; line-height: 1.7; }
