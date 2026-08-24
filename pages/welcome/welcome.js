@@ -33,6 +33,7 @@ Page({
     openCount: 0,  // 陪伴次数（第 N 次回来）
     todayLine: '',
     weekGreet: '',  // 星期特别句（随当天）
+    goldenLine: '', // 我的金句：小课存下的，每天换一条
     todayCare: null,   // 今日状态卡：今天对自己照顾了什么（呼吸/记录/小事）
     role: '',          // 谁在用：student/teacher/parent/other（本地记住）
     roleTip: '',
@@ -79,6 +80,9 @@ Page({
   onLoad(options) {
     if (options && options.src === 'share') this.setData({ shared: true });
     this.setData({ welcomed: wx.getStorageSync('hb_welcomed') === true, todayLine: todayLine(), weekGreet: WEEK_LINE[new Date().getDay()] }); // 首次引导卡只出现一次
+    // 我的金句：小课里存下的每天晒一条（本地）
+    const gold = wx.getStorageSync('hb_goldenLines') || [];
+    if (gold.length) this.setData({ goldenLine: gold[(new Date().getDate() + new Date().getMonth()) % gold.length] });
     this.setData({ todayCare: this.buildTodayCare() }); // 今日状态卡
     this.setData({ weekCare: this.buildWeekCare() }); // 本周照顾小结
     this.setData({ nurture: this.buildNurture() }); // 今日滋养三连

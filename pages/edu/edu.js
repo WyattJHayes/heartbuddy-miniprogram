@@ -429,6 +429,17 @@ Page({
     wx.setClipboardData({ data: body, success: () => wx.showToast({ title: '已复制这一课', icon: 'success' }) });
   },
 
+  // 存一句「我的金句」：学到的那句进本地金库，欢迎页每天晒一条（最多 10 句）
+  saveGolden(e) {
+    const t = (e.currentTarget.dataset.t || '').trim();
+    if (!t) return;
+    const list = wx.getStorageSync('hb_goldenLines') || [];
+    if (list.includes(t)) { wx.showToast({ title: '这句已经在金句里啦 💛', icon: 'none' }); return; }
+    list.unshift(t);
+    wx.setStorageSync('hb_goldenLines', list.slice(0, 10));
+    wx.showToast({ title: '已存进「我的金句」💛', icon: 'none' });
+  },
+
   onShareAppMessage() {
     return {
       title: this.data.gradDate ? '我在心语伴学完了 7 节心理小课 🎓' : '一起来学几分钟就能用的心理小课 📚',

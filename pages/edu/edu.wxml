@@ -59,6 +59,7 @@
               wx:for="{{item.quiz.opts}}" wx:for-item="opt" wx:for-index="oidx" wx:key="*this"
               bindtap="answerQuiz" data-i="{{index}}" data-o="{{oidx}}" role="button" aria-label="{{opt}}">{{opt}}</view>
         <view class="lq-why" wx:if="{{quizOk[item.key]}}">💡 {{item.quiz.why}}</view>
+        <view class="lq-gold" wx:if="{{quizOk[item.key]}}" bindtap="saveGolden" data-t="{{item.quiz.why}}" role="button" aria-label="把这句话存进我的金句">💛 把这句话存进「我的金句」</view>
       </view>
       <view class="ls-btn-row">
         <view class="ls-copy" bindtap="copyLesson" data-i="{{index}}" role="button" aria-label="复制这一课分享给朋友">📄 复制分享</view>

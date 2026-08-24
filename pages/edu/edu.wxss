@@ -92,3 +92,5 @@ page { background: #F7F8FB; }
 .exam-tick { display: flex; align-items: center; gap: 10rpx; background: #fff4e6; border: 1rpx solid #f3d9b8; border-radius: 14rpx; padding: 14rpx 16rpx; margin-bottom: 14rpx; }
 .et-emoji { font-size: 28rpx; }
 .et-text { color: #a5712e; font-size: 24rpx; line-height: 1.6; flex: 1; }
+
+.lq-gold { margin-top: 8rpx; color: #b97a4a; font-size: 22rpx; text-decoration: underline; }

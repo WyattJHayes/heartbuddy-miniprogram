@@ -110,3 +110,5 @@
 .em-line { color: #8a6a3e; font-size: 23rpx; line-height: 1.7; }
 
 .welcome-week { margin-top: 10rpx; font-size: 23rpx; color: #7f93b8; line-height: 1.6; }
+
+.welcome-gold { margin-top: 8rpx; font-size: 23rpx; color: #b07a3f; background: #fff8ec; border-radius: 10rpx; padding: 8rpx 12rpx; }

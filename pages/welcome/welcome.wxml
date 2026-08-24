@@ -6,6 +6,7 @@
   <!-- 今日一句：每天换一句话给你 -->
   <view class="welcome-line" wx:if="{{todayLine}}" bindtap="copyTodayLine" role="button" aria-label="今日一句，点击复制">{{todayLine}}</view>
   <view class="welcome-week" wx:if="{{weekGreet}}" role="note" aria-label="星期特别句">{{weekGreet}}</view>
+  <view class="welcome-gold" wx:if="{{goldenLine}}" role="note" aria-label="我的金句">💛 我的金句 · {{goldenLine}}</view>
 
   <!-- 来自朋友的分享 -->
   <view class="share-banner" wx:if="{{shared}}">
