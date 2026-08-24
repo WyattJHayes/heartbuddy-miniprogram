@@ -122,3 +122,7 @@
 .exam-wrap { margin-top: 12rpx; background: #fff3f0; border: 1rpx solid #f5d9d2; border-radius: 14rpx; padding: 14rpx 16rpx; }
 .ew-title { color: #a05c45; font-size: 25rpx; font-weight: 600; margin-bottom: 8rpx; }
 .ew-line { color: #8a5c4a; font-size: 23rpx; line-height: 1.7; }
+
+.pre-exam { margin-top: 12rpx; background: #f2f8ff; border: 1rpx solid #d4e6f8; border-radius: 14rpx; padding: 14rpx 16rpx; }
+.pe-title { color: #4a6fa5; font-size: 24rpx; font-weight: 600; margin-bottom: 6rpx; }
+.pe-action { color: #5a7db3; font-size: 24rpx; line-height: 1.6; }

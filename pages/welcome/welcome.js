@@ -36,6 +36,7 @@ Page({
     goldenLine: '', // 我的金句：小课存下的，每天换一条
     weekPlan: '',   // 写给下周的一句话（周日留/周一看起）
     examWrap: null,  // 考完当天傍晚的收尾卡
+    preExam: null,   // 考前第 N 天「每天一点点」动作卡
     weekPlanSet: false, // 本周是否已写
     todayCare: null,   // 今日状态卡：今天对自己照顾了什么（呼吸/记录/小事）
     role: '',          // 谁在用：student/teacher/parent/other（本地记住）
@@ -95,6 +96,7 @@ Page({
     this.setData({ nurture: this.buildNurture() }); // 今日滋养三连
     this.setData({ examMorning: this.buildExamMorning() }); // 考试当天早餐卡
     this.setData({ examWrap: this.buildExamWrap() }); // 考完的傍晚收尾卡
+    this.setData({ preExam: this.buildPreExam() }); // 考前 7 天一点计划
     this.setData({ openCount: wx.getStorageSync('hb_openCount') || 0 }); // 陪伴纪念日：第 N 次回来
     const savedRole = wx.getStorageSync('hb_role') || '';
     this.setData({ role: savedRole, roleTip: ROLE_HINT[savedRole] || '' });
@@ -160,7 +162,29 @@ Page({
     return { name };
   },
 
-  // 考完收尾卡：考试日当天 16 点后显示「考了一天，今天这样收尾」
+  // 考前 7 天「每天一点点」：第 7 天到考前一天每天一个 5 分钟动作
+  buildPreExam() {
+    const dateStr = wx.getStorageSync('hb_examDate') || '';
+    if (!dateStr) return null;
+    const name = wx.getStorageSync('hb_examName') || '考试';
+    const t = new Date(); t.setHours(0, 0, 0, 0);
+    const ex = new Date(dateStr); ex.setHours(0, 0, 0, 0);
+    const days = Math.round((ex.getTime() - t.getTime()) / 86400000);
+    if (days < 0 || days > 7) return null;
+    if (days === 0) return null; // 考试当天有专门的早晨/收尾卡
+    const PLAN = [
+      '第 7 天 · 整理书桌：把最重要的 3 页放最上面，其余收好',
+      '第 6 天 · 早睡 30 分钟：给身体先储备一晚好觉',
+      '第 5 天 · 走 15 分钟：散步时脑子里什么都可以不想',
+      '第 4 天 · 和朋友对一句「考完想去做什么」',
+      '第 3 天 · 只复习「最怕的那个知识点」10 分钟就停',
+      '第 2 天 · 把考场流程在脑里走一遍（进场/坐下/深呼吸）',
+      '第 1 天 · 今晚的复习不超过 30 分钟，然后早点躺下'
+    ];
+    return { name, days, action: PLAN[7 - days] };
+  },
+
+  // 考完收尾卡：考试当天（16 点后）显示「考了一天，今天这样收尾」
   buildExamWrap() {
     const dateStr = wx.getStorageSync('hb_examDate') || '';
     if (!dateStr) return null;
