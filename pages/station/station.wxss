@@ -64,3 +64,5 @@
 .st-like-tags { font-size: 19rpx; color: #9aa3b8; }
 .st-like-go { color: #5b8def; font-size: 28rpx; }
 
+/* 今日充电计数 */
+.today-read { margin: 14rpx 24rpx 0; padding: 12rpx 18rpx; font-size: 23rpx; color: #3f6498; background: #f0f7ff; border: 1rpx solid #d3e5fa; border-radius: 12rpx; text-align: center; line-height: 1.6; }

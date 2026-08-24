@@ -266,6 +266,15 @@ Page({
     // 阅读总数：所有卡片的展开次数之和
     const totalReads = keys.reduce((a, k) => a + reads[k], 0);
     this.setData({ readTotal: totalReads });
+    // 今日已读计数（当天展开次数，温柔鼓励）
+    this.setData({ todayReads: this.todayStationReads() });
+  },
+
+  // 今日已展开过的卡片数（本地按天累计）
+  todayStationReads() {
+    const day = wx.getStorageSync('hb_stReadDay') || {};
+    const k = new Date().toDateString();
+    return (day[k] || 0);
   },
 
   setCardTag(e) {
@@ -284,6 +293,12 @@ Page({
         const reads = wx.getStorageSync('hb_stReads') || {};
         reads[c.title] = (reads[c.title] || 0) + 1;
         wx.setStorageSync('hb_stReads', reads);
+        // 今日已读计数（同一天内每张只算一次）
+        const day = wx.getStorageSync('hb_stReadDay') || {};
+        const k = new Date().toDateString();
+        day[k] = (day[k] || 0) + 1;
+        wx.setStorageSync('hb_stReadDay', day);
+        this.setData({ todayReads: day[k] });
       }
     }
     this.setData({ open: willOpen ? i : -1 });

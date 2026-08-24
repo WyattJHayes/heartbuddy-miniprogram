@@ -77,6 +77,9 @@
     <view class="st-btn ghost" bindtap="randomCard" role="button" aria-label="随机抽一张充电卡">🎴 不知道做哪张？抽一张</view>
   </view>
 
-  <view class="read-total" wx:if="{{readTotal >= 5}}" role="note" aria-label="阅读总数">📚 你已经在这里翻阅过 {{readTotal}} 次自救方法——这些本事都是你的了。</view>
+  <view class="today-read" wx:if="{{todayReads}}" role="note" aria-label="今日充电次数">
+  ⚡ 今天已经翻阅过 {{todayReads}} 张充电卡<text wx:if="{{todayReads >= 3}}">——你已经很会照顾自己了</text>
+</view>
+<view class="read-total" wx:if="{{readTotal >= 5}}" role="note" aria-label="阅读总数">📚 你已经在这里翻阅过 {{readTotal}} 次自救方法——这些本事都是你的了。</view>
   <view class="st-foot">* 内容为心理学科普与自助技巧，不替代专业诊断。若情况紧急，请去「求助」页拨打热线。</view>
 </view>
