@@ -7,8 +7,8 @@
   <!-- 准备态 -->
   <view class="scan-card" wx:if="{{phase === 'ready'}}">
     <view class="scan-hero">🧘</view>
-    <view class="scan-title">{{mode === 'quick' ? '3 分钟午间快扫' : '5 分钟身体扫描'}}</view>
-    <view class="scan-sub">{{mode === 'quick' ? '只有 3 分钟，也能把注意力从「最忙的脑子」挪回身体。课间、午休、排队的时候都来得及。' : '跟着引导，把注意力从「最忙的脑子」慢慢挪回身体。不需要技巧，只需要你陪着身体待一会儿。'}}</view>
+    <view class="scan-title">{{mode === 'micro' ? '1 分钟微扫' : (mode === 'quick' ? '3 分钟午间快扫' : '5 分钟身体扫描')}}</view>
+    <view class="scan-sub">{{mode === 'micro' ? '只要 60 秒：等车、排队、课间，让身体先回个神，不占时间。' : (mode === 'quick' ? '只有 3 分钟，也能把注意力从「最忙的脑子」挪回身体。课间、午休、排队的时候都来得及。' : '跟着引导，把注意力从「最忙的脑子」慢慢挪回身体。不需要技巧，只需要你陪着身体待一会儿。')}}</view>
   <view class="scan-time-tip" wx:if="{{timeTip}}" role="note" aria-label="此刻扫描建议">{{timeTip}}</view>
     <view class="scan-open" wx:if="{{opening}}">{{opening}}</view>
     <view class="scan-mode-pick" role="group" aria-label="选择扫描时长">
@@ -20,13 +20,17 @@
         <text class="sm-t">3 分钟午间快扫</text>
         <text class="sm-d">课间/午休随时来一组</text>
       </view>
+      <view class="sm-item {{mode === 'micro' ? 'on' : ''}}" data-m="micro" bindtap="pickMode" role="button" aria-label="1 分钟微扫">
+        <text class="sm-t">1 分钟微扫</text>
+        <text class="sm-d">等车/排队也能扫</text>
+      </view>
     </view>
     <view class="scan-tips">
       <view class="scan-tip">· 跟着节奏往下走，走神了也没关系</view>
-      <view class="scan-tip">· 全程约 {{mode === 'quick' ? '3' : '5'}} 分钟，随时可以结束</view>
+      <view class="scan-tip">· 全程约 {{mode === 'micro' ? '1' : (mode === 'quick' ? '3' : '5')}} 分钟，随时可以结束</view>
       <view class="scan-tip">· 完成后会自动记一条「平静」心情</view>
     </view>
-    <button class="btn-primary full" bindtap="begin">开始{{mode === 'quick' ? '快扫' : '扫描'}}</button>
+    <button class="btn-primary full" bindtap="begin">开始{{mode === 'micro' ? '微扫' : (mode === 'quick' ? '快扫' : '扫描')}}</button>
     <view class="scan-last" wx:if="{{lastDone}}">{{lastDone}}</view>
     <view class="scan-next" role="button" bindtap="goBreathe" aria-label="再去呼吸页做一轮">🌿 还想再放松？接着做一轮呼吸 →</view>
     <button class="btn-ghost full mt" bindtap="exit">返回</button>
@@ -47,8 +51,8 @@
   <!-- 完成态 -->
   <view class="scan-card" wx:else>
     <view class="scan-hero">🌿</view>
-    <view class="scan-title">这次{{mode === 'quick' ? '快扫' : '扫描'}}，你做到了<text wx:if="{{doneN}}"> · 累计第 {{doneN}} 次</text></view>
-    <view class="scan-sub">{{mode === 'quick' ? '3 分钟也够身体缓一缓——课间里给自己留的这口气，很值得。' : '给自己一点安静，本身就是一种照顾。'}}</view>
+    <view class="scan-title">这次{{mode === 'micro' ? '微扫' : (mode === 'quick' ? '快扫' : '扫描')}}，你做到了<text wx:if="{{doneN}}"> · 累计第 {{doneN}} 次</text></view>
+    <view class="scan-sub">{{mode === 'micro' ? '60 秒也够身体回个神——零碎时间里的自我照顾，同样算数。' : (mode === 'quick' ? '3 分钟也够身体缓一缓：课间里留的这口气，很值得。' : '给自己一点安静，本身就是一种照顾。')}}</view>
     <view class="scan-last" wx:if="{{lastDone}}">{{lastDone}}</view>
     <!-- 完成时告知：已自动记一笔「平静」，可选此刻程度（1-5） -->
     <view class="calm-pick" role="note" aria-label="此刻的平静程度">

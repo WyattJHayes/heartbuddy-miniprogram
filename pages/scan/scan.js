@@ -23,6 +23,12 @@ const QUICK_STAGES = [
   { t: '回到此刻', d: '动动手指和脚趾，慢慢睁开眼睛，回到眼前这一分钟。', sec: 40 }
 ];
 
+// 1 分钟「微扫」：等车/排队/课间 60 秒，也能让身体回个神（更轻，计完成）
+const MICRO_STAGES = [
+  { t: '坐稳，闭眼', d: '只做一件事：深吸一口气，慢慢呼出去。', sec: 30 },
+  { t: '扫过肩→心口→腿', d: '像手电筒一样从肩膀照到心口、再落到腿上，只是「看着」它们。', sec: 30 }
+];
+
 Page({
   data: {
     stages: STAGES,
@@ -104,13 +110,18 @@ Page({
   },
 
   pickMode(e) {
-    const mode = e.currentTarget.dataset.m === 'quick' ? 'quick' : 'full';
-    const stages = mode === 'quick' ? QUICK_STAGES : STAGES;
+    const m = e.currentTarget.dataset.m;
+    this.applyMode(m === 'micro' ? 'micro' : (m === 'quick' ? 'quick' : 'full'));
+  },
+
+  // 统一按 mode 取出对应引导段并复位准备态
+  applyMode(mode) {
+    const stages = mode === 'micro' ? MICRO_STAGES : (mode === 'quick' ? QUICK_STAGES : STAGES);
     this.setData({ mode, stages, modeTotal: stages.length, phase: 'ready', idx: 0, left: stages[0].sec, pct: 0 });
   },
 
   begin() {
-    const stages = this.data.mode === 'quick' ? QUICK_STAGES : STAGES;
+    const stages = this.data.mode === 'micro' ? MICRO_STAGES : (this.data.mode === 'quick' ? QUICK_STAGES : STAGES);
     this.setData({ phase: 'run', stages, modeTotal: stages.length, idx: 0, left: stages[0].sec, pct: 0 });
     this.startTimer();
   },
@@ -121,7 +132,7 @@ Page({
     this._timer = setInterval(() => {
       const { phase, idx, left } = self.data;
       if (phase !== 'run') return self.stop();
-      const stages = self.data.mode === 'quick' ? QUICK_STAGES : STAGES;
+      const stages = self.data.mode === 'micro' ? MICRO_STAGES : (self.data.mode === 'quick' ? QUICK_STAGES : STAGES);
       if (left > 1) {
         self.setData({ left: left - 1, pct: (1 - left / stages[idx].sec) * 100 });
       } else if (idx + 1 < stages.length) {
@@ -166,7 +177,7 @@ Page({
     // 完成回响：按累计次数与完成时段给一句「身体的留言」（可复制带走）
     this.setData({ scanEcho: this.buildScanEcho(), scanEchoCnt: (wx.getStorageSync('hb_scanCount') || 0) + 1 });
     // 计入今日「放松累计」：扫描/快扫的分钟数也进呼吸页每日 10 分钟目标（跨页一致）
-    this.touchRelaxMins(this.data.mode === 'quick' ? 3 : 5);
+    this.touchRelaxMins(this.data.mode === 'micro' ? 1 : (this.data.mode === 'quick' ? 3 : 5));
     this.setData({ scanStreak: this.buildScanStreak(), scanToday: this.buildScanToday() });
     // 记一次「平静」情绪，进入心情曲线
     try {
@@ -174,7 +185,7 @@ Page({
       if (!openid) openid = await app.login();
       if (!openid) return;
       await wx.cloud.database().collection('moods').add({
-        data: { openid, mood: 'peace', intensity: this.data.calmInt || 3, trigger: '身体扫描', note: this.data.mode === 'quick' ? '3分钟午间快扫完成' : '5分钟身体扫描完成', createdAt: Date.now() }
+        data: { openid, mood: 'peace', intensity: this.data.calmInt || 3, trigger: '身体扫描', note: this.data.mode === 'micro' ? '1分钟微扫完成' : (this.data.mode === 'quick' ? '3分钟午间快扫完成' : '5分钟身体扫描完成'), createdAt: Date.now() }
       });
       wx.setStorageSync('ach_body_scan', true);
       wx.setStorageSync('ach_scan', true);
@@ -205,7 +216,7 @@ Page({
   },
 
   again() {
-    const stages = this.data.mode === 'quick' ? QUICK_STAGES : STAGES;
+    const stages = this.data.mode === 'micro' ? MICRO_STAGES : (this.data.mode === 'quick' ? QUICK_STAGES : STAGES);
     this.setData({ phase: 'ready', idx: 0, left: stages[0].sec, pct: 0 });
   },
 
