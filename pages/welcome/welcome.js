@@ -12,6 +12,7 @@ Page({
   data: {
     loading: true, openid: '', showNotice: false, shared: false, welcomed: true, showLog: false,
     todayLine: '',
+    todayCare: null,   // 今日状态卡：今天对自己照顾了什么（呼吸/记录/小事）
     lastRoute: '',  // 继续上次：最近离开的功能页路径
     lastLabel: '',  // 继续上次的按钮文案
     changelog: [
@@ -48,6 +49,7 @@ Page({
   onLoad(options) {
     if (options && options.src === 'share') this.setData({ shared: true });
     this.setData({ welcomed: wx.getStorageSync('hb_welcomed') === true, todayLine: todayLine() }); // 首次引导卡只出现一次
+    this.setData({ todayCare: this.buildTodayCare() }); // 今日状态卡
     // 继续上次：最近离开的功能页，欢迎页一键直达
     const last = wx.getStorageSync('hbLastRoute') || '';
     const ROUTE_LABEL = {
@@ -78,6 +80,25 @@ Page({
     if (!this.data.lastRoute) return;
     if (this.data.lastRoute.indexOf('pages/chat/chat') === 0) { wx.switchTab({ url: this.data.lastRoute }); }
     else wx.navigateTo({ url: '/' + this.data.lastRoute });
+  },
+
+  // 今日状态卡：盘点今天对自己照顾了什么（纯本地，跨页统一口径）
+  buildTodayCare() {
+    const now = new Date();
+    const todayStr = now.toDateString();
+    let relaxMin = 0, scanN = 0, mood = false, small = false;
+    // 呼吸 + 扫描放松分钟（统一口径 hb_breatheDay / hb_relaxScan）
+    const bd = wx.getStorageSync('hb_breatheDay') || {};
+    if (bd && bd.date === todayStr) relaxMin += bd.mins || 0;
+    const rd = wx.getStorageSync('hb_relaxScan') || {};
+    if (rd && rd.date === todayStr) relaxMin += rd.mins || 0;
+    // 扫描次数：今日完成日志
+    scanN = (wx.getStorageSync('hb_scanDoneLog') || []).filter((t) => new Date(t).toDateString() === todayStr).length;
+    // 三件小事：今天做满了才记
+    small = (wx.getStorageSync('hb_smallDays') || []).includes(todayStr);
+    // 心情：今日记录过（同 chat 晨间提醒口径：toDateString）
+    mood = wx.getStorageSync('hb_lastMoodDate') === todayStr;
+    return { relaxMin, scanN, mood, small };
   },
 
   // 今日一句：点击复制（随时带走一句温柔）

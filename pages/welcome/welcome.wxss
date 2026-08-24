@@ -73,3 +73,10 @@
 .fg-item:active { opacity: .6; }
 
 .qentry.q-last { border: 2rpx dashed #b9c9e8; background: #f6f9ff; }
+
+/* 今日状态卡 */
+.today-care { margin-top: 16rpx; background: #f6f9ff; border: 1rpx solid #dbe6f8; border-radius: 14rpx; padding: 14rpx 18rpx; }
+.tc-line { display: flex; flex-wrap: wrap; gap: 12rpx; align-items: center; font-size: 24rpx; }
+.tc-key { font-weight: 600; color: #4a6a9a; }
+.tc-val { color: #6b86b8; background: #eaf2ff; border-radius: 20rpx; padding: 4rpx 14rpx; }
+.tc-none { color: #9aa8bd; }
