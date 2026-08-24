@@ -35,6 +35,7 @@ Page({
     weekGreet: '',  // 星期特别句（随当天）
     goldenLine: '', // 我的金句：小课存下的，每天换一条
     weekPlan: '',   // 写给下周的一句话（周日留/周一看起）
+    examWrap: null,  // 考完当天傍晚的收尾卡
     weekPlanSet: false, // 本周是否已写
     todayCare: null,   // 今日状态卡：今天对自己照顾了什么（呼吸/记录/小事）
     role: '',          // 谁在用：student/teacher/parent/other（本地记住）
@@ -93,6 +94,7 @@ Page({
     this.setData({ weekCare: this.buildWeekCare() }); // 本周照顾小结
     this.setData({ nurture: this.buildNurture() }); // 今日滋养三连
     this.setData({ examMorning: this.buildExamMorning() }); // 考试当天早餐卡
+    this.setData({ examWrap: this.buildExamWrap() }); // 考完的傍晚收尾卡
     this.setData({ openCount: wx.getStorageSync('hb_openCount') || 0 }); // 陪伴纪念日：第 N 次回来
     const savedRole = wx.getStorageSync('hb_role') || '';
     this.setData({ role: savedRole, roleTip: ROLE_HINT[savedRole] || '' });
@@ -155,6 +157,18 @@ Page({
     const t = new Date(); t.setHours(0, 0, 0, 0);
     const ex = new Date(dateStr); ex.setHours(0, 0, 0, 0);
     if (t.getTime() !== ex.getTime()) return null;
+    return { name };
+  },
+
+  // 考完收尾卡：考试日当天 16 点后显示「考了一天，今天这样收尾」
+  buildExamWrap() {
+    const dateStr = wx.getStorageSync('hb_examDate') || '';
+    if (!dateStr) return null;
+    const name = wx.getStorageSync('hb_examName') || '考试';
+    const t = new Date(); t.setHours(0, 0, 0, 0);
+    const ex = new Date(dateStr); ex.setHours(0, 0, 0, 0);
+    if (t.getTime() !== ex.getTime()) return null;
+    if (new Date().getHours() < 16) return null; // 下午 4 点前还在考试，先不打扰
     return { name };
   },
 

@@ -52,7 +52,16 @@
     </view>
   </view>
 
-  <!-- 考试当天早晨：就是今天——把「考试」交给稳的早晨 -->
+  <!-- 考完的傍晚：考试日当天下午后显示收尾清单 -->
+  <view class="exam-wrap" wx:if="{{examWrap}}" role="note" aria-label="考完的傍晚收尾清单">
+    <view class="ew-title">🌇 {{examWrap.name}} 结束了 · 今天辛苦了</view>
+    <view class="ew-line">① 先把「考得怎么样」放一边——那是明天才操心的事</view>
+    <view class="ew-line">② 喝杯水，吃点想吃的，让身体从紧绷里缓过来</view>
+    <view class="ew-line">③ 洗把脸，或散步 10 分钟：脑子能不能「下班」就看这一步</view>
+    <view class="ew-line">④ 今晚不安排复习，只安排「好好睡一觉」</view>
+    <view class="ew-line">⑤ 明天的事，明天早上再说 🌙</view>
+  </view>
+
   <view class="exam-morning" wx:if="{{examMorning}}" role="note" aria-label="考试当天早晨清单">
     <view class="em-title">就是今天：{{examMorning.name}} 🍀</view>
     <view class="em-line">① 早喝一杯温水，慢慢来</view>

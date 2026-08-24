@@ -118,3 +118,7 @@
 .wp-text { font-size: 25rpx; color: #4a3f78; line-height: 1.7; }
 .wp-ta { width: 100%; font-size: 25rpx; color: #4a3f78; min-height: 60rpx; }
 .wp-save { margin-top: 10rpx; color: #6a5aa8; font-size: 24rpx; text-align: right; }
+
+.exam-wrap { margin-top: 12rpx; background: #fff3f0; border: 1rpx solid #f5d9d2; border-radius: 14rpx; padding: 14rpx 16rpx; }
+.ew-title { color: #a05c45; font-size: 25rpx; font-weight: 600; margin-bottom: 8rpx; }
+.ew-line { color: #8a5c4a; font-size: 23rpx; line-height: 1.7; }
