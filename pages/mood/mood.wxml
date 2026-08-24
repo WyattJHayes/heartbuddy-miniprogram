@@ -24,6 +24,11 @@
   <view class="night-greet" wx:if="{{weekFull}}" role="note" aria-label="本周全勤庆祝">{{weekFull}}</view>
   <view class="shift-card" wx:if="{{intDist}}" role="note" aria-label="近30天强度分布">🌡 {{intDist}}</view>
   <view class="shift-card" wx:if="{{moodShift}}" role="note" aria-label="本月情绪转换洞察">{{moodShift}}</view>
+  <view class="evidence-card" wx:if="{{evidence}}" role="note" aria-label="我照顾自己的证据">
+    <view class="ev-title">🔍 这个月，你照顾自己的证据</view>
+    <view class="ev-line" wx:for="{{evidence.lines}}" wx:key="*this">{{item}}</view>
+    <view class="ev-tail">{{evidence.tail}}</view>
+  </view>
 
   <!-- 小结日记本：所有写过的小结，随时翻回去看 -->
   <view class="notebook" wx:if="{{noteList.length}}">

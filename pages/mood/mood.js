@@ -72,7 +72,8 @@ Page({
     yesterdayNote: '',     // 昨天的小结（次日回看）
     nightGreet: '',        // 晚间温柔提醒（21 点后一次性）
     emptyTip: '',          // 连续空白天数提醒（≥3 天，温柔语气）
-    moodShift: '',         // 本月最常见情绪转变链
+    moodShift: '',
+    evidence: null,   // 月度「3 条证据」夸奖卡         // 本月最常见情绪转变链
     bestStreak: 0,         // 历史最长连续记录天数
     peakDay: '',           // 当月记录最多的一天
     bandLegend: Object.keys(MOOD_META).map((k) => ({ k, e: MOOD_META[k].emoji, l: MOOD_META[k].label })),
@@ -860,6 +861,7 @@ Page({
       this.setData({ dayPref: this.buildDayPref(raw) });
       this.setData({ weekdayInsight: this.buildWeekdayInsight(raw) });
       this.setData({ moodShift: this.buildMoodShift(raw) });
+      this.setData({ evidence: this.buildEvidence(raw) });
     } catch (e) {
       console.error('[mood] 读取失败', e);
       this.setData({ loaded: true });
@@ -1186,7 +1188,34 @@ Page({
   },
 
   // 近 4 周「周几印象」：你在一周里的哪个星期几更常停下来记录
-  buildWeekdayInsight(raw) {
+  // 月度「我的 3 条证据」：从本月数据里找三条夸奖证据（不评判，只看见）
+  buildEvidence(raw) {
+    const now = new Date();
+    const y = now.getFullYear(), mo = now.getMonth();
+    let calm = 0, count = 0;
+    const dayMap = {};
+    (raw || []).forEach((m) => {
+      const d = new Date(m.createdAt);
+      if (d.getFullYear() !== y || d.getMonth() !== mo) return;
+      count += 1;
+      const k = d.getDate();
+      if (!dayMap[k]) dayMap[k] = { n: 0, s: 0 };
+      dayMap[k].n += 1;
+      dayMap[k].s += MOOD_SCORE[m.mood] !== undefined ? MOOD_SCORE[m.mood] : 3;
+    });
+    Object.keys(dayMap).forEach((k) => {
+      if (dayMap[k].s / dayMap[k].n >= 3.5) calm += 1;
+    });
+    const station = Number(wx.getStorageSync('hb_stationRead') || 0);
+    const lines = [];
+    if (calm) lines.push('· 你拥有了 ' + calm + ' 个平静的日子 🌤');
+    if (count) lines.push('· 你认真记下了 ' + count + ' 次心情');
+    if (station) lines.push('· 你打开过情绪充电站 ' + station + ' 次，去给自己找办法');
+    if (!lines.length) return null;
+    return { lines, tail: '这些都是你照顾自己的证据——不用「更好」，你已经走到这里了。' };
+  },
+
+  buildTrendInsight(raw) {
     const now = new Date();
     const start = now.getTime() - 27 * 86400000; // 近 4 周
     const cnt = [0, 0, 0, 0, 0, 0, 0]; // 0=周日…6=周六

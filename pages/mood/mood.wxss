@@ -342,3 +342,8 @@
 .warm-day { margin-top: 10rpx; background: #f0f9f0; border-radius: 12rpx; padding: 10rpx 14rpx; color: #4f8a5f; font-size: 23rpx; line-height: 1.6; }
 
 .skip-tip { margin-top: 8rpx; font-size: 23rpx; color: #7f9a6f; background: #f0f8ec; border-radius: 10rpx; padding: 8rpx 12rpx; }
+
+.evidence-card { margin-top: 10rpx; background: #f2f9f2; border: 1rpx solid #d9edda; border-radius: 12rpx; padding: 12rpx 16rpx; }
+.ev-title { font-size: 23rpx; color: #4f7a55; margin-bottom: 6rpx; }
+.ev-line { font-size: 23rpx; color: #3f6a46; line-height: 1.6; }
+.ev-tail { margin-top: 6rpx; font-size: 22rpx; color: #7a9a80; }
