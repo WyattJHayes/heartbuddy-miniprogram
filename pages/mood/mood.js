@@ -74,6 +74,7 @@ Page({
     bandLegend: Object.keys(MOOD_META).map((k) => ({ k, e: MOOD_META[k].emoji, l: MOOD_META[k].label })),
     trigShift: '',         // 触发来源环比洞察
     dayPref: '',           // 记录时段偏好洞察
+    weekdayInsight: '',    // 近4周「周几印象」：你更常在哪个星期几记录
     monthRun: '',          // 当月最长连续记录段
     intDist: '',           // 近30天强度分布
     weekFull: '',          // 本周全勤庆祝条（一次性）
@@ -849,6 +850,7 @@ Page({
       this.setData({ trigMonth: this.buildTrigMonth(raw) });
       this.setData({ trigShift: this.buildTrigShift(raw) });
       this.setData({ dayPref: this.buildDayPref(raw) });
+      this.setData({ weekdayInsight: this.buildWeekdayInsight(raw) });
       this.setData({ moodShift: this.buildMoodShift(raw) });
     } catch (e) {
       console.error('[mood] 读取失败', e);
@@ -1127,6 +1129,24 @@ Page({
     const name = { morning: '早晨', noon: '白天', evening: '晚上', night: '深夜' };
     const top = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0];
     return '你最常在' + name[top] + '记录心情（' + cnt[top] + '/' + total + ' 条）——那是你最愿意面对自己的时段。';
+  },
+
+  // 近 4 周「周几印象」：你在一周里的哪个星期几更常停下来记录
+  buildWeekdayInsight(raw) {
+    const now = new Date();
+    const start = now.getTime() - 27 * 86400000; // 近 4 周
+    const cnt = [0, 0, 0, 0, 0, 0, 0]; // 0=周日…6=周六
+    (raw || []).forEach((m) => {
+      const d = new Date(m.createdAt);
+      if (d.getTime() >= start) cnt[d.getDay()]++;
+    });
+    const total = cnt.reduce((a, b) => a + b, 0);
+    if (total < 5) return '';
+    const names = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    const top = cnt.indexOf(Math.max(...cnt));
+    const pct = Math.round(cnt[top] / total * 100);
+    const school = top === 0 || top === 6 ? '周末' : '工作日';
+    return '近四周，你更常在「' + names[top] + '」停下记录心情（占 ' + pct + '%）——' + (school === '周末' ? '周末的你会好好照顾自己。' : '忙碌里也没忘给自己留一格。');
   },
 
   // 触发来源环比：本月 Top1 与上月 Top1 是否同一个（变化也是信号）

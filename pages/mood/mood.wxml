@@ -361,6 +361,7 @@
     <view class="trig-tip">同一类场面反复出现？可能是个值得留意的小信号 🌱</view>
     <view class="trig-shift" wx:if="{{trigShift}}" role="note" aria-label="触发来源环比洞察">📉 {{trigShift}}</view>
     <view class="trig-shift" wx:if="{{dayPref}}" role="note" aria-label="记录时段偏好">🕰 {{dayPref}}</view>
+    <view class="trig-shift" wx:if="{{weekdayInsight}}" role="note" aria-label="近四周周几记录偏好">📅 {{weekdayInsight}}</view>
   </view>
 
   <!-- 最近记录 -->
