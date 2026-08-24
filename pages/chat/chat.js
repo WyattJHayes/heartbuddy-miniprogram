@@ -54,6 +54,7 @@ Page({
       { k: 'coach', emoji: '⚡', t: '清醒教练' }
     ],
     persona: '',           // 本次陪伴身份（本地记住，''=默认）
+    need: '',            // 此刻我需要：listen 陪我说 / calm 陪我等 / action 帮我想办法（本地前缀注入 AI）
     feelList: [
       '我今天其实还行，就是有点累。',
       '说实话有点难过，但不知怎么开口。',
@@ -140,7 +141,7 @@ Page({
     const last0 = wx.getStorageSync('hb_phraseLast') || {};
     const phraseLast = {};
     sorted.forEach((t) => { if (last0[t]) phraseLast[t] = this.fmtPhraseLast(last0[t]); });
-    this.setData({ persona: wx.getStorageSync('hb_persona') || '', myPhrases: sorted, phraseLast });
+    this.setData({ persona: wx.getStorageSync('hb_persona') || '', need: wx.getStorageSync('hb_need') || '', myPhrases: sorted, phraseLast });
     const savedDraft = wx.getStorageSync('hb_inputDraft');
     if (savedDraft && !this.data.input) this.setData({ input: savedDraft });
     this.setData({ phraseUses: wx.getStorageSync('hb_phraseUses') || {} });
@@ -712,6 +713,19 @@ Page({
     wx.showToast({ title: tip.split('。')[0], icon: 'none' });
   },
 
+  // 此刻我需要：三种陪伴方式（陪伴身份之下更细的「现在要什么」）
+  setNeed(e) {
+    const k = e.currentTarget.dataset.k;
+    if (!k) return;
+    wx.setStorageSync('hb_need', k);
+    this.setData({ need: k });
+    const tip = k === 'listen' ? '好，我就听着，陪你慢慢说。'
+      : k === 'calm' ? '好，把节奏放慢，我稳稳陪你。'
+      : k === 'action' ? '好，我们想办法，给你能上手的小步骤。'
+      : '';
+    wx.showToast({ title: tip, icon: 'none' });
+  },
+
   // 陪伴里程碑：她说得越多，陪伴的重量越实（本地累计，到了就点亮一次）
   touchMilestone() {
     const total = (wx.getStorageSync('hb_chatLife') || 0) + 1;
@@ -1069,10 +1083,17 @@ Page({
     }));
 
     this.setData({ loading: true });
+    // 此刻我需要：把我的倾诉格式告诉 AI（本地包裹，不改变原话）
+    const needPrefix = this.data.need === 'calm'
+      ? '（我现在不需要建议，只需要你稳稳地陪着，把此刻的节奏放慢）'
+      : this.data.need === 'action'
+        ? '（我现在想要具体可做的办法，请直接给我 1-3 个能马上用的小步骤）'
+        : '';
+    const inputForAI = needPrefix ? needPrefix + text : text;
     try {
       const res = await api.call('aiChat', {
         sessionId: this.data.sessionId,
-        userInput: text,
+        userInput: inputForAI,
         history,
         intensity: this.data.intensity || 3, // 此刻强度（云函数可用可忽略）
         assessment: this.getLastAssessment()

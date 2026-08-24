@@ -61,6 +61,13 @@ module.exports = { divider: divider };
       role="button" aria-label="让心语以{{item.t}}身份陪我">{{item.emoji}} {{item.t}}</view>
     <text class="persona-hint">选今天想要的陪伴</text>
   </view>
+  <!-- 此刻我需要：三种陪伴方式的细调（本地记住） -->
+  <view class="need-bar">
+    <view class="n-chip {{need === 'listen' ? 'on' : ''}}" data-k="listen" bindtap="setNeed" role="button" aria-label="现在我只想被听">👂 听我说</view>
+    <view class="n-chip {{need === 'calm' ? 'on' : ''}}" data-k="calm" bindtap="setNeed" role="button" aria-label="现在只要稳稳陪着">🌊 稳稳陪着</view>
+    <view class="n-chip {{need === 'action' ? 'on' : ''}}" data-k="action" bindtap="setNeed" role="button" aria-label="现在想要能上手的方法">🛠 给我办法</view>
+    <text class="need-hint" wx:if="{{!need}}">此刻需要怎么陪你？(选一个更贴)</text>
+  </view>
   <!-- 深夜工具箱（22:00–5:00）：失眠/烦躁时的三个小出口 -->
   <view class="night-bar" wx:if="{{nightShow}}">
     <text class="night-title">🌙 这么晚还醒着？给你几个出口</text>

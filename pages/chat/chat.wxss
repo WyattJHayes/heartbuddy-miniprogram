@@ -213,3 +213,9 @@
 
 .quick-panel-title.sticky { color: #8a7a3a; }
 .quick-panel-item.sticky { background: #fdf9ec; border-color: #eaddb8; color: #8a6a2a; }
+
+/* 此刻我需要 */
+.need-bar { display: flex; flex-wrap: wrap; gap: 10rpx; align-items: center; padding: 2rpx 24rpx 10rpx; }
+.n-chip { padding: 8rpx 20rpx; border-radius: 26rpx; background: #f1f4fa; color: #7a88a0; font-size: 23rpx; }
+.n-chip.on { background: #e3eeff; color: #3f6aa8; }
+.need-hint { margin-left: 6rpx; font-size: 21rpx; color: #aab2c4; }
