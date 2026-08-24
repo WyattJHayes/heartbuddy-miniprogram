@@ -52,7 +52,12 @@
     </view>
   </view>
 
-  <!-- 考完的傍晚：考试日当天下午后显示收尾清单 -->
+  <!-- 考前第 N 天·每天一点点 -->
+  <view class="pre-exam" wx:if="{{preExam}}" role="note" aria-label="考前行动一点点">
+    <view class="pe-title">📌 离 {{preExam.name}} 还有 {{preExam.days}} 天 · 今天做一点点</view>
+    <view class="pe-action">{{preExam.action}}</view>
+  </view>
+
   <view class="exam-wrap" wx:if="{{examWrap}}" role="note" aria-label="考完的傍晚收尾清单">
     <view class="ew-title">🌇 {{examWrap.name}} 结束了 · 今天辛苦了</view>
     <view class="ew-line">① 先把「考得怎么样」放一边——那是明天才操心的事</view>
