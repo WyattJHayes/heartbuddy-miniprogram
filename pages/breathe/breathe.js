@@ -7,7 +7,8 @@ const PRESETS = [
   { key: 'calm', label: '放松 · 4-4-6', rounds: [['in', 3800, 460, 3.9], ['hold', 3200, 460, 0.6], ['out', 5600, 150, 5.6]] },
   { key: 'box', label: '盒式 · 4-4-4-4', rounds: [['in', 4000, 520, 4.1], ['hold', 4000, 520, 0.6], ['out', 4000, 150, 4.1], ['hold', 4000, 150, 0.6]] },
   { key: 'long', label: '长呼 · 6-2-6-2', rounds: [['in', 6000, 520, 6.1], ['hold', 2000, 520, 0.6], ['out', 6000, 150, 6.1], ['hold', 2000, 150, 0.6]] },
-  { key: 'stare', label: '发呆 · 2 分钟', rounds: [['stare', 120000, 150, 2]] }
+  { key: 'stare', label: '发呆 · 2 分钟', rounds: [['stare', 120000, 150, 2]] },
+  { key: 'mini', label: '课间 · 1.5 分钟', rounds: [['in', 3800, 460, 3.9], ['hold', 3200, 460, 0.6], ['out', 5600, 150, 5.6]] }
 ];
 const DAILY_GOAL_MIN = 10; // 每日放松目标：累计 10 分钟（同一次约 5 分钟 → 两次达标）
 const CUSTOM_STORE = 'hbBreathCustom'; // 自定义节奏 { in, hold, out } 秒
@@ -305,9 +306,10 @@ Page({
       this._timers = [];
     }
     this._rounds = p.rounds;
-    this.setData({ presetKey: key, presetLabel: p.label, phase: 'ready', round: 0, ball: 150, trans: 0.5,
+    this._rounds = p.rounds;
+    this.setData({ presetKey: key, presetLabel: p.label, phase: 'ready', round: 0, ball: 150, trans: 0.5, total: key === 'mini' ? 3 : 4,
       timeHint: key === 'stare' ? '🌑 什么都不用做——就发会儿呆，这也是练习' : this.timeHint(),
-      text: '已选「' + p.label + '」，点击开始' + (key === 'stare' ? '安安静静待着' : '跟着节奏呼吸'), calm: false });
+      text: '已选「' + p.label + '」，点击开始' + (key === 'stare' ? '安安静静待着' : (key === 'mini' ? '3 轮就好' : '跟着节奏呼吸')), calm: false });
   },
 
   // 此刻心意：开始前选一个意图词，本轮的心念就朝那个方向轻轻放
@@ -338,7 +340,8 @@ Page({
     this._running = true;
     this._stop = false;
     this.setData({ round: 1 });
-    this.runRound(1, 0, this.data.total);
+    const tot = this.data.presetKey === 'mini' ? 3 : this.data.total; // 课间档 3 轮 ≈1.5 分钟
+    this.runRound(1, 0, tot);
   },
 
   runRound(r, step, total) {
