@@ -432,6 +432,18 @@ Page({
         else run = 1;
       }
       if (allDays.length) bestRun = Math.max(bestRun, 1);
+      // 本月情绪亮点：从构成与均值里挑一句最暖的话，给这个月一个「被看见」的落点
+      const topBest = top3[0];
+      let highlight = '';
+      if (topBest && (topBest.label === '平静' || topBest.label === '开心' || topBest.label === '感恩' || topBest.label === '期待')) {
+        highlight = `这个月里「${topBest.label}」出现的次数最多——它不是偶然，是你把好状态一点点留给自己的证据 ☀️`;
+      } else if (curAvg != null && curAvg >= 3.4) {
+        highlight = `这个月的平均情绪在 ${curAvg} 分（满 5），偏平稳——保持记录本身就很值得被自己肯定 🌤`;
+      } else if (curAvg != null) {
+        highlight = `这个月情绪均值 ${curAvg} 分，无论高低，每一次记录都是「我看见了它」——这比分数重要`;
+      } else if (topBest) {
+        highlight = `这个月你记录最多的是「${topBest.label}」——被看见的情绪，就已经开始被照顾`;
+      }
       this.setData({
         monthInfo: {
         monthCountText,
@@ -443,7 +455,8 @@ Page({
           avgInt,
           cloud,
           delta,
-          bestRun: bestRun >= 3 ? `最长连续记录 ${bestRun} 天 ⭐` : ''
+          bestRun: bestRun >= 3 ? `最长连续记录 ${bestRun} 天 ⭐` : '',
+          highlight
         }
       });
     } catch (err) {

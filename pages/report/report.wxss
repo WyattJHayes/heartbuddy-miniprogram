@@ -104,3 +104,5 @@
 .future-seen { margin-top: 12rpx; font-size: 27rpx; color: #55627e; line-height: 1.7; background: #f7f9fd; border-radius: 12rpx; padding: 16rpx 18rpx; }
 .future-you { margin-top: 10rpx; font-size: 23rpx; color: #8a9aa8; }
 .future-clear { margin-top: 10rpx; text-align: right; font-size: 23rpx; color: #5b8def; }
+
+.month-hl { margin-top: 12rpx; background: #f6f9ff; border-radius: 12rpx; padding: 12rpx 14rpx; color: #5f7fb0; font-size: 24rpx; line-height: 1.7; }

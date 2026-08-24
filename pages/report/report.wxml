@@ -98,6 +98,7 @@
       <view class="section-title">📅 {{monthInfo.label}} 心情小结</view>
       <view class="month-line">这个月你记录了 <text class="hl">{{monthInfo.total}}</text> 条心情，覆盖 <text class="hl">{{monthInfo.days}}</text> 天<text wx:if="{{monthInfo.bestRun}}"> · {{monthInfo.bestRun}}</text></view>
       <view class="month-count" wx:if="{{monthInfo.monthCountText}}" role="note" aria-label="本月与上月条数对比">📊 {{monthInfo.monthCountText}}</view>
+      <view class="month-hl" wx:if="{{monthInfo.highlight}}" role="note" aria-label="本月情绪亮点">✨ {{monthInfo.highlight}}</view>
       <view class="month-copy" bindtap="copyMonthText" role="button" aria-label="复制月度小结文字版">📋 复制月度小结（可发给老师/家长）</view>
       <view class="mtop" wx:for="{{monthInfo.top3}}" wx:key="index">
         <text class="mtop-e">{{item.emoji}}</text>
