@@ -10,6 +10,12 @@
     <text class="tg-text">{{todayGoal}}</text>
   </view>
 
+  <!-- 考前 N 天：联动「我的」考试日，考前给心稳稳的提示 -->
+  <view class="exam-tick" wx:if="{{examTick}}" role="note" aria-label="考前倒数提示">
+    <text class="et-emoji">📅</text>
+    <text class="et-text">{{examTick.text}}</text>
+  </view>
+
   <!-- 完成度进度条 -->
   <view class="edu-progress" role="progressbar" aria-label="课程完成度 {{doneCount}}/{{total}}">
     <view class="ep-num">已学完 {{doneCount}} / {{total}} 节<text wx:if="{{streak >= 2}}" class="ep-streak">🔥 连续学习 {{streak}} 天</text></view>

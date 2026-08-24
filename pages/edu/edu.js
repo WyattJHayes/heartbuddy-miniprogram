@@ -158,6 +158,7 @@ Page({
     openIdx: -1,
     kw: '',             // 课程搜索关键词
     todayGoal: '',      // 今日轻目标文案
+    examTick: null,    // 考前 N 天轻卡（联动「我的」考试日）
     todayDone: false    // 今天是否学过
   },
 
@@ -179,7 +180,8 @@ Page({
       todayDone: learnedToday,
       todayGoal: learnedToday
         ? '今天已经打开过小课了——这几分钟，就是你照顾自己的证据 🌿'
-        : '今天给心理小课 5 分钟就够：读完一节，就算今天的照顾做到了 🌱'
+        : '今天给心理小课 5 分钟就够：读完一节，就算今天的照顾做到了 🌱',
+      examTick: this.buildExamTick()
     });
     // 全部学完：每天打开自动出一道温故题
     if (LESSONS.every((l) => doneMap[l.key])) {
@@ -223,6 +225,25 @@ Page({
     this.setData({ kw: e.detail.value, lessons: this.filterLessons(e.detail.value).map((l) => this.shuffleQuiz(l)) });
   },
   clearSearch() { this.setData({ kw: '', lessons: LESSONS }); },
+
+  // 考前 N 天：联动「我的」里设过的考试日，考前给学习节奏 + 稳住提示
+  buildExamTick() {
+    const dateStr = wx.getStorageSync('hb_examDate') || '';
+    const name = wx.getStorageSync('hb_examName') || '考试';
+    if (!dateStr) return null;
+    const t = new Date(); t.setHours(0, 0, 0, 0);
+    const ex = new Date(dateStr); ex.setHours(0, 0, 0, 0);
+    const DAY = 86400000;
+    const days = Math.round((ex.getTime() - t.getTime()) / DAY);
+    if (days < 0 || days > 30) return null;
+    let text = '';
+    if (days > 7) text = `离${name}还有 ${days} 天——小课照常，把心安在这 5 分钟里就好。`;
+    else if (days > 3) text = `还剩 ${days} 天。现在比「多学一点」更有用的是「稳住自己」：读一节小课吧。`;
+    else if (days > 0) text = `还剩 ${days} 天。紧张正常——先做一次深呼吸，再决定学什么。`;
+    else if (days === 0) text = `就是今天。深呼吸，你已经准备好了。`;
+    else return null;
+    return { days, name, text };
+  },
 
   toggle(e) {
     const i = Number(e.currentTarget.dataset.i);

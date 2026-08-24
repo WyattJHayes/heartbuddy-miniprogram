@@ -88,3 +88,7 @@ page { background: #F7F8FB; }
 .today-goal { display: flex; align-items: flex-start; gap: 12rpx; background: linear-gradient(135deg, #eefaf2, #fff); border: 1rpx solid #cfe8d8; border-radius: 16rpx; padding: 16rpx 18rpx; margin-bottom: 16rpx; }
 .tg-emoji { font-size: 30rpx; }
 .tg-text { flex: 1; font-size: 24rpx; color: #3f6a51; line-height: 1.6; }
+
+.exam-tick { display: flex; align-items: center; gap: 10rpx; background: #fff4e6; border: 1rpx solid #f3d9b8; border-radius: 14rpx; padding: 14rpx 16rpx; margin-bottom: 14rpx; }
+.et-emoji { font-size: 28rpx; }
+.et-text { color: #a5712e; font-size: 24rpx; line-height: 1.6; flex: 1; }
