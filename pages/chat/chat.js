@@ -870,6 +870,22 @@ Page({
 
   onQuick(e) { this.setData({ showQuick: false }); this.send(e.currentTarget.dataset.text); },
 
+  // 想聊什么：主题起手（一键发起一段话，AI 顺着聊下去）
+  onTopic(e) {
+    this.setData({ showQuick: false });
+    const key = e.currentTarget.dataset.t;
+    const TOPICS = {
+      friend: '我今天想聊和我朋友有关的事——好像有点小别扭，我有点不知道怎么办。',
+      exam: '我今天想聊聊考试。一想到它我就有点慌，想找人说说话。',
+      mood: '我今天情绪不太好，但说不清是哪种。你陪我理一理好吗？',
+      happy: '今天有件让我开心的小事，我想说给你听。',
+      sleep: '晚上总是睡不着，脑子停不下来。今晚能不能陪我待一会儿？',
+      family: '我想聊聊和家里人的事，不知道怎么说出口。'
+    };
+    const text = TOPICS[key] || '';
+    if (text) this.send(text);
+  },
+
   // 即时 3 次深呼吸引导（固定文案，不打 AI）
   breatheNow() {
     this.setData({ showQuick: false });

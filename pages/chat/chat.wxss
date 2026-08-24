@@ -206,3 +206,7 @@
 .mp-last { display: block; font-size: 19rpx; color: #b6bdcc; margin-top: 2rpx; }
 
 .mp-sample { display: block; margin-top: 8rpx; color: #5b8def; text-decoration: underline; }
+
+/* 想聊什么 · 主题起手 */
+.quick-panel-title.topic { color: #6a8a6a; }
+.quick-panel-item.topic { background: #f2faf2; border-color: #cfe8cf; color: #3f6a4a; }

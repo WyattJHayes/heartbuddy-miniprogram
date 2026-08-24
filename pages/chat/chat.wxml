@@ -191,6 +191,15 @@ module.exports = { divider: divider };
 
     <!-- 快捷面板（随时可展开） -->
     <view class="quick-panel" wx:if="{{showQuick}}">
+      <view class="quick-panel-title topic">💬 今天想聊点什么？</view>
+      <view class="quick-panel-list topic">
+        <view class="quick-panel-item topic" data-t="friend" bindtap="onTopic" role="button" aria-label="想聊朋友的事">朋友的小别扭</view>
+        <view class="quick-panel-item topic" data-t="exam" bindtap="onTopic" role="button" aria-label="想聊考试">考试的慌</view>
+        <view class="quick-panel-item topic" data-t="mood" bindtap="onTopic" role="button" aria-label="聊聊说不清的情绪">说不清的情绪</view>
+        <view class="quick-panel-item topic" data-t="happy" bindtap="onTopic" role="button" aria-label="想聊开心的小事">开心的小事</view>
+        <view class="quick-panel-item topic" data-t="sleep" bindtap="onTopic" role="button" aria-label="想聊睡不着">晚上睡不着</view>
+        <view class="quick-panel-item topic" data-t="family" bindtap="onTopic" role="button" aria-label="想聊家里的事">家里的事</view>
+      </view>
       <view class="quick-panel-title">试试这样说 · Try: "I've been feeling down…"</view>
       <view class="quick-panel-list">
         <view class="quick-panel-item" wx:for="{{quickReplies}}" wx:key="*this"
