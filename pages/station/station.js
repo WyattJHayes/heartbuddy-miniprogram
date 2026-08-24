@@ -203,7 +203,9 @@ Page({
     open: -1,   // 当前展开的卡片索引
     kw: '',      // 关键词搜索框（标题/标签/内容匹配，与标签筛选叠加）
     likeCards: [],  // 展开卡时「一起充电」同主题推荐（最多 2 张，未读优先）
-    todayReads: 0   // 今日展开过的卡片数（充电小结）
+    todayReads: 0,   // 今日展开过的卡片数（充电小结）
+    favOpen: false,  // 收藏抽屉
+    favList: []      // 收藏抽屉里的完整卡数据
   },
 
   // 收藏置顶：长按卡片头 ★ 收藏/取消（本地，最多 3 张）
@@ -233,6 +235,37 @@ Page({
   onSearchInput(e) { this.setData({ kw: e.detail.value }); this.applyFavs(); },
   onSearchConfirm() { wx.hideKeyboard && wx.hideKeyboard(); },
   clearSearch() { this.setData({ kw: '' }); this.applyFavs(); },
+
+  noop() {},
+
+  // 我的收藏抽屉：打开时把收藏的卡完整数据列出来（本地）
+  openFavDrawer() {
+    const favs = wx.getStorageSync('hb_stFavs') || [];
+    const all = this._allCards || [];
+    const list = favs.map((t) => all.find((c) => c.title === t)).filter(Boolean);
+    this.setData({ favOpen: true, favList: list });
+  },
+  closeFavDrawer() { this.setData({ favOpen: false }); },
+
+  // 从收藏抽屉里点某张卡 → 关抽屉并展开该卡
+  openFavCard(e) {
+    const t = e.currentTarget.dataset.t;
+    this.setData({ favOpen: false });
+    const open = (this.data.cards || []).findIndex((c) => c.title === t);
+    if (open >= 0) this.setData({ open });
+  },
+
+  // 从收藏抽屉里直接取消收藏
+  unfavFromDrawer(e) {
+    const t = e.currentTarget.dataset.t;
+    if (!t) return;
+    let favs = wx.getStorageSync('hb_stFavs') || [];
+    favs = favs.filter((x) => x !== t);
+    wx.setStorageSync('hb_stFavs', favs);
+    this.setData({ favTitles: favs, favList: favs.map((f) => (this._allCards || this.data.cards).find((c) => c.title === f)).filter(Boolean) });
+    this.applyFavs();
+    wx.showToast({ title: '已取消收藏', icon: 'none' });
+  },
 
   toggleFav(e) {
     const t = e.currentTarget.dataset.t;

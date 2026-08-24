@@ -15,9 +15,26 @@
     📖 你最常翻：「{{topRead.title}}」（{{topRead.n}} 次）——它似乎对你特别有用。
   </view>
 
-  <!-- 收藏概览：已收藏几张、长按可取消 -->
-  <view class="fav-summary" wx:if="{{favTitles.length}}" role="note" aria-label="收藏概览">
-    ⭐ 已收藏 {{favTitles.length}}/3 张（置顶显示 · 长按卡片头可取消）
+  <!-- 收藏概览：已收藏几张、点开抽屉查看/取消。长按卡片头也可直接取消 -->
+  <view class="fav-summary" wx:if="{{favTitles.length}}" role="button" bindtap="openFavDrawer" aria-label="打开我的收藏">
+    ⭐ 已收藏 {{favTitles.length}}/3 张 · 点开看看 →
+  </view>
+
+  <!-- 我的收藏抽屉 -->
+  <view class="fav-mask" wx:if="{{favOpen}}" bindtap="closeFavDrawer">
+    <view class="fav-sheet" catchtap="noop">
+      <view class="fav-sheet-title">⭐ 我的收藏（{{favList.length}}/3）</view>
+      <scroll-view scroll-y class="fav-sheet-scroll">
+        <view class="fav-item" wx:for="{{favList}}" wx:key="title">
+          <view class="fav-item-main" bindtap="openFavCard" data-t="{{item.title}}" role="button" aria-label="打开卡片 {{item.title}}">
+            <text class="fav-item-e">🃏</text>
+            <text class="fav-item-t">{{item.title}}</text>
+          </view>
+          <view class="fav-item-x" bindtap="unfavFromDrawer" data-t="{{item.title}}" role="button" aria-label="取消收藏 {{item.title}}">✕</view>
+        </view>
+      </scroll-view>
+      <view class="fav-sheet-close" bindtap="closeFavDrawer" role="button" aria-label="关闭">知道了</view>
+    </view>
   </view>
 
   <!-- 按此刻心情筛选卡片 -->

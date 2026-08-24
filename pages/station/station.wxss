@@ -66,3 +66,15 @@
 
 /* 今日充电计数 */
 .today-read { margin: 14rpx 24rpx 0; padding: 12rpx 18rpx; font-size: 23rpx; color: #3f6498; background: #f0f7ff; border: 1rpx solid #d3e5fa; border-radius: 12rpx; text-align: center; line-height: 1.6; }
+
+/* 我的收藏抽屉 */
+.fav-mask { position: fixed; inset: 0; background: rgba(20, 30, 50, 0.45); z-index: 60; display: flex; align-items: flex-end; }
+.fav-sheet { width: 100%; background: #fff; border-radius: 24rpx 24rpx 0 0; padding: 26rpx 24rpx 34rpx; box-sizing: border-box; max-height: 62vh; display: flex; flex-direction: column; }
+.fav-sheet-title { font-size: 30rpx; font-weight: 700; color: #33415c; text-align: center; }
+.fav-sheet-scroll { flex: 1; margin-top: 18rpx; max-height: 46vh; }
+.fav-item { display: flex; align-items: center; gap: 14rpx; padding: 18rpx 4rpx; border-bottom: 1rpx solid #f0f2f7; }
+.fav-item-main { flex: 1; display: flex; align-items: center; gap: 12rpx; }
+.fav-item-e { font-size: 30rpx; }
+.fav-item-t { font-size: 26rpx; color: #33415c; }
+.fav-item-x { padding: 10rpx 16rpx; color: #c46a6a; font-size: 26rpx; }
+.fav-sheet-close { margin-top: 20rpx; text-align: center; font-size: 26rpx; color: #7a8aa8; }
