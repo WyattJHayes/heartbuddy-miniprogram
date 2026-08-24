@@ -122,6 +122,7 @@
   <button wx:if="{{phase === 'done'}}" class="ghost" bindtap="recordCalm" loading="{{calm && false}}">
     {{calm ? '已记下此刻' : (presetKey === 'stare' ? '把这段安静记下来' : '记下此刻的平静心情')}}
   </button>
+  <button wx:if="{{phase === 'done'}}" class="ghost share-br" bindtap="shareBreath">🤲 把这一刻说给别人听</button>
   <!-- 这一轮留给谁：把心意托付出去，完成感更稳 -->
   <view class="for-pick" wx:if="{{phase === 'done' && !breatheFor && presetKey !== 'stare'}}">
     <view class="fp-label">这一轮呼吸，我想留给……</view>

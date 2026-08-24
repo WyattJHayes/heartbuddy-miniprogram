@@ -329,6 +329,24 @@ Page({
     wx.vibrateShort && wx.vibrateShort({ type: 'light' });
   },
 
+  // 把这一刻说给别人听：复制一段「我刚练完一轮呼吸」的文字给 TA（真诚、不尴尬）
+  shareBreath() {
+    const mins = this.data.presetKey === 'stare' ? 2 : (this.data.presetKey === 'mini' ? 1 : 4);
+    const forWho = this.data.breatheFor || '我自己';
+    const d = new Date();
+    const lines = [
+      '🤲 刚做完一轮呼吸练习，想告诉你',
+      '—— 心语伴',
+      '',
+      `今天练的：${this.data.presetLabel}`,
+      `这一轮，我留给了「${forWho}」`,
+      `时长约 ${mins} 分钟 · ${d.getMonth() + 1}月${d.getDate()}日 ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`,
+      '',
+      '如果它也能帮你放松一点，随时可以试试。'
+    ];
+    wx.setClipboardData({ data: lines.join('\n'), success: () => wx.showToast({ title: '已复制，可以发给TA了 🤲', icon: 'none' }) });
+  },
+
   startStare() {
     if (this._running) return;
     this._timers.forEach((t) => clearTimeout(t));

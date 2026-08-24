@@ -114,3 +114,5 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .fp-chip { padding: 10rpx 26rpx; border-radius: 30rpx; background: #eef3f8; color: #6b7a8e; font-size: 24rpx; }
 .fp-chip:active { transform: scale(0.96); }
 .done-for { margin-top: 14rpx; text-align: center; font-size: 24rpx; color: #5f8a6a; }
+
+.share-br { margin-top: 6rpx; }
