@@ -45,6 +45,7 @@ Page({
     scanEcho: '',    // 完成回响：给身体的留言
     scanEchoCnt: 0,  // 累计完成次数（回响灵感）
     doneN: 0,        // 本次是累计第几次
+    week7: [],        // 近7天身体小日历（哪天扫过）
     idx: 0,
     left: 30,
     pct: 0,
@@ -212,7 +213,7 @@ Page({
 
   async onFinish() {
     this.stop();
-    this.setData({ phase: 'done', feelPicked: '', doneN: (wx.getStorageSync('hb_scanCount') || 0) + 1 });
+    this.setData({ phase: 'done', feelPicked: '', doneN: (wx.getStorageSync('hb_scanCount') || 0) + 1, week7: this.buildScan7() });
     const ts = Date.now();
     wx.setStorageSync('hb_scanDone', ts);
     const dl = wx.getStorageSync('hb_scanDoneLog') || [];
@@ -319,6 +320,19 @@ Page({
     const mon = now.getTime() - ((now.getDay() + 6) % 7) * 86400000;
     const start = new Date(mon).setHours(0, 0, 0, 0);
     return doneTs.filter((x) => new Date(x).getTime() >= start).length;
+  },
+
+  // 近7天身体小日历：从昨天往前数6天+今天，扫过标亮
+  buildScan7() {
+    const doneTs = wx.getStorageSync('hb_scanDoneLog') || [];
+    const set = new Set(doneTs.map((t) => new Date(t).toDateString()));
+    const out = [];
+    const now = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const dt = new Date(now.getTime() - i * 86400000);
+      out.push({ key: dt.toDateString(), dot: set.has(dt.toDateString()), today: i === 0, w: '日一二三四五六'[dt.getDay()] });
+    }
+    return out;
   },
 
   // 今日放松累计（跨页共享给呼吸页的每日目标）：按天记录扫描分钟数

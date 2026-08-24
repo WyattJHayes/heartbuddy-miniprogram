@@ -111,6 +111,14 @@
       </view>
       <view class="scan-echo-copy" bindtap="copyScanEcho" role="button" aria-label="复制这段身体留言">📋 复制这份身体留言</view>
     </view>
+    <!-- 近7天身体小日历：哪天扫过一眼看清，今天也会点亮 -->
+    <view class="week7" wx:if="{{week7.length}}" role="note" aria-label="近7天扫描日历">
+      <text class="w7-label">近 7 天：</text>
+      <view class="w7-cell {{item.dot ? 'on' : ''}} {{item.today ? 'today' : ''}}" wx:for="{{week7}}" wx:key="key">
+        <text class="w7-w">{{item.w}}</text>
+        <text class="w7-dot">{{item.dot ? '●' : '○'}}</text>
+      </view>
+    </view>
     <button class="btn-primary full" bindtap="again">再来一次</button>
     <view class="scan-next" role="button" bindtap="goBreathe" aria-label="再去呼吸页做一轮">🌿 还想再放松？接着做一轮呼吸 →</view>
     <button class="btn-ghost full mt" bindtap="exit">返回</button>
