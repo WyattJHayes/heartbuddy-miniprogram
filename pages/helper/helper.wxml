@@ -300,6 +300,33 @@
     <crisis-flow></crisis-flow>
   </view>
 
+  <!-- 常见 8 问：成熟的工具才有的「先问再试」 -->
+  <view class="card">
+    <view class="section-title">❓ 常见疑问（点开看）</view>
+    <view class="faq-item" wx:for="{{faqs}}" wx:key="index">
+      <view class="faq-q" bindtap="toggleFaq" data-i="{{index}}" role="button" aria-label="{{item.q}}">{{item.q}}<text class="faq-arrow">{{openFaq === index ? '▴' : '▾'}}</text></view>
+      <view class="faq-a" wx:if="{{openFaq === index}}">{{item.a}}</view>
+    </view>
+  </view>
+
+  <!-- 给家长/老师：怎么陪一个正在压力里的孩子（不评判、只在场） -->
+  <view class="card">
+    <view class="section-title">👨‍🎓👩‍🏫 给家长/老师的小抄</view>
+    <view class="gc-row">
+      <view class="gc-t">① 别急着给方法</view>
+      <view class="gc-d">孩子开口时先听 3 句，再问「你希望我怎么做」——多数时候 TA 只要「你在」。</view>
+    </view>
+    <view class="gc-row">
+      <view class="gc-t">② 一句少评判的话</view>
+      <view class="gc-d">把「这有什么好慌的」换成「我听出你很慌，慌是正常的，我们一起看看能做什么」。</view>
+    </view>
+    <view class="gc-row">
+      <view class="gc-t">③ 留一个出口</view>
+      <view class="gc-d">告诉 TA：班里的心理委员、校心理中心、或第三方热线都可以，这里是入口不是唯一。</view>
+    </view>
+    <view class="gc-copy" bindtap="copyParentNote" role="button" aria-label="复制给家长的小抄">📋 复制这一段《怎么陪孩子》</view>
+  </view>
+
   <view class="card">
     <view class="section-title">重要说明</view>
     <view class="text-muted">心语伴是 AI 情绪陪伴助手，不能替代专业医疗诊断与治疗。危机时刻请优先寻求专业或他人帮助。</view>

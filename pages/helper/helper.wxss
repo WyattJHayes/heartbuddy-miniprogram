@@ -187,3 +187,12 @@
 .fb-actions { margin-top: 14rpx; display: flex; justify-content: flex-end; }
 .fb-btn { font-size: 24rpx; padding: 8rpx 30rpx; }
 .fb-ok { margin-top: 12rpx; font-size: 23rpx; color: #6b8a6b; }
+
+.faq-item { border-bottom: 1rpx solid #eef2f7; }
+.faq-q { display: flex; justify-content: space-between; align-items: center; padding: 14rpx 0; font-size: 25rpx; color: #3a4a63; }
+.faq-arrow { color: #9aa8bd; font-size: 22rpx; }
+.faq-a { font-size: 23rpx; color: #6b7a8e; line-height: 1.7; padding-bottom: 14rpx; }
+.gc-row { margin-bottom: 12rpx; }
+.gc-t { font-size: 25rpx; color: #4a4f6a; font-weight: 600; margin-bottom: 4rpx; }
+.gc-d { font-size: 23rpx; color: #6b7a8e; line-height: 1.6; }
+.gc-copy { margin-top: 8rpx; color: #4f6aae; font-size: 24rpx; text-decoration: underline; }
