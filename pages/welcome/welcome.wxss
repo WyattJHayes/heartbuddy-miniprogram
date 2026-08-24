@@ -87,3 +87,6 @@
 .role-chip { padding: 10rpx 26rpx; border-radius: 28rpx; background: #f1f4fa; color: #6b7a8e; font-size: 24rpx; }
 .role-chip.on { background: #e3eeff; color: #3f6aa8; }
 .role-hint { margin-top: 12rpx; font-size: 23rpx; color: #7a88a0; background: #f6f9ff; border-radius: 10rpx; padding: 12rpx 14rpx; line-height: 1.6; }
+
+.tc-val.tap { border: 1rpx solid transparent; }
+.tc-val.tap:active { border-color: #3f6aa8; background: #dcebff; }

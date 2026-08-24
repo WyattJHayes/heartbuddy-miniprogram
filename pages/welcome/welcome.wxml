@@ -41,13 +41,13 @@
   </view>
 
   <!-- 今日状态卡：今天对自己照顾了什么（临时备注口径，点击直达） -->
-  <view class="today-care" wx:if="{{todayCare}}" role="note" aria-label="今日照顾状态">
+  <view class="today-care" wx:if="{{todayCare}}" role="note" aria-label="今日照顾状态，点击直达">
     <view class="tc-line">
       <text class="tc-key">今日照顾</text>
-      <text class="tc-val" wx:if="{{todayCare.relaxMin}}">🌬 放松 {{todayCare.relaxMin}} 分</text>
-      <text class="tc-val" wx:if="{{todayCare.scanN}}">🧘 扫描 {{todayCare.scanN}} 次</text>
-      <text class="tc-val" wx:if="{{todayCare.mood}}">🎨 记了心情</text>
-      <text class="tc-val" wx:if="{{todayCare.small}}">📝 三件小事</text>
+      <text class="tc-val tap" wx:if="{{todayCare.relaxMin}}" data-r="breathe" bindtap="goTodayTap">🌬 放松 {{todayCare.relaxMin}} 分</text>
+      <text class="tc-val tap" wx:if="{{todayCare.scanN}}" data-r="scan" bindtap="goTodayTap">🧘 扫描 {{todayCare.scanN}} 次</text>
+      <text class="tc-val tap" wx:if="{{todayCare.mood}}" data-r="mood" bindtap="goTodayTap">🎨 记了心情</text>
+      <text class="tc-val tap" wx:if="{{todayCare.small}}" data-r="mood" bindtap="goTodayTap">📝 三件小事</text>
       <text class="tc-none" wx:if="{{!todayCare.relaxMin && !todayCare.scanN && !todayCare.mood && !todayCare.small}}">今天还没有照顾自己的记录——从一次呼吸开始 🍃</text>
     </view>
   </view>

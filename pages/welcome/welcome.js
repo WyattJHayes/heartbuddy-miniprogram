@@ -124,6 +124,14 @@ Page({
     wx.showToast({ title: '已记住，心语会用更贴的方式陪你', icon: 'none' });
   },
 
+  // 今日状态卡：点击某个照顾项直达对应页
+  goTodayTap(e) {
+    const r = e.currentTarget.dataset.r;
+    if (r === 'breathe') wx.navigateTo({ url: '/pages/breathe/breathe' });
+    else if (r === 'scan') wx.navigateTo({ url: '/pages/scan/scan' });
+    else if (r === 'mood') wx.switchTab({ url: '/pages/mood/mood' });
+  },
+
   // 今日一句：点击复制（随时带走一句温柔）
   copyTodayLine() {
     if (!this.data.todayLine) return;
