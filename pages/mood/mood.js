@@ -55,6 +55,7 @@ Page({
     calDay: null,          // 点选某天后的当日小结
     calSay: '',          // 想对那天的自己说（本地存 hb_calSay_日期）
     calSayKey: '',
+    calDayMark: '',   // 点选日期的记号：📝考试/🎂生日/💛重要（解释情绪来源）
     smalls: [],            // 今日三件小事 [{i,text,done}]
     smallCelebrate: false, // 三件全完成时的庆祝条
     smallStreak: 0,        // 连续全勾三件小事的天数
@@ -941,7 +942,7 @@ Page({
     for (let d = 1; d <= total; d++) {
       const k = dayKey(y, m, d);
       const dow = new Date(y, m - 1, d).getDay();
-      cells.push({ num: d, inMonth: true, emoji: (map[k] || {}).emoji || '', count: (map[k] || {}).count || 0, tone: toneOf(k), isToday: k === todayK, weekend: dow === 0 || dow === 6, key: k });
+      cells.push({ num: d, inMonth: true, emoji: (map[k] || {}).emoji || '', count: (map[k] || {}).count || 0, tone: toneOf(k), isToday: k === todayK, weekend: dow === 0 || dow === 6, key: k, mark: wx.getStorageSync('hb_calMark_' + k) || '' });
     }
     // 下月补齐（凑满整周）
     let trailingDay = 1;
@@ -1037,7 +1038,21 @@ Page({
       names[meta.label] = (names[meta.label] || 0) + 1;
     });
     const list = Object.keys(names).map((label) => ({ label, count: names[label] })).sort((a, b) => b.count - a.count);
-    this.setData({ calDay: { date: k, total: cell.count, list }, calSay: wx.getStorageSync('hb_calSay_' + k) || '', calSayKey: k });
+    this.setData({ calDay: { date: k, total: cell.count, list }, calSay: wx.getStorageSync('hb_calSay_' + k) || '', calSayKey: k, calDayMark: wx.getStorageSync('hb_calMark_' + k) || '' });
+  },
+
+  // 给这天打记号：考试/生日/重要（解释那天的情绪波动，日历角标可见）
+  pickCalMark(e) {
+    const m = e.currentTarget.dataset.m || '';
+    const k = this.data.calSayKey;
+    if (!k) return;
+    wx.setStorageSync('hb_calMark_' + k, m);
+    if (m) wx.showToast({ title: '已给这天标上「' + m + '」', icon: 'none' });
+    else wx.showToast({ title: '已去掉记号', icon: 'none' });
+    this.setData({ calDayMark: m });
+    // 只更新日历里这一格的角标（避免整月重建）
+    const cells = this.data.calCells.map((c) => (c.key === k ? Object.assign({}, c, { mark: m }) : c));
+    this.setData({ calCells: cells });
   },
 
   // 想对那天的自己说：点开过去某天时可以补一句，存在本地（只有自己看得到）

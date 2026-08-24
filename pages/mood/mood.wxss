@@ -326,3 +326,15 @@
 .cal-say-box { margin-top: 10rpx; display: flex; align-items: center; gap: 10rpx; }
 .cal-say-input { flex: 1; background: #f6f8fc; border-radius: 10rpx; padding: 10rpx 14rpx; font-size: 24rpx; }
 .cal-say-save { padding: 8rpx 20rpx; border-radius: 22rpx; background: #e3eeff; color: #3f6aa8; font-size: 23rpx; }
+
+/* 给这天打记号 */
+.cal-mark { margin-top: 14rpx; }
+.cm-label { font-size: 23rpx; color: #8a93a8; margin-bottom: 8rpx; }
+.cm-row { display: flex; flex-wrap: wrap; gap: 10rpx; }
+.cm-chip { padding: 8rpx 18rpx; border-radius: 26rpx; background: #f0f4fa; color: #6b7a8e; font-size: 23rpx; }
+.cm-chip.on { background: #e3eeff; color: #3f6aa8; }
+.cm-chip.off { opacity: .7; }
+.cm-seen { margin-top: 8rpx; font-size: 22rpx; color: #7a8ba0; }
+/* 日历角标：右上角小记号 */
+.cc-mark { position: absolute; top: 2rpx; right: 4rpx; font-size: 16rpx; line-height: 1; }
+.cal-cell { position: relative; }

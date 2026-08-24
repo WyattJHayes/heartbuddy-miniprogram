@@ -335,7 +335,7 @@
     </view>
     <view class="cal-grid">
       <view
-        class="cal-cell {{item.inMonth ? '' : 'dim'}} {{item.isToday ? 'today' : ''}} {{item.count ? 'has' : ''}} {{item.weekend ? 'wknd' : ''}} {{item.tone ? 'tone-' + item.tone : ''}}"
+        class="cal-cell {{item.inMonth ? '' : 'dim'}} {{item.isToday ? 'today' : ''}} {{item.count ? 'has' : ''}} {{item.weekend ? 'wknd' : ''}} {{item.tone ? 'tone-' + item.tone : ''}} {{item.mark ? 'has-mark' : ''}}"
         wx:for="{{calCells}}"
         wx:key="key"
         bindtap="onCalDay"
@@ -345,6 +345,7 @@
       >
         <text class="cc-num">{{item.num}}</text>
         <text class="cc-emoji">{{item.count ? item.emoji : ''}}</text>
+        <text class="cc-mark" wx:if="{{item.mark}}">{{item.mark}}</text>
       </view>
     </view>
     <view class="cal-tip" wx:if="{{!calDay}}">点亮小表情的日期是记录过心情的日子，点一下看当日小结</view>
@@ -368,6 +369,17 @@
     <view class="cal-day-info" wx:if="{{calDay}}">
       <view class="cal-day-title">📅 {{calDay.date}} · 共 {{calDay.total}} 条记录</view>
       <view class="cal-day-row" wx:for="{{calDay.list}}" wx:key="label">{{item.label}} × {{item.count}}</view>
+      <!-- 给这天打个记号：考试/生日/重要（解释那天的情绪波动） -->
+      <view class="cal-mark" wx:if="{{calDay}}" role="group" aria-label="给这天打记号">
+        <view class="cm-label">给这一天打个记号：</view>
+        <view class="cm-row">
+          <view class="cm-chip {{calDayMark === '📝' ? 'on' : ''}}" data-m="📝" bindtap="pickCalMark">📝 考试</view>
+          <view class="cm-chip {{calDayMark === '🎂' ? 'on' : ''}}" data-m="🎂" bindtap="pickCalMark">🎂 生日</view>
+          <view class="cm-chip {{calDayMark === '💛' ? 'on' : ''}}" data-m="💛" bindtap="pickCalMark">💛 重要</view>
+          <view class="cm-chip {{!calDayMark ? 'off' : ''}}" data-m="" bindtap="pickCalMark">✖ 去掉</view>
+        </view>
+        <view class="cm-seen" wx:if="{{calDayMark}}">标了「{{calDayMark}}」——以后再回看，会明白那天的情绪从哪来。</view>
+      </view>
       <!-- 想对那天的自己说：跨时空的一句，只有自己看得到 -->
       <view class="cal-say" wx:if="{{calSay}}">「{{calSay}}」</view>
       <view class="cal-say-box" wx:if="{{calDayKey}}">
