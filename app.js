@@ -1,4 +1,10 @@
 // app.js
+// 昨天的「年月日」键（与深夜陪伴同格式，用于清晨回访判断昨晚是否熬夜）
+function yesterdayKey(todayKey) {
+  const d = new Date(Date.now() - 86400000);
+  return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+}
+
 App({
   globalData: {
     openid: '',
@@ -22,6 +28,7 @@ App({
     this.login();
     this.checkDailyRemind();
     this.checkNightWindDown();
+    this.checkMorningCare();
   },
 
   onShow() {
@@ -38,10 +45,36 @@ App({
   },
 
   /**
-   * 深夜收尾引导（本地）：22:30-5:00 首次打开时。
-   * 若今天已做过练习/记录/倾诉，给一次「今天你照顾过自己了」的收尾陪伴，
-   * 可选一键去呼吸发呆或直接去睡。每天只出现一次。
+   * 清晨回访（本地）：5:00–9:00 首次打开时。
+   * 若昨晚深夜收尾陪伴出现过（说明用户熬到了很晚），轻轻问一句「昨晚睡得好吗」，
+   * 认可「熬夜也有好好照顾自己」，并提供今日的第一杯咖啡/呼吸。每天一次。
    */
+  checkMorningCare() {
+    try {
+      const now = new Date();
+      const h = now.getHours();
+      if (h < 5 || h >= 9) return;
+      const todayKey = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+      if (wx.getStorageSync('hb_morningCare') === todayKey) return;
+      // 昨晚（昨天/今晨）夜里 22 点后出现过深夜陪伴
+      const nightKey = yesterdayKey(todayKey);
+      const hadNight = wx.getStorageSync('hb_nightWind') === nightKey;
+      // 昨天熬过夜：深夜工具出现过
+      if (!hadNight) return;
+      wx.setStorageSync('hb_morningCare', todayKey);
+      wx.showModal({
+        title: '🌅 早，新的一天来了',
+        content: '昨晚那么晚还在照顾自己，辛苦了。今早不用急着做什么——先喝口水，或者用 30 秒呼吸醒醒神，再开始这一天的第一件事。',
+        confirmText: '去呼吸一下',
+        cancelText: '喝水去',
+        success: (r) => {
+          if (r.confirm) wx.navigateTo({ url: '/pages/breathe/breathe' });
+        }
+      });
+    } catch (e) {
+      console.warn('[morningCare] 检查失败', e);
+    }
+  },
   checkNightWindDown() {
     try {
       const now = new Date();
