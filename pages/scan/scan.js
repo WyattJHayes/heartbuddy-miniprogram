@@ -56,6 +56,9 @@ Page({
   onLoad() {
     this._timer = null;
     this._busy = false;
+    // 记住上次用的档位（full/quick/micro），下次打开直接用
+    const lastMode = wx.getStorageSync('hb_scanMode');
+    if (lastMode === 'quick' || lastMode === 'micro') this.setData({ mode: lastMode });
     const ts = wx.getStorageSync('hb_scanDone');
     if (ts) this.setData({ lastDone: `上次完成：${this.fmtDate(ts)}` });
     this.setData({ scanCount: wx.getStorageSync('hb_scanCount') || 0 });
@@ -116,6 +119,7 @@ Page({
 
   // 统一按 mode 取出对应引导段并复位准备态
   applyMode(mode) {
+    wx.setStorageSync('hb_scanMode', mode);
     const stages = mode === 'micro' ? MICRO_STAGES : (mode === 'quick' ? QUICK_STAGES : STAGES);
     this.setData({ mode, stages, modeTotal: stages.length, phase: 'ready', idx: 0, left: stages[0].sec, pct: 0 });
   },
