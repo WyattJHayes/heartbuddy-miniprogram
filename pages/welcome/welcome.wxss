@@ -90,3 +90,5 @@
 
 .tc-val.tap { border: 1rpx solid transparent; }
 .tc-val.tap:active { border-color: #3f6aa8; background: #dcebff; }
+
+.wf-open { margin-top: 6rpx; font-size: 21rpx; color: #9aa8bd; }

@@ -31,6 +31,28 @@ App({
     this.checkMorningCare();
   },
 
+  // 陪伴纪念日：每次打开轻计一次，到了整数次给一句「你来了这么多次」
+  bumpOpenCount() {
+    try {
+      const n = Number(wx.getStorageSync('hb_openCount') || 0) + 1;
+      wx.setStorageSync('hb_openCount', n);
+      const MILESTONES = [10, 25, 50, 100, 200, 365];
+      if (MILESTONES.includes(n) && !wx.getStorageSync('hb_mile_' + n)) {
+        wx.setStorageSync('hb_mile_' + n, true);
+        wx.setStorageSync('hb_milestone', n);
+        const m = {
+          10: '打开第 10 次——你也开始习惯「有事就来说说」了 ☁️',
+          25: '第 25 次打开。这段陪伴，你已经坚持有一阵子了 🌱',
+          50: '第 50 次。很认真地照顾自己的人，值得被自己看见 🌟',
+          100: '第 100 次打开。这不是巧合，是你对自己长期的温柔 💛',
+          200: '第 200 次。你大概已经知道，这里一直都在 ☀️',
+          365: '整整一年了。谢谢你，常回来。🌻'
+        };
+        wx.showToast({ title: m[n] || '', icon: 'none', duration: 3000 });
+      }
+    } catch (e) { /* 忽略 */ }
+  },
+
   onShow() {
     this.checkDailyRemind();
     // 记录最近离开的页面（欢迎页用于「继续上次」；welcome 自己不算）

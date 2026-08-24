@@ -19,6 +19,7 @@ const ROLE_HINT = {
 Page({
   data: {
     loading: true, openid: '', showNotice: false, shared: false, welcomed: true, showLog: false,
+    openCount: 0,  // 陪伴次数（第 N 次回来）
     todayLine: '',
     todayCare: null,   // 今日状态卡：今天对自己照顾了什么（呼吸/记录/小事）
     role: '',          // 谁在用：student/teacher/parent/other（本地记住）
@@ -63,6 +64,7 @@ Page({
     if (options && options.src === 'share') this.setData({ shared: true });
     this.setData({ welcomed: wx.getStorageSync('hb_welcomed') === true, todayLine: todayLine() }); // 首次引导卡只出现一次
     this.setData({ todayCare: this.buildTodayCare() }); // 今日状态卡
+    this.setData({ openCount: wx.getStorageSync('hb_openCount') || 0 }); // 陪伴纪念日：第 N 次回来
     const savedRole = wx.getStorageSync('hb_role') || '';
     this.setData({ role: savedRole, roleTip: ROLE_HINT[savedRole] || '' });
     // 继续上次：最近离开的功能页，欢迎页一键直达
