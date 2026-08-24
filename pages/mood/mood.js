@@ -76,6 +76,7 @@ Page({
     dayPref: '',           // 记录时段偏好洞察
     weekdayInsight: '',    // 近4周「周几印象」：你更常在哪个星期几记录
     monthRun: '',          // 当月最长连续记录段
+    weather: null,        // 本月晴雨表 {sunny,clody,rain,total,ps,pc,pr,tip}
     intDist: '',           // 近30天强度分布
     weekFull: '',          // 本周全勤庆祝条（一次性）
     weekendRecap: '',    // 周六温和复盘条（每周一次，可关闭）
@@ -843,6 +844,7 @@ Page({
       this.celebrateMilestone(list.length);
       this.buildCal(raw);
       this.setData({ monthDays: this.buildMonthDays(raw) });
+      this.setData({ weather: this.buildWeather(raw) });
       this.setData({ peakDay: this.buildPeakDay(raw) });
       this.setData({ monthRun: this.buildMonthRun(raw) });
       this.setData({ intDist: this.buildIntDist(raw) });
@@ -1309,6 +1311,36 @@ Page({
       if (d.getFullYear() === y && d.getMonth() === mo) set.add(d.getDate());
     });
     return set.size;
+  },
+
+  // 本月晴雨表：按记录日情绪分均值分 晴(≥3.4)/多云(2.6-3.4)/雨(<2.6)，一眼看本月节奏
+  buildWeather(raw) {
+    const now = new Date();
+    const y = now.getFullYear(), mo = now.getMonth();
+    const dayMap = {};
+    (raw || []).forEach((m) => {
+      const d = new Date(m.createdAt);
+      if (d.getFullYear() !== y || d.getMonth() !== mo) return;
+      const k = d.getDate();
+      if (!dayMap[k]) dayMap[k] = { n: 0, s: 0 };
+      dayMap[k].n += 1;
+      dayMap[k].s += MOOD_SCORE[m.mood] !== undefined ? MOOD_SCORE[m.mood] : 3;
+    });
+    let sunny = 0, clody = 0, rain = 0;
+    Object.keys(dayMap).forEach((k) => {
+      const avg = dayMap[k].s / dayMap[k].n;
+      if (avg >= 3.5) sunny++;
+      else if (avg >= 2.6) clody++;
+      else rain++;
+    });
+    const total = sunny + clody + rain;
+    if (!total) return '';
+    const pct = (x) => Math.round((x / total) * 100);
+    // 一句温柔解读
+    let tip = '';
+    if (sunny >= rain * 2 && sunny >= 3) tip = '这个月晴天比雨天多得多——情绪整体偏稳，继续保持就好 🌤';
+    else if (rain > sunny) tip = '这个月雨天偏多，辛苦了。雨天的你也在好好过，值得被看见 🌧';
+    return { sunny, clody, rain, total, ps: pct(sunny), pc: pct(clody), pr: pct(rain), tip };
   },
 
   // 最长连续记录：历史最高连击天数（🏆 展示在色带标题旁）

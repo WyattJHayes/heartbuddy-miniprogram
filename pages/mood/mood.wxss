@@ -308,3 +308,15 @@
 .ctn-warm { color: #e8925c; }
 .ctn-cool { color: #7d9ce0; }
 .ctn-mid { margin-right: 6rpx; }
+
+/* 本月晴雨表 */
+.weather-bar { margin-top: 16rpx; background: #fbf9f5; border: 1rpx solid #eee8dc; border-radius: 14rpx; padding: 14rpx 16rpx; }
+.wb-row { display: flex; justify-content: space-between; font-size: 22rpx; }
+.wb-sum { color: #d08a3e; }
+.wb-mid { color: #8a9aa8; }
+.wb-rain { color: #6f91c8; }
+.wb-track { display: flex; height: 12rpx; border-radius: 6rpx; overflow: hidden; margin-top: 10rpx; background: #eee6da; }
+.wb-fill.sunny { background: #f4b860; }
+.wb-fill.clody { background: #b8c4d4; }
+.wb-fill.rain { background: #7f9fd8; }
+.wb-tip { margin-top: 10rpx; font-size: 22rpx; color: #8a93a8; line-height: 1.6; }
