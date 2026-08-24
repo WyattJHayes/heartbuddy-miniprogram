@@ -89,3 +89,8 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .stare-n { display: block; width: 100%; text-align: center; font-size: 21rpx; color: #7a82a0; margin-top: 10rpx; }
 
 .best-run { margin-top: 8rpx; font-size: 22rpx; color: #8a6a2f; background: #fdf6ea; border-radius: 10rpx; padding: 10rpx 16rpx; }
+
+/* 再来一轮 */
+.again-row { display: flex; align-items: center; justify-content: center; gap: 10rpx; margin: 18rpx 24rpx 0; padding: 16rpx 0; background: #eef7ff; border: 1rpx solid #d3e8fb; border-radius: 999rpx; color: #3f6498; font-size: 25rpx; font-weight: 600; }
+.again-emoji { font-size: 28rpx; }
+.again-t { color: #3f6498; }

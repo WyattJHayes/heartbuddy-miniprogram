@@ -61,6 +61,7 @@ Page({
     timeHint: '',          // 按时段推荐节奏的一句话
     presets: PRESETS.concat([{ key: 'custom', label: '自定义 · 4-4-6', rounds: [] }]),
     presetKey: 'calm',
+    presetLabel: '放松 · 4-4-6',
     customCfg: { in: 4, hold: 4, out: 6 }
   },
 
@@ -80,6 +81,7 @@ Page({
       const c = wx.getStorageSync(CUSTOM_STORE);
       if (c && c.in && c.out) {
         this.setData({ customCfg: c, presets: PRESETS.concat([{ key: 'custom', label: customLabel(c), rounds: buildCustomRounds(c) }]) });
+        if (this.data.presetKey === 'custom') this.setData({ presetLabel: customLabel(c) });
       }
     } catch (e) {}
   },
@@ -299,7 +301,7 @@ Page({
       this._timers = [];
     }
     this._rounds = p.rounds;
-    this.setData({ presetKey: key, phase: 'ready', round: 0, ball: 150, trans: 0.5,
+    this.setData({ presetKey: key, presetLabel: p.label, phase: 'ready', round: 0, ball: 150, trans: 0.5,
       timeHint: key === 'stare' ? '🌑 什么都不用做——就发会儿呆，这也是练习' : this.timeHint(),
       text: '已选「' + p.label + '」，点击开始' + (key === 'stare' ? '安安静静待着' : '跟着节奏呼吸'), calm: false });
   },
@@ -471,6 +473,21 @@ Page({
       phase: 'ready', round: 0, ball: 150, trans: 0.5,
       text: '点击「开始」跟着节奏呼吸', calm: false
     });
+  },
+
+  // 再来一轮：保持刚才的节奏（含自定义/发呆），直接重新开始
+  again() {
+    if (this._running) return;
+    // 发呆再来一轮：也走同一入口
+    this.setData({ phase: 'ready', round: 0, ball: 150, trans: 0.5, calm: false, echoText: '' });
+    if (this.data.presetKey === 'stare') { this.startStare(); return; }
+    wx.setStorageSync('hb_breathBroke', Date.now());
+    this._timers.forEach((t) => clearTimeout(t));
+    this._timers = [];
+    this._running = true;
+    this._stop = false;
+    this.setData({ round: 1 });
+    this.runRound(1, 0, this.data.total);
   },
 
   // 记录「平静」前可选强度（1-5）

@@ -125,5 +125,10 @@
       </view>
     </view>
   </view>
+  <!-- 再来一轮：保持刚才的节奏（含自定义/发呆），直接重练一轮 -->
+  <view wx:if="{{phase === 'done'}}" class="again-row" bindtap="again" role="button" aria-label="保持这个节奏再来一轮">
+    <text class="again-emoji">↻</text>
+    <text class="again-t">再来一轮 · {{presetLabel}}</text>
+  </view>
   <view wx:if="{{phase === 'done'}}" class="tip scan-link" role="button" bindtap="goScan">还想更放松？试试 5 分钟身体扫描 →</view>
 </view>
