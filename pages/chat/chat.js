@@ -477,7 +477,7 @@ Page({
     const isUser = item.role === 'user';
     const itemList = isUser
       ? ['复制这条消息', '引用这条', '珍藏（存到我的珍藏）', '存进想法盒（7 天后回看）', '撤回我的这条']
-      : ['复制一句话', '引用这句话', '珍藏（存到我的珍藏）', '存进想法盒（7 天后回看）', '换个说法（重新生成）'];
+      : ['复制一句话', '引用这句话', '珍藏（存到我的珍藏）', '存进想法盒（7 天后回看）', '换个说法（重新生成）', '并入我的常用语（点一下就能再说）'];
     wx.showActionSheet({
       itemList,
       success: (r) => {
@@ -516,6 +516,17 @@ Page({
         } else if (!isUser && r.tapIndex === 4) {
           // 换个说法：把这条 AI 回复重生成（用同样的上文重新问一次）
           this.reask(idx);
+        } else if (!isUser && r.tapIndex === 5) {
+          // 并入常用语：把 AI 说的这句存进「我的常用语」，点一下就能再说
+          const phrases = wx.getStorageSync('hb_myPhrases') || [];
+          const clean = content.replace(/^[①②③④⑤⑥⑦⑧⑨⑩]+\s*/, '').replace(/\s+/g, ' ').slice(0, 50);
+          if (!phrases.includes(clean)) {
+            if (phrases.length >= 5) phrases.shift();
+            phrases.push(clean);
+            wx.setStorageSync('hb_myPhrases', phrases);
+          }
+          this.setData({ myPhrases: phrases });
+          wx.showToast({ title: '已并入常用语，随时点一下就能再说 🍀', icon: 'none' });
         }
       }
     });
