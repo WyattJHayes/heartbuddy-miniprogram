@@ -850,6 +850,7 @@ Page({
       this.setData({ weather: this.buildWeather(raw) });
       this.setData({ peakDay: this.buildPeakDay(raw) });
       this.setData({ monthRun: this.buildMonthRun(raw) });
+      this.setData({ warmDay: this.buildWarmDay(raw) });
       this.setData({ intDist: this.buildIntDist(raw) });
       this.setData({ weekFull: this.buildWeekFull(raw) });
       this.setData({ trigMonth: this.buildTrigMonth(raw) });
@@ -1328,6 +1329,29 @@ Page({
     const top = days.sort((a, b) => cnt[b] - cnt[a])[0];
     if (cnt[top] < 2) return '';
     return mo + 1 + ' 月 ' + top + ' 日，你记了 ' + cnt[top] + ' 条心情——那天一定很不容易，你都走过来了。';
+  },
+
+  // 回暖纪念日：从所有记录里找「连续低落之后第一次回到平稳以上」的那天（全程最早一次）
+  buildWarmDay(raw) {
+    const dayMap = {};
+    (raw || []).forEach((m) => {
+      const d = new Date(m.createdAt);
+      const k = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+      dayMap[k] = dayMap[k] || { s: 0, n: 0 };
+      const sc = MOOD_SCORE[m.mood];
+      if (sc !== undefined) { dayMap[k].s += sc; dayMap[k].n += 1; }
+    });
+    const keys = Object.keys(dayMap).sort();
+    let low = false, first = null;
+    for (const k of keys) {
+      const avg = dayMap[k].s / dayMap[k].n;
+      if (avg < 2.6) { low = true; continue; }
+      if (low && avg >= 3) { if (!first) first = k; low = false; }
+      else if (!low && avg >= 3) { low = false; }
+    }
+    if (!first) return '';
+    const parts = first.split('-');
+    return parts[1] + ' 月 ' + parts[2] + ' 日，你从一段低落里走了出来——那天的回暖，值得记住 🌤';
   },
 
   buildMonthDays(raw) {
