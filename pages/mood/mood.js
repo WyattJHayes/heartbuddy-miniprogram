@@ -901,13 +901,14 @@ Page({
       m = now.getMonth() + 1;
     }
     const rawArr = raw || this._raw || [];
-    // dateKey -> {emoji, count}
+    // dateKey -> {emoji, count, score}
     const map = {};
     rawArr.forEach((r) => {
       const d = new Date(r.createdAt);
       const k = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-      if (!map[k]) map[k] = { emoji: (MOOD_META[r.mood] || MOOD_META.peace).emoji, count: 0 };
+      if (!map[k]) map[k] = { emoji: (MOOD_META[r.mood] || MOOD_META.peace).emoji, count: 0, score: 0 };
       map[k].count += 1;
+      map[k].score += MOOD_SCORE[r.mood] !== undefined ? MOOD_SCORE[r.mood] : 3;
     });
     const firstDow = new Date(y, m - 1, 1).getDay(); // 0=周日
     const total = new Date(y, m, 0).getDate();
@@ -916,24 +917,33 @@ Page({
     const todayK = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
     const cells = [];
     const dayKey = (yy, mm, dd) => `${yy}-${mm}-${dd}`;
+    // 冷暖：本天情绪分均值 > 3.4 暖色，< 2.6 冷色，中间 中性
+    const toneOf = (k) => {
+      const e = map[k];
+      if (!e || !e.count) return '';
+      const avg = e.score / e.count;
+      if (avg >= 3.4) return 'warm';
+      if (avg <= 2.6) return 'cool';
+      return '';
+    };
     // 上月补齐
     for (let i = firstDow - 1; i >= 0; i--) {
       const d = prevTotal - i;
       const ny = m === 1 ? y - 1 : y, nm = m === 1 ? 12 : m - 1;
       const k = dayKey(ny, nm, d);
-      cells.push({ num: d, inMonth: false, emoji: (map[k] || {}).emoji || '', count: (map[k] || {}).count || 0, isToday: false, key: k });
+      cells.push({ num: d, inMonth: false, emoji: (map[k] || {}).emoji || '', count: (map[k] || {}).count || 0, tone: toneOf(k), isToday: false, key: k });
     }
-    // 本月（周六/周日标 weekend，底色微调更好扫读）
+    // 本月（周六/周日标 weekend，底色微调更好扫读；冷暖色标同月）
     for (let d = 1; d <= total; d++) {
       const k = dayKey(y, m, d);
       const dow = new Date(y, m - 1, d).getDay();
-      cells.push({ num: d, inMonth: true, emoji: (map[k] || {}).emoji || '', count: (map[k] || {}).count || 0, isToday: k === todayK, weekend: dow === 0 || dow === 6, key: k });
+      cells.push({ num: d, inMonth: true, emoji: (map[k] || {}).emoji || '', count: (map[k] || {}).count || 0, tone: toneOf(k), isToday: k === todayK, weekend: dow === 0 || dow === 6, key: k });
     }
     // 下月补齐（凑满整周）
     let trailingDay = 1;
     while (cells.length % 7 !== 0) {
       const ny = m === 12 ? y + 1 : y, nm = m === 12 ? 1 : m + 1;
-      cells.push({ num: trailingDay, inMonth: false, emoji: '', count: 0, isToday: false, key: `${nm}-${trailingDay}` });
+      cells.push({ num: trailingDay, inMonth: false, emoji: '', count: 0, tone: '', isToday: false, key: `${nm}-${trailingDay}` });
       trailingDay += 1;
     }
     const nowY = now.getFullYear(), nowM = now.getMonth() + 1;

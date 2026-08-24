@@ -296,3 +296,15 @@
   padding: 12rpx 18rpx; margin-bottom: 12rpx; }
 .wr-text { font-size: 23rpx; color: #4e6b3f; line-height: 1.5; flex: 1; }
 .wr-close { margin-left: 12rpx; color: #8aa07e; font-size: 24rpx; padding: 4rpx 10rpx; }
+
+/* 日历冷暖色：暖=情绪偏暖，冷=偏凉（中性不标） */
+.cal-cell.tone-warm { background: #fff0e6; border: 2rpx solid #f4c39b; }
+.cal-cell.tone-cool { background: #eef2fb; border: 2rpx solid #b8c9ec; }
+.cal-cell.wknd.tone-warm { background: #fde8d8; }
+.cal-cell.wknd.tone-cool { background: #e9f0fb; }
+
+/* 日历色彩说明 */
+.cal-tone-note { display: flex; align-items: center; gap: 10rpx; margin-top: 14rpx; font-size: 20rpx; color: #8a93a8; flex-wrap: wrap; }
+.ctn-warm { color: #e8925c; }
+.ctn-cool { color: #7d9ce0; }
+.ctn-mid { margin-right: 6rpx; }

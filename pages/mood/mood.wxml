@@ -327,9 +327,15 @@
     <view class="cal-week">
       <view class="cal-wd" wx:for="{{calWeekday}}" wx:key="*this">{{item}}</view>
     </view>
+    <view class="cal-tone-note">
+      <text class="ctn-warm">■ 暖</text>
+      <text class="ctn-mid">情绪偏暖的日子</text>
+      <text class="ctn-cool">■ 冷</text>
+      <text class="ctn-mid">偏凉的日子</text>
+    </view>
     <view class="cal-grid">
       <view
-        class="cal-cell {{item.inMonth ? '' : 'dim'}} {{item.isToday ? 'today' : ''}} {{item.count ? 'has' : ''}} {{item.weekend ? 'wknd' : ''}}"
+        class="cal-cell {{item.inMonth ? '' : 'dim'}} {{item.isToday ? 'today' : ''}} {{item.count ? 'has' : ''}} {{item.weekend ? 'wknd' : ''}} {{item.tone ? 'tone-' + item.tone : ''}}"
         wx:for="{{calCells}}"
         wx:key="key"
         bindtap="onCalDay"
