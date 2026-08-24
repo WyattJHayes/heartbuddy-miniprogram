@@ -9,6 +9,10 @@
 
   <!-- 答题态 -->
   <block wx:if="{{!done}}">
+    <view class="quick-row" wx:if="{{cur === 0}}">
+      <view class="quick-chip" bindtap="startQuickTest" role="button" aria-label="只做3题快评" wx:if="{{!quickMode}}">⚡ 现在只做 3 题快评（30 秒）</view>
+      <view class="quick-chip" bindtap="exitQuickTest" role="button" aria-label="放回到完整7题" wx:if="{{quickMode}}">↩ 放回到完整 7 题</view>
+    </view>
     <view class="progress">
       <text class="p-num">{{cur + 1}}/{{questions.length}}</text>
       <view class="p-bar"><view class="p-fill" style="width:{{(cur / questions.length) * 100}}%"></view></view>

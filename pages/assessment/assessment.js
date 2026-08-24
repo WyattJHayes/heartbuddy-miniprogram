@@ -43,6 +43,7 @@ Page({
     levelLabel: '',
     advice: '',
     submitting: false,
+    quickMode: false, // 3 题快评（换算 21 分制）
     showCard: false,  // 应对卡浮层
     cardUrl: '',
     drawing: false,
@@ -122,6 +123,14 @@ Page({
         this.setData({ cur: 0, answers: QUESTIONS.map(() => null), done: false, total: 0, lastDays: null });
       }
     });
+  },
+
+  // 3 题快评：只问前三题（紧张/担忧/控制），换算 21 分制口径
+  startQuickTest() {
+    this.setData({ cur: 0, answers: QUESTIONS.slice(0, 3).map(() => null), done: false, total: 0, lastDays: null, quickMode: true });
+  },
+  exitQuickTest() {
+    this.setData({ cur: 0, answers: QUESTIONS.map(() => null), done: false, total: 0, quickMode: false });
   },
 
   // 结果页轻引导：去情绪充电站缓一缓
@@ -272,7 +281,8 @@ Page({
       this.setData({ lightTip: FEELBACK[idx % FEELBACK.length], lightKey: idx });
       this._lastLightIdx = idx;
     }
-    if (idx < QUESTIONS.length - 1) {
+    const endIdx = this.data.quickMode ? 2 : QUESTIONS.length - 1;
+    if (idx < endIdx) {
       this.setData({ answers, cur: idx + 1 });
     } else {
       this.submit(answers);
@@ -284,7 +294,9 @@ Page({
   },
 
   async submit(answers) {
-    const total = answers.reduce((a, b) => a + b, 0);
+    const rawTotal = answers.reduce((a, b) => a + b, 0);
+    // 3 题快评：0-9 分换算成 21 分制口径展示
+    const total = this.data.quickMode ? Math.round((rawTotal * 21) / 9) : rawTotal;
     const lv = total <= 4 ? LEVELS[0] : total <= 11 ? LEVELS[1] : LEVELS[2];
 
     this.setData({ done: true, total, label: lv.label, advice: lv.text, submitting: true });

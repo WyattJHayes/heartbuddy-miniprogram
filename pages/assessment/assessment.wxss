@@ -114,3 +114,6 @@
 .light-tip { margin-top: 12rpx; padding: 10rpx 16rpx; background: #f3f7ff; border-radius: 10rpx; color: #6b86b8; font-size: 23rpx; line-height: 1.6; text-align: center; }
 
 .r-copy { margin-top: 10rpx; color: #3f6aa8; font-size: 23rpx; text-decoration: underline; text-align: center; }
+
+.quick-row { display: flex; gap: 12rpx; flex-wrap: wrap; margin-bottom: 8rpx; }
+.quick-chip { padding: 8rpx 20rpx; border-radius: 24rpx; background: #eef3fb; color: #4a6fae; font-size: 23rpx; }
