@@ -106,3 +106,11 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 /* 节律震动开关 */
 .vibe-toggle { margin: 20rpx auto 0; width: 70%; text-align: center; padding: 12rpx 0; border-radius: 30rpx; background: #f3f6fb; color: #7a8aa8; font-size: 23rpx; }
 .vibe-toggle.on { background: #eaf4ff; color: #3f6aa8; }
+
+/* 这一轮留给谁 */
+.for-pick { margin-top: 14rpx; text-align: center; }
+.for-n { font-size: 23rpx; color: #8a93a8; margin-bottom: 10rpx; }
+.fp-row { display: flex; gap: 14rpx; justify-content: center; }
+.fp-chip { padding: 10rpx 26rpx; border-radius: 30rpx; background: #eef3f8; color: #6b7a8e; font-size: 24rpx; }
+.fp-chip:active { transform: scale(0.96); }
+.done-for { margin-top: 14rpx; text-align: center; font-size: 24rpx; color: #5f8a6a; }

@@ -64,6 +64,7 @@ Page({
     presetKey: 'calm',
     intent: '',         // 此刻心意：开始前选的意图词（稳/慢/等/放/无事）；完成态回印
     intentPicked: false, // 已选过（本轮）
+    breatheFor: '',    // 这一轮留给谁（对自己/对今天/对一个人）· 完成态回印
     vibeOn: true,        // 节律轻震动（吸/呼交界处柔和提示）
     presetLabel: '放松 · 4-4-6',
     customCfg: { in: 4, hold: 4, out: 6 }
@@ -320,6 +321,14 @@ Page({
     wx.vibrateShort && wx.vibrateShort({ type: 'light' });
   },
 
+  // 这一轮留给谁：把练习的心意「托付」出去，完成感更稳
+  pickFor(e) {
+    const w = e.currentTarget.dataset.w;
+    if (!w) return;
+    this.setData({ breatheFor: w });
+    wx.vibrateShort && wx.vibrateShort({ type: 'light' });
+  },
+
   startStare() {
     if (this._running) return;
     this._timers.forEach((t) => clearTimeout(t));
@@ -500,7 +509,8 @@ Page({
     this._timers = [];
     this.setData({
       phase: 'ready', round: 0, ball: 150, trans: 0.5,
-      text: '点击「开始」跟着节奏呼吸', calm: false
+      text: '点击「开始」跟着节奏呼吸', calm: false,
+      breatheFor: ''
     });
   },
 

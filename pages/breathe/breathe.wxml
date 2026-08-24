@@ -122,6 +122,16 @@
   <button wx:if="{{phase === 'done'}}" class="ghost" bindtap="recordCalm" loading="{{calm && false}}">
     {{calm ? '已记下此刻' : (presetKey === 'stare' ? '把这段安静记下来' : '记下此刻的平静心情')}}
   </button>
+  <!-- 这一轮留给谁：把心意托付出去，完成感更稳 -->
+  <view class="for-pick" wx:if="{{phase === 'done' && !breatheFor && presetKey !== 'stare'}}">
+    <view class="fp-label">这一轮呼吸，我想留给……</view>
+    <view class="fp-row">
+      <view class="fp-chip" data-w="自己" bindtap="pickFor">🌱 自己</view>
+      <view class="fp-chip" data-w="今天" bindtap="pickFor">☀️ 今天</view>
+      <view class="fp-chip" data-w="一个人" bindtap="pickFor">💌 一个人</view>
+    </view>
+  </view>
+  <view class="done-for" wx:if="{{phase === 'done' && breatheFor}}">这一轮交给你想留的「{{breatheFor}}」——心意已托付，呼吸也没白费。</view>
   <!-- 记录前可选平静强度（1-5） -->
   <view class="calm-pick" wx:if="{{phase === 'done' && !calm && presetKey !== 'stare'}}">
     <view class="cp-label">此刻的平静程度？</view>
