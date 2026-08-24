@@ -124,10 +124,19 @@ Page({
     this.setData({ mode, stages, modeTotal: stages.length, phase: 'ready', idx: 0, left: stages[0].sec, pct: 0 });
   },
 
-  begin() {
+  begin(spot) {
     const stages = this.data.mode === 'micro' ? MICRO_STAGES : (this.data.mode === 'quick' ? QUICK_STAGES : STAGES);
-    this.setData({ phase: 'run', stages, modeTotal: stages.length, idx: 0, left: stages[0].sec, pct: 0 });
+    const s = (spot && spot > 0 && this.data.mode === 'full') ? spot : 0;
+    this.setData({ phase: 'run', stages, modeTotal: stages.length, idx: s, left: stages[s].sec, pct: Math.round((s / stages.length) * 100) });
     this.startTimer();
+  },
+
+  // 先选部位：从你想先照顾的地方开始扫（全身档可用，跳过前面直接到目标部位）
+  pickSpot(e) {
+    const s = Number(e.currentTarget.dataset.i);
+    if (this.data.mode !== 'full') { this.begin(0); return; }
+    this.begin(s);
+    wx.showToast({ title: s === 8 ? '从头开始扫' : s === 6 ? '从胸口肩膀开始' : '从脚开始', icon: 'none' });
   },
 
   startTimer() {

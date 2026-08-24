@@ -59,3 +59,11 @@
 .scan-echo-e { font-size: 34rpx; }
 .scan-echo-t { flex: 1; font-size: 25rpx; color: #3f6498; line-height: 1.7; }
 .scan-echo-copy { margin-top: 10rpx; text-align: right; font-size: 22rpx; color: #5b8def; }
+
+/* 先选部位 */
+.scan-spot { margin-top: 16rpx; }
+.ss-label { font-size: 24rpx; color: #8a93a8; margin-bottom: 10rpx; }
+.ss-row { display: flex; flex-wrap: wrap; gap: 12rpx; }
+.ss-chip { padding: 10rpx 22rpx; border-radius: 28rpx; background: #eef3f8; color: #6b7a8e; font-size: 24rpx; }
+.ss-chip:active { transform: scale(0.96); }
+.ss-note { margin-top: 8rpx; font-size: 22rpx; color: #b0b8c8; }

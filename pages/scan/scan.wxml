@@ -30,6 +30,16 @@
       <view class="scan-tip">· 全程约 {{mode === 'micro' ? '1' : (mode === 'quick' ? '3' : '5')}} 分钟，随时可以结束</view>
       <view class="scan-tip">· 完成后会自动记一条「平静」心情</view>
     </view>
+    <view class="scan-spot" wx:if="{{mode === 'full'}}" role="group" aria-label="从想先照顾的部位开始">
+      <view class="ss-label">想先从哪个部位开始？</view>
+      <view class="ss-row">
+        <view class="ss-chip" data-i="3" bindtap="pickSpot">🦶 脚</view>
+        <view class="ss-chip" data-i="6" bindtap="pickSpot">🫁 胸口和肩</view>
+        <view class="ss-chip" data-i="8" bindtap="pickSpot">😌 头</view>
+        <view class="ss-chip" data-i="0" bindtap="pickSpot">🧘 从头开始</view>
+      </view>
+      <view class="ss-note">点哪个，就从那个部位开始这一轮</view>
+    </view>
     <button class="btn-primary full" bindtap="begin">开始{{mode === 'micro' ? '微扫' : (mode === 'quick' ? '快扫' : '扫描')}}</button>
     <view class="scan-last" wx:if="{{lastDone}}">{{lastDone}}</view>
     <view class="scan-next" role="button" bindtap="goBreathe" aria-label="再去呼吸页做一轮">🌿 还想再放松？接着做一轮呼吸 →</view>
