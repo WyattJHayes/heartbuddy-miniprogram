@@ -52,3 +52,10 @@
 .sm-item.on { border-color: #5b8def; background: #f0f5ff; }
 .sm-t { display: block; font-size: 25rpx; color: #33415c; font-weight: 600; }
 .sm-d { display: block; margin-top: 4rpx; font-size: 21rpx; color: #9aa3b8; }
+
+/* 完成回响 */
+.scan-echo { margin-top: 18rpx; background: #f7fbff; border: 1rpx solid #dbe9fb; border-radius: 16rpx; padding: 18rpx 20rpx 14rpx; }
+.scan-echo-body { display: flex; gap: 12rpx; align-items: flex-start; }
+.scan-echo-e { font-size: 34rpx; }
+.scan-echo-t { flex: 1; font-size: 25rpx; color: #3f6498; line-height: 1.7; }
+.scan-echo-copy { margin-top: 10rpx; text-align: right; font-size: 22rpx; color: #5b8def; }

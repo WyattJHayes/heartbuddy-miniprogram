@@ -72,6 +72,14 @@
         <text class="fp-log-i" wx:for="{{feelLog}}" wx:key="t">{{item.w}}</text>
       </view>
     </view>
+    <!-- 完成回响：给身体的留言（可一键复制带走） -->
+    <view class="scan-echo" wx:if="{{scanEcho}}" role="note" aria-label="完成回响">
+      <view class="scan-echo-body">
+        <text class="scan-echo-e">🫧</text>
+        <text class="scan-echo-t">{{scanEcho}}</text>
+      </view>
+      <view class="scan-echo-copy" bindtap="copyScanEcho" role="button" aria-label="复制这段身体留言">📋 复制这份身体留言</view>
+    </view>
     <button class="btn-primary full" bindtap="again">再来一次</button>
     <view class="scan-next" role="button" bindtap="goBreathe" aria-label="再去呼吸页做一轮">🌿 还想再放松？接着做一轮呼吸 →</view>
     <button class="btn-ghost full mt" bindtap="exit">返回</button>

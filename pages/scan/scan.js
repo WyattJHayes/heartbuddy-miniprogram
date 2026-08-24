@@ -34,6 +34,8 @@ Page({
     timeTip: '',     // 按时段的扫描建议（一句话）
     feelTop: '',     // 身体感受词 Top1
     avgSlot: '',     // 平均完成时段
+    scanEcho: '',    // 完成回响：给身体的留言
+    scanEchoCnt: 0,  // 累计完成次数（回响灵感）
     doneN: 0,        // 本次是累计第几次
     idx: 0,
     left: 30,
@@ -158,7 +160,9 @@ Page({
     const dl = wx.getStorageSync('hb_scanDoneLog') || [];
     dl.push(ts);
     wx.setStorageSync('hb_scanDoneLog', dl.slice(-30));
-    this.setData({ lastDone: `上次完成：${this.fmtDate(ts)}` });
+    this.setData({ lastDone: `上次完成：${this.fmtDate(ts)}`, scanToday: this.buildScanToday() });
+    // 完成回响：按累计次数与完成时段给一句「身体的留言」（可复制带走）
+    this.setData({ scanEcho: this.buildScanEcho(), scanEchoCnt: (wx.getStorageSync('hb_scanCount') || 0) + 1 });
     // 计入今日「放松累计」：扫描/快扫的分钟数也进呼吸页每日 10 分钟目标（跨页一致）
     this.touchRelaxMins(this.data.mode === 'quick' ? 3 : 5);
     this.setData({ scanStreak: this.buildScanStreak(), scanToday: this.buildScanToday() });
@@ -203,6 +207,28 @@ Page({
     this.setData({ phase: 'ready', idx: 0, left: stages[0].sec, pct: 0 });
   },
 
+  // 完成回响：给身体的留言（按累计次数轮换 + 顺嘴提时段习惯）
+  buildScanEcho() {
+    const n = (wx.getStorageSync('hb_scanCount') || 0) + 1;
+    const h = new Date().getHours();
+    const when = h >= 22 || h < 6 ? '夜深了，身体已经学着放松，你也早点休息。' : h < 11 ? '早晨的安静是给身体的礼物，今天从「顾好自己」开始。' : h < 18 ? '白天挤出的这几分钟，是身体记住的温柔。' : '傍晚把自己扫松了些——晚上会更好睡。';
+    const POOL = [
+      '刚才从头到脚，你把自己整个「看见」了一遍。这就是照顾。',
+      '身体比你想的更信任你——它跟着你完成了一整趟扫描。',
+      '你不用「做得完美」，你已经陪自己走了这一整段。',
+      '这 5 分钟，你的身体做回了主角，世界安静了一会儿。',
+      '每一次扫描，都是你在跟身体说：「我在听你说话」。'
+    ];
+    const line = POOL[n % POOL.length];
+    return when + ' ' + line;
+  },
+
+  // 复制这段「扫描回响」带走
+  copyScanEcho() {
+    if (!this.data.scanEcho) return;
+    wx.setClipboardData({ data: this.data.scanEcho, success: () => wx.showToast({ title: '已复制这份身体留言', icon: 'none' }) });
+  },
+
   // 连续扫描天数：从完成时间戳队列往前数（今天或昨天开始都算连续）
   buildScanStreak() {
     const doneTs = wx.getStorageSync('hb_scanDoneLog') || [];
@@ -227,6 +253,7 @@ Page({
     const t = new Date().toDateString();
     return doneTs.filter((x) => new Date(x).toDateString() === t).length;
   },
+
 
   // 今日放松累计（跨页共享给呼吸页的每日目标）：按天记录扫描分钟数
   touchRelaxMins(add) {
