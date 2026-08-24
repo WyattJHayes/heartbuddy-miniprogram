@@ -927,6 +927,29 @@ Page({
     else if ([5, 10, 20].includes(n)) wx.showToast({ title: '已经说了 ' + n + ' 次谢谢——你是懂得感恩的人 💛', icon: 'none' });
   },
 
+  // 留下一句：把此刻想留的话存为便签（profile「我的便签本」可回看）
+  openSticky() {
+    this.setData({ showQuick: false });
+    const recent = (wx.getStorageSync('hb_stickyNotes') || []).slice(0, 1);
+    const prev = recent.length ? recent[0].t : '';
+    wx.showModal({
+      title: '📌 留下一句',
+      content: '把此刻想留的话写下来，它会在「我的 · 便签本」里等你。',
+      editable: true,
+      placeholderText: prev ? '上次：「' + prev.slice(0, 20) + '」…' : '例如：今天和好友和好了，很高兴',
+      confirmText: '存下',
+      success: (r) => {
+        if (!r.confirm) return;
+        const t = (r.content || '').trim().slice(0, 60);
+        if (!t) return;
+        const list = wx.getStorageSync('hb_stickyNotes') || [];
+        list.unshift({ t, at: Date.now() });
+        wx.setStorageSync('hb_stickyNotes', list.slice(0, 20));
+        wx.showToast({ title: '已收进你的便签本 📌', icon: 'none' });
+      }
+    });
+  },
+
   // 晚安收尾：睡前给一句温柔的告别，AI 顺着道晚安（本地计「晚安次数」）
   onGoodnight() {
     this.setData({ showQuick: false });

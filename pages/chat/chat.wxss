@@ -210,3 +210,6 @@
 /* 想聊什么 · 主题起手 */
 .quick-panel-title.topic { color: #6a8a6a; }
 .quick-panel-item.topic { background: #f2faf2; border-color: #cfe8cf; color: #3f6a4a; }
+
+.quick-panel-title.sticky { color: #8a7a3a; }
+.quick-panel-item.sticky { background: #fdf9ec; border-color: #eaddb8; color: #8a6a2a; }

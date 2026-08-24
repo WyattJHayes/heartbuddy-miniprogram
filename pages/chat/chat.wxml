@@ -235,6 +235,10 @@ module.exports = { divider: divider };
       <view class="quick-panel-list">
         <view class="quick-panel-item calm" bindtap="onGoodnight">聊到这里，道个晚安</view>
       </view>
+      <view class="quick-panel-title sticky">📌 留下一句</view>
+      <view class="quick-panel-list">
+        <view class="quick-panel-item sticky" bindtap="openSticky">把此刻想留的一句话存起来</view>
+      </view>
       <view class="quick-panel-title en">EN 英语角 · one tap to send</view>
       <view class="quick-panel-list">
         <view class="quick-panel-item en" wx:for="{{quickEnglish}}" wx:key="*this"
