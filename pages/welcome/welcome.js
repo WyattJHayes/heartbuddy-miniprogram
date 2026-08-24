@@ -221,6 +221,33 @@ Page({
     wx.showToast({ title: '收好了，从下周一开始记得 ☀️', icon: 'none' });
   },
 
+  // 一封写给自己的信：把常用语+金句+今天的三件小事拼成一段（复制）
+  writeSelfLetter() {
+    const phrases = wx.getStorageSync('hb_myPhrases') || [];
+    const gold = wx.getStorageSync('hb_goldenLines') || [];
+    const small = wx.getStorageSync('hb_smallDays') || [];
+    const today = new Date().toDateString();
+    const todaySmall = small.includes(today);
+    const me = wx.getStorageSync('hb_uname') || '我自己';
+    const d = new Date();
+    const lines = [
+      '写给「' + me + '」的一封信 🕊',
+      '', '亲爱的 ' + me + '：',
+      '',
+      '今天，我想提醒你几件你已经知道的事——',
+      ...(gold.slice(0, 3).map((g) => '· ' + g)),
+      ...(phrases.slice(0, 3).map((p) => '· 「' + p + '」这句是你自己最常说的')),
+      todaySmall ? '· 你今天认真做了三件小事，这已经很了不起。' : '· 就算今天什么都没做，你也值得温柔。',
+      '',
+      '你是那个一直在照顾自己的人。',
+      '—— ' + (d.getMonth() + 1) + ' 月 ' + d.getDate() + ' 日'
+    ];
+    wx.setClipboardData({
+      data: lines.join('\n'),
+      success: () => wx.showToast({ title: '已生成，去看看这封信吧 🐋', icon: 'none' })
+    });
+  },
+
   // 本周小结：这一周你照顾自己的总账（纯本地，全部最细口径）
   buildWeekCare() {
     const now = new Date();

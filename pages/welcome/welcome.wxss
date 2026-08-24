@@ -126,3 +126,5 @@
 .pre-exam { margin-top: 12rpx; background: #f2f8ff; border: 1rpx solid #d4e6f8; border-radius: 14rpx; padding: 14rpx 16rpx; }
 .pe-title { color: #4a6fa5; font-size: 24rpx; font-weight: 600; margin-bottom: 6rpx; }
 .pe-action { color: #5a7db3; font-size: 24rpx; line-height: 1.6; }
+
+.self-letter { margin-top: 14rpx; display: inline-block; color: #4f7fae; font-size: 24rpx; background: #eef6ff; border-radius: 22rpx; padding: 8rpx 26rpx; }

@@ -13,6 +13,10 @@
     <view class="wp-text">{{weekPlan}}</view>
   </view>
   <view class="week-plan write" wx:elif="{{!weekPlanSet}}" role="group" aria-label="写给下周的自己">
+
+  <!-- 一封写给自己的信：把常用语+金句+今天小事拼成一段，一键复制 -->
+  <view class="self-letter" role="button" bindtap="writeSelfLetter" aria-label="生成一封写给自己的信">🐋 生成一封「写给自己的信」</view>
+
     <view class="wp-key">✍️ 想给下周的自己留一句吗？</view>
     <textarea class="wp-ta" value="{{weekPlan}}" bindinput="planInput" maxlength="60" placeholder="例如：下周试着早点睡一天…" auto-height />
     <view class="wp-save" bindtap="saveWeekPlan" role="button" aria-label="收下这句话">收下·下周一看 ☀️</view>
