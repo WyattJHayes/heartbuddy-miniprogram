@@ -108,3 +108,5 @@
 .exam-morning { margin-top: 12rpx; background: #fff8ea; border: 1rpx solid #f3dfb6; border-radius: 14rpx; padding: 14rpx 16rpx; }
 .em-title { color: #a5712e; font-size: 25rpx; font-weight: 600; margin-bottom: 8rpx; }
 .em-line { color: #8a6a3e; font-size: 23rpx; line-height: 1.7; }
+
+.welcome-week { margin-top: 10rpx; font-size: 23rpx; color: #7f93b8; line-height: 1.6; }

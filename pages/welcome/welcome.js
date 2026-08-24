@@ -2,6 +2,17 @@
 const app = getApp();
 const { dailyQuotes } = require('../../config/index');
 
+// 星期特别句：给一周的节奏一点柔和的锚（0=周日…6=周六）
+const WEEK_LINE = [
+  '周日的晚上，适合把这一周轻轻放下，也为你下一周留个位置 🌙',
+  '周一的早上，不用急着「打满鸡血」——把今天过好，就已经赢了一场。',
+  '周二的你，可能已经被作业追着跑——停 10 秒，喝口水，别让「赶」变成常态。',
+  '周三到了，一周过半。今天如果累，就只做「最重要的一件事」。',
+  '周四想偷懒？那不是堕落，是身体在替你说「需要休息」。',
+  '周五了，先把周五的自己收好，再谈周末：今天也请准时下班。',
+  '周六的午后，做什么都好，不做什么也好——周末本来就是你的。'
+];
+
 // 今日一句（日轮换，与 chat/充电站同源）
 function todayLine() {
   const d = new Date();
@@ -21,6 +32,7 @@ Page({
     loading: true, openid: '', showNotice: false, shared: false, welcomed: true, showLog: false,
     openCount: 0,  // 陪伴次数（第 N 次回来）
     todayLine: '',
+    weekGreet: '',  // 星期特别句（随当天）
     todayCare: null,   // 今日状态卡：今天对自己照顾了什么（呼吸/记录/小事）
     role: '',          // 谁在用：student/teacher/parent/other（本地记住）
     roleTip: '',
@@ -66,7 +78,7 @@ Page({
 
   onLoad(options) {
     if (options && options.src === 'share') this.setData({ shared: true });
-    this.setData({ welcomed: wx.getStorageSync('hb_welcomed') === true, todayLine: todayLine() }); // 首次引导卡只出现一次
+    this.setData({ welcomed: wx.getStorageSync('hb_welcomed') === true, todayLine: todayLine(), weekGreet: WEEK_LINE[new Date().getDay()] }); // 首次引导卡只出现一次
     this.setData({ todayCare: this.buildTodayCare() }); // 今日状态卡
     this.setData({ weekCare: this.buildWeekCare() }); // 本周照顾小结
     this.setData({ nurture: this.buildNurture() }); // 今日滋养三连
