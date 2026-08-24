@@ -8,11 +8,21 @@ function todayLine() {
   return dailyQuotes[(d.getDate() + d.getMonth()) % dailyQuotes.length] || '';
 }
 
+// 谁在用：不同身份给一句更贴的话（仅展示文案，不影响功能）
+const ROLE_HINT = {
+  student: '备考、同学关系、考前的慌——这些我熟，随时来聊。',
+  teacher: '想帮学生，又怕说错话——可以来这里看看「如果学生找我，我该说什么」。',
+  parent: '孩子反复提到考试压力？这里的孩子视角工具也许能帮上忙。',
+  other: '我是 AI 陪伴者，你怎么舒服就怎么用。'
+};
+
 Page({
   data: {
     loading: true, openid: '', showNotice: false, shared: false, welcomed: true, showLog: false,
     todayLine: '',
     todayCare: null,   // 今日状态卡：今天对自己照顾了什么（呼吸/记录/小事）
+    role: '',          // 谁在用：student/teacher/parent/other（本地记住）
+    roleTip: '',
     lastRoute: '',  // 继续上次：最近离开的功能页路径
     lastLabel: '',  // 继续上次的按钮文案
     changelog: [
@@ -51,6 +61,8 @@ Page({
     if (options && options.src === 'share') this.setData({ shared: true });
     this.setData({ welcomed: wx.getStorageSync('hb_welcomed') === true, todayLine: todayLine() }); // 首次引导卡只出现一次
     this.setData({ todayCare: this.buildTodayCare() }); // 今日状态卡
+    const savedRole = wx.getStorageSync('hb_role') || '';
+    this.setData({ role: savedRole, roleTip: ROLE_HINT[savedRole] || '' });
     // 继续上次：最近离开的功能页，欢迎页一键直达
     const last = wx.getStorageSync('hbLastRoute') || '';
     const ROUTE_LABEL = {
@@ -100,6 +112,15 @@ Page({
     // 心情：今日记录过（同 chat 晨间提醒口径：toDateString）
     mood = wx.getStorageSync('hb_lastMoodDate') === todayStr;
     return { relaxMin, scanN, mood, small };
+  },
+
+  // 谁在用：选择身份，心语就用更贴的那句迎接你（本地记住）
+  pickRole(e) {
+    const r = e.currentTarget.dataset.r;
+    if (!r) return;
+    wx.setStorageSync('hb_role', r);
+    this.setData({ role: r, roleTip: ROLE_HINT[r] });
+    wx.showToast({ title: '已记住，心语会用更贴的方式陪你', icon: 'none' });
   },
 
   // 今日一句：点击复制（随时带走一句温柔）

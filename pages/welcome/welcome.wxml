@@ -83,6 +83,18 @@
     </view>
   </view>
 
+  <!-- 你是谁：帮助心语更贴近你（可选，本地记住，不涉及账号） -->
+  <view class="card role-card">
+    <view class="section-title">谁在用你？<text class="muted">（选一个更贴，可不选）</text></view>
+    <view class="role-row">
+      <view class="role-chip {{role === 'student' ? 'on' : ''}}" data-r="student" bindtap="pickRole" role="button" aria-label="我是学生">🎒 学生</view>
+      <view class="role-chip {{role === 'teacher' ? 'on' : ''}}" data-r="teacher" bindtap="pickRole" role="button" aria-label="我是老师">📚 老师</view>
+      <view class="role-chip {{role === 'parent' ? 'on' : ''}}" data-r="parent" bindtap="pickRole" role="button" aria-label="我是家长">🏠 家长</view>
+      <view class="role-chip {{role === 'other' ? 'on' : ''}}" data-r="other" bindtap="pickRole" role="button" aria-label="其他身份">🌱 其他</view>
+    </view>
+    <view class="role-hint" wx:if="{{roleTip}}">{{roleTip}}</view>
+  </view>
+
   <view class="card notice">
     <view class="section-title">在开始前，请了解</view>
     <view class="item">· 我是 AI 心理陪伴助手，<text class="hl">不替代专业诊疗</text>。</view>
