@@ -40,6 +40,17 @@
     </view>
   </view>
 
+  <!-- 本周小结：这一周你照顾自己的总账 -->
+  <view class="week-care" wx:if="{{weekCare}}" role="note" aria-label="本周照顾小结">
+    <view class="wc-key">这一周你做过的照顾</view>
+    <view class="wc-row">
+      <text class="wc-val" wx:if="{{weekCare.relaxMin}}">🌬 放松 {{weekCare.relaxMin}} 分</text>
+      <text class="wc-val" wx:if="{{weekCare.scanN}}">🧘 扫描 {{weekCare.scanN}} 次</text>
+      <text class="wc-val" wx:if="{{weekCare.smallN}}">📝 三件小事 {{weekCare.smallN}} 天</text>
+      <text class="wc-none" wx:if="{{!weekCare.relaxMin && !weekCare.scanN && !weekCare.smallN}}">这周先别急着添任务——从今天喘口气开始 🌿</text>
+    </view>
+  </view>
+
   <!-- 今日状态卡：今天对自己照顾了什么（临时备注口径，点击直达） -->
   <view class="today-care" wx:if="{{todayCare}}" role="note" aria-label="今日照顾状态，点击直达">
     <view class="tc-line">

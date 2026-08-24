@@ -66,6 +66,7 @@ Page({
     if (options && options.src === 'share') this.setData({ shared: true });
     this.setData({ welcomed: wx.getStorageSync('hb_welcomed') === true, todayLine: todayLine() }); // 首次引导卡只出现一次
     this.setData({ todayCare: this.buildTodayCare() }); // 今日状态卡
+    this.setData({ weekCare: this.buildWeekCare() }); // 本周照顾小结
     this.setData({ openCount: wx.getStorageSync('hb_openCount') || 0 }); // 陪伴纪念日：第 N 次回来
     const savedRole = wx.getStorageSync('hb_role') || '';
     this.setData({ role: savedRole, roleTip: ROLE_HINT[savedRole] || '' });
@@ -118,6 +119,31 @@ Page({
     // 心情：今日记录过（同 chat 晨间提醒口径：toDateString）
     mood = wx.getStorageSync('hb_lastMoodDate') === todayStr;
     return { relaxMin, scanN, mood, small };
+  },
+
+  // 本周小结：这一周你照顾自己的总账（纯本地，全部最细口径）
+  buildWeekCare() {
+    const now = new Date();
+    const weekStart = new Date(now.getTime() - ((now.getDay() + 6) % 7) * 86400000);
+    weekStart.setHours(0, 0, 0, 0);
+    let relaxMin = 0, scanN = 0, smallN = 0;
+    // 呼吸/扫描：跨页统一的当日放松分钟（breatheDay + relaxScan），本周范围内累加
+    const bd = wx.getStorageSync('hb_breatheDay') || {};
+    if (bd && typeof bd === 'object' && new Date(bd.date).getTime() >= weekStart.getTime()) relaxMin += bd.mins || 0;
+    const rd = wx.getStorageSync('hb_relaxScan') || {};
+    if (rd && typeof rd === 'object' && new Date(rd.date).getTime() >= weekStart.getTime()) relaxMin += rd.mins || 0;
+    const doneLog = wx.getStorageSync('hb_scanDoneLog') || [];
+    for (const t of doneLog) {
+      if (new Date(t).getTime() >= weekStart.getTime()) scanN += 1;
+    }
+    const smallDays = wx.getStorageSync('hb_smallDays') || [];
+    for (const k of smallDays) {
+      if (new Date(k + ' 00:00:00').getTime() >= weekStart.getTime()) smallN += 1;
+    }
+    // 本周心情天数（云端记录显示在月报里，这里读本地最近日期兜底）
+    const ready = relaxMin || scanN || smallN;
+    if (!ready) return null;
+    return { relaxMin, scanN, smallN };
   },
 
   // 谁在用：选择身份，心语就用更贴的那句迎接你（本地记住）

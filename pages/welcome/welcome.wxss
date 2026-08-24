@@ -92,3 +92,9 @@
 .tc-val.tap:active { border-color: #3f6aa8; background: #dcebff; }
 
 .wf-open { margin-top: 6rpx; font-size: 21rpx; color: #9aa8bd; }
+
+.week-care { margin-top: 12rpx; background: #f7faf5; border: 1rpx solid #e3ecdc; border-radius: 14rpx; padding: 14rpx 16rpx; }
+.wc-key { font-size: 23rpx; color: #7a8a6a; margin-bottom: 8rpx; }
+.wc-row { display: flex; flex-wrap: wrap; gap: 10rpx; }
+.wc-val { color: #5f8a4f; background: #eaf4e6; border-radius: 18rpx; padding: 4rpx 14rpx; font-size: 23rpx; }
+.wc-none { font-size: 22rpx; color: #9aa88a; }
