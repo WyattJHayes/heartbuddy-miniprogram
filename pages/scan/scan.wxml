@@ -94,6 +94,15 @@
         <text class="fp-log-i" wx:for="{{feelLog}}" wx:key="t">{{item.w}}</text>
       </view>
     </view>
+    <!-- 今日身体最需要什么：扫完给身体一个「下一步回应」（存 log 每日回看） -->
+    <view class="need-pick" role="group" aria-label="今天身体最需要什么">
+      <view class="np-label">今天身体最需要：</view>
+      <view class="np-row">
+        <view class="np-chip {{needPicked === item ? 'on' : ''}}" wx:for="{{['多喝水','早睡一点','动一动','晒太阳','吃顿好的','抱抱自己']}}" wx:key="*this"
+              data-w="{{item}}" bindtap="pickNeed" role="button" aria-label="{{item}}">{{item}}</view>
+      </view>
+      <view class="np-picked" wx:if="{{needPicked}}">已记下：「{{needPicked}}」——今晚就给自己这一件就好 ☀️</view>
+    </view>
     <!-- 完成回响：给身体的留言（可一键复制带走） -->
     <view class="scan-echo" wx:if="{{scanEcho}}" role="note" aria-label="完成回响">
       <view class="scan-echo-body">

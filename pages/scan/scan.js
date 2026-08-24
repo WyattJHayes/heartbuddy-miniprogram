@@ -37,6 +37,7 @@ Page({
     modeTotal: STAGES.length,
     bookmark: -1,      // 扫描书签：存了第几段（0 起，-1=没有）下次可从这继续
     feelPicked: '',   // 完成后的身体感受一词
+    needPicked: '',   // 今天身体最需要什么（六选一，存本地）
     feelLog: [],     // 最近几次身体感受回看
     timeTip: '',     // 按时段的扫描建议（一句话）
     feelTop: '',     // 身体感受词 Top1
@@ -192,6 +193,17 @@ Page({
     log.push({ w, t: Date.now() });
     wx.setStorageSync('hb_scanFeel', log.slice(-20));
     this.setData({ feelLog: log.slice(-5).reverse() });
+  },
+
+  // 今天身体最需要什么：六选一（存本地，可日后回看）
+  pickNeed(e) {
+    const w = e.currentTarget.dataset.w;
+    if (!w) return;
+    this.setData({ needPicked: w });
+    const log = wx.getStorageSync('hb_scanNeed') || [];
+    log.push({ w, t: Date.now() });
+    wx.setStorageSync('hb_scanNeed', log.slice(-30));
+    wx.showToast({ title: '记下了，今天就给自己这一件 ☀️', icon: 'none' });
   },
 
   goBreathe() { wx.navigateTo({ url: '/pages/breathe/breathe' }); },

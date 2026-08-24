@@ -74,3 +74,11 @@
 .bm-chip { padding: 10rpx 24rpx; border-radius: 26rpx; background: #eef3f8; color: #6b7a8e; font-size: 24rpx; }
 .bm-chip.primary { background: #e3eeff; color: #3f6aa8; }
 .btn-ghost.sm { width: auto; padding: 8rpx 20rpx; font-size: 24rpx; margin: 14rpx auto 6rpx; }
+
+/* 今天身体最需要什么 */
+.need-pick { margin-top: 16rpx; }
+.np-label { font-size: 24rpx; color: #8a93a8; margin-bottom: 10rpx; }
+.np-row { display: flex; flex-wrap: wrap; gap: 12rpx; }
+.np-chip { padding: 10rpx 22rpx; border-radius: 28rpx; background: #eef3f8; color: #6b7a8e; font-size: 24rpx; }
+.np-chip.on { background: #e3f6e3; color: #3f7a4f; }
+.np-picked { margin-top: 10rpx; font-size: 23rpx; color: #5f8a6a; }
