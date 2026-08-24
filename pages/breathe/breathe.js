@@ -44,6 +44,8 @@ Page({
     phase: 'ready', // ready | in | hold | out | done
     napOn: false,    // 小憩 20 分钟（独立计时，不占呼吸节奏）
     napLeft: '20:00', // 剩余 mm:ss
+    pomoOn: false,   // 专注 25 分（番茄钟）
+    pomoLeft: '25:00',
     round: 0,
     total: 4,
     ball: 150,
@@ -295,6 +297,7 @@ Page({
     this._stop = true;
     (this._timers || []).forEach((t) => clearTimeout(t));
     this._napTimer && clearInterval(this._napTimer);
+    this._pomoTimer && clearInterval(this._pomoTimer);
   },
 
   // 小憩 20 分钟：午休/考前间隙的小睡计时（到点震动+轻提示）
@@ -318,6 +321,29 @@ Page({
   stopNap() {
     this._napTimer && clearInterval(this._napTimer); this._napTimer = null;
     this.setData({ napOn: false, napLeft: '20:00' });
+  },
+
+  // 专注 25 分番茄钟：复习/写作业的整块专注时间，到点提醒起身
+  startPomo() {
+    if (this._pomoTimer) clearInterval(this._pomoTimer);
+    this._pomoEnds = Date.now() + 25 * 60000;
+    this.setData({ pomoOn: true, pomoLeft: '25:00' });
+    this._pomoTimer = setInterval(() => {
+      const left = Math.max(0, this._pomoEnds - Date.now());
+      const mm = String(Math.floor(left / 60000)).padStart(2, '0');
+      const ss = String(Math.floor((left % 60000) / 1000)).padStart(2, '0');
+      this.setData({ pomoLeft: mm + ':' + ss });
+      if (left <= 0) {
+        clearInterval(this._pomoTimer); this._pomoTimer = null;
+        this.setData({ pomoOn: false, pomoLeft: '25:00' });
+        wx.vibrateShort && wx.vibrateShort({ type: 'medium' });
+        wx.showModal({ title: '🍅 25 分钟到了', content: '站起来走走，喝口水，看窗外 5 分钟——脑子需要这几分钟的「离场」才能接住下一段专注。', showCancel: false, confirmText: '好的' });
+      }
+    }, 1000);
+  },
+  stopPomo() {
+    this._pomoTimer && clearInterval(this._pomoTimer); this._pomoTimer = null;
+    this.setData({ pomoOn: false, pomoLeft: '25:00' });
   },
 
   // 切换呼吸节奏（不开始时生效；进行中会先结束当前练习）
