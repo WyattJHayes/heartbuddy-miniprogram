@@ -116,6 +116,12 @@
       <view class="text-muted mdelta" wx:if="{{monthInfo.delta}}">{{monthInfo.delta}}<text wx:if="{{monthInfo.avgInt}}"> · 平均强度 {{monthInfo.avgInt}}</text></view>
     </view>
 
+    <view class="card mt exam-cmp" wx:if="{{examCmp}}" role="note" aria-label="考试期前后情绪对比">
+      <view class="section-title">📚 {{examCmp.name}} · 考试期前后</view>
+      <view class="month-hl">{{examCmp.text}}</view>
+      <view class="exam-hint">想一键生成「考前 vs 考后」分享卡？先设好考试日，数据自动对比。</view>
+    </view>
+
     <button class="btn-ghost full mt" bindtap="openShare">生成分享卡片</button>
     <button class="btn-ghost full mt" bindtap="copyWeekText">复制文字版周报</button>
     <button class="btn-primary full mt" bindtap="goChat">继续和心语聊聊</button>

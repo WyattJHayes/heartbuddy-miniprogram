@@ -159,7 +159,7 @@ Page({
     this.setData({ history: wx.getStorageSync('weekReportHistory') || [] });
   },
 
-  onShow() { this.fetchWeek(); this.fetchMonth(); this.fetchWeeks(); this.fetchYear(); this.refreshNote(); this.loadFutureNote(); },
+  onShow() { this.fetchWeek(); this.fetchMonth(); this.fetchWeeks(); this.fetchYear(); this.refreshNote(); this.loadFutureNote(); this.fetchExamCmp(); },
 
   async fetchWeek() {
     let openid = app.globalData.openid;
@@ -361,7 +361,52 @@ Page({
     return '最近两天情绪偏低，别硬扛。可以到「呼吸」做 3 分钟放松，或找我聊聊 🌿';
   },
 
-  // 月度小结：本月记录/覆盖天数/构成 Top3/与上月均值对比（与周报并行加载）
+  // 考试期前后对比：用「我的」设的考试日，看考前 5 天 vs 考后 5 天的情绪均值（云端 moods）
+  async fetchExamCmp() {
+    try {
+      const dateStr = wx.getStorageSync('hb_examDate') || '';
+      const name = wx.getStorageSync('hb_examName') || '考试';
+      if (!dateStr) { this.setData({ examCmp: null }); return; }
+      const ex = new Date(dateStr); ex.setHours(0, 0, 0, 0);
+      const DAY = 86400000;
+      const win = 5 * DAY;
+      let openid = app.globalData.openid;
+      if (!openid) openid = await app.login();
+      if (!openid) return;
+      const db = wx.cloud.database();
+      const _ = db.command;
+      const before = new Date(ex.getTime() - win).getTime(), after = new Date(ex.getTime() + DAY).getTime();
+      let pre = [], post = [];
+      try {
+        const r1 = await db.collection('moods').where({ openid, createdAt: _.gte(before).and(_.lt(ex.getTime())) }).limit(100).get();
+        const r2 = await db.collection('moods').where({ openid, createdAt: _.gte(after).and(_.lte(ex.getTime() + 5 * DAY)) }).limit(100).get();
+        pre = r1.data || []; post = r2.data || [];
+      } catch (e) { /* 某些云端配置下查询为空也直接忽略 */ }
+      const avg = (arr) => {
+        const v = (arr || []).map((m) => MOOD_SCORE[m.mood]).filter((x) => typeof x === 'number');
+        return v.length ? +(v.reduce((a, b) => a + b, 0) / v.length).toFixed(1) : null;
+      };
+      const a1 = avg(pre), a2 = avg(post);
+      if (a1 == null && a2 == null) { this.setData({ examCmp: null }); return; }
+      let text = '';
+      if (a1 != null && a2 != null) {
+        text = a2 > a1 + 0.3
+          ? `考后情绪均值 ${a2} 分，比考前（${a1}）高了——那个「撑过去」的时刻，身体都记得。`
+          : a2 < a1 - 0.3
+            ? `考后均值 ${a2}，比考前低了一些。允许自己慢一点，那些日子也可以被照顾。`
+            : `考前后情绪都比较平稳（${a1} → ${a2}），这已经很了不起。`;
+      } else if (a1 != null) {
+        text = `考前 5 天情绪均值 ${a1} 分——回头看看那个撑过来的自己吧。`;
+      } else {
+        text = `考后请 5 天均值 ${a2} 分——给自己一个新阶段轻轻开门。`;
+      }
+      this.setData({ examCmp: { name, text } });
+    } catch (err) {
+      console.warn('[report] 考试期对比失败', err);
+    }
+  },
+
+  // 月度小结：覆盖天数/构成 Top3/与上月均值对比（与周报并行加载）
   async fetchMonth() {
     try {
       let openid = app.globalData.openid;
