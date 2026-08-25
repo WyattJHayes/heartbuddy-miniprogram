@@ -347,3 +347,6 @@
 .ev-title { font-size: 23rpx; color: #4f7a55; margin-bottom: 6rpx; }
 .ev-line { font-size: 23rpx; color: #3f6a46; line-height: 1.6; }
 .ev-tail { margin-top: 6rpx; font-size: 22rpx; color: #7a9a80; }
+
+.joy-row { margin-top: 6rpx; }
+.joy-btn { color: #b07a3f; font-size: 24rpx; text-decoration: underline; }

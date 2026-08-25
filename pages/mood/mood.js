@@ -913,6 +913,33 @@ Page({
     wx.showToast({ title: on ? '今天也欢迎回来记一笔 ☀️' : '收到，今天不评判自己 🌿', icon: 'none' });
   },
 
+  // 快乐菜单：低落时翻开，随机 3 件「小确幸」（本地默认菜单 + 自己加的）
+  openJoyMenu() {
+    const ME = [
+      '听一首很久没听的歌，只放一遍',
+      '给植物/桌面擦擦灰——小小秩序感',
+      '喝一口烫的水，慢慢咽下去',
+      '抄一句喜欢的句子到本子上',
+      '晒 10 分钟太阳，看头顶的云',
+      '把手机倒扣，发呆 60 秒',
+      '给一个朋友发「今天过得怎么样」',
+      '吃一种平时不买的水果',
+      '把乱了的抽屉收出一个角',
+      '出门走 5 分钟，绕一圈回来',
+      '现在写下最近一次大笑是什么时候',
+      '深呼一口气，把肩膀放下来'
+    ];
+    const extra = wx.getStorageSync('hb_joyCustom') || [];
+    const pool = ME.concat(extra);
+    const picked = pool.slice().sort(() => Math.random() - 0.5).slice(0, 3);
+    wx.showModal({
+      title: '☕ 快乐菜单 · 挑一件',
+      content: picked.map((t, i) => (i + 1) + '）' + t).join('\n') + '\n\n不用全做完，做一件就够。',
+      confirmText: '先做第 1 件',
+      cancelText: '关掉'
+    });
+  },
+
   // ---- 心情日历（月视图签到：按月看每天记了什么）----
   buildCal(raw) {
     let y = this.data.calYear, m = this.data.calMonth;
