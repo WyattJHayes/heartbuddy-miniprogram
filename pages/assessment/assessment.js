@@ -172,7 +172,7 @@ Page({
       const list = (res.data || []).map((a) => ({
         date: this.fmt(a.createdAt),
         total: a.total,
-        level: a.level || '—',
+        level: (a.quick ? '⚡ ' : '') + (a.level || '—'),
         items: Array.isArray(a.items) ? a.items.slice(0, 7) : []
       }));
       let histDelta = '';
@@ -310,7 +310,7 @@ Page({
       if (!openid) openid = await app.login();
       const db = wx.cloud.database();
       await db.collection('assessments').add({
-        data: { openid, name: '考前焦虑自评', total, level: lv.label, items: answers, createdAt: Date.now() }
+        data: { openid, name: '考前焦虑自评', total, level: lv.label, items: answers, createdAt: Date.now(), quick: !!this.data.quickMode }
       });
       wx.setStorageSync('lastAssessment', { total, label: lv.label, ts: Date.now() });
       wx.setStorageSync('ach_assess', true); // 成就：认识自己
