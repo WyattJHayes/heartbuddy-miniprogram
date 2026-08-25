@@ -287,6 +287,28 @@ Page({
     });
   },
 
+  // 我的常用语：聊天页攒下的口头禅，在这里回看/一键清空
+  myPhrases() {
+    const list = wx.getStorageSync('hb_myPhrases') || [];
+    if (!list.length) {
+      wx.showModal({ title: '我的常用语', content: '还没有常用语。在聊天里长按 AI 说的话，选「并入我的常用语」，它就会出现在这里。', showCancel: false, confirmText: '知道啦' });
+      return;
+    }
+    const body = list.map((t, i) => (i + 1) + '）' + t).join('\n');
+    wx.showModal({
+      title: '我的常用语（' + list.length + '/5）',
+      content: body + '\n\n清空后可以重新攒。',
+      confirmText: '清空',
+      cancelText: '保留',
+      success: (r) => {
+        if (r.confirm) {
+          wx.removeStorageSync('hb_myPhrases');
+          wx.showToast({ title: '已清空，随时重新攒 🍀', icon: 'none' });
+        }
+      }
+    });
+  },
+
   // 送给朋友的一句鼓励：朋友正难时，说「绵绵的话」而不是「大道理」（三句可复制）
   encourageFriend() {
     const d = new Date();
