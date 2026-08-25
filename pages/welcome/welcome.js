@@ -346,7 +346,7 @@ Page({
     if (!t) return;
     wx.setStorageSync('hb_chatSeed', t);
     wx.navigateTo({ url: '/pages/chat/chat' });
-  },,
+  },
 
   // 分享给朋友：今日一句当作欢迎语（未同意前也可把温柔带给别人）
   onShareAppMessage() {
