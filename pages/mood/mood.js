@@ -1230,13 +1230,17 @@ Page({
       dayMap[k].n += 1;
       dayMap[k].s += MOOD_SCORE[m.mood] !== undefined ? MOOD_SCORE[m.mood] : 3;
     });
+    let bestDay = null, bestAvg = -1;
     Object.keys(dayMap).forEach((k) => {
-      if (dayMap[k].s / dayMap[k].n >= 3.5) calm += 1;
+      const avg = dayMap[k].s / dayMap[k].n;
+      if (avg >= 3.5) calm += 1;
+      if (avg > bestAvg) { bestAvg = avg; bestDay = Number(k); }
     });
     const station = Number(wx.getStorageSync('hb_stationRead') || 0);
     const lines = [];
     if (calm) lines.push('· 你拥有了 ' + calm + ' 个平静的日子 🌤');
     if (count) lines.push('· 你认真记下了 ' + count + ' 次心情');
+    if (bestDay && bestAvg >= 3.5) lines.push('· 这个月最平静的一天是 ' + bestDay + ' 日（' + bestAvg.toFixed(1) + ' 分）——那天你做了什么，值得再试一次');
     if (station) lines.push('· 你打开过情绪充电站 ' + station + ' 次，去给自己找办法');
     if (!lines.length) return null;
     return { lines, tail: '这些都是你照顾自己的证据——不用「更好」，你已经走到这里了。' };
