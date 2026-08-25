@@ -13,6 +13,7 @@ Page({
     newCount: 0,        // 还没看过的卡片数（NEW 角标）
     drawOther: '',      // 抽一张后顺带推荐的另一张
     recMood: '',    // 最近一次心情（关键词推荐来源）
+    stLarge: false,   // 大字模式（无障碍，本地记住）
     recCards: null,  // 推荐卡 {index,title} 列表
     stReads: {},        // 各卡已读次数（展示用）
     cards: [
@@ -365,6 +366,13 @@ Page({
 
   // 关键词搜索（与标签筛选叠加生效）
   // 把收藏的卡拼成一段可发朋友的文字（含每张卡第一句）
+  toggleLarge() {
+    const on = !this.data.stLarge;
+    wx.setStorageSync('hb_stLarge', on);
+    this.setData({ stLarge: on });
+    wx.showToast({ title: on ? '已切换大字 📖' : '已切回标准字', icon: 'none' });
+  },
+
   copyFavs() {
     const favs = this.data.favTitles || [];
     if (!favs.length) { wx.showToast({ title: '先收藏一两张卡', icon: 'none' }); return; }
@@ -435,6 +443,7 @@ Page({
   },
 
   onShow() {
+    this.setData({ stLarge: wx.getStorageSync('hb_stLarge') === true });
     if (!this._allCards) this._allCards = this.data.cards.slice();
     // NEW 标记：没看过的卡（hb_stReads 无记录）计数，展开过自动消
     const reads0 = wx.getStorageSync('hb_stReads') || {};

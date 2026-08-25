@@ -90,3 +90,13 @@
 .st-rec-item { font-size: 23rpx; color: #3f6a46; line-height: 1.7; }
 
 .fav-copy { margin-left: 16rpx; color: #4f6fae; font-size: 22rpx; text-decoration: underline; }
+
+.st-large-toggle { position: absolute; top: 20rpx; right: 20rpx; padding: 6rpx 16rpx; border-radius: 20rpx; background: #eef3fa; color: #5a7fb8; font-size: 22rpx; }
+.station-page { position: relative; }
+.station-page.large .ls-title,
+.station-page.large .st-hero-title { font-size: 34rpx; }
+.station-page.large .card-line,
+.station-page.large .lq-q,
+.station-page.large .faq-a { font-size: 30rpx; line-height: 1.8; }
+.station-page.large .st-rec-t,
+.station-page.large .daily-line { font-size: 28rpx; }

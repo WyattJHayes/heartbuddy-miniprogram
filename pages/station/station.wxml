@@ -1,8 +1,9 @@
-<view class="station-page">
+<view class="station-page {{stLarge ? 'large' : ''}}">
   <view class="st-hero">
     <view class="st-hero-emoji">🔋</view>
     <view class="st-hero-title">情绪充电站</view>
     <view class="st-hero-sub">不是鸡汤，是能马上做的小事<text class="new-badge" wx:if="{{newCount}}">{{newCount}} 张待看 NEW</text></view>
+    <view class="st-large-toggle" bindtap="toggleLarge" role="button" aria-label="切换大字模式">{{stLarge ? '📖 标准字' : '🔎 大字模式'}}</view>
   </view>
 
   <!-- 最近心情推荐：读最近一次心情，按情绪给 3 张卡（安静、不打扰） -->
