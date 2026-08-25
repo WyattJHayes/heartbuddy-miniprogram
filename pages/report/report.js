@@ -159,7 +159,7 @@ Page({
     this.setData({ history: wx.getStorageSync('weekReportHistory') || [] });
   },
 
-  onShow() { this.fetchWeek(); this.fetchMonth(); this.fetchWeeks(); this.fetchYear(); this.refreshNote(); this.loadFutureNote(); this.fetchExamCmp(); },
+  onShow() { this.fetchWeek(); this.fetchMonth(); this.fetchWeeks(); this.fetchYear(); this.refreshNote(); this.loadFutureNote(); this.fetchExamCmp(); this.loadSleep(); },
 
   // 考试得分记录：手动记下一场，看自己的轨迹（本地）
   loadExamNotes() {
@@ -185,6 +185,29 @@ Page({
     wx.setStorageSync('hb_examNotes', list.slice(0, 12));
     this.setData({ examNotes: list.slice(0, 12), examSub: '', examScore: '' });
     wx.showToast({ title: '记下了，下一场更有数', icon: 'none' });
+  },
+
+  // 睡眠小账：近 7 天的入睡计划平均（21 点后打卡）
+  loadSleep() {
+    const log = wx.getStorageSync('hb_sleepLog') || {};
+    const now = new Date();
+    const vals = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(now.getTime() - i * 86400000).toDateString();
+      const h = log[d];
+      if (h === '22') vals.push(22);
+      else if (h === '23') vals.push(23);
+      else if (h === '0') vals.push(24);
+      else if (h === 'later') vals.push(26);
+    }
+    if (vals.length < 2) return;
+    const avg = (vals.reduce((a, c) => a + c, 0) / vals.length).toFixed(1);
+    const hh = Math.floor(avg), mm = Math.round((avg - hh) * 60);
+    let note = '近 7 天你留了 ' + vals.length + ' 次入睡计划，平均约 ' + hh + ' 点' + (mm ? String(mm).padStart(2, '0') + ' 分' : '') + ' 入睡';
+    if (hh <= 23) note += '——早了一点点，身体会记得 🌙';
+    else if (hh <= 24) note += '——再早半小时，明天会更轻快';
+    else note += '——有点熬，试着把睡前屏放松一点 🍵';
+    this.setData({ sleepNote: note });
   },
 
   async fetchWeek() {

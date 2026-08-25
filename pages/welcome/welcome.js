@@ -104,6 +104,8 @@ Page({
     this.setData({ afterword: wx.getStorageSync('hb_examAfterword') || '', afterSaved: !!wx.getStorageSync('hb_examAfterword') }); // 考后归位
     this.setData({ afterShow: this.buildExamAfter() }); // 考完 1-3 天归位输入
     this.setData({ nightWrap: new Date().getHours() >= 21 && new Date().getHours() < 24 }); // 晚间收个尾
+    const sl = wx.getStorageSync('hb_sleepLog') || {};
+    this.setData({ sleepRec: sl[new Date().toDateString()] || null }); // 今晚打算几点睡
     this.setData({ openCount: wx.getStorageSync('hb_openCount') || 0 }); // 陪伴纪念日：第 N 次回来
     const savedRole = wx.getStorageSync('hb_role') || '';
     this.setData({ role: savedRole, roleTip: ROLE_HINT[savedRole] || '' });
@@ -185,6 +187,17 @@ Page({
     wx.setStorageSync('hb_examAfterword', t);
     this.setData({ afterSaved: true });
     wx.showToast({ title: '收好了——那场考试，正式翻页 🌈', icon: 'none' });
+  },
+
+  // 睡眠小账本：睡前选一个「打算几点睡」，本地记录，周报看平均
+  pickSleep(e) {
+    const hour = e.currentTarget.dataset.h;
+    const today = new Date().toDateString();
+    const rec = wx.getStorageSync('hb_sleepLog') || {};
+    rec[today] = hour;
+    wx.setStorageSync('hb_sleepLog', rec);
+    this.setData({ sleepRec: hour });
+    wx.showToast({ title: '记下了，晚安 🌙', icon: 'none' });
   },
 
   // 考前 7 天「每天一点点」：第 7 天到考前一天每天一个 5 分钟动作

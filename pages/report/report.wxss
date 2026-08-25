@@ -117,3 +117,5 @@
 .en-item { display: flex; justify-content: space-between; font-size: 24rpx; color: #3a4a63; line-height: 1.9; }
 .en-sub { max-width: 60%; }
 .en-sc { color: #3f6fae; font-weight: 600; }
+
+.sleep-note { border: 1rpx solid #e2e8f2; }

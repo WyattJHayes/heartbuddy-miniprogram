@@ -139,6 +139,11 @@
       <view class="text-muted" wx:if="{{!examNotes.length}}">先记下一场，慢慢就有了自己的「分数轨迹」。</view>
     </view>
 
+    <view class="card mt sleep-note" wx:if="{{sleepNote}}" role="note" aria-label="近7天入睡计划">
+      <view class="section-title">😴 睡眠小账</view>
+      <view class="text-muted">{{sleepNote}}</view>
+    </view>
+
     <button class="btn-ghost full mt" bindtap="openShare">生成分享卡片</button>
     <button class="btn-ghost full mt" bindtap="copyWeekText">复制文字版周报</button>
     <button class="btn-primary full mt" bindtap="goChat">继续和心语聊聊</button>

@@ -138,3 +138,8 @@
 .night-wrap { margin-top: 12rpx; background: #1f2937; border: 1rpx solid #334155; border-radius: 14rpx; padding: 16rpx; }
 .nw-t { color: #cdd7e3; font-size: 25rpx; font-weight: 600; margin-bottom: 8rpx; }
 .nw-line { color: #8fa3ba; font-size: 23rpx; line-height: 1.7; }
+
+.sl-row { margin-top: 10rpx; display: flex; align-items: center; gap: 8rpx; flex-wrap: wrap; }
+.sl-l { color: #8fa3ba; font-size: 22rpx; margin-right: 4rpx; }
+.sl-chip { padding: 6rpx 16rpx; border-radius: 18rpx; background: #2a3646; color: #9fb2c8; font-size: 22rpx; }
+.sleep-chip.on { background: #3f6fae; color: #fff; }
