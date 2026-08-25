@@ -340,6 +340,9 @@ Page({
     wx.setClipboardData({ data: this.data.todayLine, success: () => wx.showToast({ title: '已复制今日一句话', icon: 'none' }) });
   },
 
+  // 出门前一轮呼吸：考试早晨卡直达
+  goBreatheNow() { wx.navigateTo({ url: '/pages/breathe/breathe' }); },
+
   // 拿今日一句去聊聊：把这句话作为开场白带进聊天页
   goChatWithLine() {
     const t = this.data.todayLine;

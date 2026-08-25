@@ -102,6 +102,7 @@
     <view class="em-line">③ 证件笔放门口，出门前扫一眼</view>
     <view class="em-line">④ 路上做 3 次深呼吸，把「难」换成「到考场再说」</view>
     <view class="em-line">⑤ 到场先对自己说：你已经准备很久了</view>
+    <view class="em-breath" bindtap="goBreatheNow" role="button" aria-label="出门前做一轮呼吸">🌬 出门前，先来一轮呼吸 ›</view>
   </view>
 
   <view class="nurture" role="group" aria-label="今日滋养三连">

@@ -147,3 +147,5 @@
 .night-safe { margin-top: 12rpx; background: #232c3d; border: 1rpx solid #3a4658; border-radius: 14rpx; padding: 14rpx 16rpx; color: #9fb0c5; font-size: 23rpx; line-height: 1.7; }
 
 .wl-chat { margin-top: 6rpx; display: inline-block; color: #5f8ac0; font-size: 23rpx; }
+
+.em-breath { margin-top: 10rpx; color: #4a7fb5; font-size: 24rpx; text-decoration: underline; }
