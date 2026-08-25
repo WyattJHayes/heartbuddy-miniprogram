@@ -74,6 +74,8 @@ Page({
     selfLast: null,     // { date, done } 上次收尾
     selfResumeStep: 0,   // >0 表示有未走完的存档（第几步），可一键接着走
     followCare: null     // 回访关怀卡 { note, dueAt, dueText }
+    ,stood: false            // 今天是否已按过「我撑过来了」
+    ,stoodCount: 0            // 累计撑过来的天数（本地）
     ,hushCare: false   // 求助后静音关怀：安排回访 3 天内，顶部一条轻量不打扰的卡
     ,smartTip: null,      // 智能分流：此刻建议（按时段/连续低情绪天数，轻提示不打扰）
     // 担忧交给明天：睡前把心里挂的事写下来，明早回看（本地，与三件小事呼应但独立）
@@ -366,7 +368,22 @@ Page({
     });
   },
 
+  // 「我撑过来了」每日打卡：今天也撑过来了，就记一笔（本地）
+  stoodToday() {
+    return wx.getStorageSync('hb_stood_' + new Date().toDateString()) === true;
+  },
+  tapStood() {
+    if (this.stoodToday()) { wx.showToast({ title: '今天已经记过啦', icon: 'none' }); return; }
+    const today = new Date().toDateString();
+    wx.setStorageSync('hb_stood_' + today, true);
+    const n = Number(wx.getStorageSync('hb_stoodCount') || 0) + 1;
+    wx.setStorageSync('hb_stoodCount', n);
+    this.setData({ stood: true, stoodCount: n });
+    wx.showToast({ title: '记下了——你真的撑过来了 🌿', icon: 'none' });
+  },
+
   onShow() {
+    this.setData({ stood: this.stoodToday(), stoodCount: Number(wx.getStorageSync('hb_stoodCount') || 0) });
     this.loadFollowUp();
     this.loadHushCare();
     this.loadSmartTip();

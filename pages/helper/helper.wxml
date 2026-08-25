@@ -9,6 +9,10 @@
     <view class="hc-text">你把今天的担子交给了心语。这三天不用急，照顾好自己；想说话的时候，我一直在听。</view>
   </view>
 
+  <!-- 今天也撑过来了：每日一次小确认 -->
+  <view class="card stood-card" wx:if="{{!stood}}" role="button" bindtap="tapStood" aria-label="今天也撑过来了，点一下记一笔">🌿 今天我也撑过来了 <text class="sc-tap">点一下记一笔 ›</text></view>
+  <view class="card stood-card done" wx:if="{{stood}}" role="note" aria-label="今天已确认撑过来">🌿 今天你也撑过来了（累计 {{stoodCount}} 天）——辛苦了。</view>
+
   <!-- 现在最需要什么：三方向快速分流（导航，不给结论） -->
   <view class="card now-tg" wx:if="{{!triageDone}}">
     <view class="section-title">现在最需要什么？选一个方向</view>

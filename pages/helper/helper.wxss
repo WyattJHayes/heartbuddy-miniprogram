@@ -196,3 +196,7 @@
 .gc-t { font-size: 25rpx; color: #4a4f6a; font-weight: 600; margin-bottom: 4rpx; }
 .gc-d { font-size: 23rpx; color: #6b7a8e; line-height: 1.6; }
 .gc-copy { margin-top: 8rpx; color: #4f6aae; font-size: 24rpx; text-decoration: underline; }
+
+.stood-card { background: #f0f7f0; border: 1rpx solid #d8ecd9; color: #4a7a55; font-size: 25rpx; }
+.stood-card .sc-lead { color: #7a9a80; font-size: 22rpx; }
+.stood-card.done { background: #f5f7f2; border-color: #e2e7dd; color: #7a8a70; }
