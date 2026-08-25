@@ -17,6 +17,10 @@
   <view class="draw-msg" wx:if="{{drawMsg}}" role="note" aria-label="抽中提示">🎴 {{drawMsg}}
     <view class="draw-other" wx:if="{{drawOther}}" bindtap="openDrawOther" role="button" aria-label="展开另一张推荐卡片">也许这张也有用：「{{drawOther}}」›</view>
   </view>
+  <view class="draw-hist" wx:if="{{drawHist.length}}" role="group" aria-label="最近抽过的卡">
+    <text class="dh-t">最近抽过：</text>
+    <text class="dh-item" wx:for="{{drawHist}}" wx:key="t" data-t="{{item.t}}" bindtap="openDrawCard" role="button" aria-label="打开这张卡">{{item.t}}</text>
+  </view>
 
   <!-- 常读提示：你最常翻的一张卡 -->
   <view class="top-read" wx:if="{{topRead}}" role="note" aria-label="最常翻的卡片">

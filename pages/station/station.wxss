@@ -100,3 +100,7 @@
 .station-page.large .faq-a { font-size: 30rpx; line-height: 1.8; }
 .station-page.large .st-rec-t,
 .station-page.large .daily-line { font-size: 28rpx; }
+
+.draw-hist { margin: 8rpx 16rpx 0; display: flex; flex-wrap: wrap; gap: 6rpx; align-items: center; }
+.dh-title { color: #9aa8bd; font-size: 21rpx; }
+.dh-item { padding: 4rpx 12rpx; border-radius: 12rpx; background: #eef3fa; color: #5a7fb8; font-size: 21rpx; }

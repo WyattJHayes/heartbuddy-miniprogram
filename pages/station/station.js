@@ -608,7 +608,20 @@ Page({
       drawMsg: cnt[c.title] > 1 ? '第 ' + cnt[c.title] + ' 次抽中「' + c.title + '」——它好像特别懂你。' : '',
       drawOther: other ? other.title : ''
     });
+    // 抽卡历史：去重后保留最近 6 条（本地）
+    const hist = wx.getStorageSync('hb_drawLog') || [];
+    const cur = { t: c.title, d: today };
+    const merged = [cur].concat(hist.filter((h2) => !(h2.t === cur.t && h2.d === cur.d))).slice(0, 6);
+    wx.setStorageSync('hb_drawLog', merged);
+    this.setData({ drawHist: merged });
     wx.vibrateShort && wx.vibrateShort({ type: 'light' });
+  },
+
+  // 抽卡历史点开：把那张卡展开
+  openDrawCard(e) {
+    const t = e.currentTarget.dataset.t;
+    const i = (this.data.cards || []).findIndex((x) => x.title === t);
+    if (i >= 0) this.setData({ open: i });
   },
 
   openDrawOther() {
