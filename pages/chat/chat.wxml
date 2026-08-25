@@ -204,6 +204,14 @@ module.exports = { divider: divider };
       <view class="quick-panel-list" wx:if="{{roleAsk.length}}">
         <view class="quick-panel-item topic" wx:for="{{roleAsk}}" wx:key="*this" data-t="{{item}}" bindtap="onRoleAsk">{{item}}</view>
       </view>
+      <view class="quick-panel-title topic">📊 聊完了？给自己的状态打个分</view>
+      <view class="quick-panel-list rate-list">
+        <view class="rate-chip {{chatRated === 1 ? 'on' : ''}}" data-v="1" bindtap="rateChat" role="button" aria-label="状态1分">1 🌧</view>
+        <view class="rate-chip {{chatRated === 2 ? 'on' : ''}}" data-v="2" bindtap="rateChat" role="button" aria-label="状态2分">2 ☁️</view>
+        <view class="rate-chip {{chatRated === 3 ? 'on' : ''}}" data-v="3" bindtap="rateChat" role="button" aria-label="状态3分">3 🙂</view>
+        <view class="rate-chip {{chatRated === 4 ? 'on' : ''}}" data-v="4" bindtap="rateChat" role="button" aria-label="状态4分">4 😊</view>
+        <view class="rate-chip {{chatRated === 5 ? 'on' : ''}}" data-v="5" bindtap="rateChat" role="button" aria-label="状态5分">5 ✨</view>
+      </view>
       <view class="quick-panel-title topic">💬 今天想聊点什么？</view>
       <view class="quick-panel-list topic">
         <view class="quick-panel-item topic" data-t="friend" bindtap="onTopic" role="button" aria-label="想聊朋友的事">朋友的小别扭</view>

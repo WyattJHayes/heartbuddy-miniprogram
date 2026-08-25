@@ -227,3 +227,7 @@
 
 .daily-q { margin: 8rpx 16rpx 4rpx; background: #eef4fd; border: 1rpx solid #d3e3f8; border-radius: 12rpx; padding: 10rpx 14rpx; color: #4a6fa5; font-size: 23rpx; }
 .dq-go { color: #7a9cc8; font-size: 21rpx; }
+
+.rate-list { display: flex; gap: 10rpx; }
+.rate-chip { padding: 8rpx 20rpx; border-radius: 22rpx; background: #f2f5fa; color: #6b7a8e; font-size: 24rpx; }
+.rate-chip.on { background: #ffe9c7; color: #a5712e; }

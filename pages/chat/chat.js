@@ -131,6 +131,7 @@ Page({
     this.setData({ isNight });
     this.initRoleAsk(); // 老师/家长视角（欢迎页身份）
     this.buildDailyQ(); // 今日一问
+    this.setData({ chatRated: (wx.getStorageSync('hb_chatMood') || {})[new Date().toDateString()] || 0 }); // 今日已打分
     // 间隔问候：距上次打开聊天 ≥2 天，轻提一句（不算打扰，只是「还在」）
     const lastTs = wx.getStorageSync('hb_lastChatTs') || 0;
     if (lastTs) {
@@ -488,7 +489,7 @@ Page({
     const isUser = item.role === 'user';
     const itemList = isUser
       ? ['复制这条消息', '引用这条', '珍藏（存到我的珍藏）', '存进想法盒（7 天后回看）', '撤回我的这条']
-      : ['复制一句话', '引用这句话', '珍藏（存到我的珍藏）', '存进想法盒（7 天后回看）', '换个说法（重新生成）', '并入我的常用语（点一下就能再说）'];
+      : ['复制一句话', '引用这句话', '珍藏（存到我的珍藏）', '存进想法盒（7 天后回看）', '换个说法（重新生成）', '并入我的常用语（点一下就能再说）', '这句没帮到我'];
     wx.showActionSheet({
       itemList,
       success: (r) => {
@@ -538,6 +539,11 @@ Page({
           }
           this.setData({ myPhrases: phrases });
           wx.showToast({ title: '已并入常用语，随时点一下就能再说 🍀', icon: 'none' });
+        } else if (!isUser && r.tapIndex === 6) {
+          // 这句没帮到我：记一条轻反馈（本地计数），并温柔回应
+          const miss = wx.getStorageSync('hb_fbMiss') || 0;
+          wx.setStorageSync('hb_fbMiss', Number(miss) + 1);
+          this.pushAI('谢谢你告诉我。这句话没接住你，是我的功课。愿意的话，换种说法再讲一次——比如「我其实是想要……」，我会更懂你一点。');
         }
       }
     });
@@ -951,6 +957,19 @@ Page({
   // 今日一问：每天换一个轻起手（不知道说什么的时候，点它就行）
   sendDailyQ() {
     if (this.data.dailyQ) this.send(this.data.dailyQ);
+  },
+
+  // 聊完给自己的状态打个分（1-5，纯本地）：不评判，只留轨迹
+  rateChat(e) {
+    const v = Number(e.currentTarget.dataset.v);
+    if (!v) return;
+    const today = new Date().toDateString();
+    const rec = wx.getStorageSync('hb_chatMood') || {};
+    rec[today] = v;
+    wx.setStorageSync('hb_chatMood', rec);
+    const NOTES = { 1: '记下了。今天不容易，你已经撑过来了 🌧', 2: '收到，低一点也没关系——明天我们慢慢来 ☁️', 3: '平平的一天也是一种稳。记下了 🙂', 4: '不错呀，把这个感觉记住 😊', 5: '太好了！今天的你闪闪发光 ✨' };
+    this.setData({ chatRated: v });
+    wx.showToast({ title: NOTES[v] || '记下了', icon: 'none' });
   },
 
   buildDailyQ() {
