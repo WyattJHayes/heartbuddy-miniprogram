@@ -94,3 +94,14 @@ page { background: #F7F8FB; }
 .et-text { color: #a5712e; font-size: 24rpx; line-height: 1.6; flex: 1; }
 
 .lq-gold { margin-top: 8rpx; color: #b97a4a; font-size: 22rpx; text-decoration: underline; }
+
+.prep-box { margin: 6rpx 0 10rpx; background: #f2f7ff; border: 1rpx solid #d5e6fb; border-radius: 12rpx; padding: 12rpx 14rpx; }
+.prep-t { font-size: 25rpx; color: #3f5f8f; margin-bottom: 8rpx; }
+.prep-row { display: flex; gap: 8rpx; }
+.prep-in { flex: 1; background: #fff; border: 1rpx solid #d9e7fb; border-radius: 8rpx; padding: 8rpx 10rpx; font-size: 24rpx; }
+.prep-in.wide { flex: 2; }
+.prep-go { margin-top: 8rpx; color: #3f6fae; font-size: 24rpx; text-align: right; }
+.prep-out { margin: 6rpx 0 10rpx; background: #f2f9f2; border: 1rpx solid #d8ecd9; border-radius: 12rpx; padding: 12rpx 14rpx; }
+.prep-day { font-size: 23rpx; color: #3f6a46; line-height: 1.8; }
+.pd-d1 { font-weight: 600; }
+.prep-reset { margin-top: 6rpx; color: #7a9a80; font-size: 22rpx; text-align: right; }

@@ -412,6 +412,30 @@ Page({
 
   // 结业卡：全部学完后可复制的一段「结业词」（本地，留念/分享）
   // 复制这一课：分享给朋友 / 转发到班群都方便（纯文本）
+  prepDaysInput(e) { this.setData({ prepDays: e.detail.value }); },
+  prepSubsInput(e) { this.setData({ prepSubs: e.detail.value }); },
+  // 备考小助手：天数和科目 → 平均分给每天，每科配 1 个动作
+  genPrepPlan() {
+    const days = parseInt(this.data.prepDays, 10);
+    const subs = (this.data.prepSubs || '').split(/[,，]/).map((x) => x.trim()).filter(Boolean);
+    if (!days || days < 1 || days > 60) { wx.showToast({ title: '先填一个 1-60 的天数', icon: 'none' }); return; }
+    if (!subs.length) { wx.showToast({ title: '填一下科目，用逗号分隔', icon: 'none' }); return; }
+    const ACTS = {
+      数学: '3 道基础题，重方法不改资料', 语文: '2 分钟背，圈 3 个句式', 英语: '15 个高频词 + 一段朗读',
+      物理: '吃透一个方法，做 3 题', 化学: '抄一套方程式，条件写旁边', 生物: '读一节，画 1 张迷你图',
+      政治: '背 3 个点，各写一句解释', 历史: '把 3 个核心事件连成一段话', 地理: '看 1 个图组，默一遍要点'
+    };
+    const list = [];
+    for (let d2 = 1; d2 <= days; d2++) {
+      const sub = subs[(d2 - 1) % subs.length];
+      list.push({ d: d2, sub: sub + ' · ' + (ACTS[sub] || '45 分钟上限，到点就停') });
+    }
+    this.setData({ planOut: list });
+    wx.setStorageSync('hb_prepPlan', { at: Date.now(), list });
+    wx.showToast({ title: '第 1 天按计划来就好 ☀️', icon: 'none' });
+  },
+  resetPrepPlan() { this.setData({ planOut: null }); },
+
   copyLesson(e) {
     const i = Number(e.currentTarget.dataset.i);
     const l = this.data.lessons[i];

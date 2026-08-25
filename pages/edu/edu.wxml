@@ -16,6 +16,23 @@
     <text class="et-text">{{examTick.text}}</text>
   </view>
 
+  <!-- 备考小助手：输入剩余天数和科目，生成逐日轻计划 -->
+  <view class="prep-box" wx:if="{{!planOut}}" role="group" aria-label="备考小助手">
+    <view class="prep-t">📆 备考小助手：剩几天？考哪几科？</view>
+    <view class="prep-row">
+      <input class="prep-in" type="number" value="{{prepDays}}" bindinput="prepDaysInput" placeholder="剩余天数（如 12）" maxlength="3" />
+      <input class="prep-in wide" value="{{prepSubs}}" bindinput="prepSubsInput" placeholder="科目，逗号隔开（如 数学,英语）" />
+    </view>
+    <view class="prep-go" bindtap="genPrepPlan" role="button" aria-label="生成逐日复习计划">生成我的逐日计划 ✍️</view>
+  </view>
+  <view class="prep-out" wx:if="{{planOut}}" role="note" aria-label="我的逐日复习计划">
+    <view class="prep-t">🗓 你的逐日计划</view>
+    <view class="prep-day" wx:for="{{planOut}}" wx:key="index">
+      <text class="pd-d1">第 {{item.d}} 天</text><text class="pd-s">{{item.sub}}</text>
+    </view>
+    <view class="prep-reset" bindtap="resetPrepPlan" role="button" aria-label="重新生成">重新来一次 ›</view>
+  </view>
+
   <!-- 完成度进度条 -->
   <view class="edu-progress" role="progressbar" aria-label="课程完成度 {{doneCount}}/{{total}}">
     <view class="ep-num">已学完 {{doneCount}} / {{total}} 节<text wx:if="{{streak >= 2}}" class="ep-streak">🔥 连续学习 {{streak}} 天</text></view>
