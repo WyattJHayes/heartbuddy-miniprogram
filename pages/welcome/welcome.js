@@ -107,6 +107,11 @@ Page({
     this.setData({ nightWrap: new Date().getHours() >= 21 && new Date().getHours() < 24 }); // 晚间收个尾
     const sl = wx.getStorageSync('hb_sleepLog') || {};
     this.setData({ sleepRec: sl[new Date().toDateString()] || null }); // 今晚打算几点睡
+    const hr = new Date().getHours();
+    if (hr >= 23) {
+      const ppl = (wx.getStorageSync('hbSafePeople') || '').trim();
+      if (ppl) this.setData({ nightSafe: ppl.split('、')[0].trim() });
+    }
     this.setData({ openCount: wx.getStorageSync('hb_openCount') || 0 }); // 陪伴纪念日：第 N 次回来
     const savedRole = wx.getStorageSync('hb_role') || '';
     this.setData({ role: savedRole, roleTip: ROLE_HINT[savedRole] || '' });

@@ -75,6 +75,10 @@
     <view class="nw-line">③ 关掉屏幕前，做 3 次深呼吸，让今天真正结束</view>
     <view class="nw-line">明天见。</view>
   </view>
+  <!-- 深夜安全包提醒：23 点后且安全包里有信任的人 -->
+  <view class="night-safe" wx:if="{{nightSafe}}" role="note" aria-label="深夜安全包提醒">
+    🌙 这么晚还没睡？安全包里的「{{nightSafe}}」也许还在。想说话的时候，TA 是可以找的——或者，我也可以陪你聊到你想睡。
+  </view>
   <!-- 考前第 N 天·每天一点点 -->
   <view class="pre-exam" wx:if="{{preExam}}" role="note" aria-label="考前行动一点点">
     <view class="pe-title">📌 离 {{preExam.name}} 还有 {{preExam.days}} 天 · 今天做一点点</view>

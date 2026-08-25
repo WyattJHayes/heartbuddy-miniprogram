@@ -143,3 +143,5 @@
 .sl-l { color: #8fa3ba; font-size: 22rpx; margin-right: 4rpx; }
 .sl-chip { padding: 6rpx 16rpx; border-radius: 18rpx; background: #2a3646; color: #9fb2c8; font-size: 22rpx; }
 .sleep-chip.on { background: #3f6fae; color: #fff; }
+
+.night-safe { margin-top: 12rpx; background: #232c3d; border: 1rpx solid #3a4658; border-radius: 14rpx; padding: 14rpx 16rpx; color: #9fb0c5; font-size: 23rpx; line-height: 1.7; }
