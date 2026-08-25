@@ -84,6 +84,7 @@ module.exports = { divider: divider };
   <!-- 消息区 -->
   <scroll-view scroll-y class="msg-scroll" scroll-with-animation aria-live="polite">
     <view class="remind-bar" wx:if="{{remindAt}}" role="note" aria-label="定时提醒">💡 {{remindAt}}</view>
+    <view class="daily-q" wx:if="{{dailyQ}}" bindtap="sendDailyQ" role="button" aria-label="用今日一问开场">💬 今日一问 · {{dailyQ}} <text class="dq-go">点它开场 ›</text></view>
     <view class="msg-list">
       <view class="collapse-bar" wx:if="{{collapsed && messages.length > 22}}" bindtap="expandChat" role="button" aria-label="展开更早的对话">📁 已折叠 {{messages.length - 22}} 条更早的对话 · 点我展开 ▾</view>
       <view class="fold-bar" wx:if="{{!collapsed && messages.length > 22}}" bindtap="collapseChat" role="button" aria-label="折叠更早的对话">↑ 收起更早的 {{messages.length - 22}} 条对话</view>

@@ -121,6 +121,7 @@ Page({
     const isNight = manual === 'on' ? true : manual === 'off' ? false : auto;
     this.setData({ isNight });
     this.initRoleAsk(); // 老师/家长视角（欢迎页身份）
+    this.buildDailyQ(); // 今日一问
     // 间隔问候：距上次打开聊天 ≥2 天，轻提一句（不算打扰，只是「还在」）
     const lastTs = wx.getStorageSync('hb_lastChatTs') || 0;
     if (lastTs) {
@@ -936,6 +937,28 @@ Page({
   onRoleAsk(e) {
     const t = e.currentTarget.dataset.t;
     if (t) this.send(t);
+  },
+
+  // 今日一问：每天换一个轻起手（不知道说什么的时候，点它就行）
+  sendDailyQ() {
+    if (this.data.dailyQ) this.send(this.data.dailyQ);
+  },
+
+  buildDailyQ() {
+    const QS = [
+      '今天有没有一件小事让你笑了一下？',
+      '如果给今天的疲惫打个分，10 分制你打几分？',
+      '这周有什么事是你「硬扛下来」的？说说看。',
+      '今天最想被人理解的一个瞬间是什么时候？',
+      '最近一次觉得「还好我坚持了」是什么事？',
+      '今天有哪个时刻，你是完全放松的？',
+      '如果明天的你能给今天的你带句话，TA 会说什么？',
+      '这周你想为自己做的一件小事是什么？',
+      '最近脑子里循环最多的一句话是什么？',
+      '今天身体哪个部位最累？它在替你扛什么？'
+    ];
+    const d = new Date();
+    this.setData({ dailyQ: QS[(d.getDate() + d.getMonth()) % QS.length] });
   },
 
   // 即时 3 次深呼吸引导（固定文案，不打 AI）
