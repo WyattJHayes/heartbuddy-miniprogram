@@ -25,6 +25,7 @@
   <!-- 收藏概览：已收藏几张、点开抽屉查看/取消。长按卡片头也可直接取消 -->
   <view class="fav-summary" wx:if="{{favTitles.length}}" role="button" bindtap="openFavDrawer" aria-label="打开我的收藏">
     ⭐ 已收藏 {{favTitles.length}}/3 张 · 点开看看 →
+    <text class="fav-copy" catchtap="copyFavs" role="button" aria-label="复制收藏的卡片">📋 复制给朋友</text>
   </view>
 
   <!-- 我的收藏抽屉 -->

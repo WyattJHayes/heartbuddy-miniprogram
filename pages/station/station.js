@@ -364,6 +364,21 @@ Page({
   },
 
   // 关键词搜索（与标签筛选叠加生效）
+  // 把收藏的卡拼成一段可发朋友的文字（含每张卡第一句）
+  copyFavs() {
+    const favs = this.data.favTitles || [];
+    if (!favs.length) { wx.showToast({ title: '先收藏一两张卡', icon: 'none' }); return; }
+    const all = this._allCards || this.data.cards;
+    const lines = ['⭐ 我在「心语伴」收藏的几张情绪小卡：', ''];
+    for (const t of favs) {
+      const c = all.find((x) => x.title === t);
+      lines.push('· ' + t);
+      if (c && c.lines && c.lines[0]) lines.push('  ' + String(c.lines[0]).slice(0, 40) + '…');
+    }
+    lines.push('', '都是能马上做的小事。需要的话你也可以试试 🔋');
+    wx.setClipboardData({ data: lines.join('\n'), success: () => wx.showToast({ title: '已复制收藏卡 📋', icon: 'none' }) });
+  },
+
   onSearchInput(e) { this.setData({ kw: e.detail.value }); this.applyFavs(); },
   onSearchConfirm() { wx.hideKeyboard && wx.hideKeyboard(); },
   clearSearch() { this.setData({ kw: '' }); this.applyFavs(); },

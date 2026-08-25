@@ -88,3 +88,5 @@
 .st-rec { margin: 8rpx 20rpx 4rpx; background: #eef7f0; border: 1rpx solid #d3e8d9; border-radius: 12rpx; padding: 10rpx 14rpx; }
 .st-rec-t { font-size: 23rpx; color: #4f7a57; margin-bottom: 6rpx; }
 .st-rec-item { font-size: 23rpx; color: #3f6a46; line-height: 1.7; }
+
+.fav-copy { margin-left: 16rpx; color: #4f6fae; font-size: 22rpx; text-decoration: underline; }
