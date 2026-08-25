@@ -164,6 +164,7 @@
     <view class="sm-full" bindtap="fillAllSmall" role="button" aria-label="一键填满并标记完成，今天先做好这3件">✨ 今天没状态？先一键做完这 3 件（可改）</view>
     <view class="text-muted sm-hint">每天一换，做满 3 件会有小惊喜 ✨<text wx:if="{{smallWeekN}}"> · 本周已做到 {{smallWeekN}} 件 🌱</text></view>
     <view class="small-yay" wx:if="{{smallCelebrate}}" role="note" aria-label="三件小事都完成">🌟 今天你照顾了自己 3 次，做得好，记得谢谢自己。<text wx:if="{{smallStreak >= 2}}">已连续 {{smallStreak}} 天全完成 🔥</text></view>
+    <view class="small-review" bindtap="reviewSmalls" role="button" aria-label="翻翻之前写过的三件小事">📖 翻翻之前的小事</view>
   </view>
 
   <!-- 情绪健康指数：近 7 天均值 → 0-100，规则解读 -->

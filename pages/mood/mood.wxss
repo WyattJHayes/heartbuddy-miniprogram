@@ -350,3 +350,5 @@
 
 .joy-row { margin-top: 6rpx; }
 .joy-btn { color: #b07a3f; font-size: 24rpx; text-decoration: underline; }
+
+.small-review { margin-top: 8rpx; color: #7a8fa5; font-size: 22rpx; text-align: right; }

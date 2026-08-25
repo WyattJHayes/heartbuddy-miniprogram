@@ -380,7 +380,29 @@ Page({
   },
 
   saveSmall() {
-    wx.setStorageSync('hb_small', { date: this._toKey(), items: this.data.smalls.map((x) => ({ text: x.text, done: x.done })) });
+    const items = this.data.smalls.map((x) => ({ text: x.text, done: x.done }));
+    wx.setStorageSync('hb_small', { date: this._toKey(), items });
+    // 历史日志：同日覆盖，保留近 90 条（供「翻翻之前的小事」回看）
+    const log = wx.getStorageSync('hb_smallLog') || [];
+    const key = this._toKey();
+    const rec = log.find((x) => x.date === key);
+    if (rec) rec.items = items;
+    else log.push({ date: key, items });
+    wx.setStorageSync('hb_smallLog', log.slice(-90));
+  },
+
+  // 翻翻之前的小事：最近 3 天写过的三件小事（本地）
+  reviewSmalls() {
+    const log = (wx.getStorageSync('hb_smallLog') || []).slice(-3).reverse();
+    if (!log.length) {
+      wx.showModal({ title: '之前的小事', content: '还没有存下小事。今天写下三件，以后就能翻到它们。', showCancel: false, confirmText: '知道啦' });
+      return;
+    }
+    const body = log.map((d) => {
+      const txt = (d.items || []).filter((x) => x.text).map((x) => x.text).join(' / ');
+      return d.date + '：' + (txt || '（没写内容）');
+    }).join('\n');
+    wx.showModal({ title: '📖 之前的小事', content: body + '\n\n都是你一天一天攒下来的光。', showCancel: false, confirmText: '收好' });
   },
 
   // ---- 每日心情提醒（本地轻提醒：打开应用时若到点且今日未提醒则提示一次）----
