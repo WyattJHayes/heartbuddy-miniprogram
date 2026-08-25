@@ -340,6 +340,14 @@ Page({
     wx.setClipboardData({ data: this.data.todayLine, success: () => wx.showToast({ title: '已复制今日一句话', icon: 'none' }) });
   },
 
+  // 拿今日一句去聊聊：把这句话作为开场白带进聊天页
+  goChatWithLine() {
+    const t = this.data.todayLine;
+    if (!t) return;
+    wx.setStorageSync('hb_chatSeed', t);
+    wx.navigateTo({ url: '/pages/chat/chat' });
+  },,
+
   // 分享给朋友：今日一句当作欢迎语（未同意前也可把温柔带给别人）
   onShareAppMessage() {
     return {

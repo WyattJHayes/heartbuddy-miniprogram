@@ -113,6 +113,15 @@ Page({
     lowCareText: '',
   },
 
+  onShow() {
+    // 今日一句带来的开场白（欢迎页「拿去聊聊」）：发一次即清
+    const seed = wx.getStorageSync('hb_chatSeed');
+    if (seed) {
+      wx.removeStorageSync('hb_chatSeed');
+      this.send(seed);
+    }
+  },
+
   async onLoad() {
     // 夜间柔和模式：手动开关优先（hb_nightManual: 'on'|'off'），否则 22:00-6:00 自动
     const manual = wx.getStorageSync('hb_nightManual');

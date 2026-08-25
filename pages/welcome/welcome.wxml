@@ -5,6 +5,7 @@
 
   <!-- 今日一句：每天换一句话给你 -->
   <view class="welcome-line" wx:if="{{todayLine}}" bindtap="copyTodayLine" role="button" aria-label="今日一句，点击复制">{{todayLine}}</view>
+  <view class="wl-chat" bindtap="goChatWithLine" role="button" aria-label="拿这句去和心语聊聊">💬 拿这句去聊聊 ›</view>
   <view class="welcome-week" wx:if="{{weekGreet}}" role="note" aria-label="星期特别句">{{weekGreet}}</view>
   <view class="welcome-gold" wx:if="{{goldenLine}}" role="note" aria-label="我的金句">💛 我的金句 · {{goldenLine}}</view>
   <!-- 写给下周的自己：周日留一句，整周可见（点了输入就回想） -->
