@@ -133,3 +133,10 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .nap-card { margin-top: 12rpx; text-align: center; }
 .nap-cta { color: #5a7fb8; font-size: 25rpx; }
 .nap-left { font-size: 30rpx; font-weight: 700; color: #3a4a63; letter-spacing: 2rpx; margin-right: 16rpx; }
+
+.b-week7 { display: flex; gap: 8rpx; justify-content: center; margin-top: 10rpx; }
+.bw-cell { width: 56rpx; text-align: center; }
+.bw-dot { font-size: 22rpx; color: #c6d2e0; }
+.bw-cell.on .bw-dot { color: #5f8ac0; }
+.bw-w { font-size: 19rpx; color: #9aa8bd; }
+.bw-cell.today .bw-w { color: #4a6fa5; font-weight: 600; }

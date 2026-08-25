@@ -127,6 +127,12 @@ Page({
     d.mins = Math.min((d.mins || 0) + addMin, DAILY_GOAL_MIN);
     d.done = d.mins >= DAILY_GOAL_MIN;
     wx.setStorageSync('hb_breatheDay', d);
+    // 近 7 天练习日历的日志（按天去重，累计分钟）
+    const log = wx.getStorageSync('hb_breatheLog') || [];
+    const rec = log.find((x) => x.date === today);
+    if (rec) rec.mins = d.mins;
+    else log.push({ date: today, mins: d.mins });
+    wx.setStorageSync('hb_breatheLog', log.slice(-60));
     // 连击：达标才推进
     let st = wx.getStorageSync('hb_breatheStreak');
     if (!st || typeof st !== 'object') st = { date: '', n: 0 };
@@ -401,6 +407,19 @@ Page({
     wx.setClipboardData({ data: lines.join('\n'), success: () => wx.showToast({ title: '已复制，可以发给TA了 🤲', icon: 'none' }) });
   },
 
+  // 近 7 天练习日历：练过的天点亮
+  buildWeek7() {
+    const log = wx.getStorageSync('hb_breatheLog') || [];
+    const set = new Set(log.filter((x) => x.mins > 0).map((x) => x.date));
+    const out = [];
+    const now = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const dt = new Date(now.getTime() - i * 86400000);
+      out.push({ key: dt.toDateString(), dot: set.has(dt.toDateString()), today: i === 0, w: '日一二三四五六'[dt.getDay()] });
+    }
+    return out;
+  },
+
   // 脸松没松：一次简单觉察。存近 5 次，连续 3 天多数「松」→ 温和确认
   pickFace(e) {
     const w = e.currentTarget.dataset.w;
@@ -453,7 +472,7 @@ Page({
         this.runRound(r + 1, 0, tot);
       } else {
         this._running = false;
-        this.setData({ phase: 'done', text: PH_TEXT.done });
+        this.setData({ phase: 'done', text: PH_TEXT.done, week7B: this.buildWeek7() });
         wx.removeStorageSync('hb_breathBroke'); // 完成即清除中断标记
         // 发呆结束：直接给一句专属回响（也算一次放松）
         if (this.data.presetKey === 'stare') {
