@@ -149,3 +149,7 @@
 .wl-chat { margin-top: 6rpx; display: inline-block; color: #5f8ac0; font-size: 23rpx; }
 
 .em-breath { margin-top: 10rpx; color: #4a7fb5; font-size: 24rpx; text-decoration: underline; }
+
+.time-greet { color: #7a8fa5; font-size: 24rpx; margin-top: 6rpx; }
+
+.gold-wall { color: #a5712e; font-size: 22rpx; margin-top: 4rpx; }

@@ -2,12 +2,14 @@
   <view class="logo">🌱</view>
   <view class="title">心语伴</view>
   <view class="slogan">随时在线的情绪陪伴者</view>
+  <view class="time-greet" wx:if="{{timeGreet}}" role="note" aria-label="按时段问候">{{timeGreet}}</view>
 
   <!-- 今日一句：每天换一句话给你 -->
   <view class="welcome-line" wx:if="{{todayLine}}" bindtap="copyTodayLine" role="button" aria-label="今日一句，点击复制">{{todayLine}}</view>
   <view class="wl-chat" bindtap="goChatWithLine" role="button" aria-label="拿这句去和心语聊聊">💬 拿这句去聊聊 ›</view>
   <view class="welcome-week" wx:if="{{weekGreet}}" role="note" aria-label="星期特别句">{{weekGreet}}</view>
   <view class="welcome-gold" wx:if="{{goldenLine}}" role="note" aria-label="我的金句">💛 我的金句 · {{goldenLine}}</view>
+  <view class="gold-wall" bindtap="viewGoldenWall" role="button" aria-label="打开我的金句墙">💛 金句墙 ›</view>  
   <!-- 写给下周的自己：周日留一句，整周可见（点了输入就回想） -->
   <view class="week-plan" wx:if="{{weekPlanSet}}" role="note" aria-label="写给下周自己的话">
     <view class="wp-key">📮 写给下周自己的话 · 顺带回看一下</view>

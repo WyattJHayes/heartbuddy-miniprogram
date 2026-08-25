@@ -32,6 +32,7 @@ Page({
     loading: true, openid: '', showNotice: false, shared: false, welcomed: true, showLog: false,
     openCount: 0,  // 陪伴次数（第 N 次回来）
     todayLine: '',
+    timeGreet: '',   // 按时段问候（早上好/深夜好…）
     weekGreet: '',  // 星期特别句（随当天）
     goldenLine: '', // 我的金句：小课存下的，每天换一条
     weekPlan: '',   // 写给下周的一句话（周日留/周一看起）
@@ -91,7 +92,7 @@ Page({
 
   onLoad(options) {
     if (options && options.src === 'share') this.setData({ shared: true });
-    this.setData({ welcomed: wx.getStorageSync('hb_welcomed') === true, todayLine: todayLine(), weekGreet: WEEK_LINE[new Date().getDay()] }); // 首次引导卡只出现一次
+    this.setData({ welcomed: wx.getStorageSync('hb_welcomed') === true, todayLine: todayLine(), weekGreet: WEEK_LINE[new Date().getDay()], timeGreet: this.hourGreet() }); // 首次引导卡只出现一次
     // 我的金句：小课里存下的每天晒一条（本地）
     const gold = wx.getStorageSync('hb_goldenLines') || [];
     if (gold.length) this.setData({ goldenLine: gold[(new Date().getDate() + new Date().getMonth()) % gold.length] });
@@ -345,7 +346,28 @@ Page({
   // 出门前一轮呼吸：考试早晨卡直达
   goBreatheNow() { wx.navigateTo({ url: '/pages/breathe/breathe' }); },
 
-  // 拿今日一句去聊聊：把这句话作为开场白带进聊天页
+  // 按时段问候：早上打开看到早上好，深夜打开看到「先照顾好自己」
+  hourGreet() {
+    const h = new Date().getHours();
+    if (h < 5) return '夜深了，先照顾好自己，再找我 ☾';
+    if (h < 11) return '早上好，今天也从一点点开始 ☀';
+    if (h < 14) return '中午好，别忘了好好吃饭 🍱';
+    if (h < 18) return '下午好，累了就歇五分钟 🍵';
+    return '晚上好，这一天辛苦了 🌆';
+  },
+
+  // 金句墙：把攒下的每句金句都列出来，翻一翻
+  viewGoldenWall() {
+    const gold = wx.getStorageSync('hb_goldenLines') || [];
+    if (!gold.length) {
+      wx.showModal({ title: '我的金句墙', content: '还没有金句。在小课/充电站看到喜欢的话，存进来，这里就慢慢亮了。', showCancel: false, confirmText: '知道啦' });
+      return;
+    }
+    const body = gold.map((t, i) => (i + 1) + '）' + t).join('\n');
+    wx.showModal({ title: '💛 我的金句墙（' + gold.length + ' 条）', content: body, showCancel: false, confirmText: '收好' });
+  },
+
+  // 拿今日一句去聊聊：把今天这句话作为开场白带进聊天页
   goChatWithLine() {
     const t = this.data.todayLine;
     if (!t) return;
