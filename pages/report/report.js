@@ -161,6 +161,32 @@ Page({
 
   onShow() { this.fetchWeek(); this.fetchMonth(); this.fetchWeeks(); this.fetchYear(); this.refreshNote(); this.loadFutureNote(); this.fetchExamCmp(); },
 
+  // 考试得分记录：手动记下一场，看自己的轨迹（本地）
+  loadExamNotes() {
+    const list = wx.getStorageSync('hb_examNotes') || [];
+    let trend = '';
+    if (list.length >= 2) {
+      const vals = list.map((x) => x.sc);
+      const avg = Math.round(vals.reduce((a, c) => a + c, 0) / vals.length);
+      const up = list[0].sc - list[list.length - 1].sc;
+      trend = '平均 ' + avg + ' 分 · ' + (up > 0 ? '比最早一场高 ' + up + ' 分，真的在进步 📈' : up < 0 ? '比最早一场低 ' + Math.abs(up) + ' 分，不代表全部，继续在自己的节奏里' : '几场之间很稳，你已经很稳了 🧘');
+    }
+    this.setData({ examNotes: list, trendText: trend });
+  },
+  examSubInput(e) { this.setData({ examSub: e.detail.value }); },
+  examScoreInput(e) { this.setData({ examScore: e.detail.value }); },
+  addExamNote() {
+    const sub = (this.data.examSub || '').trim();
+    const sc = parseInt(this.data.examScore, 10);
+    if (!sub) { wx.showToast({ title: '写一下科目', icon: 'none' }); return; }
+    if (!Number.isFinite(sc) || sc < 0 || sc > 100) { wx.showToast({ title: '填 0-100 的分数', icon: 'none' }); return; }
+    const list = wx.getStorageSync('hb_examNotes') || [];
+    list.unshift({ sub, sc, at: Date.now() });
+    wx.setStorageSync('hb_examNotes', list.slice(0, 12));
+    this.setData({ examNotes: list.slice(0, 12), examSub: '', examScore: '' });
+    wx.showToast({ title: '记下了，下一场更有数', icon: 'none' });
+  },
+
   async fetchWeek() {
     let openid = app.globalData.openid;
     if (!openid) openid = await app.login();

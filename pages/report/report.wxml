@@ -122,6 +122,23 @@
       <view class="exam-hint">想一键生成「考前 vs 考后」分享卡？先设好考试日，数据自动对比。</view>
     </view>
 
+    <view class="card mt exam-note" role="group" aria-label="考试得分记录">
+      <view class="section-title">🏁 我的考试记录</view>
+      <view class="en-row">
+        <input class="en-in" value="{{examSub}}" bindinput="examSubInput" placeholder="科目" maxlength="8" />
+        <input class="en-in" type="number" value="{{examScore}}" bindinput="examScoreInput" placeholder="分数 0-100" maxlength="3" />
+        <view class="en-add" bindtap="addExamNote" role="button" aria-label="记下这场考试">记下 ›</view>
+      </view>
+      <view class="en-list" wx:if="{{examNotes.length}}">
+        <view class="en-item" wx:for="{{examNotes}}" wx:key="at">
+          <text class="en-sub">{{item.sub}}</text>
+          <text class="en-sc">{{item.sc}}</text>
+        </view>
+        <view class="text-muted" wx:if="{{trendText}}">{{trendText}}</view>
+      </view>
+      <view class="text-muted" wx:if="{{!examNotes.length}}">先记下一场，慢慢就有了自己的「分数轨迹」。</view>
+    </view>
+
     <button class="btn-ghost full mt" bindtap="openShare">生成分享卡片</button>
     <button class="btn-ghost full mt" bindtap="copyWeekText">复制文字版周报</button>
     <button class="btn-primary full mt" bindtap="goChat">继续和心语聊聊</button>

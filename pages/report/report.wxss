@@ -109,3 +109,11 @@
 
 .exam-cmp { border: 1rpx solid #e3ecfa; }
 .exam-hint { margin-top: 8rpx; font-size: 22rpx; color: #9aa8bd; }
+
+.exam-note { border: 1rpx solid #e0e9f7; }
+.en-row { display: flex; gap: 8rpx; }
+.en-in { flex: 1; background: #f7f9fd; border: 1rpx solid #dbe6f5; border-radius: 8rpx; padding: 8rpx 10rpx; font-size: 24rpx; }
+.en-add { padding: 8rpx 16rpx; color: #3f6fae; font-size: 24rpx; }
+.en-item { display: flex; justify-content: space-between; font-size: 24rpx; color: #3a4a63; line-height: 1.9; }
+.en-sub { max-width: 60%; }
+.en-sc { color: #3f6fae; font-weight: 600; }
