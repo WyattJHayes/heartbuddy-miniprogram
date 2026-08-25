@@ -214,7 +214,7 @@
 
   <!-- 版本透明 footer：当前版本 + 一句话说明 AI 边界与数据去留 -->
   <view class="wf-version" role="note" aria-label="版本与边界说明">
-    <view class="wf-v">心语伴 · v2.23（持续迭代中）</view>
+    <view class="wf-v">心语伴 · v2.24（持续迭代中）</view>
     <view class="wf-open" wx:if="{{openCount >= 2}}">你已经回来过 {{openCount}} 次了，谢谢你在 🌿</view>
     <view class="wf-s">AI 是陪伴者，不是医生 · 对话临时留在本机，情绪记录存在你自己的云端</view>
   </view>
