@@ -134,3 +134,7 @@
 .af-text { color: #4a3f78; font-size: 24rpx; line-height: 1.7; }
 .af-ta { width: 100%; font-size: 24rpx; color: #4a3f78; min-height: 60rpx; }
 .af-save { margin-top: 8rpx; color: #6a5aae; font-size: 24rpx; text-align: right; }
+
+.night-wrap { margin-top: 12rpx; background: #1f2937; border: 1rpx solid #334155; border-radius: 14rpx; padding: 16rpx; }
+.nw-t { color: #cdd7e3; font-size: 25rpx; font-weight: 600; margin-bottom: 8rpx; }
+.nw-line { color: #8fa3ba; font-size: 23rpx; line-height: 1.7; }

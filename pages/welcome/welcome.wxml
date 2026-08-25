@@ -67,6 +67,14 @@
     <view class="af-save" bindtap="saveAfterword" role="button" aria-label="收下这句话">收下 · 那场考试翻页 🌈</view>
   </view>
 
+  <!-- 晚间收个尾：21 点后出现 -->
+  <view class="night-wrap" wx:if="{{nightWrap}}" role="note" aria-label="晚间收个尾">
+    <view class="nw-t">🌙 一天要收尾了，慢慢来</view>
+    <view class="nw-line">① 把明天的「3 件最重要的事」写下来（或记在心里）</view>
+    <view class="nw-line">② 今天也辛苦了——无论做多做少，你都已经走到了晚上</view>
+    <view class="nw-line">③ 关掉屏幕前，做 3 次深呼吸，让今天真正结束</view>
+    <view class="nw-line">明天见。</view>
+  </view>
   <!-- 考前第 N 天·每天一点点 -->
   <view class="pre-exam" wx:if="{{preExam}}" role="note" aria-label="考前行动一点点">
     <view class="pe-title">📌 离 {{preExam.name}} 还有 {{preExam.days}} 天 · 今天做一点点</view>

@@ -102,6 +102,7 @@ Page({
     this.setData({ preExam: this.buildPreExam() }); // 考前 7 天一点计划
     this.setData({ afterword: wx.getStorageSync('hb_examAfterword') || '', afterSaved: !!wx.getStorageSync('hb_examAfterword') }); // 考后归位
     this.setData({ afterShow: this.buildExamAfter() }); // 考完 1-3 天归位输入
+    this.setData({ nightWrap: new Date().getHours() >= 21 && new Date().getHours() < 24 }); // 晚间收个尾
     this.setData({ openCount: wx.getStorageSync('hb_openCount') || 0 }); // 陪伴纪念日：第 N 次回来
     const savedRole = wx.getStorageSync('hb_role') || '';
     this.setData({ role: savedRole, roleTip: ROLE_HINT[savedRole] || '' });
