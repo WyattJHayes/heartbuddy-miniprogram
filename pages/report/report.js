@@ -159,7 +159,7 @@ Page({
     this.setData({ history: wx.getStorageSync('weekReportHistory') || [] });
   },
 
-  onShow() { this.fetchWeek(); this.fetchMonth(); this.fetchWeeks(); this.fetchYear(); this.refreshNote(); this.loadFutureNote(); this.fetchExamCmp(); this.loadSleep(); },
+  onShow() { this.fetchWeek(); this.fetchMonth(); this.fetchWeeks(); this.fetchYear(); this.refreshNote(); this.loadFutureNote(); this.fetchExamCmp(); this.loadToday(); this.loadSleep(); },
 
   // 考试得分记录：手动记下一场，看自己的轨迹（本地）
   loadExamNotes() {
@@ -188,6 +188,18 @@ Page({
   },
 
   // 睡眠小账：近 7 天的入睡计划平均（21 点后打卡）
+  // 今日速览：今天记了几笔、平均几分，一句温柔收束
+  loadToday() {
+    const db = null;
+    // 用本地 hb_todayMoodCount（心情页写入）与最近一次分数拼一句
+    const n = Number(wx.getStorageSync('hb_todayMoodCount_' + new Date().toDateString()) || 0);
+    let text = '';
+    if (!n) text = '今天还没记心情——想记的时候，我在。';
+    else if (n === 1) text = '今天已经记了 1 笔，谢谢你照顾自己的感受 🌱';
+    else text = '今天已经记了 ' + n + ' 笔，你很认真地对待自己的情绪 🌱';
+    this.setData({ todayBrief: text });
+  },
+
   loadSleep() {
     const log = wx.getStorageSync('hb_sleepLog') || {};
     const now = new Date();

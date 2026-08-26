@@ -122,6 +122,11 @@
       <view class="exam-hint">想一键生成「考前 vs 考后」分享卡？先设好考试日，数据自动对比。</view>
     </view>
 
+    <view class="card mt today-brief" wx:if="{{todayBrief}}" role="note" aria-label="今日速览">
+      <view class="section-title">🌤 今日速览</view>
+      <view class="text-muted">{{todayBrief}}</view>
+    </view>
+
     <view class="card mt exam-note" role="group" aria-label="考试得分记录">
       <view class="section-title">🏁 我的考试记录</view>
       <view class="en-row">

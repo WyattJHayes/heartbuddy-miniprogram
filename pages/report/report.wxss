@@ -119,3 +119,5 @@
 .en-sc { color: #3f6fae; font-weight: 600; }
 
 .sleep-note { border: 1rpx solid #e2e8f2; }
+
+.today-brief { border: 1rpx solid #e3ecdf; }
