@@ -127,6 +127,11 @@
       <view class="text-muted">{{todayBrief}}</view>
     </view>
 
+    <view class="card mt chat-mood-card" wx:if="{{chatMoodNote}}" role="note" aria-label="聊后状态">
+      <view class="section-title">💬 聊后状态</view>
+      <view class="text-muted">{{chatMoodNote}}</view>
+    </view>
+
     <view class="card mt exam-note" role="group" aria-label="考试得分记录">
       <view class="section-title">🏁 我的考试记录</view>
       <view class="en-row">

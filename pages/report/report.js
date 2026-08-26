@@ -159,7 +159,7 @@ Page({
     this.setData({ history: wx.getStorageSync('weekReportHistory') || [] });
   },
 
-  onShow() { this.fetchWeek(); this.fetchMonth(); this.fetchWeeks(); this.fetchYear(); this.refreshNote(); this.loadFutureNote(); this.fetchExamCmp(); this.loadToday(); this.loadSleep(); },
+  onShow() { this.fetchWeek(); this.fetchMonth(); this.fetchWeeks(); this.fetchYear(); this.refreshNote(); this.loadFutureNote(); this.fetchExamCmp(); this.loadToday(); this.loadChatMood(); this.loadSleep(); },
 
   // 考试得分记录：手动记下一场，看自己的轨迹（本地）
   loadExamNotes() {
@@ -188,6 +188,25 @@ Page({
   },
 
   // 睡眠小账：近 7 天的入睡计划平均（21 点后打卡）
+  // 聊后状态：近 7 天聊完给自己打的分（1-5），看趋势
+  loadChatMood() {
+    const rec = wx.getStorageSync('hb_chatMood') || {};
+    const now = new Date();
+    const vals = [];
+    for (let i = 0; i < 7; i++) {
+      const k = new Date(now.getTime() - i * 86400000).toDateString();
+      const v = Number(rec[k]);
+      if (v >= 1 && v <= 5) vals.push(v);
+    }
+    if (vals.length < 2) return;
+    const avg = (vals.reduce((x, y) => x + y, 0) / vals.length).toFixed(1);
+    let note = '这周你聊完后打了 ' + vals.length + ' 次分，平均 ' + avg + ' 分（满分 5）';
+    if (avg >= 4) note += '——最近的状态不错，继续保持 😊';
+    else if (avg >= 3) note += '——平平也是一种稳，慢慢来 🙂';
+    else note += '——最近有点沉，多来聊聊，我在 🌧';
+    this.setData({ chatMoodNote: note });
+  },
+
   // 今日速览：今天记了几笔、平均几分，一句温柔收束
   loadToday() {
     const db = null;
