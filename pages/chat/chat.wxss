@@ -231,3 +231,7 @@
 .rate-list { display: flex; gap: 10rpx; }
 .rate-chip { padding: 8rpx 20rpx; border-radius: 22rpx; background: #f2f5fa; color: #6b7a8e; font-size: 24rpx; }
 .rate-chip.on { background: #ffe9c7; color: #a5712e; }
+
+.emoji-btn { padding: 8rpx; font-size: 34rpx; }
+.emoji-bar { display: flex; flex-wrap: wrap; gap: 10rpx; padding: 12rpx 20rpx; background: #f7fafc; border-top: 1rpx solid #e5ecf3; }
+.em-item { font-size: 36rpx; padding: 6rpx; }

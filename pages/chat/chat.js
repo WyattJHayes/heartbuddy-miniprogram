@@ -955,6 +955,13 @@ Page({
   },
 
   // 今日一问：每天换一个轻起手（不知道说什么的时候，点它就行）
+  // 常用表情：点一下插到输入框末尾（不打断打字节奏）
+  toggleEmojiBar() { this.setData({ showEmojiBar: !this.data.showEmojiBar }); },
+  pickEmoji(e) {
+    const em = e.currentTarget.dataset.e;
+    this.setData({ input: (this.data.input || '') + em });
+  },
+
   sendDailyQ() {
     if (this.data.dailyQ) this.send(this.data.dailyQ);
   },

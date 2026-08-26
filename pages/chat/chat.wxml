@@ -146,6 +146,9 @@ module.exports = { divider: divider };
   </view>
 
   <!-- 输入栏 -->
+  <view class="emoji-bar" wx:if="{{showEmojiBar}}" role="group" aria-label="常用表情">
+    <view class="em-item" wx:for="{{['😊','🥺','😤','😭','😮‍💨','🤒','💪','🙏','🌧','🌈','☕','🌙']}}" wx:key="*this" data-e="{{item}}" bindtap="pickEmoji" role="button" aria-label="插入表情{{item}}">{{item}}</view>
+  </view>
   <view class="input-bar">
     <view class="mood-tags">
       <view class="tag {{moodTag==='开心'?'on':''}}" data-m="开心" bindtap="onMood">😊 开心</view>
@@ -178,6 +181,7 @@ module.exports = { divider: divider };
       <view class="reset-chat" bindtap="copyTalk" role="button" aria-label="复制这段对话留档">📋</view>
       <view class="reset-chat" bindtap="summarize" role="button" aria-label="总结这轮对话">✨</view>
       <view class="reset-chat" bindtap="resetChat" role="button" aria-label="重新开始这轮对话">↻</view>
+      <view class="emoji-btn" bindtap="toggleEmojiBar" role="button" aria-label="常用表情">😊</view>
       <input
         class="input"
         placeholder="{{inputPh || '说点什么…'}}"
