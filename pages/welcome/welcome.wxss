@@ -153,3 +153,5 @@
 .time-greet { color: #7a8fa5; font-size: 24rpx; margin-top: 6rpx; }
 
 .gold-wall { color: #a5712e; font-size: 22rpx; margin-top: 4rpx; }
+
+.wl-gold { color: #a5712e; font-size: 22rpx; margin-top: 4rpx; margin-left: 16rpx; }

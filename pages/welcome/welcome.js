@@ -33,6 +33,7 @@ Page({
     openCount: 0,  // 陪伴次数（第 N 次回来）
     todayLine: '',
     timeGreet: '',   // 按时段问候（早上好/深夜好…）
+    goldenSaved: false,
     weekGreet: '',  // 星期特别句（随当天）
     goldenLine: '', // 我的金句：小课存下的，每天换一条
     weekPlan: '',   // 写给下周的一句话（周日留/周一看起）
@@ -340,6 +341,18 @@ Page({
   },
 
   // 今日一句：点击复制（随时带走一句温柔）
+  // 把今天的句子收进金句墙（去重，最多 30 条）
+  saveTodayToGold() {
+    const t = this.data.todayLine;
+    if (!t) return;
+    let gold = wx.getStorageSync('hb_goldenLines') || [];
+    if (gold.includes(t)) { wx.showToast({ title: '这句已经在墙上了 💛', icon: 'none' }); return; }
+    gold.unshift(t);
+    wx.setStorageSync('hb_goldenLines', gold.slice(0, 30));
+    this.setData({ goldenSaved: true });
+    wx.showToast({ title: '收进金句墙了 💛', icon: 'none' });
+  },
+
   copyTodayLine() {
     if (!this.data.todayLine) return;
     wx.setClipboardData({ data: this.data.todayLine, success: () => wx.showToast({ title: '已复制今日一句话', icon: 'none' }) });
