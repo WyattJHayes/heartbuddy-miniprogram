@@ -77,6 +77,7 @@ Page({
   },
 
   onLoad() {
+    this.buildBreathTip();
     this.setData({ vibeOn: wx.getStorageSync('hb_vibe') !== false });
     // 上次练习中断提示：练习中退出（未完成）会留痕，这次进来温柔提一句
     const brokeAt = wx.getStorageSync('hb_breathBroke');
@@ -408,6 +409,13 @@ Page({
   },
 
   // 近 7 天练习日历：练过的天点亮
+  // 今日引导语：每天换一句，开始前轻轻读一遍
+  buildBreathTip() {
+    const TIPS = ['吸气 4 拍，呼气 6 拍——呼气长一点，身体会松', '肩膀先放下来，再开始', '不用做到完美，跟着就好', '想别的事了？回来数拍子就行', '呼气时，想象把今天的累吐出去'];
+    const d = new Date();
+    this.setData({ breathTip: TIPS[d.getDate() % TIPS.length] });
+  },
+
   buildWeek7() {
     const log = wx.getStorageSync('hb_breatheLog') || [];
     const set = new Set(log.filter((x) => x.mins > 0).map((x) => x.date));

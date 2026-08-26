@@ -140,3 +140,5 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .bw-cell.on .bw-dot { color: #5f8ac0; }
 .bw-w { font-size: 19rpx; color: #9aa8bd; }
 .bw-cell.today .bw-w { color: #4a6fa5; font-weight: 600; }
+
+.breath-tip { margin: 8rpx auto 0; max-width: 90%; text-align: center; color: #7a8fa5; font-size: 22rpx; }

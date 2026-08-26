@@ -53,6 +53,7 @@
           wx:key="key" data-key="{{item.key}}" bindtap="setPreset" role="button"
           aria-label="切换到{{item.label}}节奏">{{item.label}}</view>
     <text class="stare-n" wx:if="{{presetKey === 'stare' && stareCount}}">已陪你发呆 {{stareCount}} 次 🌑</text>
+  <view class="breath-tip" wx:if="{{breathTip}}" role="note" aria-label="今日引导语">🌬 {{breathTip}}</view>
   <view class="b-week7" wx:if="{{week7B.length}}" role="img" aria-label="近7天练习日历">
     <view class="bw-cell {{item.dot ? 'on' : ''}} {{item.today ? 'today' : ''}}" wx:for="{{week7B}}" wx:key="key">
       <text class="bw-dot">{{item.dot ? '●' : '○'}}</text>
