@@ -18,6 +18,7 @@ Page({
     recMood: '',    // 最近一次心情（关键词推荐来源）
     stLarge: false,   // 大字模式（无障碍，本地记住）
     recCards: null,  // 推荐卡 {index,title} 列表
+    recReason: '',   // 为什么推荐这句（解释性）
     stReads: {},        // 各卡已读次数（展示用）
     cards: [
       {
@@ -524,7 +525,10 @@ Page({
         .filter((x) => (x.c.tags || []).includes(tag))
         .slice(0, 3)
         .map((x) => ({ index: x.i, title: x.c.title }));
-      if (hits.length) this.setData({ recMood: m.mood === 'calm' ? '平静' : (tag === '难过' ? '低落' : tag), recCards: hits });
+      if (hits.length) {
+        const REASON = { 难过: '你最近记了一次低落——这几张也许接得住', 焦虑: '最近有点紧？这几张是给「静不下来」的', 平静: '状态不错的时候存几张，难过时用得上' };
+        this.setData({ recMood: m.mood === 'calm' ? '平静' : (tag === '难过' ? '低落' : tag), recCards: hits, recReason: REASON[tag] || '' });
+      }
     } catch (err) { /* 云端不可用时静默 */ }
   },
   openRec(e) {

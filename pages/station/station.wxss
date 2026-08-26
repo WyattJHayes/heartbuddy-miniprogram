@@ -111,3 +111,5 @@
 .week-reads { margin: 8rpx 16rpx 0; color: #8a7a5f; font-size: 22rpx; background: #faf6ec; border-radius: 10rpx; padding: 8rpx 12rpx; }
 
 .fav-stale { margin: 8rpx 16rpx 0; color: #8a744f; font-size: 22rpx; background: #faf3e4; border-radius: 10rpx; padding: 8rpx 12rpx; }
+
+.st-rec-reason { color: #8a94a6; font-size: 21rpx; margin-top: 4rpx; }
