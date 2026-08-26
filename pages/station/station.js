@@ -8,7 +8,8 @@ Page({
     cardTags: ['全部', '焦虑', '难过', '生气', '睡前', '学习', '平静'],
     showTag: '全部',    // 按心情筛选当前展示哪些卡
     topRead: null,      // 最常翻的一张卡（≥3 次才显示）
-    drawMsg: '',        // 抽一张后的缘分提示
+    drawMsg: '',
+    drawFaved: false,     // 刚抽到这张是否已收藏        // 抽一张后的缘分提示
     readTotal: 0,       // 卡片阅读总数
     newCount: 0,        // 还没看过的卡片数（NEW 角标）
     drawOther: '',      // 抽一张后顺带推荐的另一张
@@ -605,6 +606,7 @@ Page({
     const other = others.length ? others[Math.floor(Math.random() * others.length)] : null;
     this.setData({
       open: i,
+      drawFaved: false,
       drawMsg: cnt[c.title] > 1 ? '第 ' + cnt[c.title] + ' 次抽中「' + c.title + '」——它好像特别懂你。' : '',
       drawOther: other ? other.title : ''
     });
@@ -615,6 +617,21 @@ Page({
     wx.setStorageSync('hb_drawLog', merged);
     this.setData({ drawHist: merged });
     wx.vibrateShort && wx.vibrateShort({ type: 'light' });
+  },
+
+  // 收下刚抽到的这张（加入收藏，≤3 张）
+  favDrawnCard() {
+    const idx = this.data.open;
+    const c = (this.data.cards || [])[idx];
+    if (!c) return;
+    let favs = wx.getStorageSync('hb_stFavs') || [];
+    if (favs.includes(c.title)) { wx.showToast({ title: '已经在收藏里啦 ⭐', icon: 'none' }); return; }
+    if (favs.length >= 3) { wx.showToast({ title: '收藏满了（3 张），长按卡片可取消', icon: 'none' }); return; }
+    favs.push(c.title);
+    wx.setStorageSync('hb_stFavs', favs);
+    this.setData({ favTitles: favs, drawFaved: true });
+    this.applyFavs();
+    wx.showToast({ title: '收好了，下次它置顶等你 ⭐', icon: 'none' });
   },
 
   // 抽卡历史点开：把那张卡展开

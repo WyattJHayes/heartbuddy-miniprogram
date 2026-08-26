@@ -15,6 +15,7 @@
   </view>
 
   <view class="draw-msg" wx:if="{{drawMsg}}" role="note" aria-label="抽中提示">🎴 {{drawMsg}}
+        <view class="draw-fav {{drawFaved ? 'done' : ''}}" bindtap="favDrawnCard" role="button" aria-label="收下这张卡">{{drawFaved ? "⭐ 已收下" : "☆ 收下这张"}}</view>
     <view class="draw-other" wx:if="{{drawOther}}" bindtap="openDrawOther" role="button" aria-label="展开另一张推荐卡片">也许这张也有用：「{{drawOther}}」›</view>
   </view>
   <view class="draw-hist" wx:if="{{drawHist.length}}" role="group" aria-label="最近抽过的卡">

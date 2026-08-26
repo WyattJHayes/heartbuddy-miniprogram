@@ -104,3 +104,6 @@
 .draw-hist { margin: 8rpx 16rpx 0; display: flex; flex-wrap: wrap; gap: 6rpx; align-items: center; }
 .dh-title { color: #9aa8bd; font-size: 21rpx; }
 .dh-item { padding: 4rpx 12rpx; border-radius: 12rpx; background: #eef3fa; color: #5a7fb8; font-size: 21rpx; }
+
+.draw-fav { display: inline-block; margin-right: 14rpx; color: #a5712e; font-size: 22rpx; }
+.draw-fav.done { color: #9aa8bd; }
