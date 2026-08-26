@@ -958,6 +958,27 @@ Page({
   },
 
   // 快乐菜单：低落时翻开，随机 3 件「小确幸」（本地默认菜单 + 自己加的）
+  // 加一件我的快乐事：存进快乐菜单（≤20 条）
+  addJoyItem() {
+    const that = this;
+    wx.showModal({
+      title: '加一件让你开心的小事',
+      editable: true,
+      placeholderText: '例如：放学路上买一串烤肠',
+      success: (r) => {
+        if (!r.confirm) return;
+        const t = (r.content || '').trim().slice(0, 30);
+        if (!t) { wx.showToast({ title: '写一件就好', icon: 'none' }); return; }
+        const extra = wx.getStorageSync('hb_joyCustom') || [];
+        if (extra.includes(t)) { wx.showToast({ title: '这条已经在菜单里啦', icon: 'none' }); return; }
+        extra.push(t);
+        wx.setStorageSync('hb_joyCustom', extra.slice(-20));
+        wx.showToast({ title: '加进菜单了 ☕', icon: 'none' });
+        that.openJoyMenu();
+      }
+    });
+  },
+
   openJoyMenu() {
     const ME = [
       '听一首很久没听的歌，只放一遍',
