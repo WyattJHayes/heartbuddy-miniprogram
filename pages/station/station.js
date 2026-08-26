@@ -9,7 +9,8 @@ Page({
     showTag: '全部',    // 按心情筛选当前展示哪些卡
     topRead: null,      // 最常翻的一张卡（≥3 次才显示）
     drawMsg: '',
-    drawFaved: false,     // 刚抽到这张是否已收藏        // 抽一张后的缘分提示
+    drawFaved: false,     // 刚抽到这张是否已收藏
+    weekReads: '',        // 本周充电小结一句        // 抽一张后的缘分提示
     readTotal: 0,       // 卡片阅读总数
     newCount: 0,        // 还没看过的卡片数（NEW 角标）
     drawOther: '',      // 抽一张后顺带推荐的另一张
@@ -462,6 +463,20 @@ Page({
     this.fetchLastMood(); // 最近心情 → 推荐 3 张卡
     // 今日已读计数（当天展开次数，温柔鼓励）
     this.setData({ todayReads: this.todayStationReads() });
+    this.buildWeekReads();
+  },
+
+  // 本周充电小结：周一至今共展开过几张卡，一句鼓励
+  buildWeekReads() {
+    const day = wx.getStorageSync('hb_stReadDay') || {};
+    const now = new Date();
+    let n = 0;
+    for (let i = 0; i < 7; i++) {
+      const dt = new Date(now.getTime() - i * 86400000);
+      if (dt.getDay() === 0 && i > 0) break; // 到上周日为止
+      n += Number(day[dt.toDateString()] || 0);
+    }
+    if (n >= 1) this.setData({ weekReads: '🔋 这周你已经打开过 ' + n + ' 张小卡——每一次都是在给自己找办法' });
   },
 
   // 今日已展开过的卡片数（本地按天累计）

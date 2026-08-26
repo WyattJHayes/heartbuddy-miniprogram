@@ -18,6 +18,7 @@
         <view class="draw-fav {{drawFaved ? 'done' : ''}}" bindtap="favDrawnCard" role="button" aria-label="收下这张卡">{{drawFaved ? "⭐ 已收下" : "☆ 收下这张"}}</view>
     <view class="draw-other" wx:if="{{drawOther}}" bindtap="openDrawOther" role="button" aria-label="展开另一张推荐卡片">也许这张也有用：「{{drawOther}}」›</view>
   </view>
+  <view class="week-reads" wx:if="{{weekReads}}" role="note" aria-label="本周充电小结">{{weekReads}}</view>
   <view class="draw-hist" wx:if="{{drawHist.length}}" role="group" aria-label="最近抽过的卡">
     <text class="dh-t">最近抽过：</text>
     <text class="dh-item" wx:for="{{drawHist}}" wx:key="t" data-t="{{item.t}}" bindtap="openDrawCard" role="button" aria-label="打开这张卡">{{item.t}}</text>
