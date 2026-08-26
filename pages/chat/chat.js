@@ -131,6 +131,8 @@ Page({
     this.setData({ isNight });
     this.initRoleAsk(); // 老师/家长视角（欢迎页身份）
     this.buildDailyQ(); // 今日一问
+    const draft = wx.getStorageSync('hb_chatDraft');
+    if (draft) this.setData({ input: draft }); // 恢复未发送的草稿
     this.setData({ chatRated: (wx.getStorageSync('hb_chatMood') || {})[new Date().toDateString()] || 0 }); // 今日已打分
     // 间隔问候：距上次打开聊天 ≥2 天，轻提一句（不算打扰，只是「还在」）
     const lastTs = wx.getStorageSync('hb_lastChatTs') || 0;
@@ -686,7 +688,9 @@ Page({
           wx.setClipboardData({ data: '—— 我和心语伴的对话备份 ——\n' + lines.join('\n') });
         } else if (r.tapIndex !== 0) return;
         this.setData({ messages: [], input: '', typing: false, loading: false, showFeeling: false, feelingDone: false, moodTag: '', aiFace: '', _draft: '', sumTip: false });
-        this.initSession();
+
+    wx.removeStorageSync('hb_chatDraft'); // 已发送，清草稿
+    this.initSession();
         wx.showToast({ title: r.tapIndex === 1 ? '已备份并重新开始' : '已重新开始', icon: 'none' });
       }
     });
@@ -872,6 +876,7 @@ Page({
 
   onInput(e) {
     this.setData({ input: e.detail.value });
+    wx.setStorageSync('hb_chatDraft', e.detail.value); // 草稿：切走再回来不丢
     // 未发送的草稿先存本地：切走/重启回来还在（发送或清空时移除）
     const t = e.detail.value;
     if (t) wx.setStorageSync('hb_inputDraft', t.slice(0, 300));
