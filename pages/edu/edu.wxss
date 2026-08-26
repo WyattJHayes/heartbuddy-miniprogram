@@ -116,3 +116,5 @@ page { background: #F7F8FB; }
 .rs-time { color: #5f8ac0; font-size: 23rpx; }
 
 .nt-review { color: #7a8fa5; font-size: 22rpx; padding: 6rpx 12rpx; }
+
+.nt-export { color: #7a8fa5; font-size: 22rpx; padding: 6rpx 12rpx; }

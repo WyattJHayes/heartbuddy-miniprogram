@@ -116,6 +116,7 @@
     <view class="nt-ops">
       <view class="nt-save" bindtap="saveNote" role="button" aria-label="保存学习心得">保存</view>
       <view class="nt-copy" bindtap="copyMyNote" role="button" aria-label="复制学习心得">复制</view>
+      <view class="nt-export" bindtap="exportAllNotes" role="button" aria-label="导出全部学习心得">📋 导出全部</view>
       <view class="nt-review" bindtap="reviewNotes" role="button" aria-label="翻翻之前写给自己的话">📖 翻翻之前的</view>
     </view>
   </view>

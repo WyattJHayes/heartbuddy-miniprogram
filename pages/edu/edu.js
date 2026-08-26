@@ -421,6 +421,14 @@ Page({
     wx.showToast({ title: t ? '已记下 🌱' : '已清空', icon: 'none' });
   },
 
+  // 心得全部导出：把写过的每句都复制下来
+  exportAllNotes() {
+    const log = wx.getStorageSync('hb_eduNoteLog') || [];
+    if (!log.length) { wx.showToast({ title: '还没写过心得', icon: 'none' }); return; }
+    const body = log.map((x) => x.date + '：「' + x.text + '」').join('\n');
+    wx.setClipboardData({ data: '✏️ 我在小课里写给自己的话：\n\n' + body + '\n\n都是走过的路。', success: () => wx.showToast({ title: '已复制全部心得 📋', icon: 'none' }) });
+  },
+
   // 翻翻之前写给自己的话（最近 3 条）
   reviewNotes() {
     const log = (wx.getStorageSync('hb_eduNoteLog') || []).slice(-3).reverse();
