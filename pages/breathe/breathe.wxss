@@ -142,3 +142,8 @@ button.ghost { margin-top: 28rpx; background: #eef4ff; color: #3f6fd8; border-ra
 .bw-cell.today .bw-w { color: #4a6fa5; font-weight: 600; }
 
 .breath-tip { margin: 8rpx auto 0; max-width: 90%; text-align: center; color: #7a8fa5; font-size: 22rpx; }
+
+.bf-row { display: flex; align-items: center; gap: 10rpx; justify-content: center; margin-top: 10rpx; }
+.bf-t { color: #8a97a8; font-size: 22rpx; }
+.bf-chip { padding: 6rpx 18rpx; border-radius: 20rpx; background: #eef3fa; color: #5a7fb8; font-size: 22rpx; }
+.bf-chip.on { background: #d9e8fa; color: #3a639e; }

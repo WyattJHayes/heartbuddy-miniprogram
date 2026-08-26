@@ -410,6 +410,17 @@ Page({
 
   // 近 7 天练习日历：练过的天点亮
   // 今日引导语：每天换一句，开始前轻轻读一遍
+  // 练完感受选择
+  pickBreatheFeel(e) {
+    const w = e.currentTarget.dataset.w;
+    if (!w) return;
+    this.setData({ breatheFeel: w });
+    const log = wx.getStorageSync('hb_breatheFeelLog') || {};
+    log[w] = (log[w] || 0) + 1;
+    wx.setStorageSync('hb_breatheFeelLog', log);
+    wx.showToast({ title: w === '松了' ? '松了就好 🌿' : w === '稳了' ? '稳稳的，很好 🧘' : w === '困了' ? '那就好好休息 🌙' : '没关系，下次会更松 ☁️', icon: 'none' });
+  },
+
   buildBreathTip() {
     const TIPS = ['吸气 4 拍，呼气 6 拍——呼气长一点，身体会松', '肩膀先放下来，再开始', '不用做到完美，跟着就好', '想别的事了？回来数拍子就行', '呼气时，想象把今天的累吐出去'];
     const d = new Date();
@@ -481,6 +492,8 @@ Page({
       } else {
         this._running = false;
         this.setData({ phase: 'done', text: PH_TEXT.done, week7B: this.buildWeek7() });
+        // 练完感受：轻轻选一个词（本地统计最常出现）
+        this.setData({ feelOpts: ['松了', '稳了', '还有点紧', '困了'], breatheFeel: '' });
         wx.removeStorageSync('hb_breathBroke'); // 完成即清除中断标记
         // 发呆结束：直接给一句专属回响（也算一次放松）
         if (this.data.presetKey === 'stare') {
