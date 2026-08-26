@@ -210,7 +210,7 @@
       <text>🍀 送给朋友的一句鼓励</text><text class="arrow">›</text>
     </view>
     <view class="row" bindtap="myPhrases">
-      <text>🗣 我的常用语（聊天里攒的口头禅）</text><text class="arrow">›</text>
+      <text>🗣 我的常用语（点开看/写一条）</text><text class="arrow">›</text>
     </view>
     <view class="row" wx:if="{{stoodBadge}}" role="note" aria-label="撑过来的天数">
       <text>{{stoodBadge}}</text><text class="arrow">✓</text>

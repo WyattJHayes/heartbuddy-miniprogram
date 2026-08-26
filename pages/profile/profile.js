@@ -343,6 +343,28 @@ Page({
     });
   },
 
+  // 自己写一条常用语：不想等聊天攒，直接加
+  addPhrase() {
+    const that = this;
+    wx.showModal({
+      title: '写一条常用语',
+      editable: true,
+      placeholderText: '例如：我可以慢慢来',
+      success: (r) => {
+        if (!r.confirm) return;
+        const t = (r.content || '').trim().slice(0, 50);
+        if (!t) { wx.showToast({ title: '写了才会存进去哦', icon: 'none' }); return; }
+        const list = wx.getStorageSync('hb_myPhrases') || [];
+        if (list.includes(t)) { wx.showToast({ title: '这条已经在啦', icon: 'none' }); return; }
+        if (list.length >= 5) list.shift();
+        list.push(t);
+        wx.setStorageSync('hb_myPhrases', list);
+        wx.showToast({ title: '存好了 🍀', icon: 'none' });
+        that.myPhrases();
+      }
+    });
+  },
+
   // 我的常用语：聊天页攒下的口头禅，在这里回看/一键清空
   myPhrases() {
     const list = wx.getStorageSync('hb_myPhrases') || [];
