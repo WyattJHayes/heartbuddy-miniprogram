@@ -212,6 +212,9 @@
     <view class="row" bindtap="myPhrases">
       <text>🗣 我的常用语（聊天里攒的口头禅）</text><text class="arrow">›</text>
     </view>
+    <view class="row" bindtap="showRole">
+      <text>🪪 我的身份{{roleName ? ' · ' + roleName : ''}}（点去换）</text><text class="arrow">›</text>
+    </view>
     <view class="row" wx:if="{{safeLine}}" bindtap="goHelperSafe">
       <text>🛟 安全包 · {{safeLine}}</text><text class="arrow">›</text>
     </view>

@@ -32,7 +32,8 @@ Page({
     scanTotal: 0,    // 扫描累计（本地计数）
     noteTotal: 0,   // 晚间小结累计篇数（本地）
     eduDone: 0,
-    safeLine: '',     // 安全包速览一句          // 心理小课已学节数
+    safeLine: '',     // 安全包速览一句
+    roleName: '',     // 当前身份名          // 心理小课已学节数
     nextBadge: null,     // 下一枚待解锁徽章
     yearStat: null,      // 年度统计（今年记录条数/天数）
     eduTotal: 8,
@@ -69,6 +70,9 @@ Page({
       safeLine = n + ' 位可信赖的人' + (days === null ? '' : days >= 30 ? ' · 超 ' + days + ' 天没更新，去看看 TA 们' : days > 0 ? ' · ' + days + ' 天前更新' : ' · 今天刚更新');
     }
     this.setData({ safeLine });
+    const RN = { student: '学生', teacher: '老师', parent: '家长', friend: '朋友' };
+    const role = wx.getStorageSync('hb_role') || '';
+    this.setData({ roleName: RN[role] || '' });
     this.refreshFavs();
     this.loadExam();
     this.loadRemind();
@@ -186,6 +190,19 @@ Page({
 
   // 按时段的轻问候（每 2 小时换一次文案）
   goHelperSafe() { wx.navigateTo({ url: '/pages/helper/helper' }); },
+
+  // 我的身份：显示当前角色，点击去欢迎页换一个
+  showRole() {
+    const role = wx.getStorageSync('hb_role') || '';
+    const NAMES = { student: '学生', teacher: '老师', parent: '家长', friend: '朋友', '' : '还没选' };
+    wx.showModal({
+      title: '我在心语的身份',
+      content: '现在是：' + (NAMES[role] || role || '还没选') + '。想去换个身份吗？换完聊天开场也会跟着变。',
+      confirmText: '去换',
+      cancelText: '先不',
+      success: (r) => { if (r.confirm) wx.navigateTo({ url: '/pages/welcome/welcome' }); }
+    });
+  },
 
   // 我的心情档案 · 一键导出（纯本地汇总，复制成一段话）
   exportProfile() {
