@@ -409,7 +409,31 @@ Page({
   saveNote() {
     const t = (this.data.myNote || '').trim();
     wx.setStorageSync('hb_eduNote', t.slice(0, 60));
+    // 心得历史：按天去重，留近 30 条（供回看）
+    if (t) {
+      const key = new Date().toDateString();
+      const log = wx.getStorageSync('hb_eduNoteLog') || [];
+      const rec = log.find((x) => x.date === key);
+      if (rec) rec.text = t;
+      else log.push({ date: key, text: t });
+      wx.setStorageSync('hb_eduNoteLog', log.slice(-30));
+    }
     wx.showToast({ title: t ? '已记下 🌱' : '已清空', icon: 'none' });
+  },
+
+  // 翻翻之前写给自己的话（最近 3 条）
+  reviewNotes() {
+    const log = (wx.getStorageSync('hb_eduNoteLog') || []).slice(-3).reverse();
+    if (!log.length) {
+      wx.showModal({ title: '之前的心得', content: '还没存下心得。学完一课写一句给自己，以后就能翻到。', showCancel: false, confirmText: '知道啦' });
+      return;
+    }
+    wx.showModal({
+      title: '📖 之前写给自己的话',
+      content: log.map((x) => x.date + '：「' + x.text + '」').join('\n'),
+      showCancel: false,
+      confirmText: '收好'
+    });
   },
 
   // 结业卡：全部学完后可复制的一段「结业词」（本地，留念/分享）
