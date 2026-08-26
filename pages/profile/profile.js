@@ -31,7 +31,8 @@ Page({
     breatheTotal: 0,  // 呼吸累计（本地计数）
     scanTotal: 0,    // 扫描累计（本地计数）
     noteTotal: 0,   // 晚间小结累计篇数（本地）
-    eduDone: 0,          // 心理小课已学节数
+    eduDone: 0,
+    safeLine: '',     // 安全包速览一句          // 心理小课已学节数
     nextBadge: null,     // 下一枚待解锁徽章
     yearStat: null,      // 年度统计（今年记录条数/天数）
     eduTotal: 8,
@@ -58,6 +59,16 @@ Page({
     this.setData({ noteTotal: Object.keys(wx.getStorageSync('hbDayNote') || {}).length });
     this.calcYearStat();
     this.setData({ accompanyMilestoneText: this.accompanyMilestone(this.data.accompanyDays || 0) });
+    // 安全包速览：几个人、多久没更新了
+    const ppl = (wx.getStorageSync('hbSafePeople') || '').trim();
+    const ts = wx.getStorageSync('hbSafePackTs') || 0;
+    let safeLine = '';
+    if (ppl) {
+      const n = ppl.split('、').filter(Boolean).length;
+      const days = ts ? Math.floor((Date.now() - ts) / 86400000) : null;
+      safeLine = n + ' 位可信赖的人' + (days === null ? '' : days >= 30 ? ' · 超 ' + days + ' 天没更新，去看看 TA 们' : days > 0 ? ' · ' + days + ' 天前更新' : ' · 今天刚更新');
+    }
+    this.setData({ safeLine });
     this.refreshFavs();
     this.loadExam();
     this.loadRemind();
@@ -174,6 +185,31 @@ Page({
   },
 
   // 按时段的轻问候（每 2 小时换一次文案）
+  goHelperSafe() { wx.navigateTo({ url: '/pages/helper/helper' }); },
+
+  // 我的心情档案 · 一键导出（纯本地汇总，复制成一段话）
+  exportProfile() {
+    const L = [];
+    const moodN = Object.keys(wx.getStorageSync('hbDayNote') || {}).length;
+    const breatheN = wx.getStorageSync('breatheCount') || 0;
+    const scanN = wx.getStorageSync('hb_scanCount') || 0;
+    const stoodN = wx.getStorageSync('hb_stoodCount') || 0;
+    const assessN = (wx.getStorageSync('hb_assessHist') || []).length || Number(wx.getStorageSync('ach_assess') === true);
+    const gold = (wx.getStorageSync('hb_goldenLines') || []).length;
+    const phrases = (wx.getStorageSync('hb_myPhrases') || []).length;
+    L.push('🌿 我在「心语伴」的小小足迹：');
+    if (moodN) L.push('· 认真记过 ' + moodN + ' 天心情笔记');
+    if (breatheN) L.push('· 一起呼吸过 ' + breatheN + ' 次');
+    if (scanN) L.push('· 做过 ' + scanN + ' 次身体扫描');
+    if (stoodN) L.push('· 有 ' + stoodN + ' 天，我对自己说「我撑过来了」');
+    if (assessN) L.push('· 做过 ' + assessN + ' 次焦虑自评');
+    if (gold) L.push('· 攒了 ' + gold + ' 句自己的金句');
+    if (phrases) L.push('· 存了 ' + phrases + ' 句常用语');
+    L.push('');
+    L.push('都是一点点走过来的痕迹。继续慢慢来。');
+    wx.setClipboardData({ data: L.join('\n'), success: () => wx.showToast({ title: '已复制我的档案 📋', icon: 'none' }) });
+  },
+
   setGreet() {
     const h = new Date().getHours();
     const sale = [

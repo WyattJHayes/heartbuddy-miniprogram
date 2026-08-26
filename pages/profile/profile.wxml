@@ -212,6 +212,12 @@
     <view class="row" bindtap="myPhrases">
       <text>🗣 我的常用语（聊天里攒的口头禅）</text><text class="arrow">›</text>
     </view>
+    <view class="row" wx:if="{{safeLine}}" bindtap="goHelperSafe">
+      <text>🛟 安全包 · {{safeLine}}</text><text class="arrow">›</text>
+    </view>
+    <view class="row" bindtap="exportProfile">
+      <text>📋 导出我的心情档案（复制成一段话）</text><text class="arrow">›</text>
+    </view>
     <view class="row" bindtap="viewPrivacy">
       <text>隐私声明</text><text class="arrow">›</text>
     </view>
