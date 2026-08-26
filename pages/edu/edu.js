@@ -163,6 +163,8 @@ Page({
   },
 
   onLoad() {
+    this.buildStudyTip();
+    this.refreshRevRemind();
     let done = [];
     try { done = wx.getStorageSync(DONE_KEY) || []; } catch (e) {}
     const doneMap = {};
@@ -412,6 +414,24 @@ Page({
 
   // 结业卡：全部学完后可复制的一段「结业词」（本地，留念/分享）
   // 复制这一课：分享给朋友 / 转发到班群都方便（纯文本）
+  // 今日学习心法：每天换一条「怎么学不焦虑」的小方法
+  buildStudyTip() {
+    const TIPS = [
+      '先做 5 分钟最不想做的那科——开头最难，之后会顺',
+      '把「我要学 2 小时」换成「我要做完 5 道题」，任务越具体越轻',
+      '学 25 分钟，歇 5 分钟。歇的时候真的休息，别刷手机',
+      '今天只求「弄懂一个点」，比囫囵过三章更有用',
+      '错题是最好的老师：重做一遍，比新做十道更值',
+      '背书出声读，手也跟着写——多个通道一起记',
+      '睡前 10 分钟回想今天学的框架，记得更牢',
+      '卡住超过 10 分钟就先跳过，做个标记回头再看',
+      '把手机放到够不着的地方，物理隔离最有效',
+      '告诉自己「先学 10 分钟」——往往一开始就停不下来了'
+    ];
+    const d = new Date();
+    this.setData({ studyTip: TIPS[(d.getDate() * 7 + d.getMonth()) % TIPS.length] });
+  },
+
   prepDaysInput(e) { this.setData({ prepDays: e.detail.value }); },
   prepSubsInput(e) { this.setData({ prepSubs: e.detail.value }); },
   // 备考小助手：天数和科目 → 平均分给每天，每科配 1 个动作

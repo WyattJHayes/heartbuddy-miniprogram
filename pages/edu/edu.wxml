@@ -10,6 +10,16 @@
     <text class="tg-text">{{todayGoal}}</text>
   </view>
 
+  <!-- 今日学习心法 -->
+  <view class="study-tip" wx:if="{{studyTip}}" role="note" aria-label="今日学习心法">💡 今天的心法：{{studyTip}}</view>
+  <view class="rev-tip" wx:if="{{revRemindTip}}" role="note" aria-label="复习时间到">⏰ {{revRemindTip}}<text class="rt-close" bindtap="closeRevTip" role="button" aria-label="关闭">✕</text></view>
+  <view class="rev-set" role="group" aria-label="复习提醒设置">
+    <view class="rs-toggle {{revRemindOn ? 'on' : ''}}" bindtap="toggleRevRemind" role="switch" aria-checked="{{revRemindOn}}" aria-label="复习提醒开关">⏰ 每天复习提醒{{revRemindOn ? ' · 开' : ' · 关'}}</view>
+    <picker wx:if="{{revRemindOn}}" mode="time" value="{{revRemindTime}}" bindchange="revTimeInput">
+      <view class="rs-time" role="button" aria-label="选择提醒时间">{{revRemindTime}} ›</view>
+    </picker>
+  </view>
+
   <!-- 考前 N 天：联动「我的」考试日，考前给心稳稳的提示 -->
   <view class="exam-tick" wx:if="{{examTick}}" role="note" aria-label="考前倒数提示">
     <text class="et-emoji">📅</text>
