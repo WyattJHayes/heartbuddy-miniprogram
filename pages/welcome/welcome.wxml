@@ -3,11 +3,13 @@
   <view class="title">心语伴</view>
   <view class="slogan">随时在线的情绪陪伴者</view>
   <view class="time-greet" wx:if="{{timeGreet}}" role="note" aria-label="按时段问候">{{timeGreet}}</view>
+  <view class="exam-cd" wx:if="{{examCountdown}}" role="note" aria-label="考试倒计时">{{examCountdown}}</view>
 
   <!-- 今日一句：每天换一句话给你 -->
   <view class="welcome-line" wx:if="{{todayLine}}" bindtap="copyTodayLine" role="button" aria-label="今日一句，点击复制">{{todayLine}}</view>
   <view class="wl-chat" bindtap="goChatWithLine" role="button" aria-label="拿这句去和心语聊聊">💬 拿这句去聊聊 ›</view>
-  <view class="wl-gold" bindtap="saveTodayToGold" role="button" aria-label="把今日一句收进金句墙">{{goldenSaved ? '💛 已在金句墙上' : '🤍 收进金句墙'}}</view>
+  <view class="wl-shuffle" bindtap="shuffleTodayLine" role="button" aria-label="今日一句换一句">🔄 换一句</view>
+    <view class="wl-gold" bindtap="saveTodayToGold" role="button" aria-label="把今日一句收进金句墙">{{goldenSaved ? '💛 已在金句墙上' : '🤍 收进金句墙'}}</view>
   <view class="welcome-week" wx:if="{{weekGreet}}" role="note" aria-label="星期特别句">{{weekGreet}}</view>
   <view class="welcome-gold" wx:if="{{goldenLine}}" role="note" aria-label="我的金句">💛 我的金句 · {{goldenLine}}</view>
   <view class="gold-wall" bindtap="viewGoldenWall" role="button" aria-label="打开我的金句墙">💛 金句墙 ›</view>  

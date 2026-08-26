@@ -19,6 +19,18 @@ function todayLine() {
   return dailyQuotes[(d.getDate() + d.getMonth()) % dailyQuotes.length] || '';
 }
 
+// 今日一句换一句：不喜欢就重抽一条（避开当前这句）
+function anotherTodayLine(notThis) {
+  if (!Array.isArray(dailyQuotes) || dailyQuotes.length < 2) return '';
+  let t = '';
+  for (let i = 0; i < 6; i++) {
+    const d = new Date();
+    t = dailyQuotes[Math.floor(Math.random() * dailyQuotes.length)] || '';
+    if (t && t !== notThis) break;
+  }
+  return t;
+}
+
 // 谁在用：不同身份给一句更贴的话（仅展示文案，不影响功能）
 const ROLE_HINT = {
   student: '备考、同学关系、考前的慌——这些我熟，随时来聊。',
@@ -34,6 +46,7 @@ Page({
     todayLine: '',
     timeGreet: '',   // 按时段问候（早上好/深夜好…）
     goldenSaved: false,
+    examCountdown: '',
     weekGreet: '',  // 星期特别句（随当天）
     goldenLine: '', // 我的金句：小课存下的，每天换一条
     weekPlan: '',   // 写给下周的一句话（周日留/周一看起）
@@ -107,6 +120,7 @@ Page({
     this.setData({ weekCare: this.buildWeekCare() }); // 本周照顾小结
     this.setData({ nurture: this.buildNurture() }); // 今日滋养三连
     this.setData({ examMorning: this.buildExamMorning() }); // 考试当天早餐卡
+    this.buildExamCountdown();
     this.setData({ examWrap: this.buildExamWrap() }); // 考完的傍晚收尾卡
     this.setData({ preExam: this.buildPreExam() }); // 考前 7 天一点计划
     this.setData({ afterword: wx.getStorageSync('hb_examAfterword') || '', afterSaved: !!wx.getStorageSync('hb_examAfterword') }); // 考后归位
@@ -171,6 +185,17 @@ Page({
     // 心情：今日记录过（同 chat 晨间提醒口径：toDateString）
     mood = wx.getStorageSync('hb_lastMoodDate') === todayStr;
     return { relaxMin, scanN, mood, small };
+  },
+
+  // 考试倒计时：≤30 天且非当天，顶部一句「还有 N 天」
+  buildExamCountdown() {
+    const dateStr = wx.getStorageSync('hb_examDate') || '';
+    if (!dateStr) return;
+    const name = wx.getStorageSync('hb_examName') || '考试';
+    const t = new Date(); t.setHours(0, 0, 0, 0);
+    const ex = new Date(dateStr); ex.setHours(0, 0, 0, 0);
+    const diff = Math.round((ex - t) / 86400000);
+    if (diff > 0 && diff <= 30) this.setData({ examCountdown: '📅 距' + name + '还有 ' + diff + ' 天——不急，一天一天来' });
   },
 
   // 考试当天早晨：设了考试日且就是今天 → 显示「早晨 5 步」清单
@@ -342,6 +367,14 @@ Page({
   },
 
   // 今日一句：点击复制（随时带走一句温柔）
+  // 换一句：今天的句子不合胃口？重抽一条
+  shuffleTodayLine() {
+    const t = anotherTodayLine(this.data.todayLine);
+    if (!t) return;
+    this.setData({ todayLine: t, goldenSaved: false });
+    wx.showToast({ title: '换好啦', icon: 'none' });
+  },
+
   // 把今天的句子收进金句墙（去重，最多 30 条）
   saveTodayToGold() {
     const t = this.data.todayLine;
