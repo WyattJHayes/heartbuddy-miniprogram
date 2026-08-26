@@ -10,6 +10,7 @@ Page({
     topRead: null,      // 最常翻的一张卡（≥3 次才显示）
     drawMsg: '',
     drawFaved: false,     // 刚抽到这张是否已收藏
+    favStale: '',         // 收藏久未看的提醒
     weekReads: '',        // 本周充电小结一句        // 抽一张后的缘分提示
     readTotal: 0,       // 卡片阅读总数
     newCount: 0,        // 还没看过的卡片数（NEW 角标）
@@ -464,6 +465,16 @@ Page({
     // 今日已读计数（当天展开次数，温柔鼓励）
     this.setData({ todayReads: this.todayStationReads() });
     this.buildWeekReads();
+    this.checkFavStale();
+  },
+
+  // 收藏的卡三天没点开过 → 轻轻提醒一句（本地）
+  checkFavStale() {
+    const favs = this.data.favTitles || [];
+    if (!favs.length) return;
+    const last = Number(wx.getStorageSync('hb_favLastOpen') || 0);
+    const days = Math.floor((Date.now() - last) / 86400000);
+    if (days >= 3) this.setData({ favStale: '⭐ 收藏的「' + favs[0] + '」等了你 ' + days + ' 天——需要的话它一直在' });
   },
 
   // 本周充电小结：周一至今共展开过几张卡，一句鼓励
@@ -523,6 +534,7 @@ Page({
   },
 
   toggleCard(e) {
+    wx.setStorageSync('hb_favLastOpen', Date.now());
     const i = Number(e.currentTarget.dataset.index);
     // 一句话速读：开启时点卡片只看核心一句（toast 即可带走），不展开全文
     if (this.data.quickRead) {

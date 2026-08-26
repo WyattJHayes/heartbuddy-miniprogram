@@ -109,3 +109,5 @@
 .draw-fav.done { color: #9aa8bd; }
 
 .week-reads { margin: 8rpx 16rpx 0; color: #8a7a5f; font-size: 22rpx; background: #faf6ec; border-radius: 10rpx; padding: 8rpx 12rpx; }
+
+.fav-stale { margin: 8rpx 16rpx 0; color: #8a744f; font-size: 22rpx; background: #faf3e4; border-radius: 10rpx; padding: 8rpx 12rpx; }
