@@ -221,6 +221,9 @@
     <view class="row" wx:if="{{safeLine}}" bindtap="goHelperSafe">
       <text>🛟 安全包 · {{safeLine}}</text><text class="arrow">›</text>
     </view>
+    <view class="row" bindtap="wipeLocalData">
+      <text>🧹 清空本地记录（隐私主权 · 双重确认）</text><text class="arrow">›</text>
+    </view>
     <view class="row" bindtap="exportProfile">
       <text>📋 导出我的心情档案（复制成一段话）</text><text class="arrow">›</text>
     </view>

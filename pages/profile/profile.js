@@ -192,6 +192,41 @@ Page({
   },
 
   // 按时段的轻问候（每 2 小时换一次文案）
+  // 清空本地数据：只保留登录态，双重确认（隐私主权）
+  wipeLocalData() {
+    const that = this;
+    wx.showModal({
+      title: '清空本地记录？',
+      content: '心情笔记、收藏、常用语、金句墙等本地内容都会删除，且无法恢复。云端记录不受影响。',
+      confirmText: '继续',
+      cancelText: '算了',
+      success: (r1) => {
+        if (!r1.confirm) return;
+        wx.showModal({
+          title: '最后确认',
+          content: '真的要清空吗？这些小足迹没了就找不回来了。',
+          confirmText: '清空',
+          cancelText: '保留',
+          confirmColor: '#c0392b',
+          success: (r2) => {
+            if (!r2.confirm) return;
+            try {
+              const info = wx.getStorageInfoSync();
+              (info.keys || []).forEach((k) => {
+                if (k === 'openid' || k === 'hb_role' || k.startsWith('ach_')) return; // 保留登录/身份/成就
+                wx.removeStorageSync(k);
+              });
+              wx.showToast({ title: '已清空，像新的一天 🌅', icon: 'none' });
+              that.onShow();
+            } catch (e) {
+              wx.showToast({ title: '出了点小问题，稍后再试', icon: 'none' });
+            }
+          }
+        });
+      }
+    });
+  },
+
   goHelperSafe() { wx.navigateTo({ url: '/pages/helper/helper' }); },
 
   // 我的身份：显示当前角色，点击去欢迎页换一个
