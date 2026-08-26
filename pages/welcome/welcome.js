@@ -406,11 +406,21 @@ Page({
     return '晚上好，这一天辛苦了 🌆';
   },
 
-  // 金句墙：把攒下的每句金句都列出来，翻一翻
+  // 金句墙：先看全貌；条数少时可直接挑一条复制
   viewGoldenWall() {
     const gold = wx.getStorageSync('hb_goldenLines') || [];
     if (!gold.length) {
       wx.showModal({ title: '我的金句墙', content: '还没有金句。在小课/充电站看到喜欢的话，存进来，这里就慢慢亮了。', showCancel: false, confirmText: '知道啦' });
+      return;
+    }
+    if (gold.length <= 6) {
+      wx.showActionSheet({
+        itemList: gold.map((t) => (t.length > 18 ? t.slice(0, 18) + '…' : t)),
+        success: (r) => {
+          const t = gold[r.tapIndex];
+          if (t) wx.setClipboardData({ data: '「' + t + '」——记在心语伴的金句墙上', success: () => wx.showToast({ title: '已复制 💛', icon: 'none' }) });
+        }
+      });
       return;
     }
     const body = gold.map((t, i) => (i + 1) + '）' + t).join('\n');
