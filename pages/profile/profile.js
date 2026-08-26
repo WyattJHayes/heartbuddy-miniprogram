@@ -33,7 +33,8 @@ Page({
     noteTotal: 0,   // 晚间小结累计篇数（本地）
     eduDone: 0,
     safeLine: '',     // 安全包速览一句
-    roleName: '',     // 当前身份名          // 心理小课已学节数
+    roleName: '',     // 当前身份名
+    stoodBadge: '',   // 撑过天数一句          // 心理小课已学节数
     nextBadge: null,     // 下一枚待解锁徽章
     yearStat: null,      // 年度统计（今年记录条数/天数）
     eduTotal: 8,
@@ -70,6 +71,8 @@ Page({
       safeLine = n + ' 位可信赖的人' + (days === null ? '' : days >= 30 ? ' · 超 ' + days + ' 天没更新，去看看 TA 们' : days > 0 ? ' · ' + days + ' 天前更新' : ' · 今天刚更新');
     }
     this.setData({ safeLine });
+    const stoodN = Number(wx.getStorageSync('hb_stoodCount') || 0);
+    if (stoodN > 0 && !this.data.stoodBadge) this.setData({ stoodBadge: '🌿 已有 ' + stoodN + ' 天「我撑过来了」' });
     const RN = { student: '学生', teacher: '老师', parent: '家长', friend: '朋友' };
     const role = wx.getStorageSync('hb_role') || '';
     this.setData({ roleName: RN[role] || '' });
