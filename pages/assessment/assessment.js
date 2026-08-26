@@ -134,6 +134,9 @@ Page({
   },
 
   // 结果页轻引导：去情绪充电站缓一缓
+  // 先去做一轮呼吸平复一下：结果页直达
+    goBreatheFirst() { wx.navigateTo({ url: '/pages/breathe/breathe' }); },
+
   goStation() {
     wx.navigateTo({ url: '/pages/station/station' });
   },

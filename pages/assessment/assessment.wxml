@@ -53,6 +53,7 @@
         如果这份感受已经持续一段时间，或影响到了吃饭睡觉，欢迎你向校心理中心、医院心理科或咨询师求助，你不必一个人扛。
       </view>
       <view class="r-link" role="button" aria-label="去情绪充电站看舒缓方法" bindtap="goStation">🔋 想先缓一缓？去情绪充电站看看舒缓方法 →</view>
+      <view class="r-link" role="button" aria-label="先去做一轮呼吸平复一下" bindtap="goBreatheFirst">🌬 先去做一轮呼吸，平复一下 →</view>
       <view class="r-link" wx:if="{{!retestRemind}}" bindtap="setRetestRemind" role="button" aria-label="设置3天后复查提醒">
         ⏰ 给自己设个复查提醒：3 天后回来看看有没有变化 →
       </view>
