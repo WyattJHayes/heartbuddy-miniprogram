@@ -64,7 +64,8 @@ Page({
     skipToday: false,    // 今天「放空·不评判」：点了就不打扰（本地）
     dayNote: '',           // 今日小结（21 点后的收尾）
     aidPack: null,         // 情绪急救包（记录负性情绪后给即时可做的小事）
-    quickInt: 3,           // 快速记录可选强度 1-5（默认 3）
+    quickInt: 3,
+    warmLine: '',    // 记录后的随机温柔一句           // 快速记录可选强度 1-5（默认 3）
     bandDays: 14,          // 情绪色带天数：14 / 30 可切换
     smallScene: 'body',    // 三件小事灵感场景：study/body/social/me
     smallWeekN: 0,      // 本周已勾选完成的小事件数（跨周重置）
@@ -683,6 +684,24 @@ Page({
 
   // 一键快速记录：直接把此刻心情写入 moods 集合
   // 触发来源 chips：多选、可反选
+  // 自己写一个「因为什么」：直接加入本次触发并入库
+  addCustomTrig() {
+    const that = this;
+    wx.showModal({
+      title: '因为什么？',
+      editable: true,
+      placeholderText: '例如：和家里吵架了',
+      success: (r) => {
+        if (!r.confirm) return;
+        const t = (r.content || '').trim().slice(0, 12);
+        if (!t) { wx.showToast({ title: '写一个词就好', icon: 'none' }); return; }
+        const cur = that.data.trig || [];
+        if (!cur.includes(t)) that.setData({ trig: cur.concat(t) });
+        wx.showToast({ title: '记上了：因为 ' + t, icon: 'none' });
+      }
+    });
+  },
+
   toggleTrig(e) {
     const t = e.currentTarget.dataset.t;
     if (!t) return;
@@ -737,6 +756,9 @@ Page({
         gapLine = h >= 1 ? '（距上一条 ' + h + ' 小时）' : '';
       }
       wx.showToast({ title: meta.label + ' · 本周第 ' + wkN + ' 条' + gapLine, icon: 'success' });
+      // 随机一句「接住你」的话，显示在快速记录卡下方
+      const WARM = ['谢谢你记下此刻——被看见的感受会变轻 🌱', '不管是哪种心情，都欢迎它在这里待一会儿 ☁️', '记下来就是照顾自己的开始 💧', '这一刻你很诚实，这很了不起 ✨', '心情没有对错，你愿意看它，就很好 🌿'];
+      this.setData({ warmLine: WARM[Math.floor(Math.random() * WARM.length)] });
       const _hh = new Date().getHours();
       if (_hh >= 23 || _hh < 6) {
         setTimeout(() => wx.showToast({ title: '夜深了，记完早点休息 🌙', icon: 'none' }), 600);

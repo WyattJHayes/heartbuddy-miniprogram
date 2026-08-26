@@ -102,8 +102,10 @@
       </button>
     </view>
     <!-- 触发来源快选：记录心情时顺便点一下「因为什么」（多选，入库） -->
+    <view class="warm-line" wx:if="{{warmLine}}" role="note" aria-label="给你的话">{{warmLine}}</view>
     <view class="trig-row" wx:if="{{trigChips.length}}">
       <text class="trig-cap">因为什么？</text>
+      <view class="trig-chip trig-add" bindtap="addCustomTrig" role="button" aria-label="自己写一个原因">＋ 写我的</view>
       <view class="trig-chip trig-chip-warm {{trig.indexOf(item) >= 0 ? 'on' : ''}}"
         wx:for="{{topTrig}}" wx:key="*this"
         data-t="{{item}}" bindtap="toggleTrig"
