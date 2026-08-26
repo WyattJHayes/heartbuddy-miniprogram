@@ -134,11 +134,13 @@ const LESSONS = [
 ];
 
 const DONE_KEY = 'hb_eduDone';
+const FAV_KEY = 'hb_eduFavs';   // 收藏的课程 id（最多 5 个）
 const { calcStreak } = require('../../utils/streak');
 
 Page({
   data: {
     lessons: [],
+    eduFavs: [],      // 收藏的课程 id
     doneMap: {},   // key -> true
     quizOk: {},    // key -> 随堂小测已答对
     answered: {},  // key -> 已选的选项下标
@@ -163,6 +165,7 @@ Page({
   },
 
   onLoad() {
+    this.setData({ eduFavs: wx.getStorageSync(FAV_KEY) || [] });
     this.buildStudyTip();
     this.refreshRevRemind();
     let done = [];
@@ -219,9 +222,15 @@ Page({
 
   filterLessons(kw) {
     const k = (kw || '').trim().toLowerCase();
-    if (!k) return LESSONS;
-    return LESSONS.filter((l) =>
+    let list = LESSONS;
+    if (k) list = LESSONS.filter((l) =>
       (l.title + l.intro + l.points.join(' ') + l.do).toLowerCase().includes(k));
+    const favs = wx.getStorageSync(FAV_KEY) || [];
+    return list.slice().sort((x, y) => {
+      const fx = favs.includes(x.key) ? 0 : 1;
+      const fy = favs.includes(y.key) ? 0 : 1;
+      return fx - fy;
+    });
   },
   onSearch(e) {
     this.setData({ kw: e.detail.value, lessons: this.filterLessons(e.detail.value).map((l) => this.shuffleQuiz(l)) });
@@ -396,6 +405,23 @@ Page({
     this.setData({ review: Object.assign({}, rv, { picked: o, ok }) });
     if (ok) wx.showToast({ title: '还记得，真棒 🎉', icon: 'success' });
     else wx.showToast({ title: '忘了一点，很正常', icon: 'none' });
+  },
+
+  // 课程收藏：⭐ 收下/取消（≤5），收藏的排前面
+  toggleEduFav(e) {
+    const id = e.currentTarget.dataset.id;
+    if (!id) return;
+    let favs = wx.getStorageSync(FAV_KEY) || [];
+    if (favs.includes(id)) favs = favs.filter((x) => x !== id);
+    else {
+      if (favs.length >= 5) { wx.showToast({ title: '最多收藏 5 节', icon: 'none' }); return; }
+      favs.push(id);
+    }
+    wx.setStorageSync(FAV_KEY, favs);
+    this.setData({ eduFavs: favs });
+    const kw = this.data.kw || '';
+    this.setData({ lessons: this.filterLessons(kw).map((l) => this.shuffleQuiz(l)) });
+    wx.vibrateShort && wx.vibrateShort({ type: 'light' });
   },
 
   // 学习心得：一句话（本地保存，写在结业卡上方）
