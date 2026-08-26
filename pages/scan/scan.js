@@ -37,6 +37,7 @@ Page({
     modeTotal: STAGES.length,
     bookmark: -1,      // 扫描书签：存了第几段（0 起，-1=没有）下次可从这继续
     feelPicked: '',   // 完成后的身体感受一词
+    stretchTip: '',   // 完成后的伸展小建议（随机一句）
     needPicked: '',   // 今天身体最需要什么（六选一，存本地）
     feelLog: [],     // 最近几次身体感受回看
     timeTip: '',     // 按时段的扫描建议（一句话）
@@ -213,7 +214,8 @@ Page({
 
   async onFinish() {
     this.stop();
-    this.setData({ phase: 'done', feelPicked: '', doneN: (wx.getStorageSync('hb_scanCount') || 0) + 1, week7: this.buildScan7() });
+    const STRETCH = ['慢慢转转肩膀，画两个小圈 🔄', '低头看胸口，再抬头看天，慢一点 🙂', '双手举高伸个懒腰，呼一口气 🙆', '坐着扭一扭腰，左右各一次 ↩️', '站起来走五步，再回来坐下 🚶'];
+    this.setData({ phase: 'done', feelPicked: '', doneN: (wx.getStorageSync('hb_scanCount') || 0) + 1, week7: this.buildScan7(), stretchTip: STRETCH[Math.floor(Math.random() * STRETCH.length)] });
     const ts = Date.now();
     wx.setStorageSync('hb_scanDone', ts);
     const dl = wx.getStorageSync('hb_scanDoneLog') || [];

@@ -91,3 +91,5 @@
 .w7-w { font-size: 19rpx; color: #9aa8bd; }
 .w7-dot { font-size: 20rpx; color: #b8c4d6; }
 .w7-cell.on .w7-dot { color: #4f9a5f; }
+
+.stretch-tip { margin-top: 8rpx; color: #6a8a70; font-size: 22rpx; background: #f0f7f0; border-radius: 10rpx; padding: 8rpx 12rpx; }
